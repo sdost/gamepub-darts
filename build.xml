@@ -1,0 +1,264 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- build.xml -->
+<project name="Default Internet Assets Build for swc and/or swf" default="build" basedir=".">
+	<taskdef resource="flexTasks.tasks"/>
+	
+	<!-- 
+		Built-In Ant Properties
+		=======================
+		basedir							the absolute path of the project's basedir (as set with the basedir attribute of <project>).
+		ant.file						the absolute path of the buildfile.
+		ant.version						the version of Ant
+		ant.project.name				the name of the project that is currently executing; it is set in the name attribute of <project>.
+		ant.java.version				the JVM version Ant detected; currently it can hold the values "1.2", "1.3", "1.4" and "1.5".
+		ant.home						home directory of Ant
+		java.version					JRE version
+		java.vendor						JRE vendor
+		java.vendor.url					Java vendor URL
+		java.home						Java installation directory
+		java.vm.specification.version	JVM specification version
+		java.vm.specification.vendor 	JVM  specification vendor
+		java.vm.specification.name 		JVM specification name
+		java.vm.version					JVM implementation version
+		java.vm.vendor					JVM implementation vendor
+		java.vm.name					JVM implementation name
+		java.specification.version		JRE specification version
+		java.specification.vendor		JRE specification vendor
+		java.specification.name			JRE specification name
+		java.class.version				Java class format version number
+		java.class.path					Java class path
+		java.ext.dirs					Path of extension directory or directories
+		os.name							Operating system name
+		os.arch							Operating system architecture
+		os.version						Operating system version
+		file.separator					File separator ("/" on UNIX)
+		path.separator					Path separator (":" on UNIX)
+		line.separator					Line separator ("\n" on UNIX)
+		user.name						User's account name
+		user.home						User's home directory
+		user.dir						User's current working directory
+		
+	-->
+	
+	<echo>|||| OS: ${os.name} - ${os.arch} - ver: ${os.version} ||||</echo>
+	
+	<!-- The project config file. -->
+	<property file="project.config" prefix="proj" />
+	
+	<!-- The user-config file, specified in the project config file -->
+	<property file="${proj.user.config}" prefix="user" />
+	
+	<!-- The definition of FLEX_HOME - required to do any of the ant-building that this file does. -->
+	<property name="FLEX_HOME" value="${user.flex.home}" />
+	<property name="asdoc.exe" value="${FLEX_HOME}/bin/aasdoc.bat" />
+	
+	<property name="src.dir" value="${proj.src.dir}" />
+	
+	<!-- All the swc class definitions in this directory will be included in the swc we're building. -->
+	<property name="swcIncludeAll.lib" value="${proj.swcIncludeAll.dir}" />
+	
+	<!-- The swc that's being built will compile against, but *not* link in the class definitions of the *.swc files in this directory. -->
+	<property name="swcCompileAgainst.lib" value="${proj.swcCompileAgainst.lib.dir}" />
+	
+	<!-- This is the directory to include any swc libraries for the swf. If the swf includes a swc that compiled against but *not* linked-in some definitions, those definitions should be in this directory. -->
+	<property name="includeInSwfIfUsed.lib" value="${proj.includeInSwfIfUsed.lib}" />
+	
+	<!-- All the swc's class definitions in this directory will be included in the produced swf. -->
+	<property name="swfIncludeAll.lib" value="${proj.swfIncludeAll.dir}" />
+	
+	<!-- These class definitions are compiled against, but *not* linked into the swf. -->
+	<property name="swfCompileAgainst.lib" value="${proj.swfCompileAgainst.lib.dir}" />
+	
+	<!-- The directory where the swc is built to -->
+	<property name="swc.build.dir" value="${proj.swc.build.dir}" />
+	
+	<!-- The directory where the swf's classes are found. -->
+	<property name="test.src.dir" value="${proj.test.src.dir}" />
+	
+	<!--  -->
+	<property name="test.build.dir" value="${proj.test.build.dir}" />
+	<property name="swc.name" value="${proj.swc.name}" />
+	<property name="swf.name" value="${proj.swf.name}" />
+	<property name="document.class" value="${test.src.dir}/${proj.document.class}" />
+	
+	<!-- After the swc is built, we copy it to this directory. -->
+	<property name="copy.build.to.dir" value="${proj.copy.build.to.dir}" />
+	
+	<!-- Where we put the documentation for this project -->
+	<property name="doc.output.dir" value="${proj.asdoc.output}" />
+	
+	<!-- The footer of the documentation for the swc. -->
+	<property name="docs.footer" value="${proj.docs.footer}" />
+	
+	<!-- 'proj.build.docs' determines whether we're currently building documentation for this build of the swc. -->
+	
+	<echo>----------------------------------------------------------</echo>
+	<echo message="Building swc '${swc.name}' and swf '${swf.name}'" />
+	<echo>----------------------------------------------------------</echo>
+	
+	<!-- The block recursively searches through the src directory and removes the 'src.' from the full
+			path of the file, *after* we swap out slashes for '.' in all .as and .mxml files. -->
+	<pathconvert property="src.classes" pathsep=" ">
+		
+		<fileset dir="${src.dir}">
+			<include name="**/*.as"/>
+			<include name="**/*.mxml"/>
+		</fileset>
+		
+		<chainedmapper>
+			
+			<compositemapper>
+				<packagemapper from="${basedir}\*.as" to="*"/>
+				<packagemapper from="${basedir}\*.mxml" to="*"/>
+				<packagemapper from="${basedir}/*.as" to="*"/>
+				<packagemapper from="${basedir}/*.mxml" to="*"/>
+			</compositemapper>
+			
+			<compositemapper>
+				<packagemapper from="${src.dir}.*" to="*"/>
+			</compositemapper>
+			
+		</chainedmapper>
+		
+	</pathconvert>
+	
+	<target name="build" depends="clean, setConditionals, allClassesSwc, copyFromLocalBuildDir, tester, documentation">
+		<echo>buildAll complete.</echo>
+	</target>
+	
+	<!-- Delete the swc's and swf's that we build for proper clean-up. -->
+	<target name="clean" depends="clean_tester">
+		
+		<echo>deleting ${swc.build.dir}/${swc.name}</echo>
+		<delete file="${swc.build.dir}/${swc.name}" />
+		
+		<echo>deleting ${copy.build.to.dir}/${swc.name}</echo>
+		<delete file="${copy.build.to.dir}/${swc.name}" />
+		
+	</target>
+	
+	<target name="clean_tester">
+		<delete file="${test.build.dir}/${swf.name}" />
+	</target>
+	
+	<target name="allClassesSwc" depends="doCompileSwc">
+		<echo>Finished building allClassesSwc.</echo>
+	</target>
+	
+	<target name="testClassesExistence">
+		
+		<condition property="classes.exist" >
+			<not><equals arg1="${src.classes}" arg2="" /></not>
+		</condition>
+		
+	</target>
+	
+	<target name="doCompileSwc" if="classes.exist" depends="clean, testClassesExistence">
+		
+		<compc output="${swc.build.dir}/${swc.name}" include-classes="${src.classes}">
+			
+			<source-path path-element="${src.dir}"/>
+			
+			<!-- Compile against but omit from linking. -->
+			<compiler.external-library-path dir="${swcCompileAgainst.lib}" append="true">
+				<include name="*.swc" />
+			</compiler.external-library-path>
+			
+			<!-- Completely include these swc libraries. -->
+			<compiler.include-libraries dir="${swcIncludeAll.lib}" append="true">
+				<include name="*.swc" />
+			</compiler.include-libraries>
+			
+			<define name="COMPILEVAR::DEBUG" value="${compile.code.debug}" />
+			
+		</compc>
+		
+	</target>
+	
+	<target name="copyFromLocalBuildDir" depends="doCompileSwc" if="classes.exist">
+		<copy file="${swc.build.dir}/${swc.name}" todir="${copy.build.to.dir}"/>
+	</target>
+	
+	<target name="tester" depends="doCompileSwc">
+		<antcall target="tester_alone" />
+	</target>
+	
+	<target name="tester_alone" depends="clean_tester">
+		
+		<mxmlc 
+			debug="${compile.code.debug}"
+            file="${document.class}" 
+            output="${test.build.dir}/${swf.name}"
+            actionscript-file-encoding="UTF-8"
+			default-background-color="${proj.bg.color}"
+			default-frame-rate="${proj.frame.rate}"
+			target-player="${proj.target.player}"
+        >
+			<!--
+			<debug>true</debug>
+			-->
+			
+			<!-- The size of the test swf. -->
+			<default-size width="${proj.width}" height="${proj.height}" />
+			
+			<source-path path-element="${test.src.dir}"/>
+			
+			<!-- Compile against but omit from linking. -->
+			<compiler.external-library-path dir="${swfCompileAgainst.lib}" append="true">
+				<include name="*.swc" />
+			</compiler.external-library-path>
+			
+			<!-- Completely include these swc libraries. -->
+			<compiler.include-libraries dir="${swfIncludeAll.lib}" append="true">
+				<include name="*.swc" />
+			</compiler.include-libraries>
+			
+			<!-- Compile into the swf if used. -->
+			<compiler.library-path dir="${includeInSwfIfUsed.lib}" append="true">
+                <include name="*.swc" />
+            </compiler.library-path>
+			
+			<define name="COMPILEVAR::DEBUG" value="${compile.code.debug}" />
+			
+        </mxmlc>
+		
+	</target>
+	
+	<!-- Build the documentation -->
+	<target name="documentation" depends="doCompileSwc, checkConditions" if="do.build.docs">
+		<exec executable="${asdoc.exe}">
+			<arg line="-doc-sources+='${src.dir}'" />
+			<arg line="-source-path+='${src.dir}'" />
+			<arg line="-l+='${swcIncludeAll.lib}'" />
+			<arg line="-l+='${swcCompileAgainst.lib}'" />
+			<arg line="-output='${doc.output.dir}'" />
+			<arg line="-footer '${docs.footer}'"/>
+		</exec>
+	</target>
+	
+	<target name="checkConditions">
+		
+		<condition property="build.docs">
+			<not><equals arg1="${proj.build.docs}" arg2="" /></not>
+		</condition>
+		
+		<condition property="do.build.docs" >
+			<and>
+				<isset property="classes.exist" />
+				<isset property="build.docs" />
+			</and>
+			
+		</condition>
+	</target>
+	
+	<target name="setConditionals">
+		<condition property="compile.code.debug" value="true" else="false" >
+			<and>
+				<isset property="proj.compile.code.debug" />
+				<equals casesensitive="false" arg1="${proj.compile.code.debug}" arg2="true" />
+			</and>
+		</condition>
+		
+	</target>
+	
+</project>
