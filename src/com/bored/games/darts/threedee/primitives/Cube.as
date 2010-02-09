@@ -32,8 +32,7 @@
 			 vertices3D.push(x, y, z);
 
 			// initialize vertices2D and uvtData with some values 
-			 vertices2D.push(0, 0, 0); 
-			 uvtData.push(1, 0, 0); 
+			 vertices2D.push(0, 0, 0);
 		}//end addVertex();
 
 		// adding two triangle faces per rectangle

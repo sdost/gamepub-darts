@@ -27,7 +27,7 @@
 		public function setReleasePosition(a_x:Number, a_y:Number, a_z:Number):void
 		{
 			_releasePosition.x = a_x;
-			_releasePosition.y = a_y;
+			_releasePosition.y = -a_y;
 			_releasePosition.z = a_z;
 			
 			recalculateThrustVector();
@@ -103,7 +103,7 @@
 			y_rotate_unit.z = x_rotate_unit.z * Math.cos(_theta_y) - x_rotate_unit.x * Math.sin(_theta_y);
 			
 			_thrustVector.x = y_rotate_unit.x * _thrustForce;
-			_thrustVector.y = y_rotate_unit.y * _thrustForce;
+			_thrustVector.y = -y_rotate_unit.y * _thrustForce;
 			_thrustVector.z = y_rotate_unit.z * _thrustForce;
 		}//end recalculateThrustVector()
 		
@@ -112,23 +112,9 @@
 			var direction:Vector3D = new Vector3D(0, _gravityForce, 0); 
 			
 			_gravityVector.x = direction.x;
-			_gravityVector.y = direction.y;
+			_gravityVector.y = -direction.y;
 			_gravityVector.z = direction.z;
 		}//end recalculateGravityVector()
-		
-		public function calculateRange():Number	
-		{
-			var distance:Number = (_thrustVector.z / _gravityVector.y) * (_thrustVector.y + Math.sqrt(Math.pow(_thrustVector.y, 2) + 2 * _gravityVector.y * _releasePosition.y));
-						
-			return distance;
-		}//end calculateRange()
-		
-		public function calculateApex():Number
-		{
-			var apex:Number = Math.pow(_thrustVector.y, 2) / (_gravityVector.y * 2) + _releasePosition.y;
-			
-			return apex;
-		}//end calculateApex()
 		
 		public function calculateHeightAtPos(a_z:Number):Number
 		{			
