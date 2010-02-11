@@ -51,8 +51,6 @@
     <element path="swcLibs_includeAll\StateMachines.swc" />
     <element path="swcLibs_includeAll\Tweener.swc" />
     <element path="swcLibs_includeAll\UIComponents.swc" />
-    <element path="swcLibs_includeAll\AttractScreen.swc" />
-    <element path="swcLibs_includeAll\GameplayScreen.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>

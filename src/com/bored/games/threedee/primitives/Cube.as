@@ -1,6 +1,6 @@
-﻿package com.bored.games.darts.threedee.primitives 
+﻿package com.bored.games.threedee.primitives 
 {
-	import com.bored.games.darts.threedee.Mesh3D;
+	import com.bored.games.threedee.Mesh3D;
 	/**
 	 * ...
 	 * @author sam
@@ -29,19 +29,19 @@
 
 		// adding a vertex to our vertex data
 		public function addVertex(x:Number, y:Number, z:Number):void {
-			 vertices3D.push(x, y, z);
+			 _vertices.push(x, y, z);
 
 			// initialize vertices2D and uvtData with some values 
-			 vertices2D.push(0, 0, 0);
+			 _projVertices.push(0, 0, 0);
 		}//end addVertex();
 
 		// adding two triangle faces per rectangle
 		public function addTriangles(index0:Number, index1:Number, index2:Number, index3:Number):void {
 			// first triangle 
-			indices.push(index3, index1, index0);
+			_indices.push(index3, index1, index0);
 
 			// second triangle 
-			indices.push(index3, index2, index1);
+			_indices.push(index3, index2, index1);
 		}//end addTriangles()
 		
 	}//end class Cube

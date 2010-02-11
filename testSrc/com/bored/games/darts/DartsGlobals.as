@@ -1,5 +1,7 @@
 ﻿package com.bored.games.darts
 {
+	import com.bored.games.controllers.InputController;
+	import com.bored.games.controllers.MouseInputController;
 	import flash.display.Sprite;
 	import flash.display.Stage;
 	import flash.events.Event;
@@ -42,6 +44,8 @@
 		private var _constructed:Boolean = false;
 		
 		private var _debugBuild:Boolean = false;
+		
+		private var _inputController:InputController;
 		
 		public function DartsGlobals(a_singletonEnforcer:DartsGlobals_SingletonEnforcer) 
 		{
@@ -86,6 +90,8 @@
 		public function set stage(a_stage:Stage):void
 		{
 			_stage = a_stage;
+			
+			_inputController = new MouseInputController(_stage);
 			
 			/*
 			if (!_optionsInterfaceSpace)
@@ -193,6 +199,11 @@
 			return _debugBuild;
 			
 		}//end get isDebugBuild()
+		
+		public function get inputController():InputController
+		{
+			return _inputController;
+		}//end get inputController()
 		
 		/*****************************
 		 * 
