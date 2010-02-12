@@ -37,10 +37,9 @@
 			return 0;
 		}//end calculateDragAngle()
 		
-		public static function calculateDragLength():Number
+		public static function get dragVector():Vector3D
 		{
-			var vec:Vector3D = new Vector3D((_dragAnchor.x - _dragPosition.x), (_dragAnchor.y - _dragPosition.y), 0);
-			return vec.length;
+			return new Vector3D((_dragAnchor.x - _dragPosition.x), (_dragAnchor.y - _dragPosition.y), 0);
 		}//end calculateDragLength()
 		
 	}//end MouseManager

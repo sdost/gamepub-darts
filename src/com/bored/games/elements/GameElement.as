@@ -1,7 +1,7 @@
 ﻿package com.bored.games.elements 
 {
-	import com.bored.games.math.CartesianCoord;
 	import flash.display.DisplayObject;
+	import flash.geom.Vector3D;
 	
 	/**
 	 * ...
@@ -10,11 +10,11 @@
 	public class GameElement
 	{	
 		private var _lastUpdateTime:Number;
-		private var _position:CartesianCoord;
+		private var _position:Vector3D;
 		
 		public function GameElement() 
 		{
-			_position = new CartesianCoord();
+			_position = new Vector3D();
 		}//end constructor()
 		
 		public function update(t:Number = 0):void
@@ -22,7 +22,7 @@
 			_lastUpdateTime = t;
 		}//end update()
 		
-		public function get position():CartesianCoord
+		public function get position():Vector3D
 		{
 			return _position;
 		}//end get position()

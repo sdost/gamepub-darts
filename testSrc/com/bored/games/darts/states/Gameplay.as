@@ -2,7 +2,9 @@
 {
 	import com.bored.games.assets.GameplayScreen_MC;
 	import com.bored.games.controllers.InputController;
+	import com.bored.games.darts.objects.Board;
 	import com.bored.games.darts.objects.Dart;
+	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.bored.games.darts.ui.GameplayScreen;
 	import com.bored.games.events.InputStateEvent;
 	import com.inassets.statemachines.Finite.State;
@@ -28,14 +30,15 @@
 		private var _buttonDown:Boolean;
 		private var _inputController:InputController;
 		
-		private var _releasePos:Vector3D = new Vector3D(0, -.6, 2);
+		private var _releasePos:Vector3D = new Vector3D(0, 0, 2);
 		private	var _thrust:Number = 20;
 		private var _angleX:Number = 3;
 		private	var _angleY:Number = 0;
 		private var _grav:Number = 9.8;
 		private var _dist:Number = 20;
 		
-		private var _darts:Array;
+		private var _darts:Vector.<Dart>;
+		private var _dartboard:Board;
 		
 		private var _currDartIdx:uint;
 		
@@ -64,26 +67,47 @@
 				_inputController.pause = false;
 				_buttonDown = false;
 				
-				_darts = new Array();
+				_darts = new Vector.<Dart>();
 				_darts.push(new Dart());
 				_darts.push(new Dart());
 				_darts.push(new Dart());
 				
 				_currDartIdx = 0;
 				
+				_dartboard = new Board();
+				_dartboard.position.x = 0.0;
+				_dartboard.position.y = 0.0;
+				_dartboard.position.z = 15.0;
 				
+				_gameplayScreen.setDartReferences(_darts);
+				_gameplayScreen.setBoardReference(_dartboard);
 				
 				_gameplayScreen.addEventListener(Event.ENTER_FRAME, update, false, 0, false);
 			}
 			catch (e:Error)
 			{
-				DartsGlobals.addWarning("Gameplay::onEnter(): Caught error=" + e);
+				DartsGlobals.addWarning("Gameplay::onEnter(): Caught error=" + e.getStackTrace());
 			}
 			
 		}//end onEnter()
 		
 		private function update(a_evt:Event):void
 		{
+			for (var i:int = 0; i < _darts.length; i++)
+			{
+				_darts[i].update();
+				
+				if (_darts[_currDartIdx].position.z >= _dartboard.position.z)
+				{
+					_darts[_currDartIdx].finishThrow();
+					_currDartIdx++;
+					
+					if (_currDartIdx >= _darts.length) {
+						(this.stateMachine as GameFSM).transitionToStateNamed("Gameplay");
+					}
+				} 
+			}
+			
 			_gameplayScreen.render();
 		}//end updateDisplay()
 		
@@ -93,25 +117,31 @@
 			{
 				if (a_evt.button) { // dragging
 					MouseManager.updateDrag(a_evt.x, a_evt.y);
-					_angleY = MouseManager.calculateDragAngle()-90;
-					var len:Number = MouseManager.calculateDragLength() / 100;
-					if ( len > 1 ) len = 1;
-					_angleX = len * 10;
-					_thrust = len * 50;
+					var vec:Vector3D = MouseManager.dragVector;
+					var ratio:Number = vec.length / 100;
+					ratio = ratio > 1 ? 1 : ratio;
+					_angleX = ratio * 10;
+					_thrust = ratio * 30;
 				} else {
-					_buttonDown = false;					
-					(_darts[_currDartIdx] as Dart).initThrowParams(_releasePos.y, _releasePos.z, _thrust, _angleX, _grav, _dist);
+					_buttonDown = false;
+					if( _currDartIdx < _darts.length ) {
+						(_darts[_currDartIdx] as Dart).initThrowParams(_releasePos.x, _releasePos.y, _releasePos.z, _thrust, _angleX, _grav, _dist);
+					}
 				}
 			} else {
 				if (a_evt.button) {
 					_buttonDown = true;
 					MouseManager.beginDrag(a_evt.x, a_evt.y);
 				} else {
-					_releasePos.x = (a_evt.x)/100;
-					_releasePos.y = (a_evt.y)/100;
+					_releasePos.x = (a_evt.x - 400)/100;
+					_releasePos.y = -(a_evt.y - 300)/100;
 					_releasePos.z = 2;
 					
-					(_darts[_currDartIdx] as Dart).position.setCoords(_releasePos.x, _releasePos.y);
+					if( _currDartIdx < _darts.length && !_darts[_currDartIdx].throwing ) {
+						(_darts[_currDartIdx] as Dart).position.x = _releasePos.x;
+						(_darts[_currDartIdx] as Dart).position.y = _releasePos.y;
+						(_darts[_currDartIdx] as Dart).position.z = _releasePos.z;
+					}
 				}
 			}
 		}//end onInputUpdate()
@@ -127,7 +157,7 @@
 		 */
 		override public function onExit():void
 		{
-			
+			_gameplayScreen.removeEventListener(Event.ENTER_FRAME, update);
 		}//end onExit()
 		
 	}//end class Gameplay

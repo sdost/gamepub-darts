@@ -1,6 +1,6 @@
 ﻿package com.bored.games.math 
 {	
-	import com.bored.games.math.CartesianCoord;
+	import flash.geom.Point;
 	import flash.geom.Vector3D;
 	/**
 	 * ...
@@ -8,7 +8,7 @@
 	 */
 	public class TrajectoryCalculator
 	{
-		private var _startPosition:CartesianCoord;
+		private var _startPosition:Vector3D;
 		private var _theta:Number = 0;
 		private var _thrustForce:Number = 0;
 		private var _gravityForce:Number = 0;
@@ -17,14 +17,15 @@
 		
 		public function TrajectoryCalculator() 
 		{
-			_startPosition = new CartesianCoord();
-			
+			_startPosition = new Vector3D();			
 			_thrustVector = new Vector3D();
 		} //end TrajectoryCalculator constructor()
 		
-		public function set initialPosition(a_pos:CartesianCoord):void
+		public function set initialPosition(a_pos:Vector3D):void
 		{
-			_startPosition.setCoords(a_pos);
+			_startPosition.x = a_pos.x;
+			_startPosition.y = a_pos.y;
+			_startPosition.z = a_pos.z;
 			
 			recalculateThrustVector();
 		}//end setReleasePosition()
@@ -50,19 +51,34 @@
 				
 		private function recalculateThrustVector():void
 		{
-			var unit:CartesianCoord = new CartesianCoord(1, 0);
+			var unit:Vector3D = new Vector3D(1, 0, 0);
 			var rotX:Number = unit.x * Math.cos(_theta) - unit.y * Math.sin(_theta);
 			var rotY:Number = unit.x * Math.sin(_theta) + unit.y * Math.cos(_theta);
-			
 			
 			_thrustVector.x = rotX * _thrustForce;
 			_thrustVector.y = rotY * _thrustForce;
 		}//end recalculateThrustVector()
 		
-		public function calculateHeightAtPos(a_x:Number):Number
+		public function get thrustVector():Vector3D
+		{
+			return _thrustVector;
+		}//end get thrustVector()
+		
+		public function calculateHeightAtPos(a_pos:Number):Number
 		{			
-			return _startPosition.y + a_x * (_thrustVector.y / _thrustVector.x) - .5 * a_x * a_x * _gravityForce / Math.pow(_thrustVector.x, 2);
+			return _startPosition.y + (a_pos - _startPosition.z) * (_thrustVector.y / _thrustVector.x) - .5 * (a_pos - _startPosition.z) * (a_pos - _startPosition.z) * _gravityForce / Math.pow(_thrustVector.x, 2);
 		}//end calculateHeightAtPos()
+		
+		public function toString():String
+		{
+			var str:String = new String("TrajectoryCalculator: @(" + _startPosition.x + ", " + _startPosition.y + ", " + _startPosition.z + ")\n");
+			str += new String("\t theta: " + _theta + "\n");
+			str += new String("\t thrust: " + _thrustForce + "\n");
+			str += new String("\t gravity: " + _gravityForce + "\n");
+			str += new String("\t thrust vector: " + _thrustVector.toString());
+			
+			return str;
+		}//end toString()
 		
 	}//end class TrajectoryCalculator
 

@@ -6,6 +6,8 @@
 	import com.bored.games.assets.WallTexture_BMP;
 	import com.bored.games.assets.DartboardTexture_BMP;
 	import com.bored.games.controllers.InputController;
+	import com.bored.games.darts.objects.Board;
+	import com.bored.games.darts.objects.Dart;
 	import com.bored.games.input.MouseManager;
 	import com.bored.games.events.InputStateEvent;
 	import com.bored.games.darts.DartsGlobals;
@@ -84,7 +86,12 @@
 		private var _dartPos:Vector3D = new Vector3D();
 		private var _endPos:Vector3D = new Vector3D();
 		
-		private var _calc:TrajectoryCalculator = new TrajectoryCalculator();
+		private var _dartBillboard:Mesh3D;
+		private var _boardBillboard:Mesh3D;
+		private var _wallBillboard:Mesh3D;
+		
+		private var _dartRefs:Vector.<Dart>;
+		private var _boardRef:Board;
 		
 		public function GameplayScreen(a_img:Sprite, a_buildFromAllDescendants:Boolean = false, a_bAddContents:Boolean = true, a_buildBackground:Boolean = false) 
 		{
@@ -106,32 +113,9 @@
 		override protected function buildFrom(a_img:Sprite, a_buildFromAllDescendants:Boolean = true):Dictionary
 		{
 			var descendantsDict:Dictionary = super.buildFrom(a_img, a_buildFromAllDescendants);
-			
-			// now build ourselves from the descendantsDict.
-			
-			_calculateBtnImg = descendantsDict["calculateBtn_mc"] as MovieClip;
-			
-			_releaseXField = descendantsDict["x_0"] as TextField;
-			_releaseYField = descendantsDict["y_0"] as TextField;
-			_releaseZField = descendantsDict["z_0"] as TextField;
-		
-			_thrustField = descendantsDict["F"] as TextField;
-			_angleXField = descendantsDict["theta_x"] as TextField;
-			_angleYField = descendantsDict["theta_y"] as TextField;
-			_gravityField = descendantsDict["g"] as TextField;
-			_distanceField = descendantsDict["d"] as TextField;
-			
+						
 			_viewPort = descendantsDict["viewPort_mc"] as Sprite;
-			_graphicsLayer = _viewPort.getChildByName("anchor") as Sprite;
-			
-			if (_distanceField)
-			{
-				_distanceField.addEventListener(Event.CHANGE, onDistanceChanged, false, 0, true);
-			}
-			else
-			{
-				throw new Error("GameplayScreen::buildFrom(): _distanceField=" + _distanceField);
-			}
+			_graphicsLayer = _viewPort.getChildByName("anchor") as Sprite;			
 			
 			if(_buildBackground)
 			{
@@ -175,9 +159,9 @@
 			
 			_mpersp = _persp.toMatrix3D();
 			
-			_wall = new Quad();
-			_board = new Quad();
-			_dart = new Quad();
+			_dartBillboard = new Quad();
+			_boardBillboard = new Quad();
+			_wallBillboard = new Quad();
 			
 			_wallTexture = new WallTexture_BMP(100, 100);
 			_dartboardTexture = new DartboardTexture_BMP(50, 50);
@@ -189,9 +173,43 @@
 			
 		}//end addedToStage()
 		
+		public function setDartReferences(a_darts:Vector.<Dart>):void
+		{
+			_dartRefs = a_darts;
+		}//end setDartReferences()
+		
+		public function setBoardReference(a_board:Board):void
+		{
+			_boardRef = a_board;
+		}//end setBoardReference()
+		
 		public function render():void
 		{	
 			_graphicsLayer.graphics.clear();
+			
+			_mtransform.identity();
+			_mtransform.appendScale(20.0, 20.0, 20.0);
+			_mtransform.appendTranslation(0.0, 0.0, 15.0);
+			
+			_wallBillboard.applyTransform(_mtransform);
+			_wallBillboard.renderBitmapFill(_persp, _graphicsLayer.graphics, _wallTexture);
+			
+			_mtransform.identity();
+			_mtransform.appendScale(5.0, 5.0, 5.0);
+			_mtransform.appendTranslation(_boardRef.position.x, -_boardRef.position.y, _boardRef.position.z);
+			
+			_boardBillboard.applyTransform(_mtransform);
+			_boardBillboard.renderBitmapFill(_persp, _graphicsLayer.graphics, _dartboardTexture);
+			
+			if(_dartRefs) {
+				for (var i:int = 0; i < _dartRefs.length; i++) {
+					_mtransform.identity();
+					_mtransform.appendTranslation(_dartRefs[i].position.x, -_dartRefs[i].position.y, _dartRefs[i].position.z);
+				
+					_dartBillboard.applyTransform(_mtransform);
+					_dartBillboard.renderBitmapFill(_persp, _graphicsLayer.graphics, _dartTexture);
+				}
+			}
 		}//end render()
 		
 		private function onDistanceChanged(a_evt:Event):void

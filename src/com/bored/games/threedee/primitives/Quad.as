@@ -24,7 +24,7 @@
 		}//end constructor()
 
 		// adding a vertex to our vertex data
-		public function addVertex(x:Number, y:Number):void {
+		private function addVertex(x:Number, y:Number):void {
 			 _vertices.push(x, y, 0.000000);
 
 			// initialize vertices2D and uvtData with some values 
@@ -32,7 +32,7 @@
 		}//end addVertex();
 
 		// adding two triangle faces per rectangle
-		public function addTriangles(index0:Number, index1:Number, index2:Number, index3:Number):void {
+		private function addTriangles(index0:Number, index1:Number, index2:Number, index3:Number):void {
 			// first triangle 
 			_indices.push(index0, index1, index3);
 
@@ -40,7 +40,7 @@
 			_indices.push(index1, index2, index3);
 		}//end addTriangles()
 		
-		public function addTCoords(t0:Number, t1:Number):void {
+		private function addTCoords(t0:Number, t1:Number):void {
 			_uvtData.push(t0, t1, 0.000000);
 		}//end addTCoords()
 		

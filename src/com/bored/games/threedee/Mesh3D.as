@@ -57,6 +57,11 @@
 			Utils3D.projectVectors(a_persp.toMatrix3D(), _transformedVertices, _projVertices, _uvtData);
 			
 			a_graphics.beginBitmapFill(a_bmp);
+			
+			//trace("Projects Matrices: " + _projVertices.toString());
+			//trace("Indices: " + _indices.toString());
+			//trace("UV Data: " + _uvtData.toString());
+			
 			a_graphics.drawTriangles(_projVertices, _indices, _uvtData, TriangleCulling.NONE);
 			a_graphics.endFill();
 		}//end renderBitmapFill()

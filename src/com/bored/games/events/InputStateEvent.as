@@ -16,8 +16,6 @@
 		{ 
 			super(type, bubbles, cancelable);
 			
-			trace("InputStateEvent::InputStateEvent("+x+", "+y+", "+but+")");
-			
 			this.x = x;
 			this.y = y;
 			
