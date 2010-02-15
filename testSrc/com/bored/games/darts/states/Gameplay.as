@@ -1,6 +1,7 @@
 ﻿package com.bored.games.darts.states 
 {
 	import com.bored.games.assets.GameplayScreen_MC;
+	import com.bored.games.assets.DartboardCollision_BMP;
 	import com.bored.games.controllers.InputController;
 	import com.bored.games.darts.objects.Board;
 	import com.bored.games.darts.objects.Dart;
@@ -40,6 +41,8 @@
 		private var _darts:Vector.<Dart>;
 		private var _dartboard:Board;
 		
+		private var _boardCollisionMap:BitmapData;
+		
 		private var _currDartIdx:uint;
 		
 		public function Gameplay(a_name:String, a_stateMachine:IStateMachine)
@@ -74,7 +77,10 @@
 				
 				_currDartIdx = 0;
 				
+				_boardCollisionMap = new DartboardCollision_BMP(350, 350);
+				
 				_dartboard = new Board();
+				_dartboard.setCollisionMap(new DartboardCollision_BMP(350, 350));
 				_dartboard.position.x = 0.0;
 				_dartboard.position.y = 0.0;
 				_dartboard.position.z = 15.0;
@@ -97,7 +103,9 @@
 			{
 				_darts[i].update();
 				
-				if (_darts[_currDartIdx].position.z >= _dartboard.position.z)
+				var collision:Boolean = _dartboard.checkForCollision(_darts[_currDartIdx].position, _darts[_currDartIdx].radius);
+				
+				if (collision)
 				{
 					_darts[_currDartIdx].finishThrow();
 					_currDartIdx++;

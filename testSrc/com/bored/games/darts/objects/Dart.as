@@ -11,11 +11,14 @@
 	{
 		private var _trajCalc:TrajectoryCalculator;
 		private var _throwing:Boolean;
+		private var _radius:int;
 		
-		public function Dart() 
+		public function Dart(a_radius:int = 1) 
 		{
 			_trajCalc = new TrajectoryCalculator();
 			_throwing = false;
+			
+			_radius = a_radius;
 			
 			this.position.x = -1000;
 			this.position.y = -1000;
@@ -43,6 +46,11 @@
 		{
 			return _throwing;
 		}//end get throwing()
+		
+		public function get radius():int
+		{
+			return _radius;
+		}//end get radius()
 		
 		public function initThrowParams(releaseX:Number, releaseY:Number, releaseZ:Number, thrust:Number, angle:Number, grav:Number, dist:Number):void
 		{

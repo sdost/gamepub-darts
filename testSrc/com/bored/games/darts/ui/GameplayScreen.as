@@ -1,7 +1,6 @@
 ﻿package com.bored.games.darts.ui 
 {
 	import caurina.transitions.Tweener;
-	import com.bored.games.assets.DartboardCollision_BMP;
 	import com.bored.games.assets.DartTexture_BMP;
 	import com.bored.games.assets.WallTexture_BMP;
 	import com.bored.games.assets.DartboardTexture_BMP;
@@ -48,12 +47,6 @@
 		private static var _wallTexture:BitmapData;
 		private static var _dartboardTexture:BitmapData;
 		private static var _dartTexture:BitmapData;
-		
-		private static var _collisionMap:BitmapData;
-		
-		private var _wall:Mesh3D;
-		private var _board:Mesh3D;
-		private var _dart:Mesh3D;
 		
 		private var _background:Sprite;
 		private var _buildBackground:Boolean = false;
@@ -163,13 +156,11 @@
 			_boardBillboard = new Quad();
 			_wallBillboard = new Quad();
 			
-			_wallTexture = new WallTexture_BMP(100, 100);
-			_dartboardTexture = new DartboardTexture_BMP(50, 50);
-			_dartTexture = new DartTexture_BMP(100, 100);
+			_wallTexture = new WallTexture_BMP(800, 531);
+			_dartboardTexture = new DartboardTexture_BMP(350, 350);
+			_dartTexture = new DartTexture_BMP(400, 340);
 			
-			_collisionMap = new DartboardCollision_BMP(50, 50);
-			
-			Tweener.addTween(this, {alpha:1, time:2 } );
+			Tweener.addTween(this, { alpha:1, time:2 } );
 			
 		}//end addedToStage()
 		
@@ -211,11 +202,6 @@
 				}
 			}
 		}//end render()
-		
-		private function onDistanceChanged(a_evt:Event):void
-		{
-			_wallZ = Number((a_evt.currentTarget as TextField).text);
-		}//end onDistanceChanged()
 		
 		override public function destroy(...args):void
 		{
