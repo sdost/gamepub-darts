@@ -1,0 +1,27 @@
+﻿<plist version="1.0">
+	<dict>
+		<key>gameplay</key>
+		<dict>
+			<key>releasePosition</key>
+			<dict>
+				<key>x</key>
+				<real>0</real>
+				<key>y</key>
+				<real>0</real>
+				<key>z</key>
+				<real>2</real>
+			</dict>
+			<key>thrust</key>
+			<real>20</real>
+			<key>angle</key>
+			<real>3</real>
+			<key>gravity</key>
+			<real>9.8</real>
+		</dict>
+		<key>dart</key>
+		<dict>
+			<key>radius</key>
+			<integer>1</integer>
+		</dict>
+	</dict>
+</plist>

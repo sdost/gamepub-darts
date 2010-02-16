@@ -1,5 +1,6 @@
 ﻿package com.bored.games.darts
 {
+	import com.bored.games.config.ConfigManager;
 	import com.bored.games.controllers.InputController;
 	import com.bored.games.controllers.MouseInputController;
 	import flash.display.Sprite;
@@ -7,6 +8,7 @@
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.TimerEvent;
+	import flash.net.URLRequest;
 	import flash.utils.Timer;
 	
 	/**
@@ -46,6 +48,8 @@
 		private var _debugBuild:Boolean = false;
 		
 		private var _inputController:InputController;
+		
+		private var _config:XML;
 		
 		public function DartsGlobals(a_singletonEnforcer:DartsGlobals_SingletonEnforcer) 
 		{
@@ -193,6 +197,11 @@
 			return _flashVars;
 			
 		}//end get flashVars()
+		
+		public function set config(a_xml:String):void 
+		{
+			ConfigManager.loadConfig(a_xml);
+		}//end set config()
 		
 		public function get isDebugBuild():Boolean
 		{

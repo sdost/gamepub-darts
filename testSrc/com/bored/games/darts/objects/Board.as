@@ -50,17 +50,23 @@
 				
 				trace("Sample: " + samples.toString());
 				
-				var color:Number = 0x000000;
+				var color:Number = 0x00000000;
+				
+				trace("Bytes Available: " + samples.bytesAvailable);
 				
 				while(samples.bytesAvailable) {
 					color += samples.readUnsignedInt();	
 				}
+				
+				trace("Length: " + samples.length);
 						
-				var avg:uint = color / samples.length;
+				var avg:uint = color / (a_radius * a_radius);
 				
 				trace("Averaged Color (from sample): " + avg.toString(16));
 				
-				return ( avg == 0x000000 );
+				trace("AND: " + (avg & 0xFF000000));
+				
+				return uint(avg & 0xFF000000);
 			} 
 			else return false;
 		}//end checkForCollision()

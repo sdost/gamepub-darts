@@ -52,7 +52,7 @@
 			return _radius;
 		}//end get radius()
 		
-		public function initThrowParams(releaseX:Number, releaseY:Number, releaseZ:Number, thrust:Number, angle:Number, grav:Number, dist:Number):void
+		public function initThrowParams(releaseX:Number, releaseY:Number, releaseZ:Number, thrust:Number, angle:Number, grav:Number):void
 		{
 			this.position.x = releaseX;
 			this.position.y = releaseY;

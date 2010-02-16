@@ -1,7 +1,8 @@
 ﻿package com.bored.games.darts.states 
 {
 	import com.bored.games.assets.GameplayScreen_MC;
-	import com.bored.games.assets.DartboardCollision_BMP;
+	import com.bored.games.assets.DartboardTexture_BMP;
+	import com.bored.games.config.ConfigManager;
 	import com.bored.games.controllers.InputController;
 	import com.bored.games.darts.objects.Board;
 	import com.bored.games.darts.objects.Dart;
@@ -31,12 +32,10 @@
 		private var _buttonDown:Boolean;
 		private var _inputController:InputController;
 		
-		private var _releasePos:Vector3D = new Vector3D(0, 0, 2);
-		private	var _thrust:Number = 20;
-		private var _angleX:Number = 3;
-		private	var _angleY:Number = 0;
-		private var _grav:Number = 9.8;
-		private var _dist:Number = 20;
+		private var _releasePos:Vector3D;
+		private	var _thrust:Number;
+		private var _angle:Number;
+		private var _grav:Number;
 		
 		private var _darts:Vector.<Dart>;
 		private var _dartboard:Board;
@@ -56,6 +55,13 @@
 		 */
 		override public function onEnter():void
 		{
+			var gameplayConfig:XML = ConfigManager.getConfigNamespace("gameplay");
+			
+			_releasePos = new Vector3D( gameplayConfig.releasePosition.x, gameplayConfig.releasePosition.y, gameplayConfig.releasePosition.z );
+			_thrust = gameplayConfig.thrust;
+			_angle = gameplayConfig.angle;
+			_grav = gameplayConfig.gravity;
+			
 			var gameplayScreenImg:MovieClip;
 			
 			try
@@ -70,20 +76,20 @@
 				_inputController.pause = false;
 				_buttonDown = false;
 				
+				var dartConfig:XML = ConfigManager.getConfigNamespace("dart");
+				
 				_darts = new Vector.<Dart>();
-				_darts.push(new Dart());
-				_darts.push(new Dart());
-				_darts.push(new Dart());
+				_darts.push(new Dart(dartConfig.radius));
+				_darts.push(new Dart(dartConfig.radius));
+				_darts.push(new Dart(dartConfig.radius));
 				
 				_currDartIdx = 0;
 				
-				_boardCollisionMap = new DartboardCollision_BMP(350, 350);
-				
 				_dartboard = new Board();
-				_dartboard.setCollisionMap(new DartboardCollision_BMP(350, 350));
+				_dartboard.setCollisionMap(new DartboardTexture_BMP(350, 350));
 				_dartboard.position.x = 0.0;
 				_dartboard.position.y = 0.0;
-				_dartboard.position.z = 15.0;
+				_dartboard.position.z = 6.0;
 				
 				_gameplayScreen.setDartReferences(_darts);
 				_gameplayScreen.setBoardReference(_dartboard);
@@ -128,12 +134,12 @@
 					var vec:Vector3D = MouseManager.dragVector;
 					var ratio:Number = vec.length / 100;
 					ratio = ratio > 1 ? 1 : ratio;
-					_angleX = ratio * 10;
+					_angle = ratio * 10;
 					_thrust = ratio * 30;
 				} else {
 					_buttonDown = false;
 					if( _currDartIdx < _darts.length ) {
-						(_darts[_currDartIdx] as Dart).initThrowParams(_releasePos.x, _releasePos.y, _releasePos.z, _thrust, _angleX, _grav, _dist);
+						(_darts[_currDartIdx] as Dart).initThrowParams(_releasePos.x, _releasePos.y, _releasePos.z, _thrust, _angle, _grav);
 					}
 				}
 			} else {

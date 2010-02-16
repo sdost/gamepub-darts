@@ -40,6 +40,7 @@
 			
 			// set the global stage value.
 			DartsGlobals.instance.stage = this.stage;
+			DartsGlobals.instance.config = "config.plist";
 			
 			// our flashVars were set before we were added to the stage, so, now that we're on the stage, we can start.
 			_myStateMachine.start();
