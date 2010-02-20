@@ -32,6 +32,11 @@
 			return _parsedConfigXML.child(a_name)[0];
 		}//end getConfigNamespace()
 		
+		public static function get config():XML
+		{
+			return _parsedConfigXML;
+		}//end get config()
+		
 	}//end ConfigManager
 
 }//end com.bored.games.config

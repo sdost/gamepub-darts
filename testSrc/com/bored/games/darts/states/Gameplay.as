@@ -1,7 +1,6 @@
 ﻿package com.bored.games.darts.states 
 {
 	import com.bored.games.assets.GameplayScreen_MC;
-	import com.bored.games.assets.DartboardTexture_BMP;
 	import com.bored.games.config.ConfigManager;
 	import com.bored.games.controllers.InputController;
 	import com.bored.games.darts.objects.Board;
@@ -9,6 +8,7 @@
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.bored.games.darts.ui.GameplayScreen;
 	import com.bored.games.events.InputStateEvent;
+	import com.bored.games.graphics.ImageFactory;
 	import com.inassets.statemachines.Finite.State;
 	import com.inassets.statemachines.interfaces.IStateMachine;
 	import flash.display.BitmapData;
@@ -66,8 +66,8 @@
 			
 			try
 			{
-				gameplayScreenImg = new GameplayScreen_MC();
-				_gameplayScreen = new GameplayScreen(gameplayScreenImg, false, true);
+				//gameplayScreenImg = new GameplayScreen_MC();
+				_gameplayScreen = new GameplayScreen(/*gameplayScreenImg, false, true*/);
 				
 				DartsGlobals.instance.screenSpace.addChild(_gameplayScreen);
 				
@@ -85,11 +85,13 @@
 				
 				_currDartIdx = 0;
 				
+				var boardConfig:XML = ConfigManager.getConfigNamespace("dartboard");
+				
 				_dartboard = new Board();
-				_dartboard.setCollisionMap(new DartboardTexture_BMP(350, 350));
-				_dartboard.position.x = 0.0;
-				_dartboard.position.y = 0.0;
-				_dartboard.position.z = 6.0;
+				_dartboard.setCollisionMap(ImageFactory.getBitmapDataByQualifiedName(boardConfig.collisionMap.bitmap, boardConfig.collisionMap.width, boardConfig.collisionMap.height));
+				_dartboard.position.x = boardConfig.position.x;
+				_dartboard.position.y = boardConfig.position.y;
+				_dartboard.position.z = boardConfig.position.z;
 				
 				_gameplayScreen.setDartReferences(_darts);
 				_gameplayScreen.setBoardReference(_dartboard);
@@ -109,15 +111,18 @@
 			{
 				_darts[i].update();
 				
-				var collision:Boolean = _dartboard.checkForCollision(_darts[_currDartIdx].position, _darts[_currDartIdx].radius);
+				var result:int = _dartboard.checkForCollision(_darts[_currDartIdx].position, _darts[_currDartIdx].radius);
 				
-				if (collision)
-				{
+				if (result > 0)
+				{					
 					_darts[_currDartIdx].finishThrow();
 					_currDartIdx++;
 					
 					if (_currDartIdx >= _darts.length) {
-						(this.stateMachine as GameFSM).transitionToStateNamed("Gameplay");
+						_currDartIdx = 0;
+						_darts[0].reset();
+						_darts[1].reset();
+						_darts[2].reset();
 					}
 				} 
 			}
@@ -147,9 +152,9 @@
 					_buttonDown = true;
 					MouseManager.beginDrag(a_evt.x, a_evt.y);
 				} else {
-					_releasePos.x = (a_evt.x - 400)/100;
-					_releasePos.y = -(a_evt.y - 300)/100;
-					_releasePos.z = 2;
+					_releasePos.x = (a_evt.x - 350)/400;
+					_releasePos.y = -(a_evt.y - 275)/400;
+					_releasePos.z = 0;
 					
 					if( _currDartIdx < _darts.length && !_darts[_currDartIdx].throwing ) {
 						(_darts[_currDartIdx] as Dart).position.x = _releasePos.x;

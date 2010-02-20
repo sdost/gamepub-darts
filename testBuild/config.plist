@@ -1,5 +1,7 @@
 ﻿<plist version="1.0">
 	<dict>
+		<key>engineScale</key>
+		<real>400</real>
 		<key>gameplay</key>
 		<dict>
 			<key>releasePosition</key>
@@ -9,7 +11,7 @@
 				<key>y</key>
 				<real>0</real>
 				<key>z</key>
-				<real>2</real>
+				<real>0</real>
 			</dict>
 			<key>thrust</key>
 			<real>20</real>
@@ -22,6 +24,57 @@
 		<dict>
 			<key>radius</key>
 			<integer>1</integer>
+		</dict>
+		<key>dartboard</key>
+		<dict>
+			<key>position</key>
+			<dict>
+				<key>x</key>
+				<real>0</real>
+				<key>y</key>
+				<real>0</real>
+				<key>z</key>
+				<real>1.8</real>
+			</dict>
+			<key>collisionMap</key>
+			<dict>
+				<key>bitmap</key>
+				<string>com.bored.games.assets.PrototypeDartboardTexture_BMP</string>
+				<key>width</key>
+				<integer>353</integer>
+				<key>height</key>
+				<integer>353</integer>
+			</dict>
+		</dict>
+		<key>textures</key>
+		<dict>
+			<key>dart</key>
+			<dict>
+				<key>bitmap</key>
+				<string>com.bored.games.assets.PrototypeDartTexture_BMP</string>
+				<key>width</key>
+				<integer>512</integer>
+				<key>height</key>
+				<integer>512</integer>
+			</dict>
+			<key>board</key>
+			<dict>
+				<key>bitmap</key>
+				<string>com.bored.games.assets.PrototypeDartboardTexture_BMP</string>
+				<key>width</key>
+				<integer>353</integer>
+				<key>height</key>
+				<integer>353</integer>
+			</dict>
+			<key>wall</key>
+			<dict>
+				<key>bitmap</key>
+				<string>com.bored.games.assets.PrototypeWallTexture_BMP</string>
+				<key>width</key>
+				<integer>700</integer>
+				<key>height</key>
+				<integer>550</integer>
+			</dict>
 		</dict>
 	</dict>
 </plist>
