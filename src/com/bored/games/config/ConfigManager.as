@@ -2,6 +2,7 @@
 {
 	import com.adobe.webapis.URLLoaderBase;
 	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import laan.xml.PlistParser;
@@ -11,8 +12,12 @@
 	 */
 	public class ConfigManager
 	{
+		public static const CONFIG_READY:String = "configReady";
+		
 		private static var _configXML:XML;
 		private static var _parsedConfigXML:XML;
+		
+		public static var dispatcher:EventDispatcher = new EventDispatcher();
 		
 		public static function loadConfig(a_string:String):void
 		{
@@ -25,6 +30,7 @@
 		{
 			_configXML = new XML(a_evt.target.data);
 			_parsedConfigXML = PlistParser.parsePlist(_configXML);
+			dispatcher.dispatchEvent(new Event(ConfigManager.CONFIG_READY));
 		}//end xmlLoadComplete()
 		
 		public static function getConfigNamespace(a_name:String):XML

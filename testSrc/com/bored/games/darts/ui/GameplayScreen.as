@@ -12,12 +12,15 @@
 	import away3dlite.core.utils.Debug;
 	import away3dlite.events.Loader3DEvent;
 	import away3dlite.loaders.Collada;
+	import away3dlite.loaders.data.MaterialData;
+	import away3dlite.loaders.data.MeshMaterialData;
 	import away3dlite.loaders.Loader3D;
 	import away3dlite.materials.BitmapFileMaterial;
 	import away3dlite.materials.BitmapMaterial;
+	import away3dlite.materials.WireframeMaterial;
 	import away3dlite.primitives.Plane;
 	import caurina.transitions.Tweener;
-	import com.bored.games.away3d.cameras.FollowCamera3D;
+	import com.bored.games.assets.VectorDartboard_MC;
 	import com.bored.games.config.ConfigManager;
 	import com.bored.games.controllers.InputController;
 	import com.bored.games.darts.objects.Board;
@@ -32,6 +35,7 @@
 	import com.inassets.ui.contentholders.ContentHolder;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import flash.display.BlendMode;
 	import flash.display.Loader;
 	import flash.display.MovieClip;
 	import flash.display.Shader;
@@ -64,9 +68,10 @@
 	 */
 	public class GameplayScreen extends Sprite //ContentHolder
 	{
+		private static var _dartboardMC:BitmapMaterial;
+		
 		private static var _wallTexture:BitmapMaterial;
-		private static var _dartboardTexture:BitmapMaterial;
-		private static var _dartTexture:BitmapMaterial;
+		private static var _dartOutline:WireframeMaterial;
 		
 		//private var _background:Sprite;
 		//private var _buildBackground:Boolean = false;
@@ -78,11 +83,10 @@
 		private var _scene:Scene3D;
 		
 		private var _camera:Camera3D;
-		private var _followCamera:FollowCamera3D;
-		
-		private var _renderer:FastRenderer;
 		
 		private var _view:View3D;
+		
+		private var _renderer:FastRenderer;
 		
 		private var _engineScale:Number;
 		
@@ -210,14 +214,14 @@
 			_scene = new Scene3D();
 			
 			_camera = new Camera3D();
-			_camera.z = -400;
+			_camera.z = -100;
 			
-			_followCamera = new FollowCamera3D();
-			_followCamera.distance = 400;
+			_renderer = new FastRenderer();
 			
 			_view = new View3D();
 			_view.scene = _scene;
 			_view.camera = _camera;
+			_view.renderer = _renderer;
 			
 			addChild(_view);
 			
@@ -237,19 +241,20 @@
 			_wallTexture.repeat = false;
 			_wallTexture.smooth = true;
 			
-			_dartboardTexture = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(textureConfig.board.bitmap, textureConfig.board.width, textureConfig.board.height));
-			_dartboardTexture.repeat = false;
-			_dartboardTexture.smooth = true;
+			var bmp:BitmapData = new BitmapData(353, 353, true, 0x0000000000);
+			bmp.draw(new VectorDartboard_MC());
 			
-			_dartTexture = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(textureConfig.dart.bitmap, textureConfig.dart.width, textureConfig.dart.height));
-			_dartTexture.repeat = false;
-			_dartTexture.smooth = true;
+			_dartboardMC = new BitmapMaterial(bmp);
+			_dartboardMC.repeat = false;
+			_dartboardMC.smooth = true;
+			
+			_dartOutline = new WireframeMaterial(0x000000);
 			
 		}//end initMaterial()
 		
 		private function onSuccess(a_evt:Loader3DEvent):void
 		{
-			_dartTemplate = _loader.handle;
+			_dartTemplate = _loader.handle;			
 			_dartTemplate.mouseEnabled = false;
 			
 			for ( var i:int = 0; i < 3; i++ ) {
@@ -264,12 +269,12 @@
 		 */
 		private function initObjects():void
 		{
+			Debug.active = true;
+			
 			var textureConfig:XML = ConfigManager.getConfigNamespace("textures");
 			
 			_wallBillboard = new Plane();
-			_wallBillboard.rotationZ = 180;
-			_wallBillboard.rotationY = 180;
-			_wallBillboard.z = 800;
+			_wallBillboard.z = 200;
 			_wallBillboard.material = _wallTexture;
 			_wallBillboard.width = textureConfig.wall.width;
 			_wallBillboard.height = textureConfig.wall.height;
@@ -279,9 +284,7 @@
 			_scene.addChild(_wallBillboard);
 			
 			_boardBillboard = new Plane();
-			_boardBillboard.rotationZ = 180;
-			_boardBillboard.rotationY = 180;
-			_boardBillboard.material = _dartboardTexture;
+			_boardBillboard.material = _dartboardMC;
 			_boardBillboard.width = textureConfig.board.width;
 			_boardBillboard.height = textureConfig.board.height;
 			_boardBillboard.yUp = false;
@@ -290,7 +293,7 @@
 			_scene.addChild(_boardBillboard);
 			
 			_collada = new Collada();
-			_collada.scaling = 3.6;
+			_collada.scaling = 2;
 			_collada.centerMeshes = true;
 			
 			_loader = new Loader3D();
@@ -326,17 +329,6 @@
 					_dartModels[i].x = _dartRefs[i].position.x * _engineScale;
 					_dartModels[i].y = -(_dartRefs[i].position.y * _engineScale);
 					_dartModels[i].z = _dartRefs[i].position.z * _engineScale;
-					
-					if (_dartRefs[i].throwing) {
-						//followCam = true;
-						_followCamera.target = _dartModels[i];
-					}
-				}
-				
-				if (followCam) {
-					_view.camera = _followCamera;
-				} else {
-					_view.camera = _camera;
 				}
 			}
 			

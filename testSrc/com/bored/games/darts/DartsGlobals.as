@@ -3,6 +3,7 @@
 	import com.bored.games.config.ConfigManager;
 	import com.bored.games.controllers.InputController;
 	import com.bored.games.controllers.MouseInputController;
+	import com.bored.services.AbstractExternalService;
 	import flash.display.Sprite;
 	import flash.display.Stage;
 	import flash.events.Event;
@@ -28,7 +29,7 @@
 		 * the global layers, below:
 		 */
 		
-		//private var _optionsInterfaceSpace:Sprite;
+		private var _optionsInterfaceSpace:Sprite;
 		
 		// space for any top-level pop-ups.
 		private var _popupSpace:Sprite;
@@ -50,6 +51,8 @@
 		private var _inputController:InputController;
 		
 		private var _config:XML;
+		
+		private var _externalService:AbstractExternalService;
 		
 		public function DartsGlobals(a_singletonEnforcer:DartsGlobals_SingletonEnforcer) 
 		{
@@ -97,12 +100,10 @@
 			
 			_inputController = new MouseInputController(_stage);
 			
-			/*
 			if (!_optionsInterfaceSpace)
 			{
 				_optionsInterfaceSpace = new Sprite();
 			}
-			*/
 			
 			if (!_popupSpace)
 			{
@@ -128,15 +129,13 @@
 			if (_popupSpace.parent)
 				_popupSpace.parent.removeChild(_popupSpace);
 			
-			/*
 			if (_optionsInterfaceSpace.parent)
 				_optionsInterfaceSpace.parent.removeChild(_optionsInterfaceSpace);
-			*/
 			
 			_stage.addChild(_screenSpace); // bottom
 			_stage.addChild(_adSpace);
 			_stage.addChild(_popupSpace); 
-			// _stage.addChild(_optionsInterfaceSpace); // top
+			_stage.addChild(_optionsInterfaceSpace); // top
 			
 		}//end set stage()
 		
@@ -164,27 +163,11 @@
 			
 		}//end set popupSpace()
 		
-		/*
 		public function get optionsInterfaceSpace():Sprite
 		{
 			return _optionsInterfaceSpace;
 			
 		}//end set optionsInterfaceSpace()
-		*/
-		
-		/*
-		public function set optionsInterface(a_anim:Sprite):void
-		{
-			_optionsInterface = a_anim;
-			
-		}//end set preloaderAnimation()
-		
-		public function get optionsInterface():Sprite
-		{
-			return _optionsInterface;
-			
-		}//end get preloaderAnimation()
-		*/
 		
 		public function set flashVars(a_obj:Object):void
 		{
@@ -202,6 +185,16 @@
 		{
 			ConfigManager.loadConfig(a_xml);
 		}//end set config()
+		
+		public function set externalServices(a_ext:AbstractExternalService):void
+		{
+			_externalService = a_ext;
+		}//end set externalServices()
+		
+		public function get externalServices():AbstractExternalService
+		{
+			return _externalService;
+		}//end get externalServices()
 		
 		public function get isDebugBuild():Boolean
 		{

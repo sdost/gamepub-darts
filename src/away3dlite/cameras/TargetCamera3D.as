@@ -33,7 +33,7 @@ package away3dlite.cameras
 		 * @param zoom		Defines the overall scale value of the view.
 		 * @param target	The 3d object targeted by the camera.
 		 */
-        public function TargetCamera3D(zoom:Number = 10, focus:Number = 100, target:Object3D = null)
+        public function TargetCamera3D(focus:Number = 10, zoom:Number = 100, target:Object3D = null)
         {
             super(focus, zoom);
             

@@ -1,7 +1,14 @@
 ﻿<plist version="1.0">
 	<dict>
+		<key>externalServices</key>
+		<dict>
+			<key>provider</key>
+			<string>com.bored.services.ExternalService_MochiAPI</string>
+			<key>gameId</key>
+			<string>84993a1de4031cd8</string>
+		</dict>
 		<key>engineScale</key>
-		<real>400</real>
+		<real>100</real>
 		<key>gameplay</key>
 		<dict>
 			<key>releasePosition</key>
@@ -48,32 +55,23 @@
 		</dict>
 		<key>textures</key>
 		<dict>
-			<key>dart</key>
-			<dict>
-				<key>bitmap</key>
-				<string>com.bored.games.assets.PrototypeDartTexture_BMP</string>
-				<key>width</key>
-				<integer>512</integer>
-				<key>height</key>
-				<integer>512</integer>
-			</dict>
 			<key>board</key>
 			<dict>
 				<key>bitmap</key>
 				<string>com.bored.games.assets.PrototypeDartboardTexture_BMP</string>
 				<key>width</key>
-				<integer>353</integer>
+				<integer>128</integer>
 				<key>height</key>
-				<integer>353</integer>
+				<integer>128</integer>
 			</dict>
 			<key>wall</key>
 			<dict>
 				<key>bitmap</key>
 				<string>com.bored.games.assets.PrototypeWallTexture_BMP</string>
 				<key>width</key>
-				<integer>700</integer>
+				<integer>255</integer>
 				<key>height</key>
-				<integer>550</integer>
+				<integer>200</integer>
 			</dict>
 		</dict>
 	</dict>

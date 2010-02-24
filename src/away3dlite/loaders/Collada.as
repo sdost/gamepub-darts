@@ -411,9 +411,8 @@
             var totalStrings:Number = strings.length;
 			
             for (var i:Number = 0; i < totalStrings; ++i)
-            	if (strings[i] != "") {					
-					numbers.push(Number(strings[i]));
-				}
+            	if (strings[i] != "")
+                	numbers.push(Number(strings[i]));
 
             return numbers;
         }
