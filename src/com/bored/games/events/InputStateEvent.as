@@ -1,6 +1,7 @@
 ﻿package com.bored.games.events 
 {
 	import flash.events.Event;
+	import flash.utils.getTimer;
 	
 	/**
 	 * ...
@@ -10,7 +11,7 @@
 	{
 		public static const UPDATE:String = "input_Update"
 		
-		public var x:Number, y:Number, button:Boolean;
+		public var x:Number, y:Number, button:Boolean, timestamp:Number;
 		
 		public function InputStateEvent(type:String, x:Number, y:Number, but:Boolean, bubbles:Boolean = false, cancelable:Boolean = false) 
 		{ 
@@ -20,6 +21,8 @@
 			this.y = y;
 			
 			this.button = but;
+			
+			timestamp = getTimer();
 			
 		} //end constructor()
 		

@@ -3,12 +3,14 @@
 	import com.bored.games.assets.GameplayScreen_MC;
 	import com.bored.games.config.ConfigManager;
 	import com.bored.games.controllers.InputController;
+	import com.bored.games.controllers.MouseInputController;
 	import com.bored.games.darts.objects.Board;
 	import com.bored.games.darts.objects.Dart;
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.bored.games.darts.ui.GameplayScreen;
 	import com.bored.games.events.InputStateEvent;
 	import com.bored.games.graphics.ImageFactory;
+	import com.bored.games.input.MouseStroke;
 	import com.inassets.statemachines.Finite.State;
 	import com.inassets.statemachines.interfaces.IStateMachine;
 	import flash.display.BitmapData;
@@ -27,6 +29,11 @@
 	 */
 	public class Gameplay extends State
 	{		
+		private static var AIM:uint = 0;
+		private static var READY:uint = 1;
+		private static var SHOOT:uint = 2;
+		private static var RELEASE:uint = 4;
+		
 		private var _gameplayScreen:GameplayScreen;
 		
 		private var _buttonDown:Boolean;
@@ -43,6 +50,10 @@
 		private var _boardCollisionMap:BitmapData;
 		
 		private var _currDartIdx:uint;
+		
+		private var _currentStroke:MouseStroke;
+		
+		private var _inputState:uint = AIM;
 		
 		public function Gameplay(a_name:String, a_stateMachine:IStateMachine)
 		{
@@ -124,6 +135,9 @@
 						_darts[1].reset();
 						_darts[2].reset();
 					}
+					
+					_inputState = AIM;
+					_currentStroke = null;
 				} 
 			}
 			
@@ -133,7 +147,45 @@
 		private function inputUpdate(a_evt:InputStateEvent):void
 		{
 			if (_buttonDown)
-			{
+			{	
+				if(a_evt.button) {
+					if (_inputState == READY) {
+						
+						trace("Vector: " + _currentStroke.vector.toString());
+						
+						(_darts[_currDartIdx] as Dart).position.z = -0.1 * Math.abs(_currentStroke.vector.y / ConfigManager.config.readyThreshold);
+						
+						if (_currentStroke.vector.y >= ConfigManager.config.readyThreshold) // TODO externalize this value...
+						{
+							_inputState = SHOOT;
+							trace("Moving to SHOOT state.");
+						}
+					}
+				} else {
+					if (_inputState == SHOOT) {
+						
+						trace("Velocity: " + _currentStroke.vel.toString());
+						
+						if (_currentStroke.vel.y < 0 && (Math.abs(_currentStroke.vel.y)*ConfigManager.config.shootMultiplier) > ConfigManager.config.shootThreshold) // TODO externalize this value...
+						{
+							_thrust = Math.abs(_currentStroke.vel.y) * ConfigManager.config.shootMultiplier;
+							var offset:Number = _currentStroke.vel.x;
+							
+							_buttonDown = false;
+							if( _currDartIdx < _darts.length ) {
+								(_darts[_currDartIdx] as Dart).initThrowParams(_releasePos.x, _releasePos.y, _releasePos.z, _thrust, _angle, _grav);
+								_inputState = RELEASE;
+								trace("Moving to RELEASE state.");
+							}
+						} else {
+							_inputState = AIM;
+							trace("Moving to AIM state.");
+						}
+					}
+					
+					_buttonDown = false;
+				}
+				/*
 				if (a_evt.button) { // dragging
 					MouseManager.updateDrag(a_evt.x, a_evt.y);
 					var vec:Vector3D = MouseManager.dragVector;
@@ -147,19 +199,27 @@
 						(_darts[_currDartIdx] as Dart).initThrowParams(_releasePos.x, _releasePos.y, _releasePos.z, _thrust, _angle, _grav);
 					}
 				}
+				*/
 			} else {
 				if (a_evt.button) {
-					_buttonDown = true;
-					MouseManager.beginDrag(a_evt.x, a_evt.y);
+					if (_inputState == AIM) {
+						_buttonDown = true;
+						//MouseManager.beginDrag(a_evt.x, a_evt.y);
+						_currentStroke = new MouseStroke(_inputController as MouseInputController, a_evt.x, a_evt.y, a_evt.timestamp);
+						_inputState = READY;
+						trace("Moving to READY state.");
+					}
 				} else {
-					_releasePos.x = (a_evt.x - 350)/400;
-					_releasePos.y = -(a_evt.y - 275)/400;
-					_releasePos.z = 0;
-					
-					if( _currDartIdx < _darts.length && !_darts[_currDartIdx].throwing ) {
-						(_darts[_currDartIdx] as Dart).position.x = _releasePos.x;
-						(_darts[_currDartIdx] as Dart).position.y = _releasePos.y;
-						(_darts[_currDartIdx] as Dart).position.z = _releasePos.z;
+					if(_inputState == AIM) {
+						_releasePos.x = (a_evt.x - 350)/400;
+						_releasePos.y = -(a_evt.y - 275)/400;
+						_releasePos.z = 0;
+						
+						if( _currDartIdx < _darts.length && !_darts[_currDartIdx].throwing ) {
+							(_darts[_currDartIdx] as Dart).position.x = _releasePos.x;
+							(_darts[_currDartIdx] as Dart).position.y = _releasePos.y;
+							(_darts[_currDartIdx] as Dart).position.z = _releasePos.z;
+						}
 					}
 				}
 			}

@@ -74,5 +74,11 @@
 				<integer>200</integer>
 			</dict>
 		</dict>
+		<key>readyThreshold</key>
+		<real>150</real>
+		<key>shootThreshold</key>
+		<real>1</real>
+		<key>shootMultiplier</key>
+		<real>50</real>
 	</dict>
 </plist>

@@ -37,17 +37,17 @@
 			
 			trace(servicesConfig.provider);
 			
-			var ServicesClass:Class = getDefinitionByName(servicesConfig.provider) as Class;
+			//var ServicesClass:Class = getDefinitionByName(servicesConfig.provider) as Class;
 			
-			trace("ServicesClass: " + ServicesClass);
+			//trace("ServicesClass: " + ServicesClass);
 			
-			var ext:AbstractExternalService = new ServicesClass();
+			//var ext:AbstractExternalService = new ServicesClass();
 			
-			ext.init(servicesConfig.gameId, DartsGlobals.instance.optionsInterfaceSpace);
+			//ext.init(servicesConfig.gameId, DartsGlobals.instance.optionsInterfaceSpace);
 			
-			DartsGlobals.instance.externalServices = ext;
+			//DartsGlobals.instance.externalServices = ext;
 			
-			trace("Initialization::onEnter()");
+			//trace("Initialization::onEnter()");
 			this.finished();
 			
 		}//end onEnter()

@@ -50,8 +50,6 @@
 		
 		private function handleMouseMove(evt:MouseEvent):void
 		{
-			evt.stopPropagation();
-			
 			var x:Number = evt.stageX;
 			var y:Number = evt.stageY;
 			var but:Boolean = evt.buttonDown;
@@ -62,8 +60,6 @@
 		
 		private function handleMouseButtons(evt:MouseEvent):void
 		{
-			evt.stopPropagation();
-			
 			var x:Number = evt.stageX;
 			var y:Number = evt.stageY;
 			var but:Boolean = evt.buttonDown;
