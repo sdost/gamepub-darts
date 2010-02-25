@@ -53,6 +53,7 @@
     <element path="swcLibs_includeAll\UIComponents.swc" />
     <element path="swfLibs_includeAll\AttractScreen.swc" />
     <element path="swfLibs_includeAll\GameplayScreen.swc" />
+    <element path="swfLibs_includeAll\HUDAssets.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>

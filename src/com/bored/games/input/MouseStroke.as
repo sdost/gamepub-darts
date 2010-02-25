@@ -51,7 +51,7 @@
 		
 		public function get vector():Point
 		{
-			return new Point((_lastPosition.x - _startPosition.x), -(_lastPosition.y - _startPosition.x));
+			return new Point(_lastPosition.x - _startPosition.x, _lastPosition.y - _startPosition.y);
 		}//end get distance()
 		
 	}//end MouseStroke

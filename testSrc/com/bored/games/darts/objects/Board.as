@@ -26,17 +26,19 @@
 			_collMap = a_bmp;
 		}//end setCollisionMap()
 		
-		public function checkForCollision(a_pos:Vector3D, a_radius:int):int
+		public function checkForCollision(a_obj:GameElement, a_radius:int):int
 		{
 			var points:int = -1;
 			
-			if (a_pos.z >= this.position.z)
+			if (a_obj.position.z >= this.position.z)
 			{
+				a_obj.position.z = this.position.z;
+				
 				var tip:Rectangle = new Rectangle(Math.floor(a_radius / 2), Math.floor(a_radius / 2), a_radius, a_radius);
 				
-				if ( a_pos.x > -5 || a_pos.y > -5 || a_pos.x < 5 || a_pos.y < 5 ) {				
-					var x:Number = int((a_pos.x / 10.0 + 0.5) * _collMap.width);
-					var y:Number = int((a_pos.y / 10.0 + 0.5) * _collMap.height);
+				if ( a_obj.position.x > -5 || a_obj.position.y > -5 || a_obj.position.x < 5 || a_obj.position.y < 5 ) {				
+					var x:Number = int((a_obj.position.x / 10.0 + 0.5) * _collMap.width);
+					var y:Number = int((a_obj.position.y / 10.0 + 0.5) * _collMap.height);
 					
 					tip.offsetPoint(new Point(x, y));
 					

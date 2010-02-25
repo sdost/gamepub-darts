@@ -75,10 +75,10 @@
 			</dict>
 		</dict>
 		<key>readyThreshold</key>
-		<real>150</real>
+		<real>100</real>
 		<key>shootThreshold</key>
 		<real>1</real>
 		<key>shootMultiplier</key>
-		<real>50</real>
+		<real>30</real>
 	</dict>
 </plist>

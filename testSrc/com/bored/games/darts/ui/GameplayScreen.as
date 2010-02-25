@@ -240,15 +240,10 @@
 			_wallTexture = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(textureConfig.wall.bitmap, textureConfig.wall.width, textureConfig.wall.height));
 			_wallTexture.repeat = false;
 			_wallTexture.smooth = true;
-			
-			var bmp:BitmapData = new BitmapData(353, 353, true, 0x0000000000);
-			bmp.draw(new VectorDartboard_MC());
-			
-			_dartboardMC = new BitmapMaterial(bmp);
+
+			_dartboardMC = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(textureConfig.board.bitmap, textureConfig.board.width, textureConfig.board.height));
 			_dartboardMC.repeat = false;
 			_dartboardMC.smooth = true;
-			
-			_dartOutline = new WireframeMaterial(0x000000);
 			
 		}//end initMaterial()
 		
@@ -275,6 +270,7 @@
 			
 			_wallBillboard = new Plane();
 			_wallBillboard.z = 200;
+			_wallBillboard.scaleX = _wallBillboard.scaleY = 1.54;
 			_wallBillboard.material = _wallTexture;
 			_wallBillboard.width = textureConfig.wall.width;
 			_wallBillboard.height = textureConfig.wall.height;
@@ -284,6 +280,8 @@
 			_scene.addChild(_wallBillboard);
 			
 			_boardBillboard = new Plane();
+			_boardBillboard.z = 200;
+			_boardBillboard.scaleX = _boardBillboard.scaleY = 1.54;
 			_boardBillboard.material = _dartboardMC;
 			_boardBillboard.width = textureConfig.board.width;
 			_boardBillboard.height = textureConfig.board.height;
@@ -313,11 +311,15 @@
 		
 		public function render():void
 		{	
+			_wallBillboard.lookAt(_camera.position, new Vector3D(0, 1, 0));
+			
 			if ( _boardRef ) {
 				_boardBillboard.x = _boardRef.position.x * _engineScale;
 				_boardBillboard.y = _boardRef.position.y * _engineScale;
 				_boardBillboard.z = _boardRef.position.z * _engineScale;
 			}
+			
+			_boardBillboard.lookAt(_camera.position, new Vector3D(0, 1, 0));
 			
 			if ( _dartTemplate ) {		
 				

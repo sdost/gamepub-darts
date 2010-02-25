@@ -122,7 +122,7 @@
 			{
 				_darts[i].update();
 				
-				var result:int = _dartboard.checkForCollision(_darts[_currDartIdx].position, _darts[_currDartIdx].radius);
+				var result:int = _dartboard.checkForCollision(_darts[_currDartIdx], _darts[_currDartIdx].radius);
 				
 				if (result > 0)
 				{					
@@ -153,7 +153,7 @@
 						
 						trace("Vector: " + _currentStroke.vector.toString());
 						
-						(_darts[_currDartIdx] as Dart).position.z = -0.1 * Math.abs(_currentStroke.vector.y / ConfigManager.config.readyThreshold);
+						(_darts[_currDartIdx] as Dart).position.z = -0.2 * Math.abs(_currentStroke.vector.y / ConfigManager.config.readyThreshold);
 						
 						if (_currentStroke.vector.y >= ConfigManager.config.readyThreshold) // TODO externalize this value...
 						{

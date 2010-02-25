@@ -34,7 +34,7 @@
             MochiCoins.addEventListener(MochiCoins.STORE_ITEMS, storeItems);
 			
 			MochiCoins.getStoreItems();
-            MochiSocial.showLoginWidget( { x:330, y:360 } );
+            MochiSocial.showLoginWidget( { x:0, y:0 } );
 
             MochiInventory.addEventListener(MochiInventory.READY, inventoryReady );
             MochiInventory.addEventListener(MochiInventory.WRITTEN, inventorySynced );
