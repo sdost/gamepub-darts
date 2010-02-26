@@ -20,11 +20,13 @@
 	import away3dlite.materials.WireframeMaterial;
 	import away3dlite.primitives.Plane;
 	import caurina.transitions.Tweener;
+	import com.bored.games.assets.hud.ThrowIndicator_MC;
 	import com.bored.games.assets.VectorDartboard_MC;
 	import com.bored.games.config.ConfigManager;
 	import com.bored.games.controllers.InputController;
 	import com.bored.games.darts.objects.Board;
 	import com.bored.games.darts.objects.Dart;
+	import com.bored.games.darts.ui.hud.ThrowIndicator;
 	import com.bored.games.graphics.ImageFactory;
 	import com.bored.games.input.MouseManager;
 	import com.bored.games.events.InputStateEvent;
@@ -42,6 +44,7 @@
 	import flash.display.Sprite;
 	import flash.display.StageQuality;
 	import flash.events.Event;
+	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.geom.Matrix;
 	import flash.geom.Matrix3D;
@@ -54,6 +57,7 @@
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
+	import flash.ui.Keyboard;
 	import flash.utils.Dictionary;
 	import flash.utils.getDefinitionByName;
 	import flash.geom.Utils3D;
@@ -69,7 +73,8 @@
 	public class GameplayScreen extends Sprite //ContentHolder
 	{
 		private static var _dartboardMC:BitmapMaterial;
-		
+		private static var _dartTexture_UJ:BitmapMaterial;
+		private static var _dartTexture_JR:BitmapMaterial;
 		private static var _wallTexture:BitmapMaterial;
 		private static var _dartOutline:WireframeMaterial;
 		
@@ -91,6 +96,8 @@
 		private var _engineScale:Number;
 		
 		private var _stats:Stats;
+		
+		private var _throwIndicator:ThrowIndicator;
 		
 		//private var _persp:PerspectiveProjection;
 		//private var _mtransform:Matrix3D = new Matrix3D();
@@ -124,6 +131,9 @@
 			
 			_dartRefs = new Vector.<Dart>();
 			_dartModels = new Vector.<Object3D>();
+			
+			_throwIndicator = new ThrowIndicator(new ThrowIndicator_MC());
+			DartsGlobals.instance.optionsInterfaceSpace.addChild(_throwIndicator);
 			
 			if (this.stage)
 			{
@@ -216,12 +226,12 @@
 			_camera = new Camera3D();
 			_camera.z = -100;
 			
-			_renderer = new FastRenderer();
+			//_renderer = new FastRenderer();
 			
 			_view = new View3D();
 			_view.scene = _scene;
 			_view.camera = _camera;
-			_view.renderer = _renderer;
+			//_view.renderer = _renderer;
 			
 			addChild(_view);
 			
@@ -245,19 +255,47 @@
 			_dartboardMC.repeat = false;
 			_dartboardMC.smooth = true;
 			
+			_dartTexture_UJ = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(textureConfig.dart.bitmap.children()[0], textureConfig.dart.width, textureConfig.dart.height));
+			_dartTexture_UJ.repeat = false;
+			_dartTexture_UJ.smooth = true;
+			
+			_dartTexture_JR = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(textureConfig.dart.bitmap.children()[1], textureConfig.dart.width, textureConfig.dart.height));
+			_dartTexture_JR.repeat = false;
+			_dartTexture_JR.smooth = true;
+			
 		}//end initMaterial()
 		
 		private function onSuccess(a_evt:Loader3DEvent):void
 		{
 			_dartTemplate = _loader.handle;			
 			_dartTemplate.mouseEnabled = false;
+			_dartTemplate.materialLibrary.getMaterial("dart_skin").material = _dartTexture_UJ;
 			
 			for ( var i:int = 0; i < 3; i++ ) {
-				var newDart:Object3D = _dartTemplate.clone();
+				var newDart:Object3D = _dartTemplate.clone();			
 				_dartModels.push(newDart);
 				_scene.addChild(newDart);
 			}
+			
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKey);
 		}//end onSuccess()
+		
+		private function onKey(a_evt:KeyboardEvent):void
+		{
+			trace("Key Code [" + a_evt.keyCode + "]");
+			
+			if ( a_evt.keyCode == Keyboard.NUMPAD_1 ) {
+				_dartTemplate.materialLibrary.getMaterial("dart_skin").material = _dartTexture_UJ;
+				for ( var i:int = 0; i < _dartRefs.length; i++ ) {
+					_dartModels[i] = _dartTemplate.clone();
+				}
+			} else if (a_evt.keyCode == Keyboard.NUMPAD_2 ) {
+				_dartTemplate.materialLibrary.getMaterial("dart_skin").material = _dartTexture_JR;
+				for ( var i:int = 0; i < _dartRefs.length; i++ ) {
+					_dartModels[i] = _dartTemplate.clone();
+				}
+			}
+		}//end onKey()
 		
 		/**
 		 * Initialise the scene objects
@@ -295,6 +333,7 @@
 			_collada.centerMeshes = true;
 			
 			_loader = new Loader3D();
+			_loader.autoLoadTextures = false;
 			_loader.loadGeometry("dart01_reduced.dae", _collada);
 			_loader.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
 		}//end initObjects()
@@ -308,6 +347,23 @@
 		{
 			_boardRef = a_board;
 		}//end setBoardReference()
+		
+		public function showThrowIndicatorAt(a_x:Number, a_y:Number):void
+		{
+			_throwIndicator.x = a_x;
+			_throwIndicator.y = a_y;
+			_throwIndicator.show();
+		}//end showThrowIndicatorAt()
+		
+		public function hideThrowIndicator():void
+		{
+			_throwIndicator.hide();
+		}//end hideThrowIndicator()
+		
+		public function setThrowIndicator(a_x:Number, a_y:Number):void
+		{
+			_throwIndicator.moveBallTo(a_x, a_y);
+		}//end setThrowIndicator()
 		
 		public function render():void
 		{	

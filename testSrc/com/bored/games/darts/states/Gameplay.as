@@ -151,36 +151,53 @@
 				if(a_evt.button) {
 					if (_inputState == READY) {
 						
-						trace("Vector: " + _currentStroke.vector.toString());
-						
 						(_darts[_currDartIdx] as Dart).position.z = -0.2 * Math.abs(_currentStroke.vector.y / ConfigManager.config.readyThreshold);
+						
+						_gameplayScreen.setThrowIndicator(0, _currentStroke.vector.y);
 						
 						if (_currentStroke.vector.y >= ConfigManager.config.readyThreshold) // TODO externalize this value...
 						{
+							_gameplayScreen.setThrowIndicator(0, ConfigManager.config.readyThreshold);
 							_inputState = SHOOT;
 							trace("Moving to SHOOT state.");
 						}
-					}
-				} else {
-					if (_inputState == SHOOT) {
-						
-						trace("Velocity: " + _currentStroke.vel.toString());
-						
+					} else if ( _inputState == SHOOT ) {
 						if (_currentStroke.vel.y < 0 && (Math.abs(_currentStroke.vel.y)*ConfigManager.config.shootMultiplier) > ConfigManager.config.shootThreshold) // TODO externalize this value...
 						{
 							_thrust = Math.abs(_currentStroke.vel.y) * ConfigManager.config.shootMultiplier;
 							var offset:Number = _currentStroke.vel.x;
+							
+							_thrust = _thrust < ConfigManager.config.maxThrust ? _thrust : ConfigManager.config.maxThrust;
+							
+							_gameplayScreen.setThrowIndicator(offset, ConfigManager.config.readyThreshold-(_thrust*2));
+						}
+					}
+				} else {
+					if (_inputState == SHOOT) {
+												
+						if (_currentStroke.vel.y < 0 && (Math.abs(_currentStroke.vel.y)*ConfigManager.config.shootMultiplier) > ConfigManager.config.shootThreshold) // TODO externalize this value...
+						{
+							_thrust = Math.abs(_currentStroke.vel.y) * ConfigManager.config.shootMultiplier;
+							var offset:Number = _currentStroke.vel.x;
+							
+							_thrust = _thrust < ConfigManager.config.maxThrust ? _thrust : ConfigManager.config.maxThrust;
+							
+							_gameplayScreen.setThrowIndicator(offset, ConfigManager.config.readyThreshold-_thrust);
 							
 							_buttonDown = false;
 							if( _currDartIdx < _darts.length ) {
 								(_darts[_currDartIdx] as Dart).initThrowParams(_releasePos.x, _releasePos.y, _releasePos.z, _thrust, _angle, _grav);
 								_inputState = RELEASE;
 								trace("Moving to RELEASE state.");
+								_gameplayScreen.hideThrowIndicator();
 							}
 						} else {
 							_inputState = AIM;
 							trace("Moving to AIM state.");
 						}
+					} else {
+						_inputState = AIM;
+						_gameplayScreen.hideThrowIndicator();
 					}
 					
 					_buttonDown = false;
@@ -208,6 +225,7 @@
 						_currentStroke = new MouseStroke(_inputController as MouseInputController, a_evt.x, a_evt.y, a_evt.timestamp);
 						_inputState = READY;
 						trace("Moving to READY state.");
+						_gameplayScreen.showThrowIndicatorAt(a_evt.x, a_evt.y);
 					}
 				} else {
 					if(_inputState == AIM) {

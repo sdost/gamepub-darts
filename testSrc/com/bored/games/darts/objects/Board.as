@@ -34,6 +34,7 @@
 			{
 				a_obj.position.z = this.position.z;
 				
+				/*
 				var tip:Rectangle = new Rectangle(Math.floor(a_radius / 2), Math.floor(a_radius / 2), a_radius, a_radius);
 				
 				if ( a_obj.position.x > -5 || a_obj.position.y > -5 || a_obj.position.x < 5 || a_obj.position.y < 5 ) {				
@@ -57,6 +58,8 @@
 						points = uint(avg & 0x0000FFFF);
 					}
 				}
+				*/
+				points = 1;
 			} 
 			
 			return points;

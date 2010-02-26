@@ -48,13 +48,25 @@
 				<key>bitmap</key>
 				<string>com.bored.games.assets.PrototypeDartboardTexture_BMP</string>
 				<key>width</key>
-				<integer>353</integer>
+				<integer>128</integer>
 				<key>height</key>
-				<integer>353</integer>
+				<integer>128</integer>
 			</dict>
 		</dict>
 		<key>textures</key>
 		<dict>
+			<key>dart</key>
+			<dict>
+				<key>bitmap</key>
+				<array>
+					<string>com.bored.games.assets.UnionJackDartTexture_BMP</string>
+					<string>com.bored.games.assets.JollyRogerDartTexture_BMP</string>
+				</array>
+				<key>width</key>
+				<integer>256</integer>
+				<key>height</key>
+				<integer>256</integer>
+			</dict>
 			<key>board</key>
 			<dict>
 				<key>bitmap</key>
@@ -74,8 +86,10 @@
 				<integer>200</integer>
 			</dict>
 		</dict>
+		<key>maxThrust</key>
+		<real>50</real>
 		<key>readyThreshold</key>
-		<real>100</real>
+		<real>119</real>
 		<key>shootThreshold</key>
 		<real>1</real>
 		<key>shootMultiplier</key>

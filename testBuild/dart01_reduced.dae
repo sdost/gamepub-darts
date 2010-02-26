@@ -21,47 +21,21 @@
     <up_axis>Y_UP</up_axis>
   </asset>
   <library_materials>
-    <material id="unionjack" name="unionjack">
-      <instance_effect url="#unionjack-fx"/>
-    </material>
-    <material id="lambert1" name="lambert1">
-      <instance_effect url="#lambert1-fx"/>
+    <material id="dart_skin" name="dart_skin">
+      <instance_effect url="#dart_skin-fx"/>
     </material>
   </library_materials>
   <library_effects>
-    <effect id="lambert1-fx">
+    <effect id="dart_skin-fx">
       <profile_COMMON>
-        <technique sid="common">
-          <lambert>
-            <emission>
-              <color>0 0 0 1</color>
-            </emission>
-            <ambient>
-              <color>0 0 0 1</color>
-            </ambient>
-            <diffuse>
-              <color>0.400000005960464477539 0.400000005960464477539 0.400000005960464477539 1</color>
-            </diffuse>
-            <transparent opaque="RGB_ZERO">
-              <color>0 0 0 1</color>
-            </transparent>
-            <transparency>
-              <float>1</float>
-            </transparency>
-          </lambert>
-        </technique>
-      </profile_COMMON>
-    </effect>
-    <effect id="unionjack-fx">
-      <profile_COMMON>
-        <newparam sid="unionjack_uv-surface">
+        <newparam sid="dart_skin_uv-surface">
           <surface type="2D">
-            <init_from>unionjack_uv</init_from>
+            <init_from>dart_skin_uv</init_from>
           </surface>
         </newparam>
-        <newparam sid="unionjack_uv-sampler">
+        <newparam sid="dart_skin_uv-sampler">
           <sampler2D>
-            <source>unionjack_uv-surface</source>
+            <source>dart_skin_uv-surface</source>
           </sampler2D>
         </newparam>
         <technique sid="common">
@@ -73,7 +47,7 @@
               <color>0.527559995651245117187 0.527559995651245117187 0.527559995651245117187 1</color>
             </ambient>
             <diffuse>
-              <texture texture="unionjack_uv-sampler" texcoord="TEX0">
+              <texture texture="dart_skin_uv-sampler" texcoord="TEX0">
                 <extra>
                   <technique profile="OpenCOLLADAMaya">
                     <blend_mode>NONE</blend_mode>
@@ -111,13 +85,13 @@
     </effect>
   </library_effects>
   <library_images>
-    <image id="unionjack_uv" name="unionjack_uv">
-      <init_from>./dartuv_001.png</init_from>
+    <image id="dart_skin_uv" name="dart_skin_uv">
+      <init_from>somefile</init_from>
       <extra>
         <technique profile="OpenCOLLADAMaya">
           <dgnode_type>kFile</dgnode_type>
           <image_sequence>0</image_sequence>
-          <originalMayaNodeId>unionjack_uv</originalMayaNodeId>
+          <originalMayaNodeId>dart_skin_uv</originalMayaNodeId>
         </technique>
       </extra>
     </image>
@@ -186,7 +160,7 @@
         <instance_geometry url="#polySurfaceShape20">
           <bind_material>
             <technique_common>
-              <instance_material symbol="lambert3SG" target="#unionjack">
+              <instance_material symbol="lambert3SG" target="#dart_skin">
                 <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
               </instance_material>
             </technique_common>
