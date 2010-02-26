@@ -2,6 +2,7 @@
 {
 	import com.bored.games.config.ConfigManager;
 	import com.bored.games.darts.DartsGlobals;
+	import com.bored.games.darts.logic.CricketGameMode;
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.bored.services.AbstractExternalService;
 	import com.inassets.statemachines.Finite.State;
@@ -46,6 +47,8 @@
 			ext.init(servicesConfig.gameId, DartsGlobals.instance.optionsInterfaceSpace);
 			
 			DartsGlobals.instance.externalServices = ext;
+			
+			DartsGlobals.instance.logicManager = new CricketGameMode();
 			
 			//trace("Initialization::onEnter()");
 			this.finished();

@@ -287,12 +287,16 @@
 			if ( a_evt.keyCode == Keyboard.NUMPAD_1 ) {
 				_dartTemplate.materialLibrary.getMaterial("dart_skin").material = _dartTexture_UJ;
 				for ( var i:int = 0; i < _dartRefs.length; i++ ) {
+					_scene.removeChild(_dartModels[i]);
 					_dartModels[i] = _dartTemplate.clone();
+					_scene.addChild(_dartModels[i]);
 				}
 			} else if (a_evt.keyCode == Keyboard.NUMPAD_2 ) {
 				_dartTemplate.materialLibrary.getMaterial("dart_skin").material = _dartTexture_JR;
 				for ( var i:int = 0; i < _dartRefs.length; i++ ) {
+					_scene.removeChild(_dartModels[i]);
 					_dartModels[i] = _dartTemplate.clone();
+					_scene.addChild(_dartModels[i]);
 				}
 			}
 		}//end onKey()
@@ -382,11 +386,13 @@
 				var followCam:Boolean = false;
 				
 				for ( var i:int = 0; i < _dartRefs.length; i++ ) {
-					_dartModels[i].rotationX = _dartRefs[i].angle;
-					
-					_dartModels[i].x = _dartRefs[i].position.x * _engineScale;
-					_dartModels[i].y = -(_dartRefs[i].position.y * _engineScale);
-					_dartModels[i].z = _dartRefs[i].position.z * _engineScale;
+					if( _dartModels[i] ) {
+						_dartModels[i].rotationX = _dartRefs[i].angle;
+						
+						_dartModels[i].x = _dartRefs[i].position.x * _engineScale;
+						_dartModels[i].y = -(_dartRefs[i].position.y * _engineScale);
+						_dartModels[i].z = _dartRefs[i].position.z * _engineScale;
+					}
 				}
 			}
 			

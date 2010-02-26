@@ -12,7 +12,33 @@
 	 * @author sam
 	 */
 	public class Board extends GameElement
-	{	
+	{
+		public static const ONE:uint 		= 1;
+		public static const TWO:uint 		= 2;
+		public static const THREE:uint 		= 3;
+		public static const FOUR:uint 		= 4;
+		public static const FIVE:uint 		= 5;
+		public static const SIX:uint 		= 6;
+		public static const SEVEN:uint 		= 7;
+		public static const EIGHT:uint 		= 8;
+		public static const NINE:uint 		= 9;
+		public static const TEN:uint 		= 10;
+		public static const ELEVEN:uint 	= 11;
+		public static const TWELVE:uint 	= 12;
+		public static const THIRTEEN:uint 	= 13;
+		public static const FOURTEEN:uint 	= 14;
+		public static const FIFTEEN:uint 	= 15;
+		public static const SIXTEEN:uint 	= 16;
+		public static const SEVENTEEN:uint 	= 17;
+		public static const EIGHTEEN:uint 	= 18;
+		public static const NINETEEN:uint 	= 19;
+		public static const TWENTY:uint 	= 20;
+		public static const BULL:uint 		= 25;
+		
+		public static const SINGLE:uint 	= 1;
+		public static const DOUBLE:uint 	= 2;
+		public static const TRIPLE:uint		= 3;
+		
 		private var _collMap:BitmapData;
 		
 		public function Board() 

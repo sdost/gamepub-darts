@@ -3,6 +3,7 @@
 	import com.bored.games.config.ConfigManager;
 	import com.bored.games.controllers.InputController;
 	import com.bored.games.controllers.MouseInputController;
+	import com.bored.games.darts.logic.AbstractGameLogic;
 	import com.bored.services.AbstractExternalService;
 	import flash.display.Sprite;
 	import flash.display.Stage;
@@ -185,6 +186,16 @@
 		{
 			ConfigManager.loadConfig(a_xml);
 		}//end set config()
+		
+		public function set logicManager(a_manager:AbstractGameLogic):void
+		{
+			_logicManager = a_manager;
+		}//end set logicManager()
+		
+		public function get logicManager():AbstractGameLogic
+		{
+			return _logicManager;
+		}//end get logicManager()
 		
 		public function set externalServices(a_ext:AbstractExternalService):void
 		{

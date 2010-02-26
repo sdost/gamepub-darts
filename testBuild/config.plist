@@ -23,7 +23,7 @@
 			<key>thrust</key>
 			<real>20</real>
 			<key>angle</key>
-			<real>3</real>
+			<real>10</real>
 			<key>gravity</key>
 			<real>9.8</real>
 		</dict>

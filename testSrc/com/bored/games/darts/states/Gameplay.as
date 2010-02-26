@@ -4,6 +4,9 @@
 	import com.bored.games.config.ConfigManager;
 	import com.bored.games.controllers.InputController;
 	import com.bored.games.controllers.MouseInputController;
+	import com.bored.games.darts.logic.AbstractGameLogic;
+	import com.bored.games.darts.logic.CricketGameMode;
+	import com.bored.games.darts.logic.DartsTurn;
 	import com.bored.games.darts.objects.Board;
 	import com.bored.games.darts.objects.Dart;
 	import com.bored.games.darts.states.statemachines.GameFSM;
@@ -54,6 +57,10 @@
 		private var _currentStroke:MouseStroke;
 		
 		private var _inputState:uint = AIM;
+		
+		private var _turns:uint = 0;
+		
+		private var _currentTurn:DartsTurn;
 		
 		public function Gameplay(a_name:String, a_stateMachine:IStateMachine)
 		{
@@ -108,6 +115,8 @@
 				_gameplayScreen.setBoardReference(_dartboard);
 				
 				_gameplayScreen.addEventListener(Event.ENTER_FRAME, update, false, 0, false);
+				
+				_currentTurn = DartsGlobals.instance.logicManager.startNewTurn(AbstractGameLogic.PLAYER_TURN);
 			}
 			catch (e:Error)
 			{
@@ -125,7 +134,9 @@
 				var result:int = _dartboard.checkForCollision(_darts[_currDartIdx], _darts[_currDartIdx].radius);
 				
 				if (result > 0)
-				{					
+				{		
+					//_currentTurn.submitThrowResult(					
+					
 					_darts[_currDartIdx].finishThrow();
 					_currDartIdx++;
 					
