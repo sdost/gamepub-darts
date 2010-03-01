@@ -18,12 +18,12 @@
 		
 		override public function checkForWinState():Boolean
 		{
-			var scoreBoard:Dictionary = scoreManager.getScores(_currentTurn.owner);
+			var scoreBoard:Object = scoreManager.getScores(_currentTurn.owner);
 			
 			var win:Boolean = true;
-			for each( score in scoreBoard ) 
-			{
-				if ( score < CricketScoreManager.CLOSED_OUT ) {
+			for( var key:String in scoreBoard ) 
+			{		
+				if ( scoreBoard[key] < CricketScoreManager.CLOSED_OUT ) {
 					win = false;
 					break;
 				}

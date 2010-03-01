@@ -28,7 +28,7 @@
 		
 		public function getScores(a_name:String):Object
 		{
-			
+			return null;
 		}//end getScores()
 		
 	}//end AbstractScoreManager

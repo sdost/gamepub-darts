@@ -24,6 +24,8 @@
 		
 		public function startNewTurn(a_name:String):DartsTurn
 		{
+			trace( a_name + "'s Turn...");
+			
 			_currentTurn = new DartsTurn(this, a_name);
 			return _currentTurn;
 		}//end startNewTurn()

@@ -21,14 +21,12 @@
 	import away3dlite.primitives.Plane;
 	import caurina.transitions.Tweener;
 	import com.bored.games.assets.hud.ThrowIndicator_MC;
-	import com.bored.games.assets.VectorDartboard_MC;
 	import com.bored.games.config.ConfigManager;
 	import com.bored.games.controllers.InputController;
 	import com.bored.games.darts.objects.Board;
 	import com.bored.games.darts.objects.Dart;
 	import com.bored.games.darts.ui.hud.ThrowIndicator;
 	import com.bored.games.graphics.ImageFactory;
-	import com.bored.games.input.MouseManager;
 	import com.bored.games.events.InputStateEvent;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.math.TrajectoryCalculator;
@@ -134,6 +132,9 @@
 			
 			_throwIndicator = new ThrowIndicator(new ThrowIndicator_MC());
 			DartsGlobals.instance.optionsInterfaceSpace.addChild(_throwIndicator);
+			_throwIndicator.x = 650;
+			_throwIndicator.y = 400;
+			_throwIndicator.show();
 			
 			if (this.stage)
 			{
@@ -284,16 +285,18 @@
 		{
 			trace("Key Code [" + a_evt.keyCode + "]");
 			
+			var i:int;
+			
 			if ( a_evt.keyCode == Keyboard.NUMPAD_1 ) {
 				_dartTemplate.materialLibrary.getMaterial("dart_skin").material = _dartTexture_UJ;
-				for ( var i:int = 0; i < _dartRefs.length; i++ ) {
+				for ( i = 0; i < _dartRefs.length; i++ ) {
 					_scene.removeChild(_dartModels[i]);
 					_dartModels[i] = _dartTemplate.clone();
 					_scene.addChild(_dartModels[i]);
 				}
 			} else if (a_evt.keyCode == Keyboard.NUMPAD_2 ) {
 				_dartTemplate.materialLibrary.getMaterial("dart_skin").material = _dartTexture_JR;
-				for ( var i:int = 0; i < _dartRefs.length; i++ ) {
+				for ( i = 0; i < _dartRefs.length; i++ ) {
 					_scene.removeChild(_dartModels[i]);
 					_dartModels[i] = _dartTemplate.clone();
 					_scene.addChild(_dartModels[i]);
@@ -352,23 +355,21 @@
 			_boardRef = a_board;
 		}//end setBoardReference()
 		
-		public function showThrowIndicatorAt(a_x:Number, a_y:Number):void
+		public function startThrow():void
 		{
-			_throwIndicator.x = a_x;
-			_throwIndicator.y = a_y;
-			_throwIndicator.show();
-		}//end showThrowIndicatorAt()
+			_throwIndicator.armShot();
+		}//end startThrow()
 		
-		public function hideThrowIndicator():void
+		public function updateThrowSpeed(a_spd:Number):void 
 		{
-			_throwIndicator.hide();
-		}//end hideThrowIndicator()
+			_throwIndicator.updateBall(a_spd/10);
+		}//end updateThrowSpeed()
 		
-		public function setThrowIndicator(a_x:Number, a_y:Number):void
+		public function resetThrow():void
 		{
-			_throwIndicator.moveBallTo(a_x, a_y);
-		}//end setThrowIndicator()
-		
+			_throwIndicator.resetShot();
+		}//end resetThrow()
+	
 		public function render():void
 		{	
 			_wallBillboard.lookAt(_camera.position, new Vector3D(0, 1, 0));

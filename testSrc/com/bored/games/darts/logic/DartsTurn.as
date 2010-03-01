@@ -25,10 +25,11 @@
 		
 		public function submitThrowResult(a_obj:Object):void
 		{
-			if ( a_obj && a_obj.section )
+			if ( a_obj && a_obj.section ) {
 				_logicManager.scoreManager.submitThrowHit(_turnOwner, a_obj.section.points, a_obj.section.multiplier);
-			else
+			} else {
 				_logicManager.scoreManager.submitThrowMiss(_turnOwner);
+			}
 		}//end submitThrowResult()
 		
 		public function get owner():String

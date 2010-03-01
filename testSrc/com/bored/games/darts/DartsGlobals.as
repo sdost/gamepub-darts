@@ -55,6 +55,8 @@
 		
 		private var _externalService:AbstractExternalService;
 		
+		private var _logicManager:AbstractGameLogic;
+		
 		public function DartsGlobals(a_singletonEnforcer:DartsGlobals_SingletonEnforcer) 
 		{
 			super();

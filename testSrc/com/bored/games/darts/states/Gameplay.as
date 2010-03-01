@@ -21,10 +21,13 @@
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.TimerEvent;
+	import flash.geom.Point;
 	import flash.geom.Vector3D;
 	import flash.text.TextField;
 	import com.bored.games.darts.DartsGlobals;
-	import com.bored.games.input.MouseManager;
+	import flash.utils.getTimer;
+	import flash.utils.Timer;
 	
 	/**
 	 * ...
@@ -32,10 +35,11 @@
 	 */
 	public class Gameplay extends State
 	{		
-		private static var AIM:uint = 0;
-		private static var READY:uint = 1;
-		private static var SHOOT:uint = 2;
-		private static var RELEASE:uint = 4;
+		private static const AIM:uint = 0;
+		private static const READY:uint = 1;
+		private static const SHOOT:uint = 2;
+		private static const START_SHOT:uint = 4;
+		private static const RELEASE:uint = 8;
 		
 		private var _gameplayScreen:GameplayScreen;
 		
@@ -48,20 +52,23 @@
 		private var _grav:Number;
 		
 		private var _darts:Vector.<Dart>;
-		private var _dartboard:Board;
-		
-		private var _boardCollisionMap:BitmapData;
-		
 		private var _currDartIdx:uint;
 		
-		private var _currentStroke:MouseStroke;
-		
-		private var _inputState:uint = AIM;
-		
-		private var _turns:uint = 0;
+		private var _dartboard:Board;
 		
 		private var _currentTurn:DartsTurn;
+		private var _turns:uint = 0;
 		
+		private var _trackShot:Boolean = true;
+		
+		private var _oX:Number;//last mouse x position
+		private var _oY:Number;//last mouse y position
+		private var _velX:Number;//velocity x per second
+		private var _velY:Number;//velocity y per second
+		private var _speed:Number;//change in position per second
+
+		private var _mouseTimer:Timer = new Timer(50,0);
+						
 		public function Gameplay(a_name:String, a_stateMachine:IStateMachine)
 		{
 			super(a_name, a_stateMachine);
@@ -131,11 +138,13 @@
 			{
 				_darts[i].update();
 				
-				var result:int = _dartboard.checkForCollision(_darts[_currDartIdx], _darts[_currDartIdx].radius);
+				var result:Object = _dartboard.checkForCollision(_darts[_currDartIdx], _darts[_currDartIdx].radius);
 				
-				if (result > 0)
+				if (result.section)
 				{		
-					//_currentTurn.submitThrowResult(					
+					_currentTurn.submitThrowResult(result);
+					
+					if (_currentTurn.hasThrowsRemaining()) _currentTurn.advanceThrows();
 					
 					_darts[_currDartIdx].finishThrow();
 					_currDartIdx++;
@@ -145,10 +154,17 @@
 						_darts[0].reset();
 						_darts[1].reset();
 						_darts[2].reset();
+						
+						DartsGlobals.instance.logicManager.checkForWinState();
+						
+						_turns++;
+						
+						if ( _turns % 2 == 0 ) {
+							_currentTurn = DartsGlobals.instance.logicManager.startNewTurn(AbstractGameLogic.PLAYER_TURN);
+						} else {
+							_currentTurn = DartsGlobals.instance.logicManager.startNewTurn(AbstractGameLogic.OPPONENT_TURN);
+						}
 					}
-					
-					_inputState = AIM;
-					_currentStroke = null;
 				} 
 			}
 			
@@ -157,102 +173,61 @@
 		
 		private function inputUpdate(a_evt:InputStateEvent):void
 		{
-			if (_buttonDown)
-			{	
-				if(a_evt.button) {
-					if (_inputState == READY) {
-						
-						(_darts[_currDartIdx] as Dart).position.z = -0.2 * Math.abs(_currentStroke.vector.y / ConfigManager.config.readyThreshold);
-						
-						_gameplayScreen.setThrowIndicator(0, _currentStroke.vector.y);
-						
-						if (_currentStroke.vector.y >= ConfigManager.config.readyThreshold) // TODO externalize this value...
-						{
-							_gameplayScreen.setThrowIndicator(0, ConfigManager.config.readyThreshold);
-							_inputState = SHOOT;
-							trace("Moving to SHOOT state.");
-						}
-					} else if ( _inputState == SHOOT ) {
-						if (_currentStroke.vel.y < 0 && (Math.abs(_currentStroke.vel.y)*ConfigManager.config.shootMultiplier) > ConfigManager.config.shootThreshold) // TODO externalize this value...
-						{
-							_thrust = Math.abs(_currentStroke.vel.y) * ConfigManager.config.shootMultiplier;
-							var offset:Number = _currentStroke.vel.x;
-							
-							_thrust = _thrust < ConfigManager.config.maxThrust ? _thrust : ConfigManager.config.maxThrust;
-							
-							_gameplayScreen.setThrowIndicator(offset, ConfigManager.config.readyThreshold-(_thrust*2));
-						}
+			if (_buttonDown) {
+				if ( a_evt.button ) {
+					if( !_mouseTimer.running ) {
+						_oX = _gameplayScreen.stage.mouseX;
+						_oY = _gameplayScreen.stage.mouseY;
+						_velX = 0;
+						_velY = 0;
+						_speed = 0;
+						_mouseTimer.addEventListener( TimerEvent.TIMER, updateCurrentMouseVelocity );
+						_mouseTimer.start();
 					}
 				} else {
-					if (_inputState == SHOOT) {
-												
-						if (_currentStroke.vel.y < 0 && (Math.abs(_currentStroke.vel.y)*ConfigManager.config.shootMultiplier) > ConfigManager.config.shootThreshold) // TODO externalize this value...
-						{
-							_thrust = Math.abs(_currentStroke.vel.y) * ConfigManager.config.shootMultiplier;
-							var offset:Number = _currentStroke.vel.x;
-							
-							_thrust = _thrust < ConfigManager.config.maxThrust ? _thrust : ConfigManager.config.maxThrust;
-							
-							_gameplayScreen.setThrowIndicator(offset, ConfigManager.config.readyThreshold-_thrust);
-							
-							_buttonDown = false;
-							if( _currDartIdx < _darts.length ) {
-								(_darts[_currDartIdx] as Dart).initThrowParams(_releasePos.x, _releasePos.y, _releasePos.z, _thrust, _angle, _grav);
-								_inputState = RELEASE;
-								trace("Moving to RELEASE state.");
-								_gameplayScreen.hideThrowIndicator();
-							}
-						} else {
-							_inputState = AIM;
-							trace("Moving to AIM state.");
-						}
-					} else {
-						_inputState = AIM;
-						_gameplayScreen.hideThrowIndicator();
+					if ( _speed ) {
+						_thrust = Math.min((_speed / 30), 30);
+						
+						_gameplayScreen.updateThrowSpeed(_thrust);
+						
+						_darts[_currDartIdx].initThrowParams(_releasePos.x, _releasePos.y, _releasePos.z, _thrust, _angle, _grav);
 					}
-					
+					_mouseTimer.stop();
+					_gameplayScreen.resetThrow();
 					_buttonDown = false;
 				}
-				/*
-				if (a_evt.button) { // dragging
-					MouseManager.updateDrag(a_evt.x, a_evt.y);
-					var vec:Vector3D = MouseManager.dragVector;
-					var ratio:Number = vec.length / 100;
-					ratio = ratio > 1 ? 1 : ratio;
-					_angle = ratio * 10;
-					_thrust = ratio * 30;
-				} else {
-					_buttonDown = false;
-					if( _currDartIdx < _darts.length ) {
-						(_darts[_currDartIdx] as Dart).initThrowParams(_releasePos.x, _releasePos.y, _releasePos.z, _thrust, _angle, _grav);
-					}
-				}
-				*/
 			} else {
-				if (a_evt.button) {
-					if (_inputState == AIM) {
-						_buttonDown = true;
-						//MouseManager.beginDrag(a_evt.x, a_evt.y);
-						_currentStroke = new MouseStroke(_inputController as MouseInputController, a_evt.x, a_evt.y, a_evt.timestamp);
-						_inputState = READY;
-						trace("Moving to READY state.");
-						_gameplayScreen.showThrowIndicatorAt(a_evt.x, a_evt.y);
-					}
+				if ( a_evt.button ) {
+					_gameplayScreen.startThrow();
+					_buttonDown = true;
 				} else {
-					if(_inputState == AIM) {
-						_releasePos.x = (a_evt.x - 350)/400;
-						_releasePos.y = -(a_evt.y - 275)/400;
-						_releasePos.z = 0;
-						
-						if( _currDartIdx < _darts.length && !_darts[_currDartIdx].throwing ) {
-							(_darts[_currDartIdx] as Dart).position.x = _releasePos.x;
-							(_darts[_currDartIdx] as Dart).position.y = _releasePos.y;
-							(_darts[_currDartIdx] as Dart).position.z = _releasePos.z;
-						}
+					_releasePos.x = (a_evt.x - 350)/400;
+					_releasePos.y = (275 - a_evt.y)/400;
+				
+					if( !_darts[_currDartIdx].throwing ) {
+						_darts[_currDartIdx].position.x = _releasePos.x;
+						_darts[_currDartIdx].position.y = _releasePos.y;
+						_darts[_currDartIdx].position.z = _releasePos.z;
 					}
 				}
 			}
 		}//end onInputUpdate()
+
+		private function updateCurrentMouseVelocity(e:TimerEvent):void
+		{
+			var nX:Number = _gameplayScreen.stage.mouseX;
+			var nY:Number = _gameplayScreen.stage.mouseY;
+			var dx:Number = nX - _oX;
+			var dy:Number = nY - _oY;
+    
+			_oX = nX;
+			_oY = nY;
+			_velX = dx * 1000 / _mouseTimer.delay;//per second
+			_velY = dy * 1000 / _mouseTimer.delay;//per second
+			_speed = Math.sqrt( _velX * _velX + _velY * _velY );
+			
+			//_gameplayScreen.updateThrowSpeed(_speed);
+		}//end updateCurrentMouseVelocity()
 		
 		private function finished(...args):void
 		{

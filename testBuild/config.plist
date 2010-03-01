@@ -46,7 +46,7 @@
 			<key>collisionMap</key>
 			<dict>
 				<key>bitmap</key>
-				<string>com.bored.games.assets.PrototypeDartboardTexture_BMP</string>
+				<string>com.bored.games.assets.DartboardTexture_BMP</string>
 				<key>width</key>
 				<integer>128</integer>
 				<key>height</key>
@@ -70,7 +70,7 @@
 			<key>board</key>
 			<dict>
 				<key>bitmap</key>
-				<string>com.bored.games.assets.PrototypeDartboardTexture_BMP</string>
+				<string>com.bored.games.assets.DartboardTexture_BMP</string>
 				<key>width</key>
 				<integer>128</integer>
 				<key>height</key>
@@ -79,7 +79,7 @@
 			<key>wall</key>
 			<dict>
 				<key>bitmap</key>
-				<string>com.bored.games.assets.PrototypeWallTexture_BMP</string>
+				<string>com.bored.games.assets.WallTexture_BMP</string>
 				<key>width</key>
 				<integer>255</integer>
 				<key>height</key>
