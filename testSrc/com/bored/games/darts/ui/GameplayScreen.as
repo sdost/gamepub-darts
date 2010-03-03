@@ -20,11 +20,13 @@
 	import away3dlite.materials.WireframeMaterial;
 	import away3dlite.primitives.Plane;
 	import caurina.transitions.Tweener;
+	import com.bored.games.assets.hud.Scoreboard_MC;
 	import com.bored.games.assets.hud.ThrowIndicator_MC;
 	import com.bored.games.config.ConfigManager;
 	import com.bored.games.controllers.InputController;
 	import com.bored.games.darts.objects.Board;
 	import com.bored.games.darts.objects.Dart;
+	import com.bored.games.darts.ui.hud.ScoreBoard;
 	import com.bored.games.darts.ui.hud.ThrowIndicator;
 	import com.bored.games.graphics.ImageFactory;
 	import com.bored.games.events.InputStateEvent;
@@ -70,10 +72,11 @@
 	 */
 	public class GameplayScreen extends Sprite //ContentHolder
 	{
+		private var _wallClip:Bitmap;
+		
 		private static var _dartboardMC:BitmapMaterial;
 		private static var _dartTexture_UJ:BitmapMaterial;
 		private static var _dartTexture_JR:BitmapMaterial;
-		private static var _wallTexture:BitmapMaterial;
 		private static var _dartOutline:WireframeMaterial;
 		
 		//private var _background:Sprite;
@@ -96,6 +99,7 @@
 		private var _stats:Stats;
 		
 		private var _throwIndicator:ThrowIndicator;
+		private var _scoreBoard:ScoreBoard;
 		
 		//private var _persp:PerspectiveProjection;
 		//private var _mtransform:Matrix3D = new Matrix3D();
@@ -121,9 +125,11 @@
 		
 		public function GameplayScreen(/*a_img:Sprite, a_buildFromAllDescendants:Boolean = false, a_bAddContents:Boolean = true, a_buildBackground:Boolean = false*/) 
 		{
-			//super(a_img, a_buildFromAllDescendants, a_bAddContents);
+			var textureConfig:XML = ConfigManager.getConfigNamespace("textures");
 			
-			//_buildBackground = a_buildBackground;
+			_wallClip = new Bitmap(ImageFactory.getBitmapDataByQualifiedName(textureConfig.wall.bitmap, textureConfig.wall.width, textureConfig.wall.height));
+			
+			addChild(_wallClip);
 			
 			init();
 			
@@ -136,6 +142,13 @@
 			_throwIndicator.y = 400;
 			_throwIndicator.show();
 			
+			_scoreBoard = new ScoreBoard(new Scoreboard_MC());
+			DartsGlobals.instance.optionsInterfaceSpace.addChild(_scoreBoard);
+			_scoreBoard.x = 50;
+			_scoreBoard.y = 200;
+			_scoreBoard.registerScoreManager(DartsGlobals.instance.logicManager.scoreManager);
+			_scoreBoard.show();
+			
 			if (this.stage)
 			{
 				addedToStage();
@@ -146,53 +159,12 @@
 			}			
 		}//end GameplayScreen() constructor.
 		
-		/*
-		override protected function buildFrom(a_img:Sprite, a_buildFromAllDescendants:Boolean = true):Dictionary
-		{
-			var descendantsDict:Dictionary = super.buildFrom(a_img, a_buildFromAllDescendants);
-						
-			_viewPort = descendantsDict["viewPort_mc"] as Sprite;
-			_graphicsLayer = _viewPort.getChildByName("anchor") as Sprite;			
-			
-			if(_buildBackground)
-			{
-				_background = new Sprite();
-			}
-			
-			return descendantsDict;
-			
-		}//end buildFrom()
-		*/
-		
 		private function addedToStage(a_evt:Event = null):void
 		{
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			this.addEventListener(Event.REMOVED_FROM_STAGE, destroy, false, 0, true);
 			
-			/*
-			// build our background.
-			if (_background)
-			{
-				_background.graphics.beginFill(0xFFFFFF, .75);
-				_background.graphics.drawRect(0, 0, this.stage.stageWidth, this.stage.stageHeight);
-				_background.graphics.endFill();
-			}
-			*/
-			
-			//this.contentsMC.alpha = 1;
-			
 			this.alpha = 0;
-			
-			/*
-			if(_background)
-			{
-				var contentIndex:int = this.getChildIndex(this.contents);
-				this.addChildAt(_background, contentIndex);
-			}
-			*/
-			
-			//this.contentsMC.x = (this.stage.stageWidth / 2) - (this.contentsMC.width / 2);
-			//this.contentsMC.y = (this.stage.stageHeight / 2) - (this.contentsMC.height / 2);
 			
 			_view.x = (this.stage.stageWidth / 2);
 			_view.y = (this.stage.stageHeight / 2);
@@ -221,7 +193,7 @@
 		 * Initialise the engine
 		 */
 		private function initEngine():void
-		{
+		{			
 			_scene = new Scene3D();
 			
 			_camera = new Camera3D();
@@ -248,9 +220,9 @@
 		{
 			var textureConfig:XML = ConfigManager.getConfigNamespace("textures");
 			
-			_wallTexture = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(textureConfig.wall.bitmap, textureConfig.wall.width, textureConfig.wall.height));
-			_wallTexture.repeat = false;
-			_wallTexture.smooth = true;
+			//_wallTexture = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(textureConfig.wall.bitmap, textureConfig.wall.width, textureConfig.wall.height));
+			//_wallTexture.repeat = false;
+			//_wallTexture.smooth = true;
 
 			_dartboardMC = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(textureConfig.board.bitmap, textureConfig.board.width, textureConfig.board.height));
 			_dartboardMC.repeat = false;
@@ -313,20 +285,8 @@
 			
 			var textureConfig:XML = ConfigManager.getConfigNamespace("textures");
 			
-			_wallBillboard = new Plane();
-			_wallBillboard.z = 200;
-			_wallBillboard.scaleX = _wallBillboard.scaleY = 1.54;
-			_wallBillboard.material = _wallTexture;
-			_wallBillboard.width = textureConfig.wall.width;
-			_wallBillboard.height = textureConfig.wall.height;
-			_wallBillboard.yUp = false;
-			_wallBillboard.bothsides = true;
-			_wallBillboard.mouseEnabled = false;
-			_scene.addChild(_wallBillboard);
-			
 			_boardBillboard = new Plane();
-			_boardBillboard.z = 200;
-			_boardBillboard.scaleX = _boardBillboard.scaleY = 1.54;
+			//_boardBillboard.scaleX = _boardBillboard.scaleY = 2.0;
 			_boardBillboard.material = _dartboardMC;
 			_boardBillboard.width = textureConfig.board.width;
 			_boardBillboard.height = textureConfig.board.height;
@@ -336,7 +296,7 @@
 			_scene.addChild(_boardBillboard);
 			
 			_collada = new Collada();
-			_collada.scaling = 2;
+			_collada.scaling = 3;
 			_collada.centerMeshes = true;
 			
 			_loader = new Loader3D();
@@ -360,10 +320,15 @@
 			_throwIndicator.armShot();
 		}//end startThrow()
 		
-		public function updateThrowSpeed(a_spd:Number):void 
+		public function updateThrowSpeed(a_spd:Number, a_xvel:Number = 0):void 
 		{
-			_throwIndicator.updateBall(a_spd/10);
+			_throwIndicator.updateBall(a_xvel, a_spd);
 		}//end updateThrowSpeed()
+		
+		public function finishThrow(a_name:String):void
+		{
+			_scoreBoard.updateScores(a_name);
+		}//end finishThrow()
 		
 		public function resetThrow():void
 		{
@@ -372,7 +337,7 @@
 	
 		public function render():void
 		{	
-			_wallBillboard.lookAt(_camera.position, new Vector3D(0, 1, 0));
+			//_wallBillboard.lookAt(_camera.position, new Vector3D(0, 1, 0));
 			
 			if ( _boardRef ) {
 				_boardBillboard.x = _boardRef.position.x * _engineScale;
@@ -387,7 +352,7 @@
 				var followCam:Boolean = false;
 				
 				for ( var i:int = 0; i < _dartRefs.length; i++ ) {
-					if( _dartModels[i] ) {
+					if ( _dartModels[i] ) {
 						_dartModels[i].rotationX = _dartRefs[i].angle;
 						
 						_dartModels[i].x = _dartRefs[i].position.x * _engineScale;

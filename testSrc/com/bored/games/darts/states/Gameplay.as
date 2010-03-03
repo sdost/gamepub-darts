@@ -49,6 +49,7 @@
 		private var _releasePos:Vector3D;
 		private	var _thrust:Number;
 		private var _angle:Number;
+		private var _yaw:Number;
 		private var _grav:Number;
 		
 		private var _darts:Vector.<Dart>;
@@ -66,6 +67,8 @@
 		private var _velX:Number;//velocity x per second
 		private var _velY:Number;//velocity y per second
 		private var _speed:Number;//change in position per second
+		private var _num:Number;
+		private var _cumAvgSpeed:Number;
 
 		private var _mouseTimer:Timer = new Timer(50,0);
 						
@@ -147,6 +150,7 @@
 					if (_currentTurn.hasThrowsRemaining()) _currentTurn.advanceThrows();
 					
 					_darts[_currDartIdx].finishThrow();
+					_gameplayScreen.finishThrow(_currentTurn.owner);
 					_currDartIdx++;
 					
 					if (_currDartIdx >= _darts.length) {
@@ -181,16 +185,20 @@
 						_velX = 0;
 						_velY = 0;
 						_speed = 0;
+						_cumAvgSpeed = 0;
+						_num = 0;
 						_mouseTimer.addEventListener( TimerEvent.TIMER, updateCurrentMouseVelocity );
 						_mouseTimer.start();
 					}
 				} else {
-					if ( _speed ) {
-						_thrust = Math.min((_speed / 30), 30);
+					if ( _cumAvgSpeed ) {
+						_thrust = Math.min((_cumAvgSpeed / 50), ConfigManager.config.maxThrust);
 						
-						_gameplayScreen.updateThrowSpeed(_thrust);
-						
-						_darts[_currDartIdx].initThrowParams(_releasePos.x, _releasePos.y, _releasePos.z, _thrust, _angle, _grav);
+						if ( _thrust >= ConfigManager.config.minThrust ) 
+						{
+							_gameplayScreen.updateThrowSpeed(_thrust, (_velX / 1000));
+							_darts[_currDartIdx].initThrowParams(_releasePos.x, _releasePos.y, _releasePos.z, _thrust, _angle, _grav, _velX / 1000);
+						}
 					}
 					_mouseTimer.stop();
 					_gameplayScreen.resetThrow();
@@ -200,9 +208,10 @@
 				if ( a_evt.button ) {
 					_gameplayScreen.startThrow();
 					_buttonDown = true;
-				} else {
-					_releasePos.x = (a_evt.x - 350)/400;
-					_releasePos.y = (275 - a_evt.y)/400;
+				} else {					
+					_releasePos.x = (((a_evt.x - 350) * _dartboard.position.z * Math.tan(50 * Math.PI / 180)) / 700);
+					_releasePos.y = (((275 - a_evt.y) * _dartboard.position.z * Math.tan(50 * Math.PI / 180)) / 550);
+					
 				
 					if( !_darts[_currDartIdx].throwing ) {
 						_darts[_currDartIdx].position.x = _releasePos.x;
@@ -225,6 +234,8 @@
 			_velX = dx * 1000 / _mouseTimer.delay;//per second
 			_velY = dy * 1000 / _mouseTimer.delay;//per second
 			_speed = Math.sqrt( _velX * _velX + _velY * _velY );
+			
+			_cumAvgSpeed = _cumAvgSpeed + ((_speed - _cumAvgSpeed) / ++_num);
 			
 			//_gameplayScreen.updateThrowSpeed(_speed);
 		}//end updateCurrentMouseVelocity()

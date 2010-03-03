@@ -13,6 +13,8 @@
 		private var _throwing:Boolean;
 		private var _radius:int;
 		
+		private var _xVel:Number;
+		
 		private var _orientation:Number;
 		
 		public function Dart(a_radius:int = 1) 
@@ -33,9 +35,9 @@
 			super.update(t);
 			
 			if ( _throwing ) {			
-				var z:Number = this.position.z + _trajCalc.thrustVector.x/100;
+				var z:Number = this.position.z + _trajCalc.thrustVector.x/40;
 				var y:Number = _trajCalc.calculateHeightAtPos(z);
-				var x:Number = this.position.x;
+				var x:Number = this.position.x + _xVel / 40;
 				
 				var rad:Number = Math.atan2(y - this.position.y, z - this.position.z);
 				_orientation = rad * 180 / Math.PI + 90;
@@ -61,8 +63,8 @@
 		{
 			return _orientation;
 		}//end get angle()
-		
-		public function initThrowParams(releaseX:Number, releaseY:Number, releaseZ:Number, thrust:Number, angle:Number, grav:Number):void
+
+		public function initThrowParams(releaseX:Number, releaseY:Number, releaseZ:Number, thrust:Number, angle:Number, grav:Number, xvel:Number = 0):void
 		{
 			this.position.x = releaseX;
 			this.position.y = releaseY;
@@ -72,6 +74,8 @@
 			_trajCalc.thrust = thrust;
 			_trajCalc.theta = Math.PI / 180 * angle;
 			_trajCalc.gravity = grav;
+			
+			_xVel = xvel;
 			
 			_throwing = true;
 			

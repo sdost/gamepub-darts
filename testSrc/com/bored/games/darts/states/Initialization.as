@@ -44,7 +44,7 @@
 			
 			var ext:AbstractExternalService = new ServicesClass();
 			
-			ext.init(servicesConfig.gameId, DartsGlobals.instance.optionsInterfaceSpace);
+			//ext.init(servicesConfig.gameId, DartsGlobals.instance.optionsInterfaceSpace);
 			
 			DartsGlobals.instance.externalServices = ext;
 			

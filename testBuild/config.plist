@@ -21,7 +21,7 @@
 				<real>0</real>
 			</dict>
 			<key>thrust</key>
-			<real>20</real>
+			<real>5</real>
 			<key>angle</key>
 			<real>10</real>
 			<key>gravity</key>
@@ -41,16 +41,16 @@
 				<key>y</key>
 				<real>0</real>
 				<key>z</key>
-				<real>1.8</real>
+				<real>5</real>
 			</dict>
 			<key>collisionMap</key>
 			<dict>
 				<key>bitmap</key>
-				<string>com.bored.games.assets.DartboardTexture_BMP</string>
+				<string>com.bored.games.assets.DartboardCollision_BMP</string>
 				<key>width</key>
-				<integer>128</integer>
+				<integer>236</integer>
 				<key>height</key>
-				<integer>128</integer>
+				<integer>237</integer>
 			</dict>
 		</dict>
 		<key>textures</key>
@@ -72,27 +72,23 @@
 				<key>bitmap</key>
 				<string>com.bored.games.assets.DartboardTexture_BMP</string>
 				<key>width</key>
-				<integer>128</integer>
+				<integer>236</integer>
 				<key>height</key>
-				<integer>128</integer>
+				<integer>237</integer>
 			</dict>
 			<key>wall</key>
 			<dict>
 				<key>bitmap</key>
 				<string>com.bored.games.assets.WallTexture_BMP</string>
 				<key>width</key>
-				<integer>255</integer>
+				<integer>700</integer>
 				<key>height</key>
-				<integer>200</integer>
+				<integer>550</integer>
 			</dict>
 		</dict>
+		<key>minThrust</key>
+		<real>4</real>
 		<key>maxThrust</key>
-		<real>50</real>
-		<key>readyThreshold</key>
-		<real>119</real>
-		<key>shootThreshold</key>
-		<real>1</real>
-		<key>shootMultiplier</key>
-		<real>30</real>
+		<real>15</real>
 	</dict>
 </plist>

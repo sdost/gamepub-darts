@@ -52,43 +52,41 @@
 			_collMap = a_bmp;
 		}//end setCollisionMap()
 		
-		public function checkForCollision(a_obj:GameElement, a_radius:int):int
+		public function checkForCollision(a_obj:GameElement, a_radius:int):Object
 		{
-			var points:int = -1;
+			var hit:Object = {};
 			
 			if (a_obj.position.z >= this.position.z)
 			{
 				a_obj.position.z = this.position.z;
 				
-				/*
 				var tip:Rectangle = new Rectangle(Math.floor(a_radius / 2), Math.floor(a_radius / 2), a_radius, a_radius);
 				
-				if ( a_obj.position.x > -5 || a_obj.position.y > -5 || a_obj.position.x < 5 || a_obj.position.y < 5 ) {				
-					var x:Number = int((a_obj.position.x / 10.0 + 0.5) * _collMap.width);
-					var y:Number = int((a_obj.position.y / 10.0 + 0.5) * _collMap.height);
+				if ( a_obj.position.x > -64 || a_obj.position.y > -64 || a_obj.position.x < 64 || a_obj.position.y < 64 ) {				
+					var x:Number = int((a_obj.position.x / 128.0 + 0.5) * _collMap.width);
+					var y:Number = int((a_obj.position.y / 128.0 + 0.5) * _collMap.height);
 					
 					tip.offsetPoint(new Point(x, y));
 					
-					var samples:ByteArray = _collMap.getPixels(tip);
-					samples.position = 0;
+					var sample:uint = _collMap.getPixel(tip.x, tip.y);
 					
-					var color:Number = 0x00000000;
+					trace("Avg. Color: " + sample.toString(16));
 					
-					while(samples.bytesAvailable) {
-						color += samples.readUnsignedInt();	
-					}
-												
-					var avg:uint = color / (a_radius * a_radius);
-					
-					if (avg & 0xFF000000) {
-						points = uint(avg & 0x0000FFFF);
+					if (sample > 0) {
+						
+						var decoded:Number = Math.pow((sample + 0x010001), 1/3);
+						
+						hit.section = {};
+						hit.section.points = uint(decoded & 0x000000FF);
+						hit.section.multiplier = uint((decoded & 0x0000FF00) >> 8);
+						
+						trace("Points: " + hit.section.points);
+						trace("Multiplier: " + hit.section.multiplier);
 					}
 				}
-				*/
-				points = 1;
 			} 
 			
-			return points;
+			return hit;
 		}//end checkForCollision()
 		
 	}//end Board

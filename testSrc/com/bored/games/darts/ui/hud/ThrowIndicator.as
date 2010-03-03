@@ -75,12 +75,13 @@
 		public function armShot():void
 		{
 			_trackingBall.gotoAndStop("RED");
+			_trackingBall.x = 0;
 			_trackingBall.y = 119;
 			_trackingBall.scaleX = 5;
 			_trackingBall.scaleY = 5;
 			_trackingBall.alpha = 0;
 			_trackingBall.visible = true;
-			Tweener.addTween(_trackingBall, { alpha: 0.85, scaleX: 1, scaleY: 1, time: 1, onComplete: shotArmed } );
+			Tweener.addTween(_trackingBall, { alpha: 0.85, scaleX: 1, scaleY: 1, time: 0.5, onComplete: shotArmed } );
 		}//end armShot()
 		
 		private function shotArmed():void
@@ -90,12 +91,12 @@
 		
 		public function resetShot():void
 		{
-			_trackingBall.visible = false;
+			//_trackingBall.visible = false;
 		}//end resetShot()
 		
-		public function updateBall(a_num:Number):void
+		public function updateBall(a_x:Number, a_y:Number):void
 		{
-			Tweener.addTween(_trackingBall, { y: (119 - a_num), time: 0.5 } );
+			Tweener.addTween(_trackingBall, { x: a_x * 8, y: (119 - a_y * 8), time: 0.5 } );
 		}//end moveBallTo()
 		
 		public function show():void
