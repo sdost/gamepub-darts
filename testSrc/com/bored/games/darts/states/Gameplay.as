@@ -1,5 +1,6 @@
 ﻿package com.bored.games.darts.states 
 {
+	import com.bored.games.assets.DartboardColorMap_MC;
 	import com.bored.games.assets.GameplayScreen_MC;
 	import com.bored.games.config.ConfigManager;
 	import com.bored.games.controllers.InputController;
@@ -16,12 +17,14 @@
 	import com.bored.games.input.MouseStroke;
 	import com.inassets.statemachines.Finite.State;
 	import com.inassets.statemachines.interfaces.IStateMachine;
+	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.GraphicsBitmapFill;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.TimerEvent;
+	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Vector3D;
 	import flash.text.TextField;
@@ -116,7 +119,17 @@
 				var boardConfig:XML = ConfigManager.getConfigNamespace("dartboard");
 				
 				_dartboard = new Board();
-				_dartboard.setCollisionMap(ImageFactory.getBitmapDataByQualifiedName(boardConfig.collisionMap.bitmap, boardConfig.collisionMap.width, boardConfig.collisionMap.height));
+				
+				var bmp:BitmapData = new BitmapData(900, 900, true, 0x00000000);
+				
+				var mtx:Matrix = new Matrix();
+				mtx.translate(450, 450);
+				
+				bmp.draw(new DartboardColorMap_MC(), mtx);
+				
+				//_gameplayScreen.addChild(new Bitmap(bmp));
+				
+				_dartboard.setCollisionMap(bmp);
 				_dartboard.position.x = boardConfig.position.x;
 				_dartboard.position.y = boardConfig.position.y;
 				_dartboard.position.z = boardConfig.position.z;
@@ -159,14 +172,18 @@
 						_darts[1].reset();
 						_darts[2].reset();
 						
-						DartsGlobals.instance.logicManager.checkForWinState();
+						var win:Boolean = DartsGlobals.instance.logicManager.checkForWinState();
 						
-						_turns++;
-						
-						if ( _turns % 2 == 0 ) {
-							_currentTurn = DartsGlobals.instance.logicManager.startNewTurn(AbstractGameLogic.PLAYER_TURN);
+						if (win) {
+							trace("Hey! " + _currentTurn.owner + " has won the game!");
 						} else {
-							_currentTurn = DartsGlobals.instance.logicManager.startNewTurn(AbstractGameLogic.OPPONENT_TURN);
+							_turns++;
+							
+							if ( _turns % 2 == 0 ) {
+								_currentTurn = DartsGlobals.instance.logicManager.startNewTurn(AbstractGameLogic.PLAYER_TURN);
+							} else {
+								_currentTurn = DartsGlobals.instance.logicManager.startNewTurn(AbstractGameLogic.OPPONENT_TURN);
+							}
 						}
 					}
 				} 

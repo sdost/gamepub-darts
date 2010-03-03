@@ -62,23 +62,41 @@
 				
 				var tip:Rectangle = new Rectangle(Math.floor(a_radius / 2), Math.floor(a_radius / 2), a_radius, a_radius);
 				
-				if ( a_obj.position.x > -64 || a_obj.position.y > -64 || a_obj.position.x < 64 || a_obj.position.y < 64 ) {				
-					var x:Number = int((a_obj.position.x / 128.0 + 0.5) * _collMap.width);
-					var y:Number = int((a_obj.position.y / 128.0 + 0.5) * _collMap.height);
+				if ( a_obj.position.x > -1.2 || a_obj.position.y > -1.2 || a_obj.position.x < 1.2 || a_obj.position.y < 1.2 ) {				
+					var x:Number = int(((a_obj.position.x/2.4) + 0.5) * _collMap.width);
+					var y:Number = int(((-a_obj.position.y/2.4) + 0.5) * _collMap.height);
 					
 					tip.offsetPoint(new Point(x, y));
 					
 					var sample:uint = _collMap.getPixel(tip.x, tip.y);
 					
-					trace("Avg. Color: " + sample.toString(16));
-					
 					if (sample > 0) {
 						
-						var decoded:Number = Math.pow((sample + 0x010001), 1/3);
-						
-						hit.section = {};
-						hit.section.points = uint(decoded & 0x000000FF);
-						hit.section.multiplier = uint((decoded & 0x0000FF00) >> 8);
+						if (sample & 0xFF0000) {
+							hit.section = {};
+							hit.section.multiplier = 1;
+							hit.section.points = uint(Math.ceil(((sample & 0xFF0000) >> 16) / 12));
+							
+							if (hit.section.points == 21) {
+								hit.section.points = 25;
+							}
+						} else if ( sample & 0x00FF00 ) {
+							hit.section = {};
+							hit.section.multiplier = 2;
+							hit.section.points = uint(Math.ceil(((sample & 0x00FF00) >> 8) / 12));
+							
+							if (hit.section.points == 21) {
+								hit.section.points = 25;
+							}
+						} else if ( sample & 0x0000FF ) {
+							hit.section = {};
+							hit.section.multiplier = 3;
+							hit.section.points = uint(Math.ceil((sample & 0x0000FF) / 12));
+							
+							if (hit.section.points == 21) {
+								hit.section.points = 25;
+							}
+						}
 						
 						trace("Points: " + hit.section.points);
 						trace("Multiplier: " + hit.section.multiplier);
