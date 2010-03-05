@@ -19,7 +19,7 @@
 		
 		private var _shotDetails:Vector.<ShotDetails>;
 		
-		public var currentShot:ShotDetails;
+		private var _currentShot:ShotDetails;
 		
 		public function AIShotManager(a_config:XML, a_controller:AIController) 
 		{
@@ -28,7 +28,11 @@
 			
 			_fsm = new AIOpponentFSM(_config.opponentName);
 			
-			_shotDetails = new Vector.<ShotDetails>(3);
+			_shotDetails = new Vector.<ShotDetails>();
+			
+			_shotDetails.push(new ShotDetails());
+			_shotDetails.push(new ShotDetails());
+			_shotDetails.push(new ShotDetails());
 			
 			setupStates();			
 		}//end constructor()
@@ -40,9 +44,10 @@
 			_fsm.addState(new AIPerformShot( "AIPerformShot", this, _fsm ));
 		}//end setupStates()
 		
-		public function beginShot():void
+		public function beginShot(a_idx:Number):void
 		{
 			if (_fsm) {
+				_currentShot = _shotDetails[a_idx];
 				_fsm.start();
 			}
 		}//end beginTurn()
@@ -58,6 +63,26 @@
 		{
 			return _controller;
 		}//end get controller()
+		
+		public function get releasePoint():Vector3D
+		{
+			return _currentShot.releasePoint;
+		}//end get releasePoint()
+		
+		public function get destPoint():Vector3D
+		{
+			return _currentShot.destPoint;
+		}//end get destPoint()
+		
+		public function get thrust():Number 
+		{
+			return _currentShot.thrust;
+		}//end get thrust()
+		
+		public function set thrust(a_number:Number):void
+		{
+			_currentShot.thrust = a_number;
+		}//end set thrust()
 		
 	}//end AITurnManager
 

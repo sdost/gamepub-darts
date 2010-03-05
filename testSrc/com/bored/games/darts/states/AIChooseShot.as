@@ -26,14 +26,15 @@
 		override public function onEnter():void
 		{
 			//TODO generate shot list, pick shot, pick start position based on dest point
+			_shotMgr.destPoint.x = Math.random()*1.0-0.5;
+			_shotMgr.destPoint.y = Math.random()*1.0-0.5;
+			_shotMgr.destPoint.z = 5;
 			
-			_shotMgr.currentShot.destPoint.x = 0.8;
-			_shotMgr.currentShot.destPoint.y = 0.8;
-			_shotMgr.currentShot.destPoint.z = 5;
+			_shotMgr.releasePoint.x = Math.random()*1.0-0.5;
+			_shotMgr.releasePoint.y = Math.random()*1.0-0.5;
+			_shotMgr.releasePoint.z = 0;
 			
-			_shotMgr.currentShot.releasePoint.x = 0.8;
-			_shotMgr.currentShot.releasePoint.y = 0.8;
-			_shotMgr.currentShot.releasePoint.z = 0;
+			_shotMgr.thrust = 12+Math.random()*2;
 			
 			(this.stateMachine as AIOpponentFSM).transitionToNextState();
 		}//end onEnter()

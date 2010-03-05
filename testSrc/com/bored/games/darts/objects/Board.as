@@ -70,36 +70,23 @@
 					
 					var sample:uint = _collMap.getPixel(tip.x, tip.y);
 					
-					if (sample > 0) {
-						
-						if (sample & 0xFF0000) {
-							hit.section = {};
-							hit.section.multiplier = 1;
-							hit.section.points = uint(Math.ceil(((sample & 0xFF0000) >> 16) / 12));
-							
-							if (hit.section.points == 21) {
-								hit.section.points = 25;
-							}
-						} else if ( sample & 0x00FF00 ) {
-							hit.section = {};
-							hit.section.multiplier = 2;
-							hit.section.points = uint(Math.ceil(((sample & 0x00FF00) >> 8) / 12));
-							
-							if (hit.section.points == 21) {
-								hit.section.points = 25;
-							}
-						} else if ( sample & 0x0000FF ) {
-							hit.section = {};
+					hit.section = { };
+					hit.section.multiplier = 0;
+					hit.section.point = 0;
+					
+					if (sample & 0xFF0000) {
+						hit.section.multiplier = 1;
+						hit.section.points = uint(Math.ceil(((sample & 0xFF0000) >> 16) / 12));
+					} else if ( sample & 0x00FF00 ) {
+						hit.section.multiplier = 2;
+						hit.section.points = uint(Math.ceil(((sample & 0x00FF00) >> 8) / 12));
+					} else if ( sample & 0x0000FF ) {
 							hit.section.multiplier = 3;
 							hit.section.points = uint(Math.ceil((sample & 0x0000FF) / 12));
-							
-							if (hit.section.points == 21) {
-								hit.section.points = 25;
-							}
-						}
-						
-						trace("Points: " + hit.section.points);
-						trace("Multiplier: " + hit.section.multiplier);
+					}
+					
+					if (hit.section.points == 21) {
+						hit.section.points = Board.BULL;
 					}
 				}
 			} 

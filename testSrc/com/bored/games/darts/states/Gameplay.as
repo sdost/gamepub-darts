@@ -76,6 +76,8 @@
 		private var _num:Number;
 		private var _cumAvgSpeed:Number;
 		
+		private var _mousePosition:Point = new Point();;
+		
 		private var _opponentConfig:XML;
 		private var _opponentShooter:AIShotManager;
 
@@ -180,6 +182,11 @@
 					_currDartIdx++;
 					
 					if (_currDartIdx >= _darts.length) {
+						
+						_mouseTimer.removeEventListener( TimerEvent.TIMER, updateCurrentMouseVelocity );
+						_mouseTimer.stop();
+						_mouseTimer.reset();
+						
 						_currDartIdx = 0;
 						_darts[0].reset();
 						_darts[1].reset();
@@ -206,7 +213,7 @@
 						}
 					}
 					
-					if(_opponentShooter) _opponentShooter.beginShot();
+					if(_opponentShooter) _opponentShooter.beginShot(_currDartIdx);
 				} 
 			}
 			
@@ -215,20 +222,11 @@
 		
 		private function inputUpdate(a_evt:InputStateEvent):void
 		{
+			_mousePosition.x = a_evt.x;
+			_mousePosition.y = a_evt.y;
+			
 			if (_buttonDown) {
-				if ( a_evt.button ) {
-					if( !_mouseTimer.running ) {
-						_oX = _gameplayScreen.stage.mouseX;
-						_oY = _gameplayScreen.stage.mouseY;
-						_velX = 0;
-						_velY = 0;
-						_speed = 0;
-						_cumAvgSpeed = 0;
-						_num = 0;
-						_mouseTimer.addEventListener( TimerEvent.TIMER, updateCurrentMouseVelocity );
-						_mouseTimer.start();
-					}
-				} else {
+				if ( !a_evt.button ) {
 					if ( _cumAvgSpeed ) {
 						_thrust = Math.min((_cumAvgSpeed / 50), ConfigManager.config.maxThrust);
 						
@@ -238,7 +236,9 @@
 							_darts[_currDartIdx].initThrowParams(_releasePos.x, _releasePos.y, _releasePos.z, _thrust, _angle, _grav, _velX / 1000);
 						}
 					}
+					_mouseTimer.removeEventListener( TimerEvent.TIMER, updateCurrentMouseVelocity );
 					_mouseTimer.stop();
+					_mouseTimer.reset();
 					_gameplayScreen.resetThrow();
 					_buttonDown = false;
 				}
@@ -246,9 +246,19 @@
 				if ( a_evt.button ) {
 					_gameplayScreen.startThrow();
 					_buttonDown = true;
+					trace("Starting mouse timer??");
+					_oX = _mousePosition.x;
+					_oY = _mousePosition.y;
+					_velX = 0;
+					_velY = 0;
+					_speed = 0;
+					_cumAvgSpeed = 0;
+					_num = 0;
+					_mouseTimer.addEventListener( TimerEvent.TIMER, updateCurrentMouseVelocity );
+					_mouseTimer.start();
 				} else {					
-					_releasePos.x = (((a_evt.x - 350) * _dartboard.position.z * Math.tan(50 * Math.PI / 180)) / 700);
-					_releasePos.y = (((275 - a_evt.y) * _dartboard.position.z * Math.tan(50 * Math.PI / 180)) / 550);
+					_releasePos.x = (((_mousePosition.x - 350) * _dartboard.position.z * Math.tan(50 * Math.PI / 180)) / 700);
+					_releasePos.y = (((275 - _mousePosition.y) * _dartboard.position.z * Math.tan(50 * Math.PI / 180)) / 550);
 					
 					if( !_darts[_currDartIdx].throwing ) {
 						_darts[_currDartIdx].position.x = _releasePos.x;
@@ -261,8 +271,8 @@
 
 		private function updateCurrentMouseVelocity(e:TimerEvent):void
 		{
-			var nX:Number = _gameplayScreen.stage.mouseX;
-			var nY:Number = _gameplayScreen.stage.mouseY;
+			var nX:Number = _mousePosition.x;
+			var nY:Number = _mousePosition.y;
 			var dx:Number = nX - _oX;
 			var dy:Number = nY - _oY;
     

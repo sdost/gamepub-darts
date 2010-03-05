@@ -32,7 +32,7 @@
 		
 		private function setupListeners():void
 		{
-			trace("Adding mouse listeners...");
+			//trace("Adding mouse listeners...");
 			_listener.addEventListener(MouseEvent.MOUSE_MOVE, handleMouseMove, true, 400, true);
 			_listener.addEventListener(MouseEvent.MOUSE_DOWN, handleMouseButtons, true, 401, true);
 			_listener.addEventListener(MouseEvent.MOUSE_UP, handleMouseButtons, true, 402, true);
@@ -40,7 +40,7 @@
 		
 		private function removeListeners():void
 		{
-			trace("Removing mouse listeners...");
+			//trace("Removing mouse listeners...");
 			_listener.removeEventListener(MouseEvent.MOUSE_MOVE, handleMouseMove, true);
 			_listener.removeEventListener(MouseEvent.MOUSE_DOWN, handleMouseButtons, true);
 			_listener.removeEventListener(MouseEvent.MOUSE_UP, handleMouseButtons, true);
@@ -54,8 +54,8 @@
 			
 			var dispatched:Boolean = this.dispatchEvent(new InputStateEvent(InputStateEvent.UPDATE, x, y, but));
 			
-			if( dispatched )
-				trace("dispatching InputStateEvent??");
+			//if( dispatched )
+				//trace("dispatching InputStateEvent??");
 		
 		}//end handleMouseMove()
 		
@@ -67,8 +67,8 @@
 			
 			var dispatched:Boolean = this.dispatchEvent(new InputStateEvent(InputStateEvent.UPDATE, x, y, but));
 			
-			if( dispatched )
-				trace("dispatching InputStateEvent??");
+			//if( dispatched )
+				//trace("dispatching InputStateEvent??");
 			
 		}//end handleMouseButtons()
 		
