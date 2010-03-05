@@ -123,7 +123,7 @@
 		private var _boardScale:Number;
 		private var _dartScale:Number;
 		
-		public function GameplayScreen(/*a_img:Sprite, a_buildFromAllDescendants:Boolean = false, a_bAddContents:Boolean = true, a_buildBackground:Boolean = false*/) 
+		public function GameplayScreen() 
 		{
 			var textureConfig:XML = ConfigManager.getConfigNamespace("textures");
 			

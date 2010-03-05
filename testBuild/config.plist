@@ -90,5 +90,10 @@
 		<real>4</real>
 		<key>maxThrust</key>
 		<real>15</real>
+		<key>aitest</key>
+		<dict>
+			<key>opponentName</key>
+			<string>test_opponent</string>
+		</dict>
 	</dict>
 </plist>

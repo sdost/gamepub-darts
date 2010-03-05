@@ -3,9 +3,11 @@
 	import com.bored.games.assets.DartboardColorMap_MC;
 	import com.bored.games.assets.GameplayScreen_MC;
 	import com.bored.games.config.ConfigManager;
+	import com.bored.games.controllers.AIController;
 	import com.bored.games.controllers.InputController;
 	import com.bored.games.controllers.MouseInputController;
 	import com.bored.games.darts.logic.AbstractGameLogic;
+	import com.bored.games.darts.logic.AIShotManager;
 	import com.bored.games.darts.logic.CricketGameMode;
 	import com.bored.games.darts.logic.DartsTurn;
 	import com.bored.games.darts.objects.Board;
@@ -47,7 +49,8 @@
 		private var _gameplayScreen:GameplayScreen;
 		
 		private var _buttonDown:Boolean;
-		private var _inputController:InputController;
+		private var _playerInputController:InputController;
+		private var _opponentInputController:InputController;
 		
 		private var _releasePos:Vector3D;
 		private	var _thrust:Number;
@@ -65,15 +68,18 @@
 		
 		private var _trackShot:Boolean = true;
 		
-		private var _oX:Number;//last mouse x position
-		private var _oY:Number;//last mouse y position
-		private var _velX:Number;//velocity x per second
-		private var _velY:Number;//velocity y per second
-		private var _speed:Number;//change in position per second
+		private var _oX:Number;
+		private var _oY:Number;
+		private var _velX:Number;
+		private var _velY:Number;
+		private var _speed:Number;
 		private var _num:Number;
 		private var _cumAvgSpeed:Number;
+		
+		private var _opponentConfig:XML;
+		private var _opponentShooter:AIShotManager;
 
-		private var _mouseTimer:Timer = new Timer(50,0);
+		private var _mouseTimer:Timer = new Timer(50, 0);
 						
 		public function Gameplay(a_name:String, a_stateMachine:IStateMachine)
 		{
@@ -86,6 +92,8 @@
 		 */
 		override public function onEnter():void
 		{
+			_opponentConfig = ConfigManager.getConfigNamespace("aitest");
+			
 			var gameplayConfig:XML = ConfigManager.getConfigNamespace("gameplay");
 			
 			_releasePos = new Vector3D( gameplayConfig.releasePosition.x, gameplayConfig.releasePosition.y, gameplayConfig.releasePosition.z );
@@ -97,16 +105,20 @@
 			
 			try
 			{
-				//gameplayScreenImg = new GameplayScreen_MC();
-				_gameplayScreen = new GameplayScreen(/*gameplayScreenImg, false, true*/);
+				_gameplayScreen = new GameplayScreen();
 				
 				DartsGlobals.instance.screenSpace.addChild(_gameplayScreen);
 				
-				_inputController = DartsGlobals.instance.inputController;
-				_inputController.addEventListener(InputStateEvent.UPDATE, inputUpdate);
-				_inputController.pause = false;
 				_buttonDown = false;
 				
+				_playerInputController = new MouseInputController(DartsGlobals.instance.screenSpace);
+				_playerInputController.addEventListener(InputStateEvent.UPDATE, inputUpdate);
+				_playerInputController.pause = true;
+				
+				_opponentInputController = new AIController();
+				_opponentInputController.addEventListener(InputStateEvent.UPDATE, inputUpdate);
+				_opponentInputController.pause = true;
+								
 				var dartConfig:XML = ConfigManager.getConfigNamespace("dart");
 				
 				_darts = new Vector.<Dart>();
@@ -127,8 +139,6 @@
 				
 				bmp.draw(new DartboardColorMap_MC(), mtx);
 				
-				//_gameplayScreen.addChild(new Bitmap(bmp));
-				
 				_dartboard.setCollisionMap(bmp);
 				_dartboard.position.x = boardConfig.position.x;
 				_dartboard.position.y = boardConfig.position.y;
@@ -140,6 +150,7 @@
 				_gameplayScreen.addEventListener(Event.ENTER_FRAME, update, false, 0, false);
 				
 				_currentTurn = DartsGlobals.instance.logicManager.startNewTurn(AbstractGameLogic.PLAYER_TURN);
+				_playerInputController.pause = false;
 			}
 			catch (e:Error)
 			{
@@ -162,6 +173,8 @@
 					
 					if (_currentTurn.hasThrowsRemaining()) _currentTurn.advanceThrows();
 					
+					if(_opponentShooter) _opponentShooter.endShot();
+					
 					_darts[_currDartIdx].finishThrow();
 					_gameplayScreen.finishThrow(_currentTurn.owner);
 					_currDartIdx++;
@@ -181,11 +194,19 @@
 							
 							if ( _turns % 2 == 0 ) {
 								_currentTurn = DartsGlobals.instance.logicManager.startNewTurn(AbstractGameLogic.PLAYER_TURN);
+								_playerInputController.pause = false;
+								_opponentInputController.pause = true;
+								_opponentShooter = null;
 							} else {
 								_currentTurn = DartsGlobals.instance.logicManager.startNewTurn(AbstractGameLogic.OPPONENT_TURN);
+								_playerInputController.pause = true;
+								_opponentInputController.pause = false;
+								_opponentShooter = new AIShotManager(_opponentConfig, (_opponentInputController as AIController));
 							}
 						}
 					}
+					
+					if(_opponentShooter) _opponentShooter.beginShot();
 				} 
 			}
 			
@@ -229,7 +250,6 @@
 					_releasePos.x = (((a_evt.x - 350) * _dartboard.position.z * Math.tan(50 * Math.PI / 180)) / 700);
 					_releasePos.y = (((275 - a_evt.y) * _dartboard.position.z * Math.tan(50 * Math.PI / 180)) / 550);
 					
-				
 					if( !_darts[_currDartIdx].throwing ) {
 						_darts[_currDartIdx].position.x = _releasePos.x;
 						_darts[_currDartIdx].position.y = _releasePos.y;
@@ -248,13 +268,11 @@
     
 			_oX = nX;
 			_oY = nY;
-			_velX = dx * 1000 / _mouseTimer.delay;//per second
-			_velY = dy * 1000 / _mouseTimer.delay;//per second
+			_velX = dx * 1000 / _mouseTimer.delay;
+			_velY = dy * 1000 / _mouseTimer.delay;
 			_speed = Math.sqrt( _velX * _velX + _velY * _velY );
 			
 			_cumAvgSpeed = _cumAvgSpeed + ((_speed - _cumAvgSpeed) / ++_num);
-			
-			//_gameplayScreen.updateThrowSpeed(_speed);
 		}//end updateCurrentMouseVelocity()
 		
 		private function finished(...args):void

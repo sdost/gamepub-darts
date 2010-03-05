@@ -25,17 +25,14 @@
 			
 			if (_paused) {
 				removeListeners();
-				//_listener.mouseEnabled = false;
-				//_listener.mouseChildren = false;
 			} else {
 				setupListeners();
-				//_listener.mouseEnabled = true;
-				//_listener.mouseChildren = true;
 			}
 		}//end set pause()
 		
 		private function setupListeners():void
 		{
+			trace("Adding mouse listeners...");
 			_listener.addEventListener(MouseEvent.MOUSE_MOVE, handleMouseMove, true, 400, true);
 			_listener.addEventListener(MouseEvent.MOUSE_DOWN, handleMouseButtons, true, 401, true);
 			_listener.addEventListener(MouseEvent.MOUSE_UP, handleMouseButtons, true, 402, true);
@@ -43,9 +40,10 @@
 		
 		private function removeListeners():void
 		{
-			_listener.removeEventListener(MouseEvent.MOUSE_MOVE, handleMouseMove);
-			_listener.removeEventListener(MouseEvent.MOUSE_DOWN, handleMouseButtons);
-			_listener.removeEventListener(MouseEvent.MOUSE_UP, handleMouseButtons);
+			trace("Removing mouse listeners...");
+			_listener.removeEventListener(MouseEvent.MOUSE_MOVE, handleMouseMove, true);
+			_listener.removeEventListener(MouseEvent.MOUSE_DOWN, handleMouseButtons, true);
+			_listener.removeEventListener(MouseEvent.MOUSE_UP, handleMouseButtons, true);
 		}//end removeListeners()
 		
 		private function handleMouseMove(evt:MouseEvent):void
@@ -54,7 +52,10 @@
 			var y:Number = evt.stageY;
 			var but:Boolean = evt.buttonDown;
 			
-			this.dispatchEvent(new InputStateEvent(InputStateEvent.UPDATE, x, y, but));
+			var dispatched:Boolean = this.dispatchEvent(new InputStateEvent(InputStateEvent.UPDATE, x, y, but));
+			
+			if( dispatched )
+				trace("dispatching InputStateEvent??");
 		
 		}//end handleMouseMove()
 		
@@ -64,7 +65,10 @@
 			var y:Number = evt.stageY;
 			var but:Boolean = evt.buttonDown;
 			
-			this.dispatchEvent(new InputStateEvent(InputStateEvent.UPDATE, x, y, but));
+			var dispatched:Boolean = this.dispatchEvent(new InputStateEvent(InputStateEvent.UPDATE, x, y, but));
+			
+			if( dispatched )
+				trace("dispatching InputStateEvent??");
 			
 		}//end handleMouseButtons()
 		

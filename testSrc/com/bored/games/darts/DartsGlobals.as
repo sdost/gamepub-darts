@@ -49,8 +49,6 @@
 		
 		private var _debugBuild:Boolean = false;
 		
-		private var _inputController:InputController;
-		
 		private var _config:XML;
 		
 		private var _externalService:AbstractExternalService;
@@ -100,8 +98,6 @@
 		public function set stage(a_stage:Stage):void
 		{
 			_stage = a_stage;
-			
-			_inputController = new MouseInputController(_stage);
 			
 			if (!_optionsInterfaceSpace)
 			{
@@ -214,11 +210,6 @@
 			return _debugBuild;
 			
 		}//end get isDebugBuild()
-		
-		public function get inputController():InputController
-		{
-			return _inputController;
-		}//end get inputController()
 		
 		/*****************************
 		 * 
