@@ -4,6 +4,7 @@
 	import com.bored.games.controllers.InputController;
 	import com.bored.games.controllers.MouseInputController;
 	import com.bored.games.darts.logic.AbstractGameLogic;
+	import com.bored.games.darts.logic.AIOpponentProfile;
 	import com.bored.games.darts.logic.AIShotManager;
 	import com.bored.games.darts.logic.CricketGameMode;
 	import com.bored.games.darts.logic.DartsTurn;
@@ -79,7 +80,7 @@
 		
 		private var _mousePosition:Point = new Point();;
 		
-		private var _opponentConfig:XML;
+		private var _opponentProfile:AIOpponentProfile;
 		private var _opponentShooter:AIShotManager;
 
 		private var _mouseTimer:Timer = new Timer(50, 0);
@@ -101,6 +102,8 @@
 			_grav = AppSettings.instance.defaultGravity;
 			
 			var gameplayScreenImg:MovieClip;
+			
+			_opponentProfile = new AIOpponentProfile();
 			
 			try
 			{
@@ -140,6 +143,8 @@
 				_dartboard.position.x = AppSettings.instance.dartboardPositionX;
 				_dartboard.position.y = AppSettings.instance.dartboardPositionY;
 				_dartboard.position.z = AppSettings.instance.dartboardPositionZ;
+				
+				_opponentProfile.acquireColorMap(bmp);
 				
 				_gameplayScreen.setDartReferences(_darts);
 				_gameplayScreen.setBoardReference(_dartboard);
@@ -204,7 +209,7 @@
 							_currentTurn = DartsGlobals.instance.logicManager.startNewTurn(AbstractGameLogic.OPPONENT_TURN);
 							_playerInputController.pause = true;
 							_opponentInputController.pause = false;
-							_opponentShooter = new AIShotManager(AppSettings.instance.aiOpponentName, (_opponentInputController as AIController));
+							_opponentShooter = new AIShotManager(AppSettings.instance.aiOpponentName, (_opponentInputController as AIController), _opponentProfile);
 						}
 					}
 				}

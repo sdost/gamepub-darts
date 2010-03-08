@@ -158,6 +158,8 @@
 			
 			this.stage.quality = StageQuality.MEDIUM;
 			
+			this.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKey);
+			
 			_engineScale = AppSettings.instance.away3dEngineScale;
 			
 			trace("Engine Scale: " + _engineScale);
@@ -215,21 +217,6 @@
 			_dartTexture_JR.smooth = true;
 			
 		}//end initMaterial()
-		
-		private function onSuccess(a_evt:Loader3DEvent):void
-		{
-			_dartTemplate = _loader.handle;			
-			_dartTemplate.mouseEnabled = false;
-			_dartTemplate.materialLibrary.getMaterial("dart_skin").material = _dartTexture_UJ;
-			
-			for ( var i:int = 0; i < 3; i++ ) {
-				var newDart:Object3D = _dartTemplate.clone();			
-				_dartModels.push(newDart);
-				_scene.addChild(newDart);
-			}
-			
-			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKey);
-		}//end onSuccess()
 		
 		private function onKey(a_evt:KeyboardEvent):void
 		{

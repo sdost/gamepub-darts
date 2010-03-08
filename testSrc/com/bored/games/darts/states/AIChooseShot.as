@@ -1,6 +1,10 @@
 ﻿package com.bored.games.darts.states 
 {
+	import com.bored.games.darts.DartsGlobals;
+	import com.bored.games.darts.logic.AbstractGameLogic;
+	import com.bored.games.darts.logic.AIShotCandidate;
 	import com.bored.games.darts.logic.AIShotManager;
+	import com.bored.games.darts.logic.CricketScoreManager;
 	import com.bored.games.darts.states.statemachines.AIOpponentFSM;
 	import com.inassets.statemachines.Finite.State;
 	import com.inassets.statemachines.interfaces.IStateMachine;
@@ -25,10 +29,16 @@
 		 */
 		override public function onEnter():void
 		{
-			//TODO generate shot list, pick shot, pick start position based on dest point
-			_shotMgr.destPoint.x = Math.random()*1.0-0.5;
-			_shotMgr.destPoint.y = Math.random()*1.0-0.5;
-			_shotMgr.destPoint.z = 5;
+			var shotList:Array = new Array();
+			
+			var scores:Object = DartsGlobals.instance.logicManager.scoreManager.getScores(AbstractGameLogic.OPPONENT_TURN);
+			
+			for( var key:String in scores ) 
+			{		
+				if ( scores[key] < CricketScoreManager.CLOSED_OUT ) {
+					shotList.push(new AIShotCandidate());
+				}
+			} 
 			
 			_shotMgr.releasePoint.x = Math.random()*1.0-0.5;
 			_shotMgr.releasePoint.y = Math.random()*1.0-0.5;

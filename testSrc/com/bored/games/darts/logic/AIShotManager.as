@@ -14,13 +14,15 @@
 	public class AIShotManager
 	{
 		private var _controller:AIController;
+		private var _profile:AIOpponentProfile;
 		
 		private var _fsm:AIOpponentFSM;
 		
 		private var _currentShot:ShotDetails;
 		
-		public function AIShotManager(a_name:String, a_controller:AIController) 
+		public function AIShotManager(a_name:String, a_controller:AIController, a_profile:AIOpponentProfile) 
 		{
+			_profile = a_profile;
 			_controller = a_controller;
 			
 			_fsm = new AIOpponentFSM(a_name);
@@ -55,15 +57,15 @@
 			return _controller;
 		}//end get controller()
 		
+		public function get profile():AIOpponentProfile
+		{
+			return _profile;
+		}//end get profile()
+		
 		public function get releasePoint():Vector3D
 		{
 			return _currentShot.releasePoint;
 		}//end get releasePoint()
-		
-		public function get destPoint():Vector3D
-		{
-			return _currentShot.destPoint;
-		}//end get destPoint()
 		
 		public function get thrust():Number 
 		{
@@ -81,6 +83,5 @@
 
 internal class ShotDetails {
 		public var releasePoint:flash.geom.Vector3D = new flash.geom.Vector3D();
-		public var destPoint:flash.geom.Vector3D = new flash.geom.Vector3D();
 		public var thrust:Number = 0;
 }//end internal ShotDetails
