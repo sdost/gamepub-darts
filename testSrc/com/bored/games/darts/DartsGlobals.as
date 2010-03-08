@@ -1,6 +1,5 @@
 ﻿package com.bored.games.darts
 {
-	import com.bored.games.config.ConfigManager;
 	import com.bored.games.controllers.InputController;
 	import com.bored.games.controllers.MouseInputController;
 	import com.bored.games.darts.logic.AbstractGameLogic;
@@ -48,9 +47,7 @@
 		private var _constructed:Boolean = false;
 		
 		private var _debugBuild:Boolean = false;
-		
-		private var _config:XML;
-		
+
 		private var _externalService:AbstractExternalService;
 		
 		private var _logicManager:AbstractGameLogic;
@@ -179,11 +176,6 @@
 			return _flashVars;
 			
 		}//end get flashVars()
-		
-		public function set config(a_xml:String):void 
-		{
-			ConfigManager.loadConfig(a_xml);
-		}//end set config()
 		
 		public function set logicManager(a_manager:AbstractGameLogic):void
 		{

@@ -1,12 +1,12 @@
 ﻿package com.bored.games.darts.states 
 {
-	import com.bored.games.config.ConfigManager;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.logic.CricketGameMode;
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.bored.services.AbstractExternalService;
 	import com.inassets.statemachines.Finite.State;
 	import com.inassets.statemachines.interfaces.IStateMachine;
+	import com.sven.utils.AppSettings;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.net.URLLoader;
@@ -33,26 +33,18 @@
 		 * Handler for entering (and executing) this state.
 		 */
 		override public function onEnter():void
-		{	
-			var servicesConfig:XML = ConfigManager.getConfigNamespace("externalServices");
+		{			
+			var providerCls:Class = getDefinitionByName(AppSettings.instance.externalServicesProvider) as Class;
 			
-			trace(servicesConfig.provider);
-			
-			var ServicesClass:Class = getDefinitionByName(servicesConfig.provider) as Class;
-			
-			trace("ServicesClass: " + ServicesClass);
-			
-			var ext:AbstractExternalService = new ServicesClass();
+			var ext:AbstractExternalService = new providerCls();
 			
 			//ext.init(servicesConfig.gameId, DartsGlobals.instance.optionsInterfaceSpace);
 			
 			DartsGlobals.instance.externalServices = ext;
 			
 			DartsGlobals.instance.logicManager = new CricketGameMode();
-			
-			//trace("Initialization::onEnter()");
-			this.finished();
-			
+
+			this.finished();			
 		}//end onEnter()
 		
 		private function finished(...args):void

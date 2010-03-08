@@ -48,6 +48,8 @@
 		
 		override protected function buildFrom(a_img:Sprite, a_buildFromAllDescendants:Boolean = false):Dictionary
 		{
+			var slot:Object;
+			
 			var descendantsDict:Dictionary = super.buildFrom(a_img, a_buildFromAllDescendants);
 			
 			_playerSlots = { };
@@ -60,7 +62,7 @@
 			_playerSlots[Board.FIFTEEN] = descendantsDict["player_fifteen"] as MovieClip;
 			_playerSlots[Board.BULL] = descendantsDict["player_bull"] as MovieClip;
 			
-			for each( var slot:Object in _playerSlots )
+			for each( slot in _playerSlots )
 			{
 				if ( slot )
 				{
@@ -78,7 +80,7 @@
 			_opponentSlots[Board.FIFTEEN] = descendantsDict["opponent_fifteen"] as MovieClip;
 			_opponentSlots[Board.BULL] = descendantsDict["opponent_bull"] as MovieClip;
 			
-			for each( var slot:Object in _opponentSlots )
+			for each( slot in _opponentSlots )
 			{
 				if ( slot )
 				{

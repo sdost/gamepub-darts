@@ -1,10 +1,10 @@
 ﻿package com.bored.games.darts
 {
-	import com.bored.games.config.ConfigManager;
 	import com.bored.games.darts.states.Gameplay;
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.bored.games.darts.states.Initialization;
 	import com.bored.games.darts.states.Attract;
+	import com.sven.utils.AppSettings;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.TimerEvent;
@@ -41,14 +41,15 @@
 			
 			// set the global stage value.
 			DartsGlobals.instance.stage = this.stage;
-			DartsGlobals.instance.config = "config.plist";
 			
-			ConfigManager.dispatcher.addEventListener(ConfigManager.CONFIG_READY, onConfigReady);
+			AppSettings.instance.load("development.config");
+			
+			AppSettings.instance.addEventListener(Event.COMPLETE, onConfigReady);
 		}
 		
 		private function onConfigReady(a_evt:Event):void
 		{
-			ConfigManager.dispatcher.removeEventListener(ConfigManager.CONFIG_READY, onConfigReady);
+			AppSettings.instance.removeEventListener(Event.COMPLETE, onConfigReady);
 			
 			// our flashVars were set before we were added to the stage, so, now that we're on the stage, we can start.
 			_myStateMachine.start();

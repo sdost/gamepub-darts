@@ -5,6 +5,7 @@
 	import com.bored.games.darts.states.AIMoveToShot;
 	import com.bored.games.darts.states.AIPerformShot;
 	import com.bored.games.darts.states.statemachines.AIOpponentFSM;
+	import com.sven.utils.AppSettings;
 	import flash.geom.Vector3D;
 	/**
 	 * ...
@@ -12,27 +13,17 @@
 	 */
 	public class AIShotManager
 	{
-		private var _config:XML;
 		private var _controller:AIController;
 		
 		private var _fsm:AIOpponentFSM;
 		
-		private var _shotDetails:Vector.<ShotDetails>;
-		
 		private var _currentShot:ShotDetails;
 		
-		public function AIShotManager(a_config:XML, a_controller:AIController) 
+		public function AIShotManager(a_name:String, a_controller:AIController) 
 		{
-			_config = a_config;
 			_controller = a_controller;
 			
-			_fsm = new AIOpponentFSM(_config.opponentName);
-			
-			_shotDetails = new Vector.<ShotDetails>();
-			
-			_shotDetails.push(new ShotDetails());
-			_shotDetails.push(new ShotDetails());
-			_shotDetails.push(new ShotDetails());
+			_fsm = new AIOpponentFSM(a_name);
 			
 			setupStates();			
 		}//end constructor()
@@ -47,7 +38,7 @@
 		public function beginShot(a_idx:Number):void
 		{
 			if (_fsm) {
-				_currentShot = _shotDetails[a_idx];
+				_currentShot = new ShotDetails();
 				_fsm.start();
 			}
 		}//end beginTurn()

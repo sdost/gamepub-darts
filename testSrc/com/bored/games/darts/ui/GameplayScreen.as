@@ -20,10 +20,8 @@
 	import away3dlite.materials.WireframeMaterial;
 	import away3dlite.primitives.Plane;
 	import caurina.transitions.Tweener;
-	import com.bored.games.assets.hud.Scoreboard_MC;
-	import com.bored.games.assets.hud.ThrowIndicator_MC;
-	import com.bored.games.config.ConfigManager;
 	import com.bored.games.controllers.InputController;
+	import com.bored.games.darts.models.dae_DartReduced;
 	import com.bored.games.darts.objects.Board;
 	import com.bored.games.darts.objects.Dart;
 	import com.bored.games.darts.ui.hud.ScoreBoard;
@@ -35,6 +33,7 @@
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
+	import com.sven.utils.AppSettings;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.BlendMode;
@@ -79,12 +78,6 @@
 		private static var _dartTexture_JR:BitmapMaterial;
 		private static var _dartOutline:WireframeMaterial;
 		
-		//private var _background:Sprite;
-		//private var _buildBackground:Boolean = false;
-		
-		//private var _viewPort:Sprite;
-		//private var _graphicsLayer:Sprite;
-		
 		//engine variables
 		private var _scene:Scene3D;
 		
@@ -101,18 +94,12 @@
 		private var _throwIndicator:ThrowIndicator;
 		private var _scoreBoard:ScoreBoard;
 		
-		//private var _persp:PerspectiveProjection;
-		//private var _mtransform:Matrix3D = new Matrix3D();
-		//private var _dartPos:Vector3D = new Vector3D();
-		//private var _endPos:Vector3D = new Vector3D();
-		
 		private var _collada:Collada;
 		private var _loader:Loader3D;
 		
 		private var _dartTemplate:Object3D;
 		private var _dartModels:Vector.<Object3D>;
 		private var _boardBillboard:Plane;
-		private var _wallBillboard:Plane;
 		
 		private var _dartRefs:Vector.<Dart>;
 		private var _boardRef:Board;
@@ -125,24 +112,24 @@
 		
 		public function GameplayScreen() 
 		{
-			var textureConfig:XML = ConfigManager.getConfigNamespace("textures");
-			
-			_wallClip = new Bitmap(ImageFactory.getBitmapDataByQualifiedName(textureConfig.wall.bitmap, textureConfig.wall.width, textureConfig.wall.height));
+			_wallClip = new Bitmap(ImageFactory.getBitmapDataByQualifiedName(AppSettings.instance.wallTextureBitmap, AppSettings.instance.wallTextureWidth, AppSettings.instance.wallTextureHeight));
 			
 			addChild(_wallClip);
-			
-			init();
 			
 			_dartRefs = new Vector.<Dart>();
 			_dartModels = new Vector.<Object3D>();
 			
-			_throwIndicator = new ThrowIndicator(new ThrowIndicator_MC());
+			init();
+			
+			var cls:Class = getDefinitionByName(AppSettings.instance.throwIndicatorMovie) as Class;
+			_throwIndicator = new ThrowIndicator(new cls());
 			DartsGlobals.instance.optionsInterfaceSpace.addChild(_throwIndicator);
 			_throwIndicator.x = 650;
 			_throwIndicator.y = 400;
 			_throwIndicator.show();
 			
-			_scoreBoard = new ScoreBoard(new Scoreboard_MC());
+			cls = getDefinitionByName(AppSettings.instance.scoreboardMovie) as Class;
+			_scoreBoard = new ScoreBoard(new cls());
 			DartsGlobals.instance.optionsInterfaceSpace.addChild(_scoreBoard);
 			_scoreBoard.x = 50;
 			_scoreBoard.y = 200;
@@ -171,7 +158,7 @@
 			
 			this.stage.quality = StageQuality.MEDIUM;
 			
-			_engineScale = ConfigManager.config.engineScale;
+			_engineScale = AppSettings.instance.away3dEngineScale;
 			
 			trace("Engine Scale: " + _engineScale);
 			
@@ -199,12 +186,9 @@
 			_camera = new Camera3D();
 			_camera.z = -100;
 			
-			//_renderer = new FastRenderer();
-			
 			_view = new View3D();
 			_view.scene = _scene;
 			_view.camera = _camera;
-			//_view.renderer = _renderer;
 			
 			addChild(_view);
 			
@@ -218,21 +202,15 @@
 		 */
 		private function initMaterials():void
 		{
-			var textureConfig:XML = ConfigManager.getConfigNamespace("textures");
-			
-			//_wallTexture = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(textureConfig.wall.bitmap, textureConfig.wall.width, textureConfig.wall.height));
-			//_wallTexture.repeat = false;
-			//_wallTexture.smooth = true;
-
-			_dartboardMC = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(textureConfig.board.bitmap, textureConfig.board.width, textureConfig.board.height));
+			_dartboardMC = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(AppSettings.instance.boardTextureBitmap, AppSettings.instance.boardTextureWidth, AppSettings.instance.boardTextureHeight));
 			_dartboardMC.repeat = false;
 			_dartboardMC.smooth = true;
 			
-			_dartTexture_UJ = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(textureConfig.dart.bitmap.children()[0], textureConfig.dart.width, textureConfig.dart.height));
+			_dartTexture_UJ = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(AppSettings.instance.dartTextureBitmapUJ, AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight));
 			_dartTexture_UJ.repeat = false;
 			_dartTexture_UJ.smooth = true;
 			
-			_dartTexture_JR = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(textureConfig.dart.bitmap.children()[1], textureConfig.dart.width, textureConfig.dart.height));
+			_dartTexture_JR = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(AppSettings.instance.dartTextureBitmapJR, AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight));
 			_dartTexture_JR.repeat = false;
 			_dartTexture_JR.smooth = true;
 			
@@ -283,13 +261,10 @@
 		{
 			Debug.active = true;
 			
-			var textureConfig:XML = ConfigManager.getConfigNamespace("textures");
-			
 			_boardBillboard = new Plane();
-			//_boardBillboard.scaleX = _boardBillboard.scaleY = 2.0;
 			_boardBillboard.material = _dartboardMC;
-			_boardBillboard.width = textureConfig.board.width;
-			_boardBillboard.height = textureConfig.board.height;
+			_boardBillboard.width = AppSettings.instance.boardTextureWidth;
+			_boardBillboard.height = AppSettings.instance.boardTextureHeight;
 			_boardBillboard.yUp = false;
 			_boardBillboard.bothsides = true;
 			_boardBillboard.mouseEnabled = false;
@@ -299,10 +274,15 @@
 			_collada.scaling = 3;
 			_collada.centerMeshes = true;
 			
-			_loader = new Loader3D();
-			_loader.autoLoadTextures = false;
-			_loader.loadGeometry("dart01_reduced.dae", _collada);
-			_loader.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
+			_dartTemplate = _collada.parseGeometry(dae_DartReduced.data);
+			_dartTemplate.mouseEnabled = false;
+			_dartTemplate.materialLibrary.getMaterial("dart_skin").material = _dartTexture_UJ;
+			
+			for ( var i:int = 0; i < 3; i++ ) {
+				var newDart:Object3D = _dartTemplate.clone();			
+				_dartModels.push(newDart);
+				_scene.addChild(newDart);
+			}
 		}//end initObjects()
 		
 		public function setDartReferences(a_darts:Vector.<Dart>):void
@@ -337,8 +317,6 @@
 	
 		public function render():void
 		{	
-			//_wallBillboard.lookAt(_camera.position, new Vector3D(0, 1, 0));
-			
 			if ( _boardRef ) {
 				_boardBillboard.x = _boardRef.position.x * _engineScale;
 				_boardBillboard.y = _boardRef.position.y * _engineScale;
