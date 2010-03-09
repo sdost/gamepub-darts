@@ -22,45 +22,50 @@
 			_scoreboard = new Object();
 		}//end constructor()
 		
-		override public function addPlayer(a_name:String):void
+		override public function registerPlayer(a_playerNum:int):void
 		{
-			_scoreboard[a_name] = new Object();
-			_scoreboard[a_name][Board.FIFTEEN] = CricketScoreManager.EMPTY;
-			_scoreboard[a_name][Board.SIXTEEN] = CricketScoreManager.EMPTY;
-			_scoreboard[a_name][Board.SEVENTEEN] = CricketScoreManager.EMPTY;
-			_scoreboard[a_name][Board.EIGHTEEN] = CricketScoreManager.EMPTY;
-			_scoreboard[a_name][Board.NINETEEN] = CricketScoreManager.EMPTY;
-			_scoreboard[a_name][Board.TWENTY] = CricketScoreManager.EMPTY;
-			_scoreboard[a_name][Board.BULL] = CricketScoreManager.EMPTY;
+			_scoreboard[a_playerNum] = new Object();
+			_scoreboard[a_playerNum][Board.FIFTEEN] = CricketScoreManager.EMPTY;
+			_scoreboard[a_playerNum][Board.SIXTEEN] = CricketScoreManager.EMPTY;
+			_scoreboard[a_playerNum][Board.SEVENTEEN] = CricketScoreManager.EMPTY;
+			_scoreboard[a_playerNum][Board.EIGHTEEN] = CricketScoreManager.EMPTY;
+			_scoreboard[a_playerNum][Board.NINETEEN] = CricketScoreManager.EMPTY;
+			_scoreboard[a_playerNum][Board.TWENTY] = CricketScoreManager.EMPTY;
+			_scoreboard[a_playerNum][Board.BULL] = CricketScoreManager.EMPTY;
 			
-		}//end addPlayer()
+		}//end registerPlayer()
 		
-		override public function submitThrowHit(a_name:String, a_section:uint, a_multiplier:uint = 1):void
+		override public function submitThrow(a_playerNum:int, a_section:uint, a_multiplier:uint = 1):void
 		{
-			trace("Throw: " + a_name + ", " + a_section + ", " + a_multiplier);
+			trace("Throw: " + a_playerNum + ", " + a_section + ", " + a_multiplier);
 			
 			if (a_section < Board.FIFTEEN) return;
 			
-			var score:uint = _scoreboard[a_name][a_section];
+			var score:uint = _scoreboard[a_playerNum][a_section];
 			
 			if ( score < CLOSED_OUT ) 
 			{
 				score += a_multiplier;
 				if (score > CLOSED_OUT) score = CLOSED_OUT;
 				
-				_scoreboard[a_name][a_section] = score;
+				_scoreboard[a_playerNum][a_section] = score;
 			}
-		}//end submitThrowHit()
+		}//end submitThrow()
 		
-		override public function submitThrowMiss(a_name:String):void
+		override public function getPlayerStats(a_playerNum:int):Object
 		{
-			// TODO: probably nothing??
-		}//end submitThrowMiss();
+			return _scoreboard[a_playerNum];
+		}//end getPlayerStats();
 		
-		override public function getScores(a_name:String):Object
+		override public function getPlayerScore(a_playerNum:int):Number
 		{
-			return _scoreboard[a_name];
-		}//end getScores();
+			var score:Number = 0;
+			for ( var key:Number in _scoreboard[a_playerNum] ) {
+				score += key * _scoreboard[a_playerNum][key];				
+			}
+			
+			return score;
+		}//end getPlayerScore()
 		
 	}//end CricketScoreManager()
 

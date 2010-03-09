@@ -1,5 +1,6 @@
 ﻿package com.bored.games.darts.logic 
 {
+	import com.bored.games.darts.player.DartsPlayer;
 	/**
 	 * ...
 	 * @author sam
@@ -11,25 +12,25 @@
 			
 		}//end constructor()
 		
-		public function addPlayer(a_name:String):void
+		public function registerPlayer(a_player:DartsPlayer, a_playerNum:int):void
 		{
 			
 		}//end addPlayer()
 		
-		public function submitThrowHit(a_name:String, a_section:uint, a_multiplier:uint = 1):void
+		public function submitThrow(a_playerNum:int, a_section:uint, a_multiplier:uint = 1):void
 		{
 			
 		}//end submitThrowHit()
 		
-		public function submitThrowMiss(a_name:String):void
-		{
-			
-		}//end submitThrowMiss();
-		
-		public function getScores(a_name:String):Object
+		public function getPlayerStats(a_playerNum:int):Object
 		{
 			return null;
-		}//end getScores()
+		}//end getPlayerStats()
+		
+		public function getPlayerScore(a_playerNum:int):Number
+		{
+			return 0;
+		}//end getPlayerScore()
 		
 	}//end AbstractScoreManager
 

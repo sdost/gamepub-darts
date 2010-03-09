@@ -1,21 +1,41 @@
 ﻿package com.bored.games.darts.logic 
 {
+	import flash.display.MovieClip;
 	/**
 	 * ...
 	 * @author sam
 	 */
-	public class AbstractGameLogic
-	{
-		public static const PLAYER_TURN:String = "player";
-		public static const OPPONENT_TURN:String = "opponent";	
-		
+	public class DartsGameLogic
+	{		
 		protected var _currentTurn:DartsTurn;
 		protected var _scoreManager:AbstractScoreManager;
 		
-		public function AbstractGameLogic() 
+		protected var _dartboardClip:MovieClip;
+		
+		public function DartsGameLogic() 
 		{
 			_scoreManager = new AbstractScoreManager();
 		}//end constructor()
+		
+		public function set dartboardClip(a_clip:MovieClip):void
+		{
+			_dartboardClip = a_clip;
+		}//end set dartboardClip()
+		
+		public function get dartboardClip():MovieClip
+		{
+			return _dartboardClip;
+		}//end dartboardClip()
+		
+		public function getDartboardClip(a_points:int, a_multiple:int):MovieClip
+		{
+			return _dartboardClip["c_" + a_points + "_" + a_multiple + "_mc"];
+		}//end getDartboardClip()
+		
+		public function get gameType():String
+		{
+			
+		}//end get gameType()
 		
 		public function get scoreManager():AbstractScoreManager
 		{

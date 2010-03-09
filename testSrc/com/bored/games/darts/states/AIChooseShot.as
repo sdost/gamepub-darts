@@ -29,22 +29,24 @@
 		 */
 		override public function onEnter():void
 		{
-			var shotList:Array = new Array();
+			var shotList:Vector.<AIShotCandidate> = new Vector.<AIShotCandidate>();
 			
 			var scores:Object = DartsGlobals.instance.logicManager.scoreManager.getScores(AbstractGameLogic.OPPONENT_TURN);
 			
 			for( var key:String in scores ) 
 			{		
 				if ( scores[key] < CricketScoreManager.CLOSED_OUT ) {
-					shotList.push(new AIShotCandidate());
+					_shotMgr.profile.populateShotList(shotList, Number(key));
 				}
 			} 
 			
-			_shotMgr.releasePoint.x = Math.random()*1.0-0.5;
-			_shotMgr.releasePoint.y = Math.random()*1.0-0.5;
+			var shot:AIShotCandidate = shotList[Math.floor(Math.random()*shotList.length)];
+			
+			_shotMgr.releasePoint.x = shot.point.x;
+			_shotMgr.releasePoint.y = shot.point.y;
 			_shotMgr.releasePoint.z = 0;
 			
-			_shotMgr.thrust = 12+Math.random()*2;
+			_shotMgr.thrust = 11+Math.random()*3;
 			
 			(this.stateMachine as AIOpponentFSM).transitionToNextState();
 		}//end onEnter()

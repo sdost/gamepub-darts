@@ -1,20 +1,27 @@
 ﻿package com.bored.games.darts.logic 
 {
-	import com.bored.games.darts.logic.AbstractGameLogic;
+	import com.bored.games.darts.logic.DartsGameLogic
 	import flash.utils.Dictionary;
 	
 	/**
 	 * ...
 	 * @author sam
 	 */
-	public class CricketGameMode extends AbstractGameLogic
-	{					
-		public function CricketGameMode() 
+	public class CricketGameLogic extends DartsGameLogic
+	{	
+		
+		public static const PLAYER_ONE:int = 1;
+		public static const PLAYER_TWO:int = 2;	
+		
+		public function CricketGameLogic() 
 		{
 			_scoreManager = new CricketScoreManager();
-			_scoreManager.addPlayer(PLAYER_TURN);
-			_scoreManager.addPlayer(OPPONENT_TURN);
 		}//end constructor()
+		
+		override public function get gameType():String
+		{
+			return "CRICKET";
+		}//end get gameType()
 		
 		override public function checkForWinState():Boolean
 		{
@@ -32,6 +39,6 @@
 			return win;
 		}//end checkForWinState()
 		
-	}//end CricketType
+	}//end CricketGameLogic
 
 }//end com.bored.games.darts.logic

@@ -56,7 +56,7 @@
 			
 			_avg++;
 			
-			if (_avg >= 3) {
+			if (_avg >= 5) {
 				_thrustTimer.removeEventListener(TimerEvent.TIMER, generateThrust);
 				_thrustTimer.stop();
 				_shotMgr.controller.generateInputEvent(_mouseX, _mouseY, false);
