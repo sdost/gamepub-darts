@@ -12,10 +12,10 @@
 			
 		}//end constructor()
 		
-		public function registerPlayer(a_player:DartsPlayer, a_playerNum:int):void
+		public function initPlayerStats(a_playerNum:int):void
 		{
 			
-		}//end addPlayer()
+		}//end initPlayerStats()
 		
 		public function submitThrow(a_playerNum:int, a_section:uint, a_multiplier:uint = 1):void
 		{

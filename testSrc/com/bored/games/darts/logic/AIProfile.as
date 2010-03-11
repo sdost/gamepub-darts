@@ -11,20 +11,18 @@
 	 * @author sam
 	 */
 	public class AIProfile
-	{	
-		private static const MAP_DENSITY:int = 400;
-		
-		private var _shotMap:Array;
-		
-		/**
-		 * Define the level of shot-riskiness the AI is willing to allow when deciding on a shot.
-		 */
-		private var _riskCurrency:int;
+	{		
+		protected var _name:String;
 				
-		public function AIProfile() 
+		public function AIProfile(a_name:String = "") 
 		{
-			_riskCurrency = 1;
+			_name = a_name;
 		}//end constructor()
+		
+		public function pickShot(a_shots:Vector.<AIShotCandidate>):AIShotCandidate
+		{
+			return a_shots[Math.floor(Math.random() * a_shots.length)];
+		}//end pickShot()
 		
 	}//end AIProfile
 

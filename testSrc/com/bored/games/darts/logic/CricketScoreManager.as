@@ -22,7 +22,7 @@
 			_scoreboard = new Object();
 		}//end constructor()
 		
-		override public function registerPlayer(a_playerNum:int):void
+		override public function initPlayerStats(a_playerNum:int):void
 		{
 			_scoreboard[a_playerNum] = new Object();
 			_scoreboard[a_playerNum][Board.FIFTEEN] = CricketScoreManager.EMPTY;
@@ -33,7 +33,7 @@
 			_scoreboard[a_playerNum][Board.TWENTY] = CricketScoreManager.EMPTY;
 			_scoreboard[a_playerNum][Board.BULL] = CricketScoreManager.EMPTY;
 			
-		}//end registerPlayer()
+		}//end initPlayerStats()
 		
 		override public function submitThrow(a_playerNum:int, a_section:uint, a_multiplier:uint = 1):void
 		{

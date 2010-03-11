@@ -2,7 +2,8 @@
 {
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.logic.CricketGameLogic;
-	import com.bored.games.darts.logic.DartsGameLogic;
+	import com.bored.games.darts.player.ComputerPlayer;
+	import com.bored.games.darts.player.LocalPlayer;
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.bored.services.AbstractExternalService;
 	import com.inassets.statemachines.Finite.State;
@@ -20,28 +21,24 @@
 	
 	/**
 	 * ...
-	 * @author Bo Landsman
+	 * @author Sam Dost
 	 */
-	public class Initialization extends State
+	public class GameSelect extends State
 	{		
-		public function Initialization(a_name:String, a_stateMachine:IStateMachine)
+		public function GameSelect(a_name:String, a_stateMachine:IStateMachine)
 		{
 			super(a_name, a_stateMachine);
 			
-		}//end Initialization() constructor.
+		}//end GameSelect() constructor.
 		
 		/**
 		 * Handler for entering (and executing) this state.
 		 */
 		override public function onEnter():void
 		{			
-			//var providerCls:Class = getDefinitionByName(AppSettings.instance.externalServicesProvider) as Class;
-			
-			//var ext:AbstractExternalService = new providerCls();
-			
-			//ext.init(servicesConfig.gameId, DartsGlobals.instance.optionsInterfaceSpace);
-			
-			//DartsGlobals.instance.externalServices = ext;
+			DartsGlobals.instance.gameManager = new CricketGameLogic();
+			DartsGlobals.instance.gameManager.registerPlayer( new LocalPlayer() );
+			DartsGlobals.instance.gameManager.registerPlayer( new ComputerPlayer() );
 
 			this.finished();			
 		}//end onEnter()

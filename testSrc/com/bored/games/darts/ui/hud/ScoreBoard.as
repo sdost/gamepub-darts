@@ -2,8 +2,8 @@
 {
 	import caurina.transitions.Tweener;
 	import com.bored.games.darts.DartsGlobals;
-	import com.bored.games.darts.logic.AbstractGameLogic;
 	import com.bored.games.darts.logic.AbstractScoreManager;
+	import com.bored.games.darts.logic.DartsGameLogic;
 	import com.bored.games.darts.objects.Board;
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
@@ -112,6 +112,7 @@
 		{
 			var scores:Object = _scoreMgr.getScores(a_name);
 			
+			/*
 			if (a_name == AbstractGameLogic.PLAYER_TURN) {
 				(_playerSlots[Board.TWENTY] as MovieClip).gotoAndStop(scores[Board.TWENTY] + 1);
 				(_playerSlots[Board.NINETEEN] as MovieClip).gotoAndStop(scores[Board.NINETEEN] + 1);
@@ -129,6 +130,7 @@
 				(_opponentSlots[Board.FIFTEEN] as MovieClip).gotoAndStop(scores[Board.FIFTEEN] + 1);
 				(_opponentSlots[Board.BULL] as MovieClip).gotoAndStop(scores[Board.BULL] + 1);				
 			}
+			*/
 		}//end update()
 		
 		public function show():void

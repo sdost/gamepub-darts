@@ -1,4 +1,4 @@
-﻿package com.bored.games.graphics 
+﻿package com.sven.utils 
 {
 	import flash.display.BitmapData;
 	import flash.utils.getDefinitionByName;

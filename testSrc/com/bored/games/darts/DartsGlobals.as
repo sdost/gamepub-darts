@@ -3,6 +3,7 @@
 	import com.bored.games.controllers.InputController;
 	import com.bored.games.controllers.MouseInputController;
 	import com.bored.games.darts.logic.AbstractGameLogic;
+	import com.bored.games.darts.logic.DartsGameLogic;
 	import com.bored.services.AbstractExternalService;
 	import flash.display.Sprite;
 	import flash.display.Stage;
@@ -50,7 +51,7 @@
 
 		private var _externalService:AbstractExternalService;
 		
-		private var _logicManager:AbstractGameLogic;
+		private var _gameManager:DartsGameLogic;
 		
 		public function DartsGlobals(a_singletonEnforcer:DartsGlobals_SingletonEnforcer) 
 		{
@@ -177,15 +178,15 @@
 			
 		}//end get flashVars()
 		
-		public function set logicManager(a_manager:AbstractGameLogic):void
+		public function set gameManager(a_manager:DartsGameLogic):void
 		{
-			_logicManager = a_manager;
-		}//end set logicManager()
+			_gameManager = a_manager;
+		}//end set gameManager()
 		
-		public function get logicManager():AbstractGameLogic
+		public function get gameManager():DartsGameLogic
 		{
-			return _logicManager;
-		}//end get logicManager()
+			return _gameManager;
+		}//end get gameManager()
 		
 		public function set externalServices(a_ext:AbstractExternalService):void
 		{

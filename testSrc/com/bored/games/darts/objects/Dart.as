@@ -1,5 +1,6 @@
 ﻿package com.bored.games.darts.objects 
 {
+	import caurina.transitions.Tweener;
 	import com.bored.games.elements.GameElement;
 	import com.bored.games.math.TrajectoryCalculator;
 	
@@ -77,10 +78,7 @@
 			
 			_xVel = xvel;
 			
-			_throwing = true;
-			
-			trace(_trajCalc.toString());
-		
+			_throwing = true;				
 		}//end initThrowParams()
 		
 		public function finishThrow():void 

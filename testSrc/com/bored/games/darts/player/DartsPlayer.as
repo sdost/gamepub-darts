@@ -6,13 +6,13 @@
 	 * @author sam
 	 */
 	public dynamic class DartsPlayer
-	{
+	{		
 		protected var _game:DartsGameLogic;
 		protected var _name:String;
 		
-		public function DartsPlayer() 
+		public function DartsPlayer(a_name:String = "") 
 		{
-			
+			_name = a_name;
 		}
 		
 		public function set dartGame(a_game:DartsGameLogic):void

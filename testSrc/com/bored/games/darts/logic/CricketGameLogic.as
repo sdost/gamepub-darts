@@ -23,22 +23,6 @@
 			return "CRICKET";
 		}//end get gameType()
 		
-		override public function checkForWinState():Boolean
-		{
-			var scoreBoard:Object = scoreManager.getScores(_currentTurn.owner);
-			
-			var win:Boolean = true;
-			for( var key:String in scoreBoard ) 
-			{		
-				if ( scoreBoard[key] < CricketScoreManager.CLOSED_OUT ) {
-					win = false;
-					break;
-				}
-			}
-			
-			return win;
-		}//end checkForWinState()
-		
 	}//end CricketGameLogic
 
 }//end com.bored.games.darts.logic

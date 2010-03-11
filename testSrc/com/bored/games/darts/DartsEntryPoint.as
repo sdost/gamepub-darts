@@ -1,6 +1,7 @@
 ﻿package com.bored.games.darts
 {
 	import com.bored.games.darts.states.Gameplay;
+	import com.bored.games.darts.states.GameSelect;
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.bored.games.darts.states.Initialization;
 	import com.bored.games.darts.states.Attract;
@@ -62,6 +63,7 @@
 		{
 			_myStateMachine.addState(new Initialization("Initialization", _myStateMachine));
 			_myStateMachine.addState(new Attract("Attract", _myStateMachine));
+			_myStateMachine.addState(new GameSelect("GameSelect", _myStateMachine));
 			_myStateMachine.addState(new Gameplay("Gameplay", _myStateMachine));
 			
 		}//end addStates()

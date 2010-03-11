@@ -1,12 +1,11 @@
 ﻿package com.bored.games.darts.states 
 {
-	import com.bored.games.controllers.AIController;
 	import com.bored.games.controllers.InputController;
 	import com.bored.games.controllers.MouseInputController;
-	import com.bored.games.darts.logic.AbstractGameLogic;
-	import com.bored.games.darts.logic.AIOpponentProfile;
+	import com.bored.games.darts.logic.DartsGameLogic;
+	import com.bored.games.darts.logic.AIProfile;
 	import com.bored.games.darts.logic.AIShotManager;
-	import com.bored.games.darts.logic.CricketGameMode;
+	import com.bored.games.darts.logic.CricketGameLogic;
 	import com.bored.games.darts.logic.DartsTurn;
 	import com.bored.games.darts.objects.Board;
 	import com.bored.games.darts.objects.Dart;
@@ -18,6 +17,7 @@
 	import com.inassets.statemachines.Finite.State;
 	import com.inassets.statemachines.interfaces.IStateMachine;
 	import com.sven.utils.AppSettings;
+	import com.sven.utils.SpriteFactory;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.GraphicsBitmapFill;
@@ -28,6 +28,7 @@
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Vector3D;
+	import flash.system.ApplicationDomain;
 	import flash.text.TextField;
 	import com.bored.games.darts.DartsGlobals;
 	import flash.utils.getTimer;
@@ -50,14 +51,13 @@
 		
 		private var _gameplayScreen:GameplayScreen;
 		
-		private var _buttonDown:Boolean;
-		private var _playerInputController:InputController;
-		private var _opponentInputController:InputController;
+		private var _gameManager:DartsGameLogic;
+		
+		private var _inputController:MouseInputController;
 		
 		private var _releasePos:Vector3D;
 		private	var _thrust:Number;
 		private var _angle:Number;
-		private var _yaw:Number;
 		private var _grav:Number;
 		
 		private var _darts:Vector.<Dart>;
@@ -78,12 +78,8 @@
 		private var _num:Number;
 		private var _cumAvgSpeed:Number;
 		
-		private var _mousePosition:Point = new Point();;
-		
-		private var _opponentProfile:AIOpponentProfile;
+		private var _opponentProfile:AIProfile;
 		private var _opponentShooter:AIShotManager;
-
-		private var _mouseTimer:Timer = new Timer(50, 0);
 						
 		public function Gameplay(a_name:String, a_stateMachine:IStateMachine)
 		{
@@ -95,74 +91,37 @@
 		 * Handler for entering (and executing) this state.
 		 */
 		override public function onEnter():void
-		{
-			_releasePos = new Vector3D( AppSettings.instance.defaultReleasePositionX, AppSettings.instance.defaultReleasePositionY, AppSettings.instance.defaultReleasePositionZ );
-			_thrust = AppSettings.instance.defaultThrust;
+		{						
+			var spr:Sprite = SpriteFactory.getSpriteByQualifiedName(AppSettings.instance.boardCollisionMap);
+			DartsGlobals.instance.gameManager.dartboardClip = spr;
+						
+			_releasePos = new Vector3D();
 			_angle = AppSettings.instance.defaultAngle;
 			_grav = AppSettings.instance.defaultGravity;
 			
-			var gameplayScreenImg:MovieClip;
-			
-			_opponentProfile = new AIOpponentProfile();
+			_opponentProfile = new AIProfile();
 			
 			try
 			{
 				_gameplayScreen = new GameplayScreen();
 				
+				_inputController = new MouseInputController(DartsGlobals.instance.screenSpace);
+				
 				DartsGlobals.instance.screenSpace.addChild(_gameplayScreen);
 				
-				_buttonDown = false;
-				
-				_playerInputController = new MouseInputController(DartsGlobals.instance.screenSpace);
-				_playerInputController.addEventListener(InputStateEvent.UPDATE, inputUpdate);
-				_playerInputController.pause = true;
-				
-				_opponentInputController = new AIController();
-				_opponentInputController.addEventListener(InputStateEvent.UPDATE, inputUpdate);
-				_opponentInputController.pause = true;
-								
-				_darts = new Vector.<Dart>();
-				for (var i:int = 0; i < AppSettings.instance.throwsPerTurn; i++) {
-					_darts.push(new Dart(AppSettings.instance.dartRadius));
-				}
-				
-				_currDartIdx = 0;
-				
-				_dartboard = new Board();
-				
-				var bmp:BitmapData = new BitmapData(900, 900, true, 0x00000000);
-				
-				var mtx:Matrix = new Matrix();
-				mtx.translate(450, 450);
-				
-				var cls:Class = getDefinitionByName(AppSettings.instance.boardCollisionMap) as Class;
-				
-				bmp.draw(new cls(), mtx);
-				
-				_dartboard.setCollisionMap(bmp);
-				_dartboard.position.x = AppSettings.instance.dartboardPositionX;
-				_dartboard.position.y = AppSettings.instance.dartboardPositionY;
-				_dartboard.position.z = AppSettings.instance.dartboardPositionZ;
-				
-				_opponentProfile.acquireColorMap(bmp);
-				
-				_gameplayScreen.setDartReferences(_darts);
-				_gameplayScreen.setBoardReference(_dartboard);
-				
-				_gameplayScreen.addEventListener(Event.ENTER_FRAME, update, false, 0, false);
-				
-				_currentTurn = DartsGlobals.instance.logicManager.startNewTurn(AbstractGameLogic.PLAYER_TURN);
-				_playerInputController.pause = false;
+				DartsGlobals.instance.gameManager.inputController = _inputController;
+				DartsGlobals.instance.gameManager.newGame();
 			}
 			catch (e:Error)
 			{
 				DartsGlobals.addWarning("Gameplay::onEnter(): Caught error=" + e.getStackTrace());
-			}
-			
+			}			
 		}//end onEnter()
 		
 		private function update(a_evt:Event):void
 		{
+			DartsGlobals.instance.gameManager.update();
+			/*
 			for (var i:int = 0; i < _darts.length; i++)
 			{
 				_darts[i].update();
@@ -215,76 +174,12 @@
 				}
 				
 				if(_opponentShooter) _opponentShooter.beginShot(_currDartIdx);
-			} 
+			}
+			*/
 			
 			_gameplayScreen.render();
 		}//end updateDisplay()
-		
-		private function inputUpdate(a_evt:InputStateEvent):void
-		{
-			_mousePosition.x = a_evt.x;
-			_mousePosition.y = a_evt.y;
-			
-			if (_buttonDown) {
-				if ( !a_evt.button ) {
-					if ( _cumAvgSpeed ) {
-						_thrust = Math.min((_cumAvgSpeed / 50), AppSettings.instance.dartMaxThrust);
-						
-						if ( _thrust >= AppSettings.instance.dartMinThrust ) 
-						{
-							_gameplayScreen.updateThrowSpeed(_thrust, (_velX / 1000));
-							_darts[_currDartIdx].initThrowParams(_releasePos.x, _releasePos.y, _releasePos.z, _thrust, _angle, _grav, _velX / 1000);
-						}
-					}
-					_mouseTimer.removeEventListener( TimerEvent.TIMER, updateCurrentMouseVelocity );
-					_mouseTimer.stop();
-					_mouseTimer.reset();
-					_gameplayScreen.resetThrow();
-					_buttonDown = false;
-				}
-			} else {
-				if ( a_evt.button ) {
-					_gameplayScreen.startThrow();
-					_buttonDown = true;
-					trace("Starting mouse timer??");
-					_oX = _mousePosition.x;
-					_oY = _mousePosition.y;
-					_velX = 0;
-					_velY = 0;
-					_speed = 0;
-					_cumAvgSpeed = 0;
-					_num = 0;
-					_mouseTimer.addEventListener( TimerEvent.TIMER, updateCurrentMouseVelocity );
-					_mouseTimer.start();
-				} else {					
-					_releasePos.x = (((_mousePosition.x - 350) * _dartboard.position.z * Math.tan(50 * Math.PI / 180)) / 700);
-					_releasePos.y = (((275 - _mousePosition.y) * _dartboard.position.z * Math.tan(50 * Math.PI / 180)) / 550);
-					
-					if( !_darts[_currDartIdx].throwing ) {
-						_darts[_currDartIdx].position.x = _releasePos.x;
-						_darts[_currDartIdx].position.y = _releasePos.y;
-						_darts[_currDartIdx].position.z = _releasePos.z;
-					}
-				}
-			}
-		}//end onInputUpdate()
-
-		private function updateCurrentMouseVelocity(e:TimerEvent):void
-		{
-			var nX:Number = _mousePosition.x;
-			var nY:Number = _mousePosition.y;
-			var dx:Number = nX - _oX;
-			var dy:Number = nY - _oY;
-    
-			_oX = nX;
-			_oY = nY;
-			_velX = dx * 1000 / _mouseTimer.delay;
-			_velY = dy * 1000 / _mouseTimer.delay;
-			_speed = Math.sqrt( _velX * _velX + _velY * _velY );
-			
-			_cumAvgSpeed = _cumAvgSpeed + ((_speed - _cumAvgSpeed) / ++_num);
-		}//end updateCurrentMouseVelocity()
-		
+				
 		private function finished(...args):void
 		{
 			//(this.stateMachine as GameFSM).transitionToNextState();

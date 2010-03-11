@@ -1,5 +1,6 @@
 ﻿package com.bored.games.darts.player 
 {
+	import com.bored.games.controllers.MouseInputController;
 	import com.bored.games.darts.player.DartsPlayer;
 	
 	/**
@@ -8,10 +9,9 @@
 	 */
 	public class LocalPlayer extends DartsPlayer
 	{
-		
-		public function LocalPlayer() 
+		public function LocalPlayer(a_name:String = "Local Player") 
 		{
-			super();
+			super(a_name);
 		}//end construtor()
 		
 		override public function takeTheShot(a_dartsLeft:int)
