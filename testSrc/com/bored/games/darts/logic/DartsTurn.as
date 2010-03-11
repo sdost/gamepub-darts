@@ -19,10 +19,9 @@
 			_throwsRemaining = a_maxThrows;
 			
 			_roundScore = 0;
-			_dartHistory = new Vector.<Dart>();
 		}//end constructor()
 		
-		public function advanceThrows():Boolean
+		public function advanceThrows():void
 		{
 			_throwsRemaining--;
 		}//end advanceThrows()

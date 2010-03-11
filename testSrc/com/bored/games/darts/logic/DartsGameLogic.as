@@ -8,6 +8,9 @@
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import com.sven.utils.AppSettings;
+	import flash.events.TimerEvent;
+	import flash.geom.Point;
+	import flash.utils.Timer;
 	/**
 	 * ...
 	 * @author sam
@@ -30,12 +33,24 @@
 		
 		protected var _buttonDown:Boolean;
 		
+		private var _mousePosition:Point;
+		
+		private var _oX:Number;
+		private var _oY:Number;
+		private var _velX:Number;
+		private var _velY:Number;
+		private var _speed:Number;
+		private var _num:Number;
+		private var _cumAvgSpeed:Number;
+		
+		private var _mouseTimer:Timer;
+		
 		public function DartsGameLogic() 
 		{
 			_scoreManager = new AbstractScoreManager();
 		}//end constructor()
 		
-		public function set dartboardClip(a_clip:MovieClip):void
+		public function set dartboardClip(a_clip:Sprite):void
 		{
 			_dartboardClip = a_clip;
 		}//end set dartboardClip()
@@ -58,7 +73,7 @@
 		
 		public function get gameType():String
 		{
-			
+			return "";
 		}//end get gameType()
 		
 		public function registerPlayer(a_player:DartsPlayer):void
@@ -103,7 +118,7 @@
 			_currentDart.position.y = AppSettings.instance.defaultReleasePositionY;
 			_currentDart.position.z = AppSettings.instance.defaultReleasePositionZ;
 			
-			_players[_currentPlayer].takeTheShot(_currentTurn.throwsRemaining);
+			_players[_currentPlayer].takeTheShot();
 		}//end createNewDart()
 		
 		public function get darts():Vector.<Dart>
@@ -130,19 +145,26 @@
 		{
 			_inputController.pause = true;
 			
-			_currentDart.initThrowParams(a_x, a_y, a_z, a_thrust, AppSettings.instance.defaultAngle, AppSettings.instance.defaultGravity, a_velX);
+			_currentDart.initThrowParams(a_x, a_y, a_z, a_thrust, AppSettings.instance.defaultAngle, AppSettings.instance.defaultGravity, a_xvel);
 		}//end playerThrow()
 		
 		private function onInputUpdate(a_evt:InputStateEvent):void
-		{			
+		{	
+			if ( _mousePosition == null )
+			{
+				_mousePosition = new Point();
+			}
+			_mousePosition.x = a_evt.x;
+			_mousePosition.y = a_evt.y;
+			
 			if (_buttonDown) {
 				if ( !a_evt.button ) {
 					if ( _cumAvgSpeed ) {
-						_thrust = Math.min((_cumAvgSpeed / 50), AppSettings.instance.dartMaxThrust);
+						var thrust:Number = Math.min((_cumAvgSpeed / 50), AppSettings.instance.dartMaxThrust);
 						
-						if ( _thrust >= AppSettings.instance.dartMinThrust ) 
+						if ( thrust >= AppSettings.instance.dartMinThrust ) 
 						{
-							playerThrow(_currentDart.position.x, _currentDart.position.y, _currentDart.position.z, _thrust, _velX / 1000);
+							playerThrow(_currentDart.position.x, _currentDart.position.y, _currentDart.position.z, thrust, _velX / 1000);
 						}
 					}
 					_mouseTimer.removeEventListener( TimerEvent.TIMER, updateCurrentMouseVelocity );
@@ -159,6 +181,9 @@
 					_speed = 0;
 					_cumAvgSpeed = 0;
 					_num = 0;
+					if ( _mouseTimer == null ) {
+						_mouseTimer = new Timer(50);
+					}
 					_mouseTimer.addEventListener( TimerEvent.TIMER, updateCurrentMouseVelocity );
 					_mouseTimer.start();
 				} else {					

@@ -24,7 +24,7 @@
 		public function set profile(a_profile:AIProfile):void
 		{
 			_profile = a_profile;
-			this.playerName = _profile.name;
+			//this.playerName = _profile.name;
 		}//end set difficulty()
 		
 		override public function takeTheShot():void
@@ -32,43 +32,43 @@
 			var _gameType:String = this._game.gameType;
 			var _clipList:Vector.<MovieClip> = new Vector.<MovieClip>();
 			if (_gameType == "CRICKET") {
-				var player1Scores:Object = this._game.scoreManager.getPlayerScores(CricketGameLogic.PLAYER_ONE);
-				var player2Scores:Object = this._game.scoreManager.getPlayerScores(CricketGameLogic.PLAYER_TWO);
+				var player1Stats:Object = this._game.scoreManager.getPlayerStats(CricketGameLogic.PLAYER_ONE);
+				var player2Stats:Object = this._game.scoreManager.getPlayerStats(CricketGameLogic.PLAYER_TWO);
 				var points:int = 15;
 				
 				while ( points <= 20 ) {
-					if ( player1Scores[points] >= 3 && player2Scores[points] < 3 )
+					if ( player1Stats[points] >= 3 && player2Stats[points] < 3 )
 					{
-						_clipList.push(this._game.getDartClip(points, 3));
+						_clipList.push(this._game.getDartboardClip(points, 3));
 					}
 					++points;
 				}
-				if ( player1Scores[25] >= 3 && player2Scores < 3 ) {
-					_clipList.push(this._game.getDartClip(25, 2));
+				if ( player1Stats[25] >= 3 && player2Stats < 3 ) {
+					_clipList.push(this._game.getDartboardClip(25, 2));
 				}
 				if ( this._game.scoreManager.getPlayerScore(CricketGameLogic.PLAYER_TWO) < this._game.scoreManager.getPlayerScore(CricketGameLogic.PLAYER_ONE) + 15 ) {
 					points = 15;
 					while ( points <= 20 ) {
-						if ( player2Scores[points] >= 3 && player1Scores[points] < 3 )
+						if ( player2Stats[points] >= 3 && player1Stats[points] < 3 )
 						{
-							_clipList.push(this._game.getDartClip(points, 3));
+							_clipList.push(this._game.getDartboardClip(points, 3));
 						}
 						++points;
 					}
-					if ( player2Scores[25] >= 3 && player1Scores < 3 ) {
-						_clipList.push(this._game.getDartClip(25, 2));
+					if ( player2Stats[25] >= 3 && player1Stats < 3 ) {
+						_clipList.push(this._game.getDartboardClip(25, 2));
 					}					
 				}
 				points = 15;
 				while ( points <= 20 ) {
-					if ( player2Scores[points] < 3 )
+					if ( player2Stats[points] < 3 )
 					{
-						_clipList.push(this._game.getDartClip(points, 3));
+						_clipList.push(this._game.getDartboardClip(points, 3));
 					}
 					++points;
 				}
-				if ( player2Scores[25] < 3 ) {
-					_clipList.push(this._game.getDartClip(25, 2));
+				if ( player2Stats[25] < 3 ) {
+					_clipList.push(this._game.getDartboardClip(25, 2));
 				}
 			}
 			
@@ -83,7 +83,7 @@
 			
 			var finalShot:AIShotCandidate = _profile.pickShot(shotList);
 			
-			this._game.playerThrow(finalShot.point.x, finalShot.point.y, 14);
+			this._game.playerThrow(finalShot.point.x, finalShot.point.y, 0, 14, (Math.random() - 0.5) );
 		}//end takeTheShot()
 		
 	}//end ComputerPlayer

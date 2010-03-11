@@ -26,7 +26,6 @@
 	import com.bored.games.darts.objects.Dart;
 	import com.bored.games.darts.ui.hud.ScoreBoard;
 	import com.bored.games.darts.ui.hud.ThrowIndicator;
-	import com.bored.games.graphics.ImageFactory;
 	import com.bored.games.events.InputStateEvent;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.math.TrajectoryCalculator;
@@ -34,6 +33,7 @@
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
 	import com.sven.utils.AppSettings;
+	import com.sven.utils.ImageFactory;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.BlendMode;
@@ -133,7 +133,7 @@
 			DartsGlobals.instance.optionsInterfaceSpace.addChild(_scoreBoard);
 			_scoreBoard.x = 50;
 			_scoreBoard.y = 200;
-			_scoreBoard.registerScoreManager(DartsGlobals.instance.logicManager.scoreManager);
+			_scoreBoard.registerScoreManager(DartsGlobals.instance.gameManager.scoreManager);
 			_scoreBoard.show();
 			
 			if (this.stage)

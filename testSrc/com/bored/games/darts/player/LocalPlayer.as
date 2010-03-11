@@ -14,7 +14,7 @@
 			super(a_name);
 		}//end construtor()
 		
-		override public function takeTheShot(a_dartsLeft:int)
+		override public function takeTheShot():void
 		{
 			this._game.playerAim();
 		}//end takeTheShot()

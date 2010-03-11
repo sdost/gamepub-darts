@@ -30,7 +30,7 @@
 			return _name;
 		}//end get playerName()
 		
-		public function takeTheShot(a_dartsLeft:int):void
+		public function takeTheShot():void
 		{
 			
 		}//end takeTheShot()

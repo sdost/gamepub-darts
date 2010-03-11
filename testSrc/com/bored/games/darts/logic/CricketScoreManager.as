@@ -60,7 +60,7 @@
 		override public function getPlayerScore(a_playerNum:int):Number
 		{
 			var score:Number = 0;
-			for ( var key:Number in _scoreboard[a_playerNum] ) {
+			for ( var key in _scoreboard[a_playerNum] ) {
 				score += key * _scoreboard[a_playerNum][key];				
 			}
 			

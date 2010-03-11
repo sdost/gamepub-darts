@@ -4,7 +4,6 @@
 	import com.bored.games.controllers.MouseInputController;
 	import com.bored.games.darts.logic.DartsGameLogic;
 	import com.bored.games.darts.logic.AIProfile;
-	import com.bored.games.darts.logic.AIShotManager;
 	import com.bored.games.darts.logic.CricketGameLogic;
 	import com.bored.games.darts.logic.DartsTurn;
 	import com.bored.games.darts.objects.Board;
@@ -12,7 +11,6 @@
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.bored.games.darts.ui.GameplayScreen;
 	import com.bored.games.events.InputStateEvent;
-	import com.bored.games.graphics.ImageFactory;
 	import com.bored.games.input.MouseStroke;
 	import com.inassets.statemachines.Finite.State;
 	import com.inassets.statemachines.interfaces.IStateMachine;
@@ -69,17 +67,6 @@
 		private var _turns:uint = 0;
 		
 		private var _trackShot:Boolean = true;
-		
-		private var _oX:Number;
-		private var _oY:Number;
-		private var _velX:Number;
-		private var _velY:Number;
-		private var _speed:Number;
-		private var _num:Number;
-		private var _cumAvgSpeed:Number;
-		
-		private var _opponentProfile:AIProfile;
-		private var _opponentShooter:AIShotManager;
 						
 		public function Gameplay(a_name:String, a_stateMachine:IStateMachine)
 		{
@@ -99,7 +86,7 @@
 			_angle = AppSettings.instance.defaultAngle;
 			_grav = AppSettings.instance.defaultGravity;
 			
-			_opponentProfile = new AIProfile();
+			//_opponentProfile = new AIProfile();
 			
 			try
 			{

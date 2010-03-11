@@ -2,7 +2,6 @@
 {
 	import com.bored.games.controllers.InputController;
 	import com.bored.games.controllers.MouseInputController;
-	import com.bored.games.darts.logic.AbstractGameLogic;
 	import com.bored.games.darts.logic.DartsGameLogic;
 	import com.bored.services.AbstractExternalService;
 	import flash.display.Sprite;

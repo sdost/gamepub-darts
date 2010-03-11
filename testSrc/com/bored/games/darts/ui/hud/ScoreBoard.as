@@ -110,7 +110,7 @@
 		
 		public function updateScores(a_name:String):void
 		{
-			var scores:Object = _scoreMgr.getScores(a_name);
+			//var scores:Object = _scoreMgr.getScores(a_name);
 			
 			/*
 			if (a_name == AbstractGameLogic.PLAYER_TURN) {
