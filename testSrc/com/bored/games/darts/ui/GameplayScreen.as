@@ -20,7 +20,6 @@
 	import away3dlite.materials.WireframeMaterial;
 	import away3dlite.primitives.Plane;
 	import caurina.transitions.Tweener;
-	import com.bored.games.controllers.InputController;
 	import com.bored.games.darts.models.dae_DartReduced;
 	import com.bored.games.darts.objects.Board;
 	import com.bored.games.darts.objects.Dart;
@@ -28,7 +27,6 @@
 	import com.bored.games.darts.ui.hud.ThrowIndicator;
 	import com.bored.games.events.InputStateEvent;
 	import com.bored.games.darts.DartsGlobals;
-	import com.bored.games.math.TrajectoryCalculator;
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
@@ -287,13 +285,20 @@
 			_scoreBoard.update();
 			_throwIndicator.update();
 			
-			for ( var i:int = 0; i < DartsGlobals.instance.gameManager.darts.length; i++ ) {
-				if ( _dartModels[i] ) {
+			for ( var i:int = 0; i < AppSettings.instance.throwsPerTurn; i++ ) {
+				
+				if( i < DartsGlobals.instance.gameManager.darts.length ) {
 					_dartModels[i].rotationX = DartsGlobals.instance.gameManager.darts[i].angle;
-					
+						
 					_dartModels[i].x = DartsGlobals.instance.gameManager.darts[i].position.x * _engineScale;
 					_dartModels[i].y = -(DartsGlobals.instance.gameManager.darts[i].position.y * _engineScale);
 					_dartModels[i].z = DartsGlobals.instance.gameManager.darts[i].position.z * _engineScale;
+				} else {
+					_dartModels[i].rotationX = 90;
+						
+					_dartModels[i].x = -1000;
+					_dartModels[i].y = -1000;
+					_dartModels[i].z = 0;
 				}
 			}
 			

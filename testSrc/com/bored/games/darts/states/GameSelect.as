@@ -21,7 +21,7 @@
 	
 	/**
 	 * ...
-	 * @author Sam Dost
+	 * @author Samuel Dost
 	 */
 	public class GameSelect extends State
 	{		

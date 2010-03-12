@@ -6,7 +6,7 @@
 	
 	/**
 	 * ...
-	 * @author Bo Landsman
+	 * @author Samuel Dost
 	 */
 	public class GameFSM extends FiniteStateMachine
 	{

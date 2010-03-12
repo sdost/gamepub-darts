@@ -18,7 +18,7 @@
 	
 	/**
 	 * ....
-	 * @author Bo Landsman
+	 * @author Samuel Dost
 	 */
 	public class Attract extends State
 	{

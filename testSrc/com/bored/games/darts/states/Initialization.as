@@ -20,7 +20,7 @@
 	
 	/**
 	 * ...
-	 * @author Bo Landsman
+	 * @author Samuel Dost
 	 */
 	public class Initialization extends State
 	{		

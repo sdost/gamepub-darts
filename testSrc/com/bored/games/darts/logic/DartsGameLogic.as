@@ -1,6 +1,6 @@
 ﻿package com.bored.games.darts.logic 
 {
-	import com.bored.games.controllers.InputController;
+	import com.bored.games.input.InputController;
 	import com.bored.games.darts.input.ThrowController;
 	import com.bored.games.darts.objects.Dart;
 	import com.bored.games.darts.player.DartsPlayer;

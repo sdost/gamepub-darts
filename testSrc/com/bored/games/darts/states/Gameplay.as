@@ -1,7 +1,7 @@
 ﻿package com.bored.games.darts.states 
 {
-	import com.bored.games.controllers.InputController;
-	import com.bored.games.controllers.MouseInputController;
+	import com.bored.games.input.InputController;
+	import com.bored.games.input.MouseInputController;
 	import com.bored.games.darts.input.GestureThrowController;
 	import com.bored.games.darts.input.ThrowController;
 	import com.bored.games.darts.logic.DartsGameLogic;
@@ -13,7 +13,6 @@
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.bored.games.darts.ui.GameplayScreen;
 	import com.bored.games.events.InputStateEvent;
-	import com.bored.games.input.MouseStroke;
 	import com.inassets.statemachines.Finite.State;
 	import com.inassets.statemachines.interfaces.IStateMachine;
 	import com.sven.utils.AppSettings;
@@ -39,7 +38,7 @@
 	
 	/**
 	 * ...
-	 * @author sam
+	 * @author Samuel Dost
 	 */
 	public class Gameplay extends State
 	{		

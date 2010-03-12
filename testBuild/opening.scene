@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<scene name="opening">
+	<shot>
+		<image src="com.bored.games.darts.assets.PubWideShot" />
+		<dialogue>
+			<line frame="com.bored.games.darts.assets.BalloonTailLeft" actor="Narrator" x="30" y="200">Meanwhile at the pub...</line>
+		</dialogue>
+	</shot>
+	<shot>
+		<image src="com.bored.games.darts.assets.PubInteriorProtagonists" />
+		<dialogue>
+			<line frame="com.bored.games.darts.assets.BalloonTailLeft" actor="Hero" x="146" y="40">Blowjobs??</line>
+			<line frame="com.bored.games.darts.assets.BalloonTailRight" actor="Heroine" x="224" y="96">Maybe!!</line>
+		</dialogue>
+	</shot>
+	<shot>
+		<image src="com.bored.games.darts.assets.ActionShotAntagonists" />
+		<dialogue>
+			<line frame="com.bored.games.darts.assets.BalloonTailLeft" actor="Rogue's Gallery" x="30" y="200">Opening!!</line>
+		</dialogue>
+	</shot>
+	<shot>
+		<image src="com.bored.games.darts.assets.ActionShotConfrontation" />
+		<dialogue>
+			<line frame="com.bored.games.darts.assets.BalloonTailLeft" actor="Big Bill" x="30" y="200">Threatening!!</line>
+		</dialogue>
+	</shot>
+	<shot>
+		<image src="com.bored.games.darts.assets.ActionShotOldMan" />
+		<dialogue>
+			<line frame="com.bored.games.darts.assets.BalloonTailLeft" actor="Old Guy" x="30" y="200">Voice of reason?</line>
+			<line frame="com.bored.games.darts.assets.BalloonTailRight" actor="Chorus" x="30" y="70">Darts Begin!!</line>
+		</dialogue>
+	</shot>
+</scene>

@@ -1,7 +1,9 @@
 ﻿package com.bored.games.darts
 {
+	import com.bored.games.animations.CutsceneManager;
 	import com.bored.games.darts.states.Gameplay;
 	import com.bored.games.darts.states.GameSelect;
+	import com.bored.games.darts.states.IntroStory;
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.bored.games.darts.states.Initialization;
 	import com.bored.games.darts.states.Attract;
@@ -40,6 +42,8 @@
 		{
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage); // so that this only happens once.
 			
+			CutsceneManager.instance.loadScript("opening.scene");
+			
 			// set the global stage value.
 			DartsGlobals.instance.stage = this.stage;
 			
@@ -63,6 +67,7 @@
 		{
 			_myStateMachine.addState(new Initialization("Initialization", _myStateMachine));
 			_myStateMachine.addState(new Attract("Attract", _myStateMachine));
+			_myStateMachine.addState(new IntroStory("IntroStory", _myStateMachine));
 			_myStateMachine.addState(new GameSelect("GameSelect", _myStateMachine));
 			_myStateMachine.addState(new Gameplay("Gameplay", _myStateMachine));
 			

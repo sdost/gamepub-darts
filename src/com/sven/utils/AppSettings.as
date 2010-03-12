@@ -54,7 +54,7 @@
 		 * to enforce a singleton
 		 * @throws Error when instantiating with a 'null' argument
 		 */
-		public function AppSettings(enforcer:AppSettingsSingletonEnforcer) 
+		public function AppSettings(enforcer:AppSettingsSingletonEnforcer = null) 
 		{
 			if (!enforcer)
 				throw new Error("Unable to instantiate a singleton class using constructor. Use instance property.");

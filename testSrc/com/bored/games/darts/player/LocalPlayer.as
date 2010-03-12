@@ -1,6 +1,5 @@
 ﻿package com.bored.games.darts.player 
 {
-	import com.bored.games.controllers.MouseInputController;
 	import com.bored.games.darts.player.DartsPlayer;
 	
 	/**

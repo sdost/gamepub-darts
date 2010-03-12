@@ -1,8 +1,8 @@
 ﻿package com.bored.games.darts.objects 
 {
 	import caurina.transitions.Tweener;
-	import com.bored.games.elements.GameElement;
-	import com.bored.games.math.TrajectoryCalculator;
+	import com.bored.games.objects.GameElement;
+	import com.sven.utils.TrajectoryCalculator;
 	
 	/**
 	 * ...

@@ -1,6 +1,6 @@
 ﻿package com.bored.games.darts.objects 
 {
-	import com.bored.games.elements.GameElement;
+	import com.bored.games.objects.GameElement;
 	import flash.display.BitmapData;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
