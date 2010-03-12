@@ -73,10 +73,9 @@
 	{
 		private var _wallClip:Bitmap;
 		
-		private static var _dartboardMC:BitmapMaterial;
+		private static var _dartboardTexture:BitmapMaterial;
 		private static var _dartTexture_UJ:BitmapMaterial;
 		private static var _dartTexture_JR:BitmapMaterial;
-		private static var _dartOutline:WireframeMaterial;
 		
 		//engine variables
 		private var _scene:Scene3D;
@@ -104,12 +103,6 @@
 		private var _dartRefs:Vector.<Dart>;
 		private var _boardRef:Board;
 		
-		private var _wallPosition:Vector3D;
-		
-		private var _wallScale:Number;
-		private var _boardScale:Number;
-		private var _dartScale:Number;
-		
 		public function GameplayScreen() 
 		{
 			_wallClip = new Bitmap(ImageFactory.getBitmapDataByQualifiedName(AppSettings.instance.wallTextureBitmap, AppSettings.instance.wallTextureWidth, AppSettings.instance.wallTextureHeight));
@@ -119,6 +112,8 @@
 			_dartRefs = new Vector.<Dart>();
 			_dartModels = new Vector.<Object3D>();
 			
+			_engineScale = AppSettings.instance.away3dEngineScale;
+			
 			init();
 			
 			var cls:Class = getDefinitionByName(AppSettings.instance.throwIndicatorMovie) as Class;
@@ -126,6 +121,7 @@
 			DartsGlobals.instance.optionsInterfaceSpace.addChild(_throwIndicator);
 			_throwIndicator.x = 650;
 			_throwIndicator.y = 400;
+			_throwIndicator.registerThrowController(DartsGlobals.instance.gameManager.throwController);
 			_throwIndicator.show();
 			
 			cls = getDefinitionByName(AppSettings.instance.scoreboardMovie) as Class;
@@ -159,10 +155,6 @@
 			this.stage.quality = StageQuality.MEDIUM;
 			
 			this.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKey);
-			
-			_engineScale = AppSettings.instance.away3dEngineScale;
-			
-			trace("Engine Scale: " + _engineScale);
 			
 			Tweener.addTween(this, { alpha:1, time:2 } );
 			
@@ -204,9 +196,9 @@
 		 */
 		private function initMaterials():void
 		{
-			_dartboardMC = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(AppSettings.instance.boardTextureBitmap, AppSettings.instance.boardTextureWidth, AppSettings.instance.boardTextureHeight));
-			_dartboardMC.repeat = false;
-			_dartboardMC.smooth = true;
+			_dartboardTexture = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(AppSettings.instance.boardTextureBitmap, AppSettings.instance.boardTextureWidth, AppSettings.instance.boardTextureHeight));
+			_dartboardTexture.repeat = false;
+			_dartboardTexture.smooth = true;
 			
 			_dartTexture_UJ = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(AppSettings.instance.dartTextureBitmapUJ, AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight));
 			_dartTexture_UJ.repeat = false;
@@ -226,14 +218,14 @@
 			
 			if ( a_evt.keyCode == Keyboard.NUMPAD_1 ) {
 				_dartTemplate.materialLibrary.getMaterial("dart_skin").material = _dartTexture_UJ;
-				for ( i = 0; i < _dartRefs.length; i++ ) {
+				for ( i = 0; i < AppSettings.instance.throwsPerTurn; i++ ) {
 					_scene.removeChild(_dartModels[i]);
 					_dartModels[i] = _dartTemplate.clone();
 					_scene.addChild(_dartModels[i]);
 				}
 			} else if (a_evt.keyCode == Keyboard.NUMPAD_2 ) {
 				_dartTemplate.materialLibrary.getMaterial("dart_skin").material = _dartTexture_JR;
-				for ( i = 0; i < _dartRefs.length; i++ ) {
+				for ( i = 0; i < AppSettings.instance.throwsPerTurn; i++ ) {
 					_scene.removeChild(_dartModels[i]);
 					_dartModels[i] = _dartTemplate.clone();
 					_scene.addChild(_dartModels[i]);
@@ -249,23 +241,31 @@
 			Debug.active = true;
 			
 			_boardBillboard = new Plane();
-			_boardBillboard.material = _dartboardMC;
+			_boardBillboard.x = AppSettings.instance.dartboardPositionX * _engineScale;
+			_boardBillboard.y = AppSettings.instance.dartboardPositionY * _engineScale;
+			_boardBillboard.z = AppSettings.instance.dartboardPositionZ * _engineScale;
+			_boardBillboard.material = _dartboardTexture;
 			_boardBillboard.width = AppSettings.instance.boardTextureWidth;
 			_boardBillboard.height = AppSettings.instance.boardTextureHeight;
 			_boardBillboard.yUp = false;
 			_boardBillboard.bothsides = true;
 			_boardBillboard.mouseEnabled = false;
+			_boardBillboard.lookAt(_camera.position, new Vector3D(0, 1, 0));
 			_scene.addChild(_boardBillboard);
 			
+			//trace("Board Billboard: [" + _boardBillboard.x + ", " + _boardBillboard.y + ", " + _boardBillboard.z + "]" );
+			
 			_collada = new Collada();
-			_collada.scaling = 3;
+			_collada.scaling = AppSettings.instance.dartModelScale;
 			_collada.centerMeshes = true;
 			
 			_dartTemplate = _collada.parseGeometry(dae_DartReduced.data);
 			_dartTemplate.mouseEnabled = false;
 			_dartTemplate.materialLibrary.getMaterial("dart_skin").material = _dartTexture_UJ;
+			_dartTemplate.x = -1000;
+			_dartTemplate.y = -1000;
 			
-			for ( var i:int = 0; i < 3; i++ ) {
+			for ( var i:int = 0; i < AppSettings.instance.throwsPerTurn; i++ ) {
 				var newDart:Object3D = _dartTemplate.clone();			
 				_dartModels.push(newDart);
 				_scene.addChild(newDart);
@@ -281,49 +281,19 @@
 		{
 			_boardRef = a_board;
 		}//end setBoardReference()
-		
-		public function startThrow():void
-		{
-			_throwIndicator.armShot();
-		}//end startThrow()
-		
-		public function updateThrowSpeed(a_spd:Number, a_xvel:Number = 0):void 
-		{
-			_throwIndicator.updateBall(a_xvel, a_spd);
-		}//end updateThrowSpeed()
-		
-		public function finishThrow(a_name:String):void
-		{
-			_scoreBoard.updateScores(a_name);
-		}//end finishThrow()
-		
-		public function resetThrow():void
-		{
-			_throwIndicator.resetShot();
-		}//end resetThrow()
 	
 		public function render():void
 		{	
-			if ( _boardRef ) {
-				_boardBillboard.x = _boardRef.position.x * _engineScale;
-				_boardBillboard.y = _boardRef.position.y * _engineScale;
-				_boardBillboard.z = _boardRef.position.z * _engineScale;
-			}
+			_scoreBoard.update();
+			_throwIndicator.update();
 			
-			_boardBillboard.lookAt(_camera.position, new Vector3D(0, 1, 0));
-			
-			if ( _dartTemplate ) {		
-				
-				var followCam:Boolean = false;
-				
-				for ( var i:int = 0; i < _dartRefs.length; i++ ) {
-					if ( _dartModels[i] ) {
-						_dartModels[i].rotationX = _dartRefs[i].angle;
-						
-						_dartModels[i].x = _dartRefs[i].position.x * _engineScale;
-						_dartModels[i].y = -(_dartRefs[i].position.y * _engineScale);
-						_dartModels[i].z = _dartRefs[i].position.z * _engineScale;
-					}
+			for ( var i:int = 0; i < DartsGlobals.instance.gameManager.darts.length; i++ ) {
+				if ( _dartModels[i] ) {
+					_dartModels[i].rotationX = DartsGlobals.instance.gameManager.darts[i].angle;
+					
+					_dartModels[i].x = DartsGlobals.instance.gameManager.darts[i].position.x * _engineScale;
+					_dartModels[i].y = -(DartsGlobals.instance.gameManager.darts[i].position.y * _engineScale);
+					_dartModels[i].z = DartsGlobals.instance.gameManager.darts[i].position.z * _engineScale;
 				}
 			}
 			

@@ -2,6 +2,8 @@
 {
 	import com.bored.games.controllers.InputController;
 	import com.bored.games.controllers.MouseInputController;
+	import com.bored.games.darts.input.GestureThrowController;
+	import com.bored.games.darts.input.ThrowController;
 	import com.bored.games.darts.logic.DartsGameLogic;
 	import com.bored.games.darts.logic.AIProfile;
 	import com.bored.games.darts.logic.CricketGameLogic;
@@ -52,6 +54,7 @@
 		private var _gameManager:DartsGameLogic;
 		
 		private var _inputController:MouseInputController;
+		private var _throwController:ThrowController;
 		
 		private var _releasePos:Vector3D;
 		private	var _thrust:Number;
@@ -81,23 +84,23 @@
 		{						
 			var spr:Sprite = SpriteFactory.getSpriteByQualifiedName(AppSettings.instance.boardCollisionMap);
 			DartsGlobals.instance.gameManager.dartboardClip = spr;
-						
-			_releasePos = new Vector3D();
-			_angle = AppSettings.instance.defaultAngle;
-			_grav = AppSettings.instance.defaultGravity;
 			
-			//_opponentProfile = new AIProfile();
+			_inputController = new MouseInputController(DartsGlobals.instance.screenSpace);
+			_throwController = new GestureThrowController();
+			
+			DartsGlobals.instance.gameManager.inputController = _inputController;
+			DartsGlobals.instance.gameManager.throwController = _throwController;
+			DartsGlobals.instance.gameManager.newGame();
 			
 			try
-			{
+			{				
 				_gameplayScreen = new GameplayScreen();
-				
-				_inputController = new MouseInputController(DartsGlobals.instance.screenSpace);
 				
 				DartsGlobals.instance.screenSpace.addChild(_gameplayScreen);
 				
-				DartsGlobals.instance.gameManager.inputController = _inputController;
-				DartsGlobals.instance.gameManager.newGame();
+				DartsGlobals.instance.stage.addEventListener(Event.ENTER_FRAME, update, false, 0, true);
+				
+				DartsGlobals.instance.gameManager.startNewTurn();
 			}
 			catch (e:Error)
 			{

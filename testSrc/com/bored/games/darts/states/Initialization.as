@@ -34,7 +34,9 @@
 		 * Handler for entering (and executing) this state.
 		 */
 		override public function onEnter():void
-		{			
+		{		
+			trace("Initialization::onEnter()");
+			
 			//var providerCls:Class = getDefinitionByName(AppSettings.instance.externalServicesProvider) as Class;
 			
 			//var ext:AbstractExternalService = new providerCls();

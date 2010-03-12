@@ -11,31 +11,28 @@
 	public class Dart extends GameElement
 	{
 		private var _trajCalc:TrajectoryCalculator;
-		private var _throwing:Boolean;
 		private var _radius:int;
 		
 		private var _xVel:Number;
 		
 		private var _orientation:Number;
 		
+		private var _throwing:Boolean;
+		
 		public function Dart(a_radius:int = 1) 
 		{
 			_trajCalc = new TrajectoryCalculator();
-			_throwing = false;
 			
 			_radius = a_radius;
 			
-			_orientation = 90;
-			
-			reset();
-			
+			_orientation = 90;			
 		}//end constructor()
 		
 		override public function update(t:Number = 0):void
 		{
 			super.update(t);
-			
-			if ( _throwing ) {			
+				
+			if( _throwing ) {
 				var z:Number = this.position.z + _trajCalc.thrustVector.x/40;
 				var y:Number = _trajCalc.calculateHeightAtPos(z);
 				var x:Number = this.position.x + _xVel / 40;
@@ -45,15 +42,9 @@
 					
 				this.position.x = x;
 				this.position.y = y;
-				this.position.z = z;
+				this.position.z = z;				
 			}
-			
 		}//end update()
-		
-		public function get throwing():Boolean
-		{
-			return _throwing;
-		}//end get throwing()
 		
 		public function get radius():int
 		{
@@ -76,24 +67,15 @@
 			_trajCalc.theta = Math.PI / 180 * angle;
 			_trajCalc.gravity = grav;
 			
-			_xVel = xvel;
+			_throwing = true;
 			
-			_throwing = true;				
+			_xVel = xvel;			
 		}//end initThrowParams()
 		
-		public function finishThrow():void 
+		public function finishThrow():void
 		{
 			_throwing = false;
 		}//end finishThrow()
-		
-		public function reset():void
-		{
-			_orientation = 90;
-			
-			this.position.x = -1000;
-			this.position.y = -1000;
-			this.position.z = 0;
-		}//end reset()
 		
 	}//end Dart
 

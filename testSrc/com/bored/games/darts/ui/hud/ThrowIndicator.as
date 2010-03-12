@@ -1,7 +1,9 @@
 ﻿package com.bored.games.darts.ui.hud 
 {
+	import caurina.transitions.properties.CurveModifiers;
 	import caurina.transitions.Tweener;
 	import com.bored.games.darts.DartsGlobals;
+	import com.bored.games.darts.input.ThrowController;
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
@@ -24,6 +26,8 @@
 	public class ThrowIndicator extends ContentHolder
 	{
 		private var _trackingBall:MovieClip;
+		
+		private var _throwController:ThrowController;
 		
 		public function ThrowIndicator(a_img:Sprite, a_buildFromAllDescendants:Boolean = false, a_bAddContents:Boolean = true) 
 		{
@@ -50,7 +54,7 @@
 			
 			if (_trackingBall)
 			{
-				_trackingBall.visible = false;
+				_trackingBall.gotoAndStop("RED");
 			}
 			else
 			{
@@ -60,6 +64,11 @@
 			return descendantsDict;
 			
 		}//end buildFrom()
+		
+		public function registerThrowController(a_controller:ThrowController):void
+		{
+			_throwController = a_controller;
+		}//end registerThrowController()		
 		
 		private function addedToStage(a_evt:Event = null):void
 		{
@@ -72,32 +81,13 @@
 			
 		}//end addedToStage()
 		
-		public function armShot():void
-		{
-			_trackingBall.gotoAndStop("RED");
-			_trackingBall.x = 0;
-			_trackingBall.y = 119;
-			_trackingBall.scaleX = 5;
-			_trackingBall.scaleY = 5;
-			_trackingBall.alpha = 0;
-			_trackingBall.visible = true;
-			Tweener.addTween(_trackingBall, { alpha: 0.85, scaleX: 1, scaleY: 1, time: 0.5, onComplete: shotArmed } );
-		}//end armShot()
+		public function update():void
+		{			
+			_trackingBall.x = _throwController.lean * 8;
+			_trackingBall.y = 119 - _throwController.thrust * 8;
+		}//end update()
 		
-		private function shotArmed():void
-		{
-			_trackingBall.gotoAndStop("GREEN");
-		}//end shotArmed()
 		
-		public function resetShot():void
-		{
-			//_trackingBall.visible = false;
-		}//end resetShot()
-		
-		public function updateBall(a_x:Number, a_y:Number):void
-		{
-			Tweener.addTween(_trackingBall, { x: a_x * 8, y: (119 - a_y * 8), time: 0.5 } );
-		}//end moveBallTo()
 		
 		public function show():void
 		{

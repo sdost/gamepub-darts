@@ -3,6 +3,8 @@
 	import caurina.transitions.Tweener;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.logic.AbstractScoreManager;
+	import com.bored.games.darts.logic.CricketGameLogic;
+	import com.bored.games.darts.logic.CricketScoreManager;
 	import com.bored.games.darts.logic.DartsGameLogic;
 	import com.bored.games.darts.objects.Board;
 	import com.inassets.ui.buttons.events.ButtonEvent;
@@ -108,29 +110,27 @@
 			_scoreMgr = a_mgr;
 		}//end registerScoreManager()
 		
-		public function updateScores(a_name:String):void
+		public function update():void
 		{
-			//var scores:Object = _scoreMgr.getScores(a_name);
+			var playerScores:Object = _scoreMgr.getPlayerStats(CricketGameLogic.PLAYER_ONE);
 			
-			/*
-			if (a_name == AbstractGameLogic.PLAYER_TURN) {
-				(_playerSlots[Board.TWENTY] as MovieClip).gotoAndStop(scores[Board.TWENTY] + 1);
-				(_playerSlots[Board.NINETEEN] as MovieClip).gotoAndStop(scores[Board.NINETEEN] + 1);
-				(_playerSlots[Board.EIGHTEEN] as MovieClip).gotoAndStop(scores[Board.EIGHTEEN] + 1);
-				(_playerSlots[Board.SEVENTEEN] as MovieClip).gotoAndStop(scores[Board.SEVENTEEN] + 1);
-				(_playerSlots[Board.SIXTEEN] as MovieClip).gotoAndStop(scores[Board.SIXTEEN] + 1);
-				(_playerSlots[Board.FIFTEEN] as MovieClip).gotoAndStop(scores[Board.FIFTEEN] + 1);
-				(_playerSlots[Board.BULL] as MovieClip).gotoAndStop(scores[Board.BULL] + 1);
-			} else if (a_name == AbstractGameLogic.OPPONENT_TURN) {
-				(_opponentSlots[Board.TWENTY] as MovieClip).gotoAndStop(scores[Board.TWENTY] + 1);
-				(_opponentSlots[Board.NINETEEN] as MovieClip).gotoAndStop(scores[Board.NINETEEN] + 1);
-				(_opponentSlots[Board.EIGHTEEN] as MovieClip).gotoAndStop(scores[Board.EIGHTEEN] + 1);
-				(_opponentSlots[Board.SEVENTEEN] as MovieClip).gotoAndStop(scores[Board.SEVENTEEN] + 1);
-				(_opponentSlots[Board.SIXTEEN] as MovieClip).gotoAndStop(scores[Board.SIXTEEN] + 1);
-				(_opponentSlots[Board.FIFTEEN] as MovieClip).gotoAndStop(scores[Board.FIFTEEN] + 1);
-				(_opponentSlots[Board.BULL] as MovieClip).gotoAndStop(scores[Board.BULL] + 1);				
-			}
-			*/
+			(_playerSlots[Board.TWENTY] as MovieClip).gotoAndStop(playerScores[Board.TWENTY] + 1);
+			(_playerSlots[Board.NINETEEN] as MovieClip).gotoAndStop(playerScores[Board.NINETEEN] + 1);
+			(_playerSlots[Board.EIGHTEEN] as MovieClip).gotoAndStop(playerScores[Board.EIGHTEEN] + 1);
+			(_playerSlots[Board.SEVENTEEN] as MovieClip).gotoAndStop(playerScores[Board.SEVENTEEN] + 1);
+			(_playerSlots[Board.SIXTEEN] as MovieClip).gotoAndStop(playerScores[Board.SIXTEEN] + 1);
+			(_playerSlots[Board.FIFTEEN] as MovieClip).gotoAndStop(playerScores[Board.FIFTEEN] + 1);
+			(_playerSlots[Board.BULL] as MovieClip).gotoAndStop(playerScores[Board.BULL] + 1);
+				
+			var opponentScores:Object = _scoreMgr.getPlayerStats(CricketGameLogic.PLAYER_TWO);	
+
+			(_opponentSlots[Board.TWENTY] as MovieClip).gotoAndStop(opponentScores[Board.TWENTY] + 1);
+			(_opponentSlots[Board.NINETEEN] as MovieClip).gotoAndStop(opponentScores[Board.NINETEEN] + 1);
+			(_opponentSlots[Board.EIGHTEEN] as MovieClip).gotoAndStop(opponentScores[Board.EIGHTEEN] + 1);
+			(_opponentSlots[Board.SEVENTEEN] as MovieClip).gotoAndStop(opponentScores[Board.SEVENTEEN] + 1);
+			(_opponentSlots[Board.SIXTEEN] as MovieClip).gotoAndStop(opponentScores[Board.SIXTEEN] + 1);
+			(_opponentSlots[Board.FIFTEEN] as MovieClip).gotoAndStop(opponentScores[Board.FIFTEEN] + 1);
+			(_opponentSlots[Board.BULL] as MovieClip).gotoAndStop(opponentScores[Board.BULL] + 1);				
 		}//end update()
 		
 		public function show():void

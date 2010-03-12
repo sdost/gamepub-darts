@@ -154,7 +154,7 @@
 		 */
 		flash_proxy override function getProperty(name:*):* 
 		{
-			return _settings[name] || name;
+			return _settings[name];
 		}
 		
 		/**
@@ -197,8 +197,8 @@
 		 * @param xml The XML object that contains the settings.
 		 */
 		private function parseSettingsFromXml(xml:XML):void {
-			for each(var i:XML in xml.add){
-				_settings[i.@key] = i.@value;
+			for each(var i:XML in xml.add) {
+				_settings[i.@key] = compileValue(i.@type, i.@value);
 			}
 		}
 		

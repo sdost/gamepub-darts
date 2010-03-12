@@ -23,6 +23,21 @@
 			return "CRICKET";
 		}//end get gameType()
 		
+		override protected function checkForWin():Boolean
+		{
+			var stats:Object = this.scoreManager.getPlayerStats(_currentPlayer);
+					
+			var win:Boolean = true;
+			
+			for ( var i:int = 15; i <= 20; i++ ) {
+				if ( stats[i] < 3 ) win = false;
+			}
+			if ( stats[25] < 3 ) win = false;
+			
+			return win;
+					
+		}//end checkForWin()
+		
 	}//end CricketGameLogic
 
 }//end com.bored.games.darts.logic

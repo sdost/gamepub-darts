@@ -36,7 +36,12 @@
 		 */
 		override public function onEnter():void
 		{			
+			trace("GameSelect::onEnter()");
+			
 			DartsGlobals.instance.gameManager = new CricketGameLogic();
+			
+			trace("GameManager: " + DartsGlobals.instance.gameManager);
+			
 			DartsGlobals.instance.gameManager.registerPlayer( new LocalPlayer() );
 			DartsGlobals.instance.gameManager.registerPlayer( new ComputerPlayer() );
 

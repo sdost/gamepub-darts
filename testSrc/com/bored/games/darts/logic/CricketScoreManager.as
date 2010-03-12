@@ -37,8 +37,6 @@
 		
 		override public function submitThrow(a_playerNum:int, a_section:uint, a_multiplier:uint = 1):void
 		{
-			trace("Throw: " + a_playerNum + ", " + a_section + ", " + a_multiplier);
-			
 			if (a_section < Board.FIFTEEN) return;
 			
 			var score:uint = _scoreboard[a_playerNum][a_section];

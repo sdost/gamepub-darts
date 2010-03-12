@@ -54,7 +54,7 @@
 		
 		private function onNewGameClicked(e_evt:Event):void
 		{
-			(this.stateMachine as GameFSM).transitionToStateNamed("Gameplay");
+			(this.stateMachine as GameFSM).transitionToNextState();
 			
 		}//end onNewGameClicked();
 		

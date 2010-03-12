@@ -21,7 +21,14 @@
 		
 		public function pickShot(a_shots:Vector.<AIShotCandidate>):AIShotCandidate
 		{
-			return a_shots[Math.floor(Math.random() * a_shots.length)];
+			var shot:AIShotCandidate;
+			
+			if( a_shots.length > 0 )
+				shot = a_shots[Math.floor(Math.random() * a_shots.length)];
+			else
+				shot = new AIShotCandidate(0, 0);
+				
+			return shot;
 		}//end pickShot()
 		
 	}//end AIProfile

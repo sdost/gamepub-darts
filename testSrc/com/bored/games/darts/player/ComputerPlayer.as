@@ -5,7 +5,8 @@
 	import com.bored.games.darts.logic.CricketGameLogic;
 	import com.bored.games.darts.logic.DartsGameLogic;
 	import com.bored.games.darts.player.DartsPlayer;
-	import flash.display.MovieClip;
+	import com.sven.utils.AppSettings;
+	import flash.display.Sprite;
 	import flash.geom.Point;
 	
 	/**
@@ -19,6 +20,9 @@
 		public function ComputerPlayer() 
 		{
 			super("COMPUTER");
+			
+			_profile = new AIProfile();
+			
 		}//end constructor()
 		
 		public function set profile(a_profile:AIProfile):void
@@ -30,7 +34,7 @@
 		override public function takeTheShot():void
 		{
 			var _gameType:String = this._game.gameType;
-			var _clipList:Vector.<MovieClip> = new Vector.<MovieClip>();
+			var _clipList:Vector.<Sprite> = new Vector.<Sprite>();
 			if (_gameType == "CRICKET") {
 				var player1Stats:Object = this._game.scoreManager.getPlayerStats(CricketGameLogic.PLAYER_ONE);
 				var player2Stats:Object = this._game.scoreManager.getPlayerStats(CricketGameLogic.PLAYER_TWO);
@@ -75,15 +79,22 @@
 			var shotList:Vector.<AIShotCandidate> = new Vector.<AIShotCandidate>();
 			
 			for ( var i:int = 0; i < _clipList.length; i++ ) {
-				var clipScaledX:Number = (_clipList[i].x / this._game.dartboardClip.width);
-				var clipScaledY:Number = (_clipList[i].y / this._game.dartboardClip.height);
 				
-				shotList.push( new AIShotCandidate(clipScaledX, clipScaledY) );
-			}			
+				var clipScaledX:Number = (_clipList[i].x / (this._game.dartboardClip.width/2)) * 1.2;
+				var clipScaledY:Number = (_clipList[i].y / (this._game.dartboardClip.height/2)) * 1.2;
+				
+				shotList.push( new AIShotCandidate(clipScaledX, -clipScaledY) );
+			}
 			
 			var finalShot:AIShotCandidate = _profile.pickShot(shotList);
 			
-			this._game.playerThrow(finalShot.point.x, finalShot.point.y, 0, 14, (Math.random() - 0.5) );
+			this._game.playerThrow(
+				finalShot.point.x,
+				finalShot.point.y,
+				0,
+				AppSettings.instance.aiOptimumThrust + (Math.random() * AppSettings.instance.aiThrustErrorRange * 2) - AppSettings.instance.aiThrustErrorRange,
+				(Math.random() * AppSettings.instance.aiLeanRange * 2) - AppSettings.instance.aiLeanRange
+			);
 		}//end takeTheShot()
 		
 	}//end ComputerPlayer
