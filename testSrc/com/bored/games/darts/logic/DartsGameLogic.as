@@ -40,6 +40,17 @@
 			_scoreManager = new AbstractScoreManager();
 		}//end constructor()
 		
+		public function loadGameState(a_state:Object):void
+		{
+			// TODO translate state object into game logic state
+		}//end loadGameState()
+		
+		public function saveGameState():Object
+		{
+			return null;
+			// TODO translate game logic state into state object
+		}//end saveGameState()
+		
 		public function set dartboardClip(a_clip:Sprite):void
 		{
 			_dartboardClip = a_clip;
@@ -103,13 +114,16 @@
 		
 		public function update(a_time:Number = 0):void
 		{
-			if (_currentDart) _currentDart.update(a_time);
-			
-			if ( _currentDart.position.z >=  AppSettings.instance.dartboardPositionZ )
+			for each ( var dart:Dart in _darts )
 			{
-				_currentDart.position.z = AppSettings.instance.dartboardPositionZ;
-				
+				dart.update(a_time);
+			}
+			
+			if ( _currentDart && _currentDart.position.z >=  AppSettings.instance.dartboardPositionZ )
+			{
 				_currentDart.finishThrow();
+				
+				_currentDart.position.z = AppSettings.instance.dartboardPositionZ;			
 				
 				var p:Point = new Point( ( _currentDart.position.x / 1.2 ) * (_dartboardClip.width/2), ( -_currentDart.position.y / 1.2 ) * (_dartboardClip.height/2) );
 				
@@ -120,7 +134,15 @@
 					if (_pattern.test(objects[0].parent.name)) {
 						var arr:Array = objects[0].parent.name.split("_");
 						this.scoreManager.submitThrow(_currentPlayer, Number(arr[1]), Number(arr[2]));
+					} 
+					else
+					{
+						_currentDart.beginFalling();
 					}
+				}
+				else
+				{
+					_currentDart.beginFalling();
 				}
 				
 				if (_currentTurn.throwsRemaining == 0) {

@@ -109,7 +109,7 @@
 		
 		private function update(a_evt:Event):void
 		{
-			DartsGlobals.instance.gameManager.update();
+			DartsGlobals.instance.gameManager.update(getTimer());
 			/*
 			for (var i:int = 0; i < _darts.length; i++)
 			{

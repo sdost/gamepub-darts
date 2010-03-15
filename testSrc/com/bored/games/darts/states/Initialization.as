@@ -37,13 +37,14 @@
 		{		
 			trace("Initialization::onEnter()");
 			
-			//var providerCls:Class = getDefinitionByName(AppSettings.instance.externalServicesProvider) as Class;
+			DartsGlobals.instance.gameManager = new CricketGameLogic();
 			
-			//var ext:AbstractExternalService = new providerCls();
+			trace("GameManager: " + DartsGlobals.instance.gameManager);
 			
-			//ext.init(servicesConfig.gameId, DartsGlobals.instance.optionsInterfaceSpace);
-			
-			//DartsGlobals.instance.externalServices = ext;
+			var providerCls:Class = getDefinitionByName(AppSettings.instance.externalServicesProvider) as Class;
+			var ext:AbstractExternalService = new providerCls();
+			ext.init(AppSettings.instance.externalServicesGameId, DartsGlobals.instance.optionsInterfaceSpace);
+			DartsGlobals.instance.externalServices = ext;
 
 			this.finished();			
 		}//end onEnter()
@@ -51,7 +52,6 @@
 		private function finished(...args):void
 		{
 			(this.stateMachine as GameFSM).transitionToNextState();
-			
 		}//end finished()
 		
 		/**
@@ -59,8 +59,6 @@
 		 */
 		override public function onExit():void
 		{
-			
-			
 		}//end onExit()
 		
 	}//end class Initialization

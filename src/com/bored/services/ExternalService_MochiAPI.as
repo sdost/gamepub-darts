@@ -42,15 +42,12 @@
 		
 		private function inventoryReady(status:Object):void 
 		{
-            if( !MochiCoins.inventory.money )
-                MochiCoins.inventory.money = 50;
-            else
-                MochiCoins.inventory.money += 50;
+            // TODO: process inventory...
         }//end inventoryReady()
 
         private function inventorySynced(status:Object):void
         {
-            
+            // TODO: sync'd inventory...
         }//end inventorySynced()
 		
 		private function coinsError(error:Object):void 
@@ -66,8 +63,6 @@
         private function onLogin(event:Object):void 
 		{
             loginEvent = event;
-			MochiUserData.get("load_count", userDataFetch);
-            MochiSocial.saveUserProperties({ hitPoints: 120 });
         }//end onLogin()
 
         private function onLogout(event:Object):void 
@@ -109,32 +104,15 @@
             }
         }//end storeItems()
 		
-		private function userDataFetch(result:MochiUserData):void 
+		public function loadGameData(a_callback:Function):void
 		{
-            if (result.error != null) {
-                trace("[GAME] [userDataFetch] error: " + result);
-                return;
-            }
-            trace("[GAME] [userDataFetch] load_count = " + result.data);
-            var counter:Number;
-            if (result.data === null) {
-                /* fetching a non-existent key will return null */
-                counter = 0;
-            } else {
-                counter = result.data;
-            }
-            counter += 1;
-            MochiUserData.put("load_count", counter, userDataPut);
-        }//end userDataFetch()
+			MochiUserData.get("game_state", a_callback);
+		}//end loadeGameData()
 		
-		private function userDataPut(result:MochiUserData):void 
+		public function saveGameData(a_callback:Function, a_data:Object):void
 		{
-            if (result.error != null) {
-                trace("[GAME] [userDataPut] error: " + result);
-                return;
-            }
-            trace("[GAME] [userDataPut] success: " + result);
-        }//end userDataPut()
+			MochiUserData.put("game_state", a_data, a_callback);
+		}//end saveGameData()
 		
 	}//end ExternalService_MochiAPI
 

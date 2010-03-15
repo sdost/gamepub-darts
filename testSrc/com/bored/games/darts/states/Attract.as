@@ -60,7 +60,11 @@
 		
 		private function onResumeGameClicked(e_evt:Event):void
 		{
-			// TODO
+			//DartsGlobals.instance.externalServices
+			
+			DartsGlobals.instance.gameManager.loadGameState( { } );
+			
+			(this.stateMachine as GameFSM).transitionToNextState();
 		}//end onResumeGameClicked();
 		
 		/**
