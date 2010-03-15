@@ -1,8 +1,8 @@
 ﻿package com.bored.games.darts.objects 
 {
 	import caurina.transitions.Tweener;
-	import com.bored.games.darts.actions.FallingAction;
-	import com.bored.games.darts.actions.TrajectoryAction;
+	import com.bored.games.darts.actions.DartFallingAction;
+	import com.bored.games.darts.actions.DartTrajectoryAction;
 	import com.bored.games.objects.GameElement;
 	import com.sven.utils.TrajectoryCalculator;
 	
@@ -12,8 +12,8 @@
 	 */
 	public class Dart extends GameElement
 	{
-		private var _trajectoryAction:TrajectoryAction;
-		private var _fallingAction:FallingAction;
+		private var _trajectoryAction:DartTrajectoryAction;
+		private var _fallingAction:DartFallingAction;
 		
 		private var _radius:int;
 		
@@ -32,9 +32,9 @@
 		
 		private function initActions():void
 		{
-			_trajectoryAction = new TrajectoryAction(this);
+			_trajectoryAction = new DartTrajectoryAction(this);
 			addAction(_trajectoryAction);
-			_fallingAction = new FallingAction(this, { gravity: 9.8, yFloor: -10 });
+			_fallingAction = new DartFallingAction(this, { gravity: 9.8, yFloor: -10 });
 			addAction(_fallingAction);
 		}//end initAction()
 		

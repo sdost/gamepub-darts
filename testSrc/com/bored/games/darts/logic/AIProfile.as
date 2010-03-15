@@ -1,6 +1,5 @@
 ﻿package com.bored.games.darts.logic 
 {
-	import com.bored.games.darts.objects.Board;
 	import flash.display.BitmapData;
 	import flash.filters.BitmapFilter;
 	import flash.filters.ColorMatrixFilter;

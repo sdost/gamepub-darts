@@ -8,7 +8,6 @@
 	import com.bored.games.darts.logic.AIProfile;
 	import com.bored.games.darts.logic.CricketGameLogic;
 	import com.bored.games.darts.logic.DartsTurn;
-	import com.bored.games.darts.objects.Board;
 	import com.bored.games.darts.objects.Dart;
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.bored.games.darts.ui.GameplayScreen;
@@ -62,8 +61,6 @@
 		
 		private var _darts:Vector.<Dart>;
 		private var _currDartIdx:uint;
-		
-		private var _dartboard:Board;
 		
 		private var _currentTurn:DartsTurn;
 		private var _turns:uint = 0;

@@ -8,9 +8,9 @@
 	 * ...
 	 * @author sam
 	 */
-	public class TrajectoryAction extends Action
+	public class DartTrajectoryAction extends Action
 	{
-		private static const NAME:String = "com.bored.games.darts.actions.TrajectoryAction";
+		private static const NAME:String = "com.bored.games.darts.actions.DartTrajectoryAction";
 		private var _calc:TrajectoryCalculator;
 		
 		private var _thrust:Number = 0;
@@ -18,7 +18,7 @@
 		private var _gravity:Number = 0;
 		private var _lean:Number = 0;
 		
-		public function TrajectoryAction(a_gameElement:GameElement, a_params:Object = null) 
+		public function DartTrajectoryAction(a_gameElement:GameElement, a_params:Object = null) 
 		{
 			super(NAME, a_gameElement, a_params);
 			

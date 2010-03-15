@@ -1,7 +1,6 @@
 ﻿package com.bored.games.darts.logic 
 {
 	import com.bored.games.darts.logic.AbstractScoreManager;
-	import com.bored.games.darts.objects.Board;
 	import flash.utils.Dictionary;
 	
 	/**
@@ -25,19 +24,19 @@
 		override public function initPlayerStats(a_playerNum:int):void
 		{
 			_scoreboard[a_playerNum] = new Object();
-			_scoreboard[a_playerNum][Board.FIFTEEN] = CricketScoreManager.EMPTY;
-			_scoreboard[a_playerNum][Board.SIXTEEN] = CricketScoreManager.EMPTY;
-			_scoreboard[a_playerNum][Board.SEVENTEEN] = CricketScoreManager.EMPTY;
-			_scoreboard[a_playerNum][Board.EIGHTEEN] = CricketScoreManager.EMPTY;
-			_scoreboard[a_playerNum][Board.NINETEEN] = CricketScoreManager.EMPTY;
-			_scoreboard[a_playerNum][Board.TWENTY] = CricketScoreManager.EMPTY;
-			_scoreboard[a_playerNum][Board.BULL] = CricketScoreManager.EMPTY;
+			_scoreboard[a_playerNum][15] = CricketScoreManager.EMPTY;
+			_scoreboard[a_playerNum][16] = CricketScoreManager.EMPTY;
+			_scoreboard[a_playerNum][17] = CricketScoreManager.EMPTY;
+			_scoreboard[a_playerNum][18] = CricketScoreManager.EMPTY;
+			_scoreboard[a_playerNum][19] = CricketScoreManager.EMPTY;
+			_scoreboard[a_playerNum][20] = CricketScoreManager.EMPTY;
+			_scoreboard[a_playerNum][25] = CricketScoreManager.EMPTY;
 			
 		}//end initPlayerStats()
 		
 		override public function submitThrow(a_playerNum:int, a_section:uint, a_multiplier:uint = 1):void
 		{
-			if (a_section < Board.FIFTEEN) return;
+			if (a_section < 15) return;
 			
 			var score:uint = _scoreboard[a_playerNum][a_section];
 			

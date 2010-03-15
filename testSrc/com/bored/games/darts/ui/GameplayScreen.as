@@ -21,7 +21,6 @@
 	import away3dlite.primitives.Plane;
 	import caurina.transitions.Tweener;
 	import com.bored.games.darts.models.dae_DartReduced;
-	import com.bored.games.darts.objects.Board;
 	import com.bored.games.darts.objects.Dart;
 	import com.bored.games.darts.ui.hud.ScoreBoard;
 	import com.bored.games.darts.ui.hud.ThrowIndicator;
@@ -99,7 +98,6 @@
 		private var _boardBillboard:Plane;
 		
 		private var _dartRefs:Vector.<Dart>;
-		private var _boardRef:Board;
 		
 		public function GameplayScreen() 
 		{
@@ -269,16 +267,6 @@
 				_scene.addChild(newDart);
 			}
 		}//end initObjects()
-		
-		public function setDartReferences(a_darts:Vector.<Dart>):void
-		{
-			_dartRefs = a_darts;
-		}//end setDartReferences()
-		
-		public function setBoardReference(a_board:Board):void
-		{
-			_boardRef = a_board;
-		}//end setBoardReference()
 	
 		public function render():void
 		{	

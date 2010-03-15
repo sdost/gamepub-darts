@@ -8,16 +8,16 @@
 	 * ...
 	 * @author sam
 	 */
-	public class FallingAction extends Action
+	public class DartFallingAction extends Action
 	{
-		private static const NAME:String = "com.bored.games.darts.actions.FallingAction";
+		private static const NAME:String = "com.bored.games.darts.actions.DartFallingAction";
 		
 		private var _time:Number = 0;
 		
 		private var _gravity:Number = 0;
 		private var _yFloor:Number = 0;
 		
-		public function FallingAction(a_gameElement:GameElement, a_params:Object = null) 
+		public function DartFallingAction(a_gameElement:GameElement, a_params:Object = null) 
 		{
 			super(NAME, a_gameElement, a_params);
 			
