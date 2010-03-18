@@ -3,7 +3,7 @@
 	<shot>
 		<image src="com.bored.games.darts.assets.PubWideShot" />
 		<dialogue>
-			<line frame="com.bored.games.darts.assets.BalloonTailLeft" actor="Narrator" x="30" y="200">Meanwhile at the pub...</line>
+			<line frame="com.bored.games.darts.assets.BalloonYellow" actor="Narrator" x="400" y="16">Meanwhile at the pub...</line>
 		</dialogue>
 	</shot>
 	<shot>
@@ -16,20 +16,21 @@
 	<shot>
 		<image src="com.bored.games.darts.assets.ActionShotAntagonists" />
 		<dialogue>
-			<line frame="com.bored.games.darts.assets.BalloonTailLeft" actor="Rogue's Gallery" x="30" y="200">Opening!!</line>
+			<line frame="com.bored.games.darts.assets.BalloonTailLong" actor="Rogue's Gallery" x="323" y="15">Opening!!</line>
 		</dialogue>
 	</shot>
 	<shot>
 		<image src="com.bored.games.darts.assets.ActionShotConfrontation" />
 		<dialogue>
-			<line frame="com.bored.games.darts.assets.BalloonTailLeft" actor="Big Bill" x="30" y="200">Threatening!!</line>
+			<line frame="com.bored.games.darts.assets.BalloonTailLong" actor="Big Bill" x="229" y="13">We play darts here!!</line>
+			<line frame="com.bored.games.darts.assets.BalloonTailNarrowTopLeft" actor="Hero" x="381" y="249">What are darts?</line>
+			<line frame="com.bored.games.darts.assets.BalloonTailLongLeft" actor="Old Man" x="-83" y="309">Leave 'im be!</line>
 		</dialogue>
 	</shot>
 	<shot>
 		<image src="com.bored.games.darts.assets.ActionShotOldMan" />
 		<dialogue>
-			<line frame="com.bored.games.darts.assets.BalloonTailLeft" actor="Old Guy" x="30" y="200">Voice of reason?</line>
-			<line frame="com.bored.games.darts.assets.BalloonTailRight" actor="Chorus" x="30" y="70">Darts Begin!!</line>
+			<line frame="com.bored.games.darts.assets.BalloonTailInsideLeft" actor="Old Guy" x="192" y="9">Settle this on the board!</line>
 		</dialogue>
 	</shot>
 </scene>

@@ -1,5 +1,9 @@
 ﻿package com.bored.games.darts.logic 
 {
+	import com.bored.games.darts.abilities.Ability;
+	import com.bored.games.darts.DartsGlobals;
+	import com.bored.games.darts.objects.BeeLineDart;
+	import com.bored.games.darts.ui.modals.GameResultsModal;
 	import com.bored.games.input.InputController;
 	import com.bored.games.darts.input.ThrowController;
 	import com.bored.games.darts.objects.Dart;
@@ -26,6 +30,8 @@
 		
 		protected var _darts:Vector.<Dart>;
 		
+		protected var _blockedSections:Vector.<String>;
+		
 		protected var _inputController:InputController;
 		protected var _throwController:ThrowController;
 		
@@ -33,11 +39,15 @@
 		
 		protected var _dartboardClip:Sprite;
 		
+		protected var _abilityManager:AbilityManager;
+		
 		private var _pattern:RegExp = /c_[0-9]+_[0-9]+_mc/;
 		
 		public function DartsGameLogic() 
 		{
 			_scoreManager = new AbstractScoreManager();
+			_abilityManager = new AbilityManager();
+			_blockedSections = new Vector.<String>();
 		}//end constructor()
 		
 		public function loadGameState(a_state:Object):void
@@ -76,6 +86,11 @@
 			return _throwController;
 		}//end get throwController()
 		
+		public function get abilityManager():AbilityManager
+		{
+			return _abilityManager;
+		}//end get abilityManager()
+		
 		public function getDartboardClip(a_points:int, a_multiple:int):Sprite
 		{
 			return _dartboardClip.getChildByName("c_" + a_points + "_" + a_multiple + "_mc") as Sprite;
@@ -91,6 +106,11 @@
 			if ( _players == null ) {
 				_players = new Vector.<DartsPlayer>();
 				_currentPlayer = 1;
+			}
+			
+			for each( var ability:Ability in a_player.abilities )
+			{
+				_abilityManager.registerAbility(ability);
 			}
 			
 			a_player.dartGame = this;
@@ -113,7 +133,7 @@
 		}//end endGame()
 		
 		public function update(a_time:Number = 0):void
-		{
+		{			
 			for each ( var dart:Dart in _darts )
 			{
 				dart.update(a_time);
@@ -129,11 +149,14 @@
 				
 				var objects:Array = _dartboardClip.getObjectsUnderPoint(p);
 				
-				if (objects.length > 0)
-				{		
-					if (_pattern.test(objects[0].parent.name)) {
+				if (objects.length > 0) {
+					if (_pattern.test(objects[0].parent.name) && _blockedSections.indexOf(objects[0].parent.name) < 0) {
 						var arr:Array = objects[0].parent.name.split("_");
 						this.scoreManager.submitThrow(_currentPlayer, Number(arr[1]), Number(arr[2]));
+						
+						if(_currentDart is ShieldDart) {
+							_blockedSections.push(objects[0].parent.name);
+						}
 					} 
 					else
 					{
@@ -153,7 +176,9 @@
 					
 					if (win) {
 						endGame();
+						DartsGlobals.instance.showModalPopup(GameResultsModal);
 					} else {
+						_abilityManager.processTurn();
 						startNewTurn();
 					}
 				} else {
@@ -176,6 +201,8 @@
 		{
 			_currentTurn = new DartsTurn(this, AppSettings.instance.throwsPerTurn);
 			
+			_blockedSections = new Vector.<String>();
+			
 			_darts = null;
 			
 			nextDart();
@@ -187,9 +214,9 @@
 			_currentDart = new Dart(AppSettings.instance.dartRadius);
 			this.darts.push(_currentDart);
 			
-			_currentDart.position.x = AppSettings.instance.defaultReleasePositionX;
-			_currentDart.position.y = AppSettings.instance.defaultReleasePositionY;
-			_currentDart.position.z = AppSettings.instance.defaultReleasePositionZ;
+			_currentDart.position.x = AppSettings.instance.defaultStartPositionX;
+			_currentDart.position.y = AppSettings.instance.defaultStartPositionY;
+			_currentDart.position.z = AppSettings.instance.defaultStartPositionZ;
 			
 			_players[_currentPlayer-1].takeTheShot();
 		}//end createNewDart()
@@ -206,6 +233,13 @@
 			}
 			return _darts;
 		}//end get darts()
+		
+		public function upgradeDart(a_dart:Class):void
+		{
+			var ind:int = _darts.indexOf(_currentDart);
+			_currentDart = new a_dart();
+			_darts[ind] = _currentDart;
+		}//end upgradeDart()
 		
 		public function endTurn():void
 		{

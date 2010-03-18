@@ -47,7 +47,7 @@
 			
 		}//end GameReadyPopup() constructor.
 		
-		override protected function buildFrom(a_img:Sprite, a_buildFromAllDescendants:Boolean = false):Dictionary
+		override protected function buildFrom(a_img:Sprite, a_buildFromAllDescendants:Boolean = true):Dictionary
 		{
 			var slot:Object;
 			

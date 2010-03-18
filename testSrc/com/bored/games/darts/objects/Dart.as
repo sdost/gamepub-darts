@@ -12,8 +12,8 @@
 	 */
 	public class Dart extends GameElement
 	{
-		private var _trajectoryAction:DartTrajectoryAction;
-		private var _fallingAction:DartFallingAction;
+		protected var _trajectoryAction:DartTrajectoryAction;
+		protected var _fallingAction:DartFallingAction;
 		
 		private var _radius:int;
 		
@@ -30,18 +30,13 @@
 			initActions();
 		}//end constructor()
 		
-		private function initActions():void
+		protected function initActions():void
 		{
 			_trajectoryAction = new DartTrajectoryAction(this);
 			addAction(_trajectoryAction);
-			_fallingAction = new DartFallingAction(this, { gravity: 9.8, yFloor: -10 });
+			_fallingAction = new DartFallingAction(this, { gravity: 9.8, yFloor: -10, zBounceRange: 2 });
 			addAction(_fallingAction);
 		}//end initAction()
-		
-		override public function update(t:Number = 0):void
-		{
-			super.update(t);
-		}//end update()
 		
 		public function get radius():int
 		{

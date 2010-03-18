@@ -25,6 +25,7 @@
 	{
 		public static const NEW_GAME_CLICKED_EVT:String = "NewGameClickedEvent";
 		public static const RESUME_GAME_CLICKED_EVT:String = "ResumeGameClickedEvent";
+		public static const STORE_CLICKED_EVT:String = "StoreClickedEvent";
 		
 		private var _background:Sprite;
 		private var _buildBackground:Boolean = false;
@@ -34,6 +35,9 @@
 		
 		private var _resumeGameBtn:MightyButton;
 		private var _resumeGameBtnImg:MovieClip;
+		
+		private var _storeBtn:MightyButton;
+		private var _storeBtnImg:MovieClip;
 		
 		public function AttractScreen(a_img:Sprite, a_buildFromAllDescendants:Boolean = false, a_bAddContents:Boolean = true, a_buildBackground:Boolean = false) 
 		{
@@ -60,6 +64,7 @@
 			
 			_newGameBtnImg = descendantsDict["newGameBtn_mc"] as MovieClip;
 			_resumeGameBtnImg = descendantsDict["resumeGameBtn_mc"] as MovieClip;
+			_storeBtnImg = descendantsDict["storeBtn_mc"] as MovieClip;
 			
 			if (_newGameBtnImg)
 			{
@@ -81,6 +86,17 @@
 			else
 			{
 				throw new Error("AttractScreen::buildFrom(): _resumeGameBtnImg=" + _resumeGameBtnImg);
+			}
+			
+			if (_storeBtnImg)
+			{
+				_storeBtn = new MightyButton(_storeBtnImg, false);
+				_storeBtn.pause(false);
+				_storeBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onStoreClicked, false, 0, true);
+			}
+			else
+			{
+				throw new Error("AttractScreen::buildFrom(): _storeBtnImg=" + _storeBtnImg);
 			}
 			
 			if(_buildBackground)
@@ -136,6 +152,11 @@
 				_resumeGameBtn.pause(true);
 			}
 			
+			if (_storeBtn)
+			{
+				_storeBtn.pause(true);
+			}
+			
 			Tweener.addTween(this, { alpha:0, onComplete:destroy, time:0.4 } );
 			
 		}//end onPlayNowClicked()
@@ -152,6 +173,35 @@
 			if (_resumeGameBtn)
 			{
 				_resumeGameBtn.pause(true);
+			}
+			
+			if (_storeBtn)
+			{
+				_storeBtn.pause(true);
+			}
+			
+			// simply hide ourselves and remove ourselves from the display list.
+			Tweener.addTween(this, {alpha:0, onComplete:destroy, time:0.4 } );
+			
+		}//end onIgnoreClicked()
+		
+		private function onStoreClicked(a_evt:Event):void
+		{
+			this.dispatchEvent(new Event(STORE_CLICKED_EVT));
+			
+			if (_newGameBtn)
+			{
+				_newGameBtn.pause(true);
+			}
+			
+			if (_resumeGameBtn)
+			{
+				_resumeGameBtn.pause(true);
+			}
+			
+			if (_storeBtn)
+			{
+				_storeBtn.pause(true);
 			}
 			
 			// simply hide ourselves and remove ourselves from the display list.
@@ -173,11 +223,17 @@
 				_resumeGameBtn.removeEventListener(MouseEvent.CLICK, onResumeGameClicked);
 			}
 			
+			if (_storeBtn)
+			{
+				_storeBtn.removeEventListener(MouseEvent.CLICK, onStoreClicked);
+			}
+			
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			this.removeEventListener(Event.REMOVED_FROM_STAGE, destroy);
 			
 			_newGameBtn = null;
 			_resumeGameBtn = null;
+			_storeBtn = null;
 			_background = null;
 			
 			if (this.parent)

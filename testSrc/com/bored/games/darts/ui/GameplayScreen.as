@@ -22,6 +22,7 @@
 	import caurina.transitions.Tweener;
 	import com.bored.games.darts.models.dae_DartReduced;
 	import com.bored.games.darts.objects.Dart;
+	import com.bored.games.darts.ui.hud.AbilityDock;
 	import com.bored.games.darts.ui.hud.ScoreBoard;
 	import com.bored.games.darts.ui.hud.ThrowIndicator;
 	import com.bored.games.events.InputStateEvent;
@@ -89,6 +90,7 @@
 		
 		private var _throwIndicator:ThrowIndicator;
 		private var _scoreBoard:ScoreBoard;
+		private var _abilityDock:AbilityDock;
 		
 		private var _collada:Collada;
 		private var _loader:Loader3D;
@@ -115,18 +117,26 @@
 			var cls:Class = getDefinitionByName(AppSettings.instance.throwIndicatorMovie) as Class;
 			_throwIndicator = new ThrowIndicator(new cls());
 			DartsGlobals.instance.optionsInterfaceSpace.addChild(_throwIndicator);
-			_throwIndicator.x = 650;
-			_throwIndicator.y = 400;
+			_throwIndicator.x = AppSettings.instance.throwIndicatorPositionX;
+			_throwIndicator.y = AppSettings.instance.throwIndicatorPositionY;
 			_throwIndicator.registerThrowController(DartsGlobals.instance.gameManager.throwController);
 			_throwIndicator.show();
 			
 			cls = getDefinitionByName(AppSettings.instance.scoreboardMovie) as Class;
 			_scoreBoard = new ScoreBoard(new cls());
 			DartsGlobals.instance.optionsInterfaceSpace.addChild(_scoreBoard);
-			_scoreBoard.x = 50;
-			_scoreBoard.y = 200;
+			_scoreBoard.x = AppSettings.instance.scoreboardPositionX;
+			_scoreBoard.y = AppSettings.instance.scoreboardPositionY;
 			_scoreBoard.registerScoreManager(DartsGlobals.instance.gameManager.scoreManager);
 			_scoreBoard.show();
+			
+			cls = getDefinitionByName(AppSettings.instance.abilityDockMovie) as Class;
+			_abilityDock = new AbilityDock(new cls());
+			DartsGlobals.instance.optionsInterfaceSpace.addChild(_abilityDock);
+			_abilityDock.x = AppSettings.instance.abilityDockPositionX;
+			_abilityDock.y = AppSettings.instance.abilityDockPositionY;
+			_abilityDock.registerAbilityManager(DartsGlobals.instance.gameManager.abilityManager);
+			_abilityDock.show();
 			
 			if (this.stage)
 			{
@@ -148,7 +158,7 @@
 			_view.x = (this.stage.stageWidth / 2);
 			_view.y = (this.stage.stageHeight / 2);
 			
-			this.stage.quality = StageQuality.MEDIUM;
+			//this.stage.quality = StageQuality.MEDIUM;
 			
 			this.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKey);
 			
@@ -182,9 +192,9 @@
 			
 			addChild(_view);
 			
-			_stats = new Stats();
+			//_stats = new Stats();
+            //addChild(_stats);
             
-            addChild(_stats);
 		}//end initEngine()
 		
 		/**
@@ -272,6 +282,7 @@
 		{	
 			_scoreBoard.update();
 			_throwIndicator.update();
+			_abilityDock.update();
 			
 			for ( var i:int = 0; i < AppSettings.instance.throwsPerTurn; i++ ) {
 				

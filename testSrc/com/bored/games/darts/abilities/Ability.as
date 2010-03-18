@@ -1,43 +1,52 @@
 ﻿package com.bored.games.darts.abilities 
 {
+	import com.bored.games.darts.player.DartsPlayer;
 	/**
 	 * ...
 	 * @author sam
 	 */
 	public class Ability
-	{
-		private var _ready:Boolean;
-		private var _turnsToRefresh:int;
-		private var _updateTurns:int;
+	{		
+		private var _armed:Boolean;
 		
-		public function Ability(a_time:int = 0) 
+		private var _player:DartsPlayer;
+		private var _refreshTime:int;
+		
+		public function Ability(a_time:int) 
 		{
-			_ready = true;
-			
-			_turnsToRefresh = 0;
-			_updateTurns = 0;
+			_refreshTime = a_time;
+			_armed = true;
 		}//end constructor()
 		
-		public function engageAbility():void
+		public function set owner(a_player:DartsPlayer):void
 		{
-			_ready = false;
-			_turnsToRefresh = _updateTurns;
-		}//end engageAbility()
+			_player = a_player;
+		}//end set owner()
 		
-		public function updateRefreshTimer():void
+		public function get owner():DartsPlayer
 		{
-			_turnsToRefresh--;
-			if (_turnsToRefresh == 0)
-			{
-				_ready = true;
-			}
-		}//end updateRefreshTimer()
+			return _player;
+		}//end get owner()
 		
 		public function get ready():Boolean
 		{
-			return _ready;
-		}//end ready()
+			return _armed;
+		}//end get ready()
+		
+		public function armAbility():void
+		{
+			_armed = true;
+		}//end armAbility()
+		
+		public function useAbility():int
+		{
+			_armed = false;
 			
+			// TODO: activate...
+			
+			return _refreshTime;
+		}//end useAbility()
+		
 	}//end Ability
 
 }//end com.bored.games.darts.abilities

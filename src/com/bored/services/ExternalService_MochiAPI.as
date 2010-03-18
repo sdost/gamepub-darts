@@ -1,6 +1,7 @@
 ﻿package com.bored.services 
 {
 	import com.bored.services.AbstractExternalService;
+	import flash.events.Event;
 	import mochi.as3.MochiCoins;
 	import mochi.as3.MochiInventory;
 	import mochi.as3.MochiServices;
@@ -12,7 +13,7 @@
 	 * @author sam
 	 */
 	public class ExternalService_MochiAPI extends AbstractExternalService
-	{
+	{		
         private var _storeItems:Object;
         private var _item:String;
 
@@ -32,6 +33,7 @@
             MochiSocial.addEventListener(MochiSocial.LOGGED_OUT, onLogout);
             MochiCoins.addEventListener(MochiCoins.ITEM_OWNED, coinsEvent);
             MochiCoins.addEventListener(MochiCoins.STORE_ITEMS, storeItems);
+			MochiCoins.addEventListener(MochiCoins.STORE_HIDE, onStoreHide);
 			
 			MochiCoins.getStoreItems();
             MochiSocial.showLoginWidget( { x:0, y:0 } );
@@ -104,15 +106,25 @@
             }
         }//end storeItems()
 		
-		public function loadGameData(a_callback:Function):void
+		override public function loadGameData(a_callback:Function):void
 		{
 			MochiUserData.get("game_state", a_callback);
 		}//end loadeGameData()
 		
-		public function saveGameData(a_callback:Function, a_data:Object):void
+		override public function saveGameData(a_callback:Function, a_data:Object):void
 		{
 			MochiUserData.put("game_state", a_data, a_callback);
 		}//end saveGameData()
+		
+		override public function showStore():void
+		{
+			MochiCoins.showStore();
+		}//end showStore()
+		
+		private function onStoreHide(event:Object):void
+		{
+			this.dispatchEvent(new Event(STORE_HIDDEN));
+		}//end onStoreHide()
 		
 	}//end ExternalService_MochiAPI
 

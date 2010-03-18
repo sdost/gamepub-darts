@@ -1,11 +1,13 @@
 ﻿package com.bored.services 
 {
+	import flash.events.EventDispatcher;
 	/**
 	 * ...
 	 * @author sam
 	 */
-	public class AbstractExternalService
+	public class AbstractExternalService extends EventDispatcher
 	{
+		public static const STORE_HIDDEN:String = "storeHidden";
 		
 		public function AbstractExternalService()
 		{
@@ -13,8 +15,19 @@
 		
 		public function init( a_gameId:String, a_parentClip:Object ):void
 		{
-			// TODO: override this to take a game ID.
 		}//end init()
+		
+		public function loadGameData(a_callback:Function):void
+		{
+		}//end loadeGameData()
+		
+		public function saveGameData(a_callback:Function, a_data:Object):void
+		{
+		}//end saveGameData()
+		
+		public function showStore():void
+		{
+		}//end showStore()
 		
 	}//end AbstractExternalService
 

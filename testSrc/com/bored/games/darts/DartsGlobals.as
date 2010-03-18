@@ -2,6 +2,7 @@
 {
 	import com.bored.games.darts.logic.DartsGameLogic;
 	import com.bored.services.AbstractExternalService;
+	import com.sven.managers.ModalDisplayManager;
 	import flash.display.Sprite;
 	import flash.display.Stage;
 	import flash.events.Event;
@@ -200,6 +201,11 @@
 			return _debugBuild;
 			
 		}//end get isDebugBuild()
+		
+		public function showModalPopup(a_content:Class = null, a_prompt:Object = null):void
+		{
+			ModalDisplayManager.createModalDisplay(_popupSpace, a_content, a_prompt);
+		}//end showModalPopup()
 		
 		/*****************************
 		 * 

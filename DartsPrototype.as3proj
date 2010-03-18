@@ -55,6 +55,7 @@
     <element path="swfLibs_includeAll\GameplayScreen.swc" />
     <element path="swfLibs_includeAll\HUDAssets.swc" />
     <element path="swfLibs_includeAll\StoryAssets.swc" />
+    <element path="swfLibs_includeAll\OpponentSelectScreen.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>

@@ -1,6 +1,8 @@
 ﻿package com.bored.games.darts.abilities 
 {
 	import com.bored.games.darts.abilities.Ability;
+	import com.bored.games.darts.DartsGlobals;
+	import com.bored.games.darts.objects.BeeLineDart;
 	
 	/**
 	 * ...
@@ -8,19 +10,19 @@
 	 */
 	public class BeeLineAbility extends Ability
 	{
-		private static var BEE_LINE_TIMER:int = 2;
 		
-		public function BeeLineAbility() 
+		public function BeeLineAbility(a_time:int) 
 		{
-			super(BEE_LINE_TIMER);
+			super(a_time);
+			
 		}//end constructor()
 		
-		override public function engageAbility():void
-		{	
-			super.engageAbility();
+		override public function useAbility():int
+		{			
+			DartsGlobals.instance.gameManager.upgradeDart(BeeLineDart);
 			
-			
-		}//end engageAbility()
+			return super.useAbility();
+		}//end useAbility()
 		
 	}//end BeeLineAbility
 
