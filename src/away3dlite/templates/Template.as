@@ -3,10 +3,12 @@ package away3dlite.templates
 	import away3dlite.arcane;
 	import away3dlite.cameras.*;
 	import away3dlite.containers.*;
+	import away3dlite.debug.*;
 	
 	import flash.display.*;
 	import flash.events.*;
 	import flash.filters.*;
+	import flash.geom.Rectangle;
 	import flash.text.*;
 	
 	import net.hires.debug.Stats;
@@ -18,12 +20,15 @@ package away3dlite.templates
 	 */
 	public class Template extends Sprite
 	{
+		protected var _stageWidth:Number = stage?stage.stageWidth:NaN;
+		protected var _stageHeight:Number = stage?stage.stageHeight:NaN;
+		
+		protected var _customWidth:Number;
+		protected var _customHeight:Number;
+		
 		/** @private */
 		arcane function init():void
 		{
-			stage.scaleMode = StageScaleMode.NO_SCALE;
-			stage.quality = StageQuality.MEDIUM;
-			
 			//init scene
 			scene = new Scene3D();
 			
@@ -36,15 +41,21 @@ package away3dlite.templates
 			view.scene = scene;
 			view.camera = camera;
 			
-			//center view to stage
-			view.x = stage.stageWidth/2;
-			view.y = stage.stageHeight/2;
+			if(_customWidth && _customHeight)
+			{
+				//init size
+				view.setSize(_customWidth, _customHeight);
+				
+				//center view to stage
+				view.x = _customWidth/2;
+				view.y = _customHeight/2;
+			}
 			
 			//add view to the displaylist
 			addChild(view);
 			
 			//init stats panel
-			stats = new Stats();
+			stats = new Stats;
 			
 			//add stats to the displaylist
 			addChild(stats);
@@ -56,7 +67,7 @@ package away3dlite.templates
 			debugText.mouseWheelEnabled = false;
 			debugText.defaultTextFormat = new TextFormat("Tahoma", 12, 0x000000);
 			debugText.autoSize = "left";
-			debugText.x = 80;
+			debugText.x = 140;
 			debugText.textColor = 0xFFFFFF;
 			debugText.filters = [new GlowFilter(0x000000, 1, 4, 4, 2, 1)];
 			
@@ -76,15 +87,41 @@ package away3dlite.templates
 			onInit();
 		}
 		
-		private var stats:Stats;
-		private var debugText:TextField;
+		protected var stats:*;
+		protected var debugText:TextField;
 		private var _title:String;
 		private var _debug:Boolean;
 		
-		private function onAddedToStage(event:Event):void
+		protected function onAddedToStage(event:Event):void
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+			
+			// setup stage
+			setupStage();
+			
+			// init 3D
 			init();
+		}
+		
+		protected function setupStage():void
+		{
+			stage.scaleMode = StageScaleMode.NO_SCALE;
+			stage.quality = StageQuality.MEDIUM;
+			
+			_stageWidth = _stageWidth?_stageWidth:stage.stageWidth;
+			_stageHeight = _stageHeight?_stageHeight:stage.stageHeight;
+			
+			_customWidth = _customWidth?_customWidth:_stageWidth;
+			_customHeight = _customHeight?_customHeight:_stageHeight;
+			
+			scrollRect = new Rectangle(0, 0, _customWidth, _customHeight);
+			
+			onStage();
+		}
+		
+		protected function onStage():void
+		{
+			// override me
 		}
 		
 		private function onEnterFrame(event:Event):void

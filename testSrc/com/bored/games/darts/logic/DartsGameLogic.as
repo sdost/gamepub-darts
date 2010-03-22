@@ -3,6 +3,7 @@
 	import com.bored.games.darts.abilities.Ability;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.objects.BeeLineDart;
+	import com.bored.games.darts.objects.ShieldDart;
 	import com.bored.games.darts.ui.modals.GameResultsModal;
 	import com.bored.games.input.InputController;
 	import com.bored.games.darts.input.ThrowController;
@@ -41,10 +42,13 @@
 		
 		protected var _abilityManager:AbilityManager;
 		
+		protected var _throwsPerTurn:int = 0;
+		
 		private var _pattern:RegExp = /c_[0-9]+_[0-9]+_mc/;
 		
 		public function DartsGameLogic() 
 		{
+			_throwsPerTurn = AppSettings.instance.throwsPerTurn;
 			_scoreManager = new AbstractScoreManager();
 			_abilityManager = new AbilityManager();
 			_blockedSections = new Vector.<String>();
@@ -70,6 +74,11 @@
 		{
 			return _dartboardClip;
 		}//end dartboardClip()
+		
+		public function get throwsPerTurn():int
+		{
+			return _throwsPerTurn;
+		}//end get throwsPerTurn()
 		
 		public function set inputController(a_input:InputController):void
 		{
@@ -105,15 +114,24 @@
 		{
 			if ( _players == null ) {
 				_players = new Vector.<DartsPlayer>();
+				_darts = new Vector.<Dart>();
 				_currentPlayer = 1;
 			}
+			
+			a_player.dartGame = this;
 			
 			for each( var ability:Ability in a_player.abilities )
 			{
 				_abilityManager.registerAbility(ability);
 			}
 			
-			a_player.dartGame = this;
+			for each( var dart:Dart in a_player.darts )
+			{
+				dart.position.x = -1000;
+				dart.position.y = -1000;
+				_darts.push(dart);
+			}
+			
 			_players.push(a_player);
 			_scoreManager.initPlayerStats(_players.length);
 		}//end registerPlayer()
@@ -145,7 +163,7 @@
 				
 				_currentDart.position.z = AppSettings.instance.dartboardPositionZ;			
 				
-				var p:Point = new Point( ( _currentDart.position.x / 1.2 ) * (_dartboardClip.width/2), ( -_currentDart.position.y / 1.2 ) * (_dartboardClip.height/2) );
+				var p:Point = new Point( ( _currentDart.position.x / AppSettings.instance.dartboardScale ) * (_dartboardClip.width/2), ( -_currentDart.position.y / AppSettings.instance.dartboardScale ) * (_dartboardClip.height/2) );
 				
 				var objects:Array = _dartboardClip.getObjectsUnderPoint(p);
 				
@@ -170,9 +188,10 @@
 				
 				if (_currentTurn.throwsRemaining == 0) {
 					
-					endTurn();
-					
 					var win:Boolean = checkForWin();
+					resetDarts();
+					
+					endTurn();
 					
 					if (win) {
 						endGame();
@@ -199,20 +218,18 @@
 		
 		public function startNewTurn():void
 		{
-			_currentTurn = new DartsTurn(this, AppSettings.instance.throwsPerTurn);
+			_currentTurn = new DartsTurn(this, _throwsPerTurn);
 			
 			_blockedSections = new Vector.<String>();
-			
-			_darts = null;
 			
 			nextDart();
 		}//end startNewRound()
 		
 		public function nextDart():void
 		{
-			_currentTurn.advanceThrows();
-			_currentDart = new Dart(AppSettings.instance.dartRadius);
-			this.darts.push(_currentDart);
+			var ind:int = _currentTurn.advanceThrows() - 1;
+			_currentDart = _players[_currentPlayer - 1].darts[ind];
+			_currentDart.reset();
 			
 			_currentDart.position.x = AppSettings.instance.defaultStartPositionX;
 			_currentDart.position.y = AppSettings.instance.defaultStartPositionY;
@@ -220,6 +237,35 @@
 			
 			_players[_currentPlayer-1].takeTheShot();
 		}//end createNewDart()
+		
+		public function resetDart():void
+		{	
+			/*
+			if (_darts.length > 1) {
+				_currentTurn.redoThrow();
+				_darts.pop();
+				_currentDart = _darts[_darts.length - 1];
+				_currentDart.reset();
+				_currentDart.pitch = 90;
+			}
+			
+			_currentDart.position.x = AppSettings.instance.defaultStartPositionX;
+			_currentDart.position.y = AppSettings.instance.defaultStartPositionY;
+			_currentDart.position.z = AppSettings.instance.defaultStartPositionZ;
+			
+			_players[_currentPlayer-1].takeTheShot();
+			*/
+		}//end resetDart()
+		
+		public function resetDarts():void
+		{
+			for each( var dart:Dart in _players[_currentPlayer - 1].darts )
+			{
+				dart.position.x = AppSettings.instance.defaultStartPositionX;
+				dart.position.y = AppSettings.instance.defaultStartPositionY;
+				dart.position.z = AppSettings.instance.defaultStartPositionZ;
+			}
+		}//end resetDarts()
 		
 		public function get currentDart():Dart
 		{

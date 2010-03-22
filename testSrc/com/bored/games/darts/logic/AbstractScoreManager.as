@@ -22,6 +22,11 @@
 			
 		}//end submitThrowHit()
 		
+		public function revertLastThrow():void
+		{
+			
+		}//end revertLastThrow()
+		
 		public function getPlayerStats(a_playerNum:int):Object
 		{
 			return null;

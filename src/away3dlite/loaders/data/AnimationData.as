@@ -2,6 +2,7 @@ package away3dlite.loaders.data
 {
 	import away3dlite.animators.*;
 	import away3dlite.containers.*;
+	import away3dlite.core.*;
 	import away3dlite.core.base.*;
 	
 	import flash.utils.*;
@@ -11,8 +12,11 @@ package away3dlite.loaders.data
 	 * 
 	 * @see away3dlite.loaders.data.MeshData
 	 */
-	public class AnimationData
-	{
+	public class AnimationData implements IDestroyable
+    {
+    	/** @private */
+		protected var _isDestroyed:Boolean;
+		
 		/**
 		 * String representing a vertex animation.
 		 */
@@ -53,6 +57,12 @@ package away3dlite.loaders.data
 		 */
 		public var channels:Dictionary = new Dictionary(true);
 		
+		/**
+		 * Duplicates the animation data's properties to another <code>AnimationData</code> object
+		 * 
+		 * @param	object	The new object instance into which all properties are copied
+		 * @return			The new object instance with duplicated properties applied
+		 */
 		public function clone(object:Object3D):AnimationData
 		{
 			var animationData:AnimationData = object.animationLibrary.addAnimation(name);
@@ -63,6 +73,21 @@ package away3dlite.loaders.data
     		animationData.animation = animation.clone(object as ObjectContainer3D);
     		
     		return animationData;
+		}
+		
+		public function get destroyed():Boolean
+		{
+			return _isDestroyed;
+		}
+
+		public function destroy():void
+		{
+			if(_isDestroyed)
+				return;
+				
+			_isDestroyed = true;
+			
+			channels = null;
 		}
 	}
 }

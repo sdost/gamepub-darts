@@ -1,10 +1,17 @@
 ﻿package com.bored.games.darts.objects 
 {
+	import away3dlite.containers.ObjectContainer3D;
+	import away3dlite.core.base.Object3D;
+	import away3dlite.loaders.Collada;
+	import away3dlite.materials.Material;
 	import caurina.transitions.Tweener;
 	import com.bored.games.darts.actions.DartFallingAction;
 	import com.bored.games.darts.actions.DartTrajectoryAction;
+	import com.bored.games.darts.models.dae_DartFlightHeart;
+	import com.bored.games.darts.models.dae_DartShaft;
 	import com.bored.games.objects.GameElement;
 	import com.sven.utils.TrajectoryCalculator;
+	import com.sven.utils.AppSettings;
 	
 	/**
 	 * ...
@@ -21,14 +28,61 @@
 		
 		private var _throwing:Boolean;
 		
-		public function Dart(a_radius:int = 1) 
+		private var _dartSkin:Material;
+		private var _dartModel:ObjectContainer3D;
+		private var _shaft:Object3D;
+		private var _flight:Object3D;
+		
+		public function Dart(a_skin:Material, a_radius:int = 1) 
 		{
 			_radius = a_radius;
 			
-			this.orientation = 90;	
+			this.pitch = 90;
+			
+			_dartSkin = a_skin;
 			
 			initActions();
 		}//end constructor()
+		
+		public function initModels():void
+		{			
+			var colladaShaft:Collada = new Collada();
+			colladaShaft.scaling = AppSettings.instance.dartModelScale;
+			colladaShaft.centerMeshes = true;
+			colladaShaft.materials = { "dart_skin": _dartSkin };
+			
+			_shaft = colladaShaft.parseGeometry(dae_DartShaft.data);
+			_shaft.mouseEnabled = false;
+			
+			var colladaFlight:Collada = new Collada();
+			colladaFlight.scaling = AppSettings.instance.dartModelScale;
+			colladaFlight.centerMeshes = true;
+			colladaFlight.materials = { "flight_skin": _dartSkin };
+			
+			_flight = colladaFlight.parseGeometry(dae_DartFlightHeart.data);
+			_flight.mouseEnabled = false;
+			
+			_dartModel = new ObjectContainer3D(_shaft, _flight);
+		}//end initModels()
+		
+		override public function update(a_time:Number = 0):void
+		{
+			super.update(a_time);
+			
+			if ( _dartModel ) {
+				//_dartModel.rotationX = _dartModel.rotationY = _dartModel.rotationZ = 0;
+				//_dartModel.rotationY = this.roll;
+				_dartModel.rotationX = this.pitch;
+				_dartModel.x = this.position.x * AppSettings.instance.away3dEngineScale;
+				_dartModel.y = -(this.position.y * AppSettings.instance.away3dEngineScale);
+				_dartModel.z = this.position.z * AppSettings.instance.away3dEngineScale;
+			}
+		}//end update()
+		
+		public function get model():Object3D
+		{
+			return _dartModel;
+		}//end get shaft()
 		
 		protected function initActions():void
 		{
@@ -42,14 +96,11 @@
 		{
 			return _radius;
 		}//end get radius()
-		
-		public function get angle():Number
-		{
-			return this.orientation;
-		}//end get angle()
 
 		public function initThrowParams(releaseX:Number, releaseY:Number, releaseZ:Number, thrust:Number, angle:Number, grav:Number, lean:Number = 0):void
 		{
+			this.pitch = 0;
+			this.roll = 0;
 			this.position.x = releaseX;
 			this.position.y = releaseY;
 			this.position.z = releaseZ;
@@ -63,6 +114,13 @@
 			
 			activateAction(_trajectoryAction.actionName);
 		}//end initThrowParams()
+		
+		override public function reset():void
+		{
+			super.reset();
+			this.roll = 0;
+			this.pitch = 90;
+		}//end reset()
 		
 		public function finishThrow():void
 		{

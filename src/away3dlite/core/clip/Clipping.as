@@ -50,15 +50,37 @@ package away3dlite.core.clip
 			_view = view;
 		}
     	/** @private */
+		arcane function collectParticles(particles:Array):Array
+		{
+			var _particles:Array = [];
+			var i:int = 0;
+			for each(var _particle:Particle in particles)
+			{ 
+				var _position:Vector3D = _particle.position;
+				if(int(_position.x) > int(_minX) && int(_position.x) < int(_maxX) &&
+				   int(_position.y) > int(_minY) && int(_position.y) < int(_maxY) &&
+				   int(_particle.screenZ) > int(_minZ) && int(_particle.screenZ) < int(_maxZ))
+					_particles[int(i++)] = _particle;
+			}
+			return _particles;
+		}
+    	/** @private */
 		arcane function collectFaces(mesh:Mesh, faces:Vector.<Face>):void
         {
         	_faces = mesh._faces;
         	_screenVertices = mesh._screenVertices;
         	
-        	var i:int = -1;
         	for each(_face in _faces)
-        	    if (mesh.bothsides || _screenVertices[_face.x0]*(_screenVertices[_face.y2] - _screenVertices[_face.y1]) + _screenVertices[_face.x1]*(_screenVertices[_face.y0] - _screenVertices[_face.y2]) + _screenVertices[_face.x2]*(_screenVertices[_face.y1] - _screenVertices[_face.y0]) > 0)
-        			faces[int(++i)] = _face;
+	        	if (_face.i3) 
+	        	{
+	    			if (mesh.bothsides 
+	    			|| _screenVertices[_face.x0]*(_screenVertices[_face.y2] - _screenVertices[_face.y1]) + _screenVertices[_face.x1]*(_screenVertices[_face.y0] - _screenVertices[_face.y2]) + _screenVertices[_face.x2]*(_screenVertices[_face.y1] - _screenVertices[_face.y0]) > 0
+	        		|| _screenVertices[_face.x0]*(_screenVertices[_face.y3] - _screenVertices[_face.y2]) + _screenVertices[_face.x2]*(_screenVertices[_face.y0] - _screenVertices[_face.y3]) + _screenVertices[_face.x3]*(_screenVertices[_face.y2] - _screenVertices[_face.y0])> 0)
+	        		faces[faces.length] = _face;
+        		}else{
+        			if (mesh.bothsides || _screenVertices[_face.x0]*(_screenVertices[_face.y2] - _screenVertices[_face.y1]) + _screenVertices[_face.x1]*(_screenVertices[_face.y0] - _screenVertices[_face.y2]) + _screenVertices[_face.x2]*(_screenVertices[_face.y1] - _screenVertices[_face.y0]) > 0)
+	        		faces[faces.length] = _face;
+        		}
         }
     	/** @private */
         arcane function screen(container:Sprite, _loaderWidth:Number, _loaderHeight:Number):Clipping
@@ -227,6 +249,7 @@ package away3dlite.core.clip
     	protected var _indexZ:int;
         protected var _screenVerticesCull:Vector.<int> = new Vector.<int>();
         protected var _cullCount:int;
+        protected var _cullTotal:int;
 		protected var _minX:Number = -100000;
 		protected var _minY:Number = -100000;
 		protected var _minZ:Number = -100000;

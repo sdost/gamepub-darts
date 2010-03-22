@@ -18,6 +18,7 @@
 		
 		private var _mousePosition:Point;
 		
+		private var _lastMove:Number;
 		private var _oX:Number;
 		private var _oY:Number;
 		private var _velX:Number;
@@ -55,6 +56,7 @@
 				}
 			} else {
 				if ( a_evt.button ) {
+					_lastMove = 0;
 					_oX = _mousePosition.x;
 					_oY = _mousePosition.y;
 					_velX = 0;
@@ -78,17 +80,23 @@
 		}//end onInputUpdate()
 		
 		private function updateCurrentMouseVelocity(e:TimerEvent):void
-		{
+		{			
 			var nX:Number = _mousePosition.x;
 			var nY:Number = _mousePosition.y;
 			var dx:Number = nX - _oX;
 			var dy:Number = nY - _oY;
+			_lastMove = Math.sqrt( dx * dx + dy * dy );			
     
 			_oX = nX;
 			_oY = nY;
 			_velX = dx * 1000 / _mouseTimer.delay;
 			_velY = dy * 1000 / _mouseTimer.delay;
 			_speed = Math.sqrt( _velX * _velX + _velY * _velY );
+			
+			if ( Math.floor(_lastMove) < 1 ) {
+				_cumAvgSpeed = 0;
+				_num = 0;
+			}
 			
 			_cumAvgSpeed = _cumAvgSpeed + ((_speed - _cumAvgSpeed) / ++_num);
 			

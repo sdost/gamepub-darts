@@ -43,7 +43,7 @@
 	
 		override public function update(a_time:Number):void
 		{
-			_gameElement.orientation += (0 - _gameElement.orientation) / 8;
+			_gameElement.pitch += (0 - _gameElement.pitch) / 8;
 			_gameElement.position.z += (_zBounce - _gameElement.position.z) / 8;
 			
 			var elapsed:Number = (a_time - _time)/1000;

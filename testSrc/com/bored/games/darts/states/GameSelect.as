@@ -1,8 +1,11 @@
 ﻿package com.bored.games.darts.states 
 {
+	import away3dlite.materials.BitmapMaterial;
 	import com.bored.games.assets.OpponentSelectScreen_MC;
 	import com.bored.games.darts.abilities.Ability;
 	import com.bored.games.darts.abilities.BeeLineAbility;
+	import com.bored.games.darts.abilities.DoOverAbility;
+	import com.bored.games.darts.abilities.ShieldAbility;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.logic.CricketGameLogic;
 	import com.bored.games.darts.player.ComputerPlayer;
@@ -13,6 +16,7 @@
 	import com.inassets.statemachines.Finite.State;
 	import com.inassets.statemachines.interfaces.IStateMachine;
 	import com.sven.utils.AppSettings;
+	import com.sven.utils.ImageFactory;
 	import flash.display.MovieClip;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
@@ -65,11 +69,23 @@
 		{
 			_opponentSelectScreen.removeEventListener(OpponentSelectScreen.OPPONENT_CHOSEN_EVT, onOpponentChosen);
 			
+			var dartTexture_UJ:BitmapMaterial = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(AppSettings.instance.dartTextureBitmapUJ, AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight));
+			dartTexture_UJ.repeat = false;
+			dartTexture_UJ.smooth = true;
+			
+			var dartTexture_JR:BitmapMaterial = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(AppSettings.instance.dartTextureBitmapJR, AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight));
+			dartTexture_JR.repeat = false;
+			dartTexture_JR.smooth = true;
+			
 			var localPlayer:LocalPlayer = new LocalPlayer();
-			localPlayer.setAbilities(new BeeLineAbility(3));
+			localPlayer.setSkin(dartTexture_UJ);
+			localPlayer.setAbilities(new BeeLineAbility(3), new ShieldAbility(5), new DoOverAbility(7));
 			DartsGlobals.instance.gameManager.registerPlayer( localPlayer );
 			
-			DartsGlobals.instance.gameManager.registerPlayer( new ComputerPlayer() );
+			var cpuPlayer:ComputerPlayer = new ComputerPlayer();
+			cpuPlayer.setSkin(dartTexture_JR);
+			DartsGlobals.instance.gameManager.registerPlayer( cpuPlayer );
+			
 			this.finished();
 		}//end pickOpponent()
 		

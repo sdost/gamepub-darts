@@ -26,10 +26,14 @@
 		override public function startAction():void
 		{
 			super.startAction();
+			
+			_gameElement.roll = 0;
 		}//end startAction()
 	
 		override public function update(a_time:Number):void
 		{
+			_gameElement.roll += 3;
+			
 			var z:Number = _gameElement.position.z + _speed/40;
 			_gameElement.position.z = z;	
 		}//end update()

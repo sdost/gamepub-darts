@@ -1,9 +1,14 @@
 package away3dlite.core.render
 {
+	import __AS3__.vec.Vector;
+	
 	import away3dlite.arcane;
 	import away3dlite.containers.*;
 	import away3dlite.core.base.*;
 	import away3dlite.core.clip.*;
+	import away3dlite.core.culler.FrustumCuller;
+	
+	import flash.display.*;
 	
 	use namespace arcane;
 	
@@ -16,17 +21,32 @@ package away3dlite.core.render
 		arcane function setView(view:View3D):void
 		{
 			_view = view;
+			_view_graphics = _view.graphics;
 			_view_graphics_drawGraphicsData = _view.graphics.drawGraphicsData;
+			_zoom = _view.camera.zoom;
+			_focus = _view.camera.focus;
+			
+			_culler = new FrustumCuller(_view.camera);
 		}
+		
+		public var useFloatZSort:Boolean = false;
+
+		//---------------------------------------------------
+		// Members not required if we use only Float ZSorting
 		
 		private var ql:Vector.<int> = new Vector.<int>(256, true);
 		private var k:int;
 		private var q0:Vector.<int>;
 		private var np0:Vector.<int>;
+		/** @private */
+		protected var q1:Vector.<int>;
+		
+		//---------------------------------------------------
+
 		private var _screenVertexArrays:Vector.<Vector.<Number>> = new Vector.<Vector.<Number>>();
         private var _screenVertices:Vector.<Number>;
-        private var _screenMouseVertexArrays:Vector.<Vector.<int>> = new Vector.<Vector.<int>>();
-        private var _screenMouseVertices:Vector.<int>;
+        private var _screenPointVertexArrays:Vector.<Vector.<int>> = new Vector.<Vector.<int>>();
+        private var _screenPointVertices:Vector.<int>;
         private var _index:int;
     	private var _indexX:int;
     	private var _indexY:int;
@@ -34,8 +54,6 @@ package away3dlite.core.render
 		protected var i:int;
 		/** @private */
 		protected var j:int;
-		/** @private */
-		protected var q1:Vector.<int>;
 		/** @private */
 		protected var np1:Vector.<int>;
 		/** @private */
@@ -61,54 +79,120 @@ package away3dlite.core.render
         /** @private */
         protected var _mouseEnabledArray:Vector.<Boolean> = new Vector.<Boolean>();
         /** @private */
-    	
+    	protected var _ind:Vector.<int>;
+    	/** @private */
+		protected var _vert:Vector.<Number>;
+		/** @private */
+		protected var _uvt:Vector.<Number>;
+		/** @private */
+		protected var _triangles:GraphicsTrianglePath = new GraphicsTrianglePath();
+		/** @private */
+		protected var _view_graphics:Graphics;
 		/** @private */
 		protected var _view_graphics_drawGraphicsData:Function;
+		/** @private */
+		protected var _culler:FrustumCuller;
+		/** @private */
+		private var _zoom:Number;
+		/** @private */
+		private var _focus:Number;
+        /** @private */
+		protected var _particles:Array;
+		
+		/**
+		 * Determines whether 3d objects are sorted in the view. Defaults to false.
+		 */
+		public var sortObjects:Boolean = true;
+		
+		/**
+		 * Determines whether 3d objects are culled in the view. Defaults to false.
+		 */
+		public var cullObjects:Boolean = false;
+		
+		/**
+		 * The number represent how many object that has been culled
+		 */		
+		public var numCulled:int = 0;
 		
 		/** @private */
 		protected function sortFaces():void
 		{
-	        // by pass
-	        var _faces_length:int = _faces.length;
-	        
-	        q0 = new Vector.<int>(256, true);
-	        q1 = new Vector.<int>(256, true);
-	        np0 = new Vector.<int>(_faces_length + 1, true);
-	        np1 = new Vector.<int>(_faces_length + 1, true);
-	        
-        	i = -1;
-        	j = 0;
-            for each (_face in _faces)
-                if((q0[k = (255 & (_sort[int(++i)] = _face.calculateScreenZ()))]))
-                    ql[k] = np0[ql[k]] = ++j;
-                else
-                    ql[k] = q0[k] = ++j;
-            
-            i = -1;
-            while (i++ < 255) {
-            	j = q0[i];
-                while (j)
-                    if((q1[k = (65280 & _sort[j-1]) >> 8]))
-	                    j = np0[ql[k] = np1[ql[k]] = j];
-	                else
-	                    j = np0[ql[k] = q1[k] = j];
-            }
+			var _faces_length_1:int = int(_faces.length + 1);
+			var _Face_calculateZIntFromZ:Function = Face.calculateZIntFromZ;
+			if (useFloatZSort) {
+				np1 = new Vector.<int>(_faces_length_1, true);
+ 				var triangles:Array = [];
+ 				
+				//z-axis, for sort-based production
+				i = 1;
+				for each (_face in _faces) {
+					var z:Number = _face.calculateScreenZ();
+					_sort[int(i-1)] = _Face_calculateZIntFromZ(z);
+					if (z > 0) 
+						triangles[int(j++)] = {i:i, z:z};
+					i++;
+				}
+				
+				//z-axis sort
+				triangles = triangles.sortOn("z", Array.NUMERIC);
+				
+				//Put the sorted indices inside a Vector
+				j = 0;
+				for each (var triangle:Object in triangles) 
+					np1[int(j++)] = triangle.i;
+				np1[int(j++)] = 0;
+					
+				triangles = null;
+			}
+			else {
+				// by pass
+		        
+				q0 = new Vector.<int>(256, true);
+				q1 = new Vector.<int>(256, true);
+				np0 = new Vector.<int>(_faces_length_1, true);
+				np1 = new Vector.<int>(_faces_length_1, true);
+		        
+				i = 0;
+        		j = 0;
+	        	
+				for each (_face in _faces) {
+					np0[int(i+1)] = q0[k = (255 & (_sort[i] = _face.calculateScreenZInt()))];
+					q0[k] = int(++i);
+				}
+				
+				i = 256;
+				while (i--) {
+					j = q0[i];
+					while (j) {
+						np1[j] = q1[k = (65280 & _sort[int(j-1)]) >> 8];
+						j = np0[q1[k] = j];
+					}
+				}
+			}
 		}
 		
 		/** @private */
-		protected function getMouseFace(x:Number, y:Number):void
+		protected function collectPointFace(x:Number, y:Number):void
 		{
-			var mouseCount:int;
-        	var mouseCountX:int;
-        	var mouseCountY:int;
+			var pointCount:int;
+			var pointTotal:int;
+        	var pointCountX:int;
+        	var pointCountY:int;
         	var i:int = _faces.length;
 			while (i--) {
 				if (_screenZ < _sort[i] && (_face = _faces[i]).mesh._mouseEnabled) {
-					_screenMouseVertices = _screenMouseVertexArrays[_face.mesh._vertexId];
-	    			mouseCount = _screenMouseVertices[_face.i0] + _screenMouseVertices[_face.i1] + _screenMouseVertices[_face.i2];
-	    			mouseCountX = (mouseCount >> 2 & 3);
-	    			mouseCountY = (mouseCount & 3);
-	    			if (mouseCountX && mouseCountX < 3 && mouseCountY && mouseCountY < 3) {
+					_screenPointVertices = _screenPointVertexArrays[_face.mesh._vertexId];
+					
+					if (_face.i3) {
+        				pointTotal = 4;
+	    				pointCount = _screenPointVertices[_face.i0] + _screenPointVertices[_face.i1] + _screenPointVertices[_face.i2] + _screenPointVertices[_face.i3];
+					} else {
+        				pointTotal = 3;
+	    				pointCount = _screenPointVertices[_face.i0] + _screenPointVertices[_face.i1] + _screenPointVertices[_face.i2];
+					}
+	    			pointCountX = (pointCount >> 4);
+	    			pointCountY = (pointCount & 15);
+	    			if (pointCountX && pointCountX < pointTotal && pointCountY && pointCountY < pointTotal) {
 	    				
 	    				//flagged for edge detection
 	    				var vertices:Vector.<Number> = _face.mesh._screenVertices;
@@ -118,18 +202,30 @@ package away3dlite.core.render
 						var v1y:Number = vertices[_face.y1];
 						var v2x:Number = vertices[_face.x2];
 						var v2y:Number = vertices[_face.y2];
+						
 						if ((v0x*(y - v1y) + v1x*(v0y - y) + x*(v1y - v0y)) < -0.001)
-			                continue;
-			
-			            if ((v0x*(v2y - y) + x*(v0y - v2y) + v2x*(y - v0y)) < -0.001)
 			                continue;
 			
 			            if ((x*(v2y - v1y) + v1x*(y - v2y) + v2x*(v1y - y)) < -0.001)
 			                continue;
 			            
+			            if (_face.i3) {
+			            	var v3x:Number = vertices[_face.x3];
+							var v3y:Number = vertices[_face.y3];
+							
+			            	if ((v3x*(v2y - y) + x*(v3y - v2y) + v2x*(y - v3y)) < -0.001)
+			            		continue;
+			            	
+			            	if ((v0x*(v3y - y) + x*(v0y - v3y) + v3x*(y - v0y)) < -0.001)
+			            		continue;
+			            	
+			            } else if ((v0x*(v2y - y) + x*(v0y - v2y) + v2x*(y - v0y)) < -0.001) {
+			                continue;
+			            }
+			            
 	    				_screenZ = _sort[i];
 						_pointFace = _face;
-	    			}
+					}
 				}
 			}
 		}
@@ -144,29 +240,24 @@ package away3dlite.core.render
 		/** @private */
 		protected function collectPointVertices(x:Number, y:Number):void
 		{
-			_screenMouseVertexArrays.fixed = false;
-        	_screenMouseVertexArrays.length = _screenVertexArrays.length;
-        	_screenMouseVertexArrays.fixed = true;
+			_screenPointVertexArrays.fixed = false;
+        	_screenPointVertexArrays.length = _screenVertexArrays.length;
+        	_screenPointVertexArrays.fixed = true;
         	
         	var i:int = _screenVertexArrays.length;
         	
         	while (i--) {
 				_screenVertices = _screenVertexArrays[i];
-				_screenMouseVertices = _screenMouseVertexArrays[i] = _screenMouseVertexArrays[i] || new Vector.<int>();
-				
-				_screenMouseVertices.fixed = false;
-				_screenMouseVertices.length = 0;
-        		_index = _screenMouseVertices.length = _screenVertices.length/2;
-	        	_screenMouseVertices.fixed = true;
+				_screenPointVertices = _screenPointVertexArrays[i] = new Vector.<int>(_index = _screenVertices.length/2, true);
         		
 	        	while (_index--) {
 	        		_indexY = (_indexX = _index*2) + 1;
 	        		
 	        		if (_screenVertices[_indexX] < x)
-	        			_screenMouseVertices[_index] += 4;
+	        			_screenPointVertices[_index] += 0x10;
 	        		
 	        		if (_screenVertices[_indexY] < y)
-	        			_screenMouseVertices[_index] += 1;
+	        			_screenPointVertices[_index] += 0x1;
 	        	}
         	}
 		}
@@ -176,6 +267,9 @@ package away3dlite.core.render
 		 */
 		function Renderer()
 		{
+			_ind = _triangles.indices = new Vector.<int>();
+			_vert = _triangles.vertices = new Vector.<Number>();
+			_uvt = _triangles.uvtData = new Vector.<Number>();
 		}
 		
 		/**
@@ -189,6 +283,54 @@ package away3dlite.core.render
 			x;
 			y;
 			return null;
+		}
+		
+		/** @private */
+		protected function drawParticles(screenZ:Number=NaN):void
+		{
+			if(_particles.length==0)
+				return;
+			
+			var _particle:Particle;
+			var _particleIndex:int = 0;
+			var _view_x:Number = _view.x;
+			var _view_y:Number = _view.y;
+			
+			if(_view.scene.bitmap)
+			{
+				var _view_scene_bitmapData:BitmapData = _view.scene.bitmap.bitmapData;
+				
+				if(!screenZ)
+				{
+					// just draw
+					for each (_particle in _particles)
+						_particle.drawBitmapdata(_view_x, _view_y, _view_scene_bitmapData, _zoom, _focus);
+				}else{
+					// draw particle that behind screenZ
+					while((_particle = _particles[_particleIndex++]) && _particle.screenZ > screenZ)
+						_particle.drawBitmapdata(_view_x, _view_y, _view_scene_bitmapData, _zoom, _focus);
+					
+					if(_particleIndex>=2)
+						_particles = _particles.slice(_particleIndex-1, _particles.length); 
+				}
+			}else{
+				
+				_view_graphics.lineStyle();
+				
+				if(!screenZ)
+				{
+					// just draw
+					for each (_particle in _particles)
+						_particle.drawGraphics(_view_x, _view_y, _view_graphics, _zoom, _focus);
+				}else{
+					// draw particle that behind screenZ
+					while((_particle = _particles[_particleIndex++]) && _particle.screenZ > screenZ)
+						_particle.drawGraphics(_view_x, _view_y, _view_graphics, _zoom, _focus);
+					
+					if(_particleIndex>=2)
+						_particles = _particles.slice(_particleIndex-1, _particles.length); 
+				}
+			}
 		}
 		
 		/**
@@ -208,6 +350,17 @@ package away3dlite.core.render
 			_pointFace = null;
 			
 			_screenVertexArrays.length = 0;
+			
+			// particles
+			_particles = [];
+			
+			// culling
+			numCulled = 0;
+			if(_view.camera.transfromDirty)
+			{
+				_culler.update();
+				_view.camera.transfromDirty = false;
+			}
 		}
 	}
 }

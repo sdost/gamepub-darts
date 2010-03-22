@@ -13,7 +13,7 @@
 		
 		public function BeeLineDart(a_radius:int = 1) 
 		{
-			super(a_radius);
+			super(null, a_radius);
 			
 		}//end constructor()
 		

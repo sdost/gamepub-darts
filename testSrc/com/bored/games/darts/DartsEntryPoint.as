@@ -29,15 +29,15 @@
 		{		
 			super();
 			
-			_myStateMachine = new GameFSM();
-			
-			addStates();
-			
 		}//end BasicPreloader() constructor.
 		
 		override protected function addedToStage(a_evt:Event = null):void
 		{
 			super.addedToStage();
+		
+			_myStateMachine = new GameFSM();
+			
+			addStates();
 			
 			stage.align = StageAlign.TOP_LEFT;
 			

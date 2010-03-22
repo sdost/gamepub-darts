@@ -42,6 +42,9 @@
 			_calc.thrust = _thrust;
 			_calc.theta = _theta;
 			_calc.gravity = _gravity;
+			
+			_gameElement.pitch = 90;
+			_gameElement.roll = 0;
 		}//end startAction()
 	
 		override public function update(a_time:Number):void
@@ -51,7 +54,9 @@
 			var x:Number = _gameElement.position.x + _lean / 40;
 				
 			var rad:Number = Math.atan2(y - _gameElement.position.y, z - _gameElement.position.z);
-			_gameElement.orientation = rad * 180 / Math.PI + 90;
+			_gameElement.pitch = rad * 180 / Math.PI + 90;
+			
+			_gameElement.roll += 3;
 					
 			_gameElement.position.x = x;
 			_gameElement.position.y = y;
