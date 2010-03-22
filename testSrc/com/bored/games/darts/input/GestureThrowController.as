@@ -38,6 +38,9 @@
 			_mousePosition.x = a_evt.x;
 			_mousePosition.y = a_evt.y;
 			
+			DartsGlobals.instance.gameManager.cursor.position.x = _mousePosition.x;
+			DartsGlobals.instance.gameManager.cursor.position.y = _mousePosition.y;
+			
 			if (_buttonDown) {
 				if ( !a_evt.button ) {
 					if ( _thrust >= AppSettings.instance.dartMinThrust ) 

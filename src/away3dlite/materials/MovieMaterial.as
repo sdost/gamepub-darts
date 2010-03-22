@@ -46,7 +46,7 @@ package away3dlite.materials
 			
 			_drawRect = _rect || _movieRect;
 			
-			if (_drawRect.width == 0 || _drawRect.height == 0)
+			if (!_drawRect || _drawRect.width == 0 || _drawRect.height == 0)
 				_drawRect = new Rectangle(0, 0, 256, 256);
 			
 			_graphicsBitmapFill.bitmapData = new BitmapData(int(_drawRect.width + 0.99), int(_drawRect.height + 0.99), _transparent, 0);
@@ -84,16 +84,18 @@ package away3dlite.materials
         
         public function set movie(val:Sprite):void
         {
-        	if (_movie == val)
+			if (_movie == val)
         		return;
         	
         	//if (val && val.parent)
         	//	val.parent.removeChild(val);
         	
         	_movie = val;
-        	
+			
         	_movieRect = _movie.getBounds(_movie);
-        	
+			
+			trace("Movie Rect: " + _movieRect);
+			
 			_bitmapDirty = true;
         	
         	if (!autoUpdate)
@@ -114,6 +116,8 @@ package away3dlite.materials
         {
         	_rect = val;
         	
+			trace("Rect: " + _rect);
+			
         	_bitmapDirty = true;
         }
         
@@ -143,6 +147,8 @@ package away3dlite.materials
 			this.movie = movie;
 			this.rect = rect;
 			this.transparent = transparent;
+			
+			trace("Rect: " + rect);
 		}
 		
 		/**

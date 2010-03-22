@@ -20,7 +20,7 @@
 		
 		override public function initParams(a_params:Object):void
 		{
-			_speed = a_params.speed;
+			_speed = a_params.thrust;
 		}//end initParams()
 		
 		override public function startAction():void

@@ -10,16 +10,13 @@
 	 */
 	public class ShieldAbility extends Ability
 	{
-		
 		public function ShieldAbility(a_time:int) 
 		{
 			super(a_time);
 		}//end constructor()
 		
 		override public function useAbility():int
-		{			
-			DartsGlobals.instance.gameManager.upgradeDart(ShieldDart);
-			
+		{						
 			return super.useAbility();
 		}//end useAbility()
 		

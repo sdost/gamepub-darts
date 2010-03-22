@@ -2,7 +2,7 @@
 {
 	import com.bored.games.darts.abilities.Ability;
 	import com.bored.games.darts.DartsGlobals;
-	import com.bored.games.darts.objects.BeeLineDart;
+	import com.bored.games.darts.objects.Cursor;
 	import com.bored.games.darts.objects.ShieldDart;
 	import com.bored.games.darts.ui.modals.GameResultsModal;
 	import com.bored.games.input.InputController;
@@ -11,6 +11,8 @@
 	import com.bored.games.darts.player.DartsPlayer;
 	import com.bored.games.events.InputStateEvent;
 	import com.bored.games.GameUtils;
+	import com.sven.utils.SpriteFactory;
+	import flash.display.Bitmap;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import com.sven.utils.AppSettings;
@@ -44,6 +46,8 @@
 		
 		protected var _throwsPerTurn:int = 0;
 		
+		protected var _cursor:Cursor;
+		
 		private var _pattern:RegExp = /c_[0-9]+_[0-9]+_mc/;
 		
 		public function DartsGameLogic() 
@@ -52,6 +56,7 @@
 			_scoreManager = new AbstractScoreManager();
 			_abilityManager = new AbilityManager();
 			_blockedSections = new Vector.<String>();
+			_cursor = new Cursor(SpriteFactory.getSpriteByQualifiedName("com.bored.games.darts.assets.hud.Cursor_MC"));
 		}//end constructor()
 		
 		public function loadGameState(a_state:Object):void
@@ -187,7 +192,6 @@
 				}
 				
 				if (_currentTurn.throwsRemaining == 0) {
-					
 					var win:Boolean = checkForWin();
 					resetDarts();
 					
@@ -280,13 +284,6 @@
 			return _darts;
 		}//end get darts()
 		
-		public function upgradeDart(a_dart:Class):void
-		{
-			var ind:int = _darts.indexOf(_currentDart);
-			_currentDart = new a_dart();
-			_darts[ind] = _currentDart;
-		}//end upgradeDart()
-		
 		public function endTurn():void
 		{
 			_currentDart = null;
@@ -298,15 +295,19 @@
 				
 		public function playerAim():void
 		{
-			_inputController.pause = false;	
+			_inputController.pause = false;
 		}//end playerAim()
 		
 		public function playerThrow(a_x:Number, a_y:Number, a_z:Number, a_thrust:Number, a_lean:Number):void
 		{			
 			_inputController.pause = true;
-			
 			_currentDart.initThrowParams(a_x, a_y, a_z, a_thrust, AppSettings.instance.defaultAngle, AppSettings.instance.defaultGravity, a_lean);
 		}//end playerThrow()
+		
+		public function get cursor():Cursor
+		{
+			return _cursor;
+		}//end get cursor()
 		
 	}//end AbstractGameLogic
 

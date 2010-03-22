@@ -40,13 +40,7 @@
 	 * @author Samuel Dost
 	 */
 	public class Gameplay extends State
-	{		
-		private static const AIM:uint = 0;
-		private static const READY:uint = 1;
-		private static const SHOOT:uint = 2;
-		private static const START_SHOT:uint = 4;
-		private static const RELEASE:uint = 8;
-		
+	{				
 		private var _gameplayScreen:GameplayScreen;
 		
 		private var _gameManager:DartsGameLogic;
@@ -107,69 +101,11 @@
 		private function update(a_evt:Event):void
 		{
 			DartsGlobals.instance.gameManager.update(getTimer());
-			/*
-			for (var i:int = 0; i < _darts.length; i++)
-			{
-				_darts[i].update();
-			}
-				
-			var result:Object = _dartboard.checkForCollision(_darts[_currDartIdx], _darts[_currDartIdx].radius);
-			
-			if (result.section)
-			{		
-				_currentTurn.submitThrowResult(result);
-				
-				if (_currentTurn.hasThrowsRemaining()) _currentTurn.advanceThrows();
-				
-				if(_opponentShooter) _opponentShooter.endShot();
-				
-				_darts[_currDartIdx].finishThrow();
-				_gameplayScreen.finishThrow(_currentTurn.owner);
-				_currDartIdx++;
-				
-				if (_currDartIdx >= _darts.length) {
-					
-					_mouseTimer.removeEventListener( TimerEvent.TIMER, updateCurrentMouseVelocity );
-					_mouseTimer.stop();
-					_mouseTimer.reset();
-					
-					_currDartIdx = 0;
-					for (var j:int = 0; j < _darts.length; j++) {
-						_darts[j].reset();
-					}
-					
-					var win:Boolean = DartsGlobals.instance.logicManager.checkForWinState();
-					
-					if (win) {
-						trace("Hey! " + _currentTurn.owner + " has won the game!");
-					} else {
-						_turns++;
-						
-						if ( _turns % 2 == 0 ) {
-							_currentTurn = DartsGlobals.instance.logicManager.startNewTurn(AbstractGameLogic.PLAYER_TURN);
-							_playerInputController.pause = false;
-							_opponentInputController.pause = true;
-							_opponentShooter = null;
-						} else {
-							_currentTurn = DartsGlobals.instance.logicManager.startNewTurn(AbstractGameLogic.OPPONENT_TURN);
-							_playerInputController.pause = true;
-							_opponentInputController.pause = false;
-							_opponentShooter = new AIShotManager(AppSettings.instance.aiOpponentName, (_opponentInputController as AIController), _opponentProfile);
-						}
-					}
-				}
-				
-				if(_opponentShooter) _opponentShooter.beginShot(_currDartIdx);
-			}
-			*/
-			
 			_gameplayScreen.render();
 		}//end updateDisplay()
 				
 		private function finished(...args):void
 		{
-			//(this.stateMachine as GameFSM).transitionToNextState();
-			
 		}//end finished()
 		
 		/**

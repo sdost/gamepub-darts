@@ -71,7 +71,7 @@ package com.sven.managers
 			g.endFill();
 			_displayManager.addChild(_overlay);
 
-			_overlay.stageResizeHandler = function() {
+			_overlay.stageResizeHandler = function():void {
 				this.width = _stage.stageWidth;
 				this.height = _stage.stageHeight;
 				if (this._alert != null ) {

@@ -5,6 +5,7 @@
 	import away3dlite.loaders.Collada;
 	import away3dlite.materials.Material;
 	import caurina.transitions.Tweener;
+	import com.bored.games.actions.Action;
 	import com.bored.games.darts.actions.DartFallingAction;
 	import com.bored.games.darts.actions.DartTrajectoryAction;
 	import com.bored.games.darts.models.dae_DartFlightHeart;
@@ -21,6 +22,8 @@
 	{
 		protected var _trajectoryAction:DartTrajectoryAction;
 		protected var _fallingAction:DartFallingAction;
+		
+		protected var _throwAction:Action;
 		
 		private var _radius:int;
 		
@@ -87,10 +90,24 @@
 		protected function initActions():void
 		{
 			_trajectoryAction = new DartTrajectoryAction(this);
-			addAction(_trajectoryAction);
+			setThrowAction(_trajectoryAction);
 			_fallingAction = new DartFallingAction(this, { gravity: 9.8, yFloor: -10, zBounceRange: 2 });
 			addAction(_fallingAction);
 		}//end initAction()
+		
+		public function setThrowAction(a_action:Action):void
+		{
+			if (!checkForActionNamed(a_action.actionName)) {
+				addAction(a_action);
+			}
+			
+			_throwAction = a_action;
+		}//end setThrowAction()
+		
+		public function resetThrowAction():void
+		{
+			_throwAction = _trajectoryAction;
+		}//end resetThrowAction()
 		
 		public function get radius():int
 		{
@@ -99,20 +116,21 @@
 
 		public function initThrowParams(releaseX:Number, releaseY:Number, releaseZ:Number, thrust:Number, angle:Number, grav:Number, lean:Number = 0):void
 		{
-			this.pitch = 0;
+			this.pitch = 90;
 			this.roll = 0;
+			this.yaw = 0;
 			this.position.x = releaseX;
 			this.position.y = releaseY;
 			this.position.z = releaseZ;
 			
-			_trajectoryAction.initParams({
+			_throwAction.initParams({
 				"thrust": thrust,
 				"theta": Math.PI / 180 * angle,
 				"gravity": grav,
 				"lean": lean
 			});
 			
-			activateAction(_trajectoryAction.actionName);
+			activateAction(_throwAction.actionName);
 		}//end initThrowParams()
 		
 		override public function reset():void
@@ -124,7 +142,8 @@
 		
 		public function finishThrow():void
 		{
-			deactivateAction(_trajectoryAction.actionName);
+			deactivateAction(_throwAction.actionName);
+			resetThrowAction();
 		}//end finishThrow()
 		
 		public function beginFalling():void

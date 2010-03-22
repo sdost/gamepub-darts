@@ -1,8 +1,8 @@
 ﻿package com.bored.games.darts.abilities 
 {
 	import com.bored.games.darts.abilities.Ability;
+	import com.bored.games.darts.actions.BeeLineTrajectoryAction;
 	import com.bored.games.darts.DartsGlobals;
-	import com.bored.games.darts.objects.BeeLineDart;
 	
 	/**
 	 * ...
@@ -18,8 +18,8 @@
 		}//end constructor()
 		
 		override public function useAbility():int
-		{			
-			DartsGlobals.instance.gameManager.upgradeDart(BeeLineDart);
+		{		
+			DartsGlobals.instance.gameManager.currentDart.setThrowAction(new BeeLineTrajectoryAction(DartsGlobals.instance.gameManager.currentDart));
 			
 			return super.useAbility();
 		}//end useAbility()

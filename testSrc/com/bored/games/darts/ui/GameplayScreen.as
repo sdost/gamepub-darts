@@ -72,8 +72,6 @@
 		private var _wallClip:Bitmap;
 		
 		private static var _dartboardTexture:BitmapMaterial;
-		private static var _dartTexture_UJ:BitmapMaterial;
-		private static var _dartTexture_JR:BitmapMaterial;
 		
 		//engine variables
 		private var _scene:Scene3D;
@@ -97,7 +95,9 @@
 		
 		private var _dartTemplate:Object3D;
 		private var _dartModels:Vector.<Object3D>;
+		
 		private var _boardBillboard:Plane;
+		private var _cursorBillboard:Plane;
 		
 		private var _dartRefs:Vector.<Dart>;
 		
@@ -217,6 +217,9 @@
 			_boardBillboard.mouseEnabled = false;
 			_boardBillboard.lookAt(_camera.position, new Vector3D(0, 1, 0));
 			_scene.addChild(_boardBillboard);
+			
+			DartsGlobals.instance.gameManager.cursor.initModels();
+			_scene.addChild(DartsGlobals.instance.gameManager.cursor.model);
 			
 			for each( var dart:Dart in DartsGlobals.instance.gameManager.darts )
 			{

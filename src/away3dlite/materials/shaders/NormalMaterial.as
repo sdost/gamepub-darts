@@ -21,14 +21,16 @@ package away3dlite.materials.shaders
 
 		public function NormalMaterial(light:Light, zValue:Boolean = false)
 		{
+			var bmd:BitmapData = null;
+			
 			this._zValue = zValue;
 			if (zValue)
 			{
-				var bmd:BitmapData = getShadingBitmapZ()
+				bmd = getShadingBitmapZ()
 			}
 			else
 			{
-				var bmd:BitmapData = getShadingBitmapXY()
+				bmd = getShadingBitmapXY()
 			}
 			super(light, bmd);
 		}
