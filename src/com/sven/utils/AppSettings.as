@@ -154,7 +154,15 @@
 		 */
 		flash_proxy override function getProperty(name:*):* 
 		{
-			return _settings[name];
+			var result:* = null;
+			
+			try {
+				result = _settings[name];
+			} catch ( e:Error ) {
+				trace("getProperty(" + name + ") failed.");
+			}
+			
+			return result;
 		}
 		
 		/**
@@ -162,10 +170,14 @@
 		 */
 		flash_proxy override function setProperty(name:*, value:*):void 
 		{
-			var oldValue:* = _settings[name];
-            _settings[name] = value;
-            var kind:String = PropertyChangeEventKind.UPDATE;
-            dispatchEvent(new PropertyChangeEvent(PropertyChangeEvent.PROPERTY_CHANGE, false, false, kind, name, oldValue, value, this));
+			try {
+				var oldValue:* = _settings[name];
+				_settings[name] = value;
+				var kind:String = PropertyChangeEventKind.UPDATE;
+				dispatchEvent(new PropertyChangeEvent(PropertyChangeEvent.PROPERTY_CHANGE, false, false, kind, name, oldValue, value, this));
+			} catch ( e:Error ) {
+				trace("setProperty(" +name+", "+value+") failed.");
+			}
 		}
 		
 		//---------------------------------------------------------------------

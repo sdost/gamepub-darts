@@ -7,6 +7,7 @@
 	import caurina.transitions.Tweener;
 	import com.bored.games.actions.Action;
 	import com.bored.games.darts.actions.DartFallingAction;
+	import com.bored.games.darts.actions.DartPullBackAction;
 	import com.bored.games.darts.actions.DartTrajectoryAction;
 	import com.bored.games.darts.models.dae_DartFlightHeart;
 	import com.bored.games.darts.models.dae_DartShaft;
@@ -21,6 +22,7 @@
 	public class Dart extends GameElement
 	{
 		protected var _trajectoryAction:DartTrajectoryAction;
+		protected var _pullBackAction:DartPullBackAction;
 		protected var _fallingAction:DartFallingAction;
 		
 		protected var _throwAction:Action;
@@ -91,6 +93,8 @@
 		{
 			_trajectoryAction = new DartTrajectoryAction(this);
 			setThrowAction(_trajectoryAction);
+			_pullBackAction = new DartPullBackAction(this, { zPull: -0.5 });
+			addAction(_pullBackAction);
 			_fallingAction = new DartFallingAction(this, { gravity: 9.8, yFloor: -10, zBounceRange: 2 });
 			addAction(_fallingAction);
 		}//end initAction()
@@ -116,6 +120,8 @@
 
 		public function initThrowParams(releaseX:Number, releaseY:Number, releaseZ:Number, thrust:Number, angle:Number, grav:Number, lean:Number = 0):void
 		{
+			deactivateAction(_pullBackAction.actionName);
+			
 			this.pitch = 90;
 			this.roll = 0;
 			this.yaw = 0;
@@ -145,6 +151,11 @@
 			deactivateAction(_throwAction.actionName);
 			resetThrowAction();
 		}//end finishThrow()
+		
+		public function pullBack():void
+		{
+			activateAction(_pullBackAction.actionName);
+		}//end pullBack()
 		
 		public function beginFalling():void
 		{

@@ -2,7 +2,8 @@
 {
 	import com.bored.games.darts.abilities.Ability;
 	import com.bored.games.darts.DartsGlobals;
-	import com.bored.games.darts.objects.ShieldDart;
+	import com.sven.utils.SpriteFactory;
+	import flash.display.Sprite;
 	
 	/**
 	 * ...
@@ -12,7 +13,8 @@
 	{
 		public function ShieldAbility(a_time:int) 
 		{
-			super(a_time);
+			var icon:Sprite = SpriteFactory.getSpriteByQualifiedName("com.bored.games.darts.assets.icons.ShieldIcon_MC");
+			super(icon, a_time);
 		}//end constructor()
 		
 		override public function useAbility():int

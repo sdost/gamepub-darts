@@ -3,6 +3,7 @@
 	import com.bored.games.actions.Action;
 	import com.bored.games.objects.GameElement;
 	import com.sven.utils.TrajectoryCalculator;
+	import com.sven.utils.AppSettings;
 	
 	/**
 	 * ...
@@ -49,14 +50,15 @@
 	
 		override public function update(a_time:Number):void
 		{
-			var z:Number = _gameElement.position.z + _calc.thrustVector.x/40;
+			var z:Number = _gameElement.position.z + _calc.thrustVector.x * AppSettings.instance.simulationStepScale;
 			var y:Number = _calc.calculateHeightAtPos(z);
-			var x:Number = _gameElement.position.x + _lean / 40;
+			var x:Number = _gameElement.position.x + _lean * AppSettings.instance.simulationStepScale;
 				
 			var rad:Number = Math.atan2(y - _gameElement.position.y, z - _gameElement.position.z);
+	
 			_gameElement.pitch = rad * 180 / Math.PI + 90;
 			
-			_gameElement.roll += 3;
+			_gameElement.roll += AppSettings.instance.dartRollSpeed;
 					
 			_gameElement.position.x = x;
 			_gameElement.position.y = y;

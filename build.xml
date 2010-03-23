@@ -139,18 +139,16 @@
 	
 	<target name="clean_tester">
 		<delete file="${test.build.dir}/${swf.name}" />
+		<!--
 		<delete>
-			<!-- Deletes playerProductInstall.swf -->
             <fileset dir="${test.build.dir}" 
                 includes="playerProductInstall.swf" 
                 defaultexcludes="false"/>
-            <!-- Deletes index.html and historyFrame.html -->
             <fileset dir="${test.build.dir}" includes="*.html" defaultexcludes="false"/>
-            <!-- Deletes history.css -->
             <fileset dir="${test.build.dir}" includes="*.css" defaultexcludes="false"/>
-            <!-- Deletes history.js and AC_OETags.js -->
             <fileset dir="${test.build.dir}" includes="*.js" defaultexcludes="false"/>
 		</delete>
+		-->
 	</target>
 	
 	<target name="allClassesSwc" depends="doCompileSwc">
@@ -233,21 +231,6 @@
 			<define name="COMPILEVAR::DEBUG" value="${compile.code.debug}" />
 			
         </mxmlc>
-		
-		<html-wrapper 
-            title="Darts Prototype"
-            file="index.html"
-            height="550"
-            width="700"
-            bgcolor="0x000000"
-            application="dartsapp"
-            swf="${swf.name}"
-            version-major="10"
-            version-minor="0"
-            version-revision="0"
-            history="false"
-            template="express-installation"
-            output="${test.build.dir}"/>
 		
 	</target>
 	

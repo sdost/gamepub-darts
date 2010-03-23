@@ -220,6 +220,7 @@
 			
 			DartsGlobals.instance.gameManager.cursor.initModels();
 			_scene.addChild(DartsGlobals.instance.gameManager.cursor.model);
+			DartsGlobals.instance.gameManager.cursor.model.z = AppSettings.instance.dartboardPositionZ * _engineScale - 10;
 			
 			for each( var dart:Dart in DartsGlobals.instance.gameManager.darts )
 			{

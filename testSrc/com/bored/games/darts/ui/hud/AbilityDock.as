@@ -3,6 +3,8 @@
 	import caurina.transitions.Tweener;
 	import com.bored.games.darts.abilities.Ability;
 	import com.bored.games.darts.logic.AbilityManager;
+	import com.inassets.ui.buttons.events.ButtonEvent;
+	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
@@ -17,7 +19,8 @@
 	 */
 	public class AbilityDock extends ContentHolder
 	{
-		private var _abilityBox:Vector.<MovieClip>;
+		private var _abilityGraphic:Vector.<MovieClip>;
+		private var _abilityBox:Vector.<MightyButton>;
 		
 		private var _abilityMgr:AbilityManager;
 		
@@ -39,38 +42,40 @@
 		{
 			var descendantsDict:Dictionary = super.buildFrom(a_img, a_buildFromAllDescendants);
 			
-			_abilityBox = new Vector.<MovieClip>(3);
+			_abilityGraphic = new Vector.<MovieClip>(3);
+			_abilityBox = new Vector.<MightyButton>(3);
 			
-			_abilityBox[0] = descendantsDict["box_1"] as MovieClip;
+			_abilityGraphic[0] = descendantsDict["box_1"] as MovieClip;
 			
-			if ( _abilityBox[0] ) 
+			if ( _abilityGraphic[0] ) 
 			{
-				_abilityBox[0].visible = false;
-				_abilityBox[0].addEventListener(MouseEvent.CLICK, onAbilityClicked);
+				
+				_abilityBox[0] = new MightyButton(_abilityGraphic[0], false);
+				_abilityBox[0].addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onAbilityClicked, false, 0, true);
 			}
 			else
 			{
 				throw new Error("AbilityDock::buildFrom(): _abilityBox[0]=" + _abilityBox[0]);
 			}
 			
-			_abilityBox[1] = descendantsDict["box_2"] as MovieClip;
+			_abilityGraphic[1] = descendantsDict["box_2"] as MovieClip;
 			
-			if ( _abilityBox[1] ) 
+			if ( _abilityGraphic[1] ) 
 			{
-				_abilityBox[1].visible = false;
-				_abilityBox[1].addEventListener(MouseEvent.CLICK, onAbilityClicked);
+				_abilityBox[1] = new MightyButton(_abilityGraphic[1], false);
+				_abilityBox[1].addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onAbilityClicked, false, 0, true);
 			}
 			else
 			{
 				throw new Error("AbilityDock::buildFrom(): _abilityBox[1]=" + _abilityBox[1]);
 			}
 			
-			_abilityBox[2] = descendantsDict["box_3"] as MovieClip;
+			_abilityGraphic[2] = descendantsDict["box_3"] as MovieClip;
 			
-			if ( _abilityBox[2] ) 
+			if ( _abilityGraphic[2] ) 
 			{
-				_abilityBox[2].visible = false;
-				_abilityBox[2].addEventListener(MouseEvent.CLICK, onAbilityClicked);
+				_abilityBox[2] = new MightyButton(_abilityGraphic[2], false);
+				_abilityBox[2].addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onAbilityClicked, false, 0, true);
 			}
 			else
 			{
@@ -102,24 +107,25 @@
 			for ( var i:int = 0; i < _abilityMgr.abilities.length; i++ )
 			{
 				if ( _abilityMgr.abilities[i] ) {
-					_abilityBox[i].visible = true;
+					_abilityBox[i].pause(false);
+					((_abilityBox[i].buttonContents as Sprite).getChildByName("icon_holder") as MovieClip).addChild(_abilityMgr.abilities[i].icon);
 				}
 				
 				if ( _abilityMgr.abilities[i].ready ) {
-					_abilityBox[i].mouseEnabled = true;
-					_abilityBox[i].filters = [];
+					_abilityBox[i].pause(false);
+					(_abilityBox[i].buttonContents as Sprite).filters = [];
 				} else {
-					_abilityBox[i].mouseEnabled = false;
-					_abilityBox[i].filters = [ new BlurFilter(2, 2, 3) ];
+					_abilityBox[i].pause(true);
+					(_abilityBox[i].buttonContents as Sprite).filters = [ new BlurFilter(2, 2, 3) ];
 				}
 			}
 		}//end update()
 		
-		private function onAbilityClicked(a_evt:MouseEvent):void
+		private function onAbilityClicked(a_evt:ButtonEvent):void
 		{
 			for ( var i:int = 0; i < _abilityBox.length; i++ )
 			{
-				if ( _abilityBox[i] == a_evt.currentTarget )
+				if ( _abilityBox[i] == a_evt.mightyButton )
 					_abilityMgr.activateAbility(i);
 			}
 		}//end onAbilityOneClicked()

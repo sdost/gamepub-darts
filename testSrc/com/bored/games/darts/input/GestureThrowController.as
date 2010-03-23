@@ -7,6 +7,7 @@
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
 	import flash.utils.Timer;
+	import mx.logging.targets.MiniDebugTarget;
 	
 	/**
 	 * ...
@@ -38,9 +39,6 @@
 			_mousePosition.x = a_evt.x;
 			_mousePosition.y = a_evt.y;
 			
-			DartsGlobals.instance.gameManager.cursor.position.x = _mousePosition.x;
-			DartsGlobals.instance.gameManager.cursor.position.y = _mousePosition.y;
-			
 			if (_buttonDown) {
 				if ( !a_evt.button ) {
 					if ( _thrust >= AppSettings.instance.dartMinThrust ) 
@@ -48,7 +46,7 @@
 						DartsGlobals.instance.gameManager.playerThrow(
 							DartsGlobals.instance.gameManager.currentDart.position.x,
 							DartsGlobals.instance.gameManager.currentDart.position.y,
-							DartsGlobals.instance.gameManager.currentDart.position.z,
+							0,
 							_thrust,
 							_lean
 						);
@@ -67,12 +65,19 @@
 					_speed = 0;
 					_cumAvgSpeed = 0;
 					_num = 0;
+					
+					DartsGlobals.instance.gameManager.currentDart.pullBack();
+					
 					if ( _mouseTimer == null ) {
 						_mouseTimer = new Timer(50);
 					}
 					_mouseTimer.addEventListener( TimerEvent.TIMER, updateCurrentMouseVelocity );
 					_mouseTimer.start();
 				} else {
+					DartsGlobals.instance.gameManager.cursor.position.x = (((a_evt.x - 350) * AppSettings.instance.cursorPositionZ * Math.tan(57.5 * Math.PI / 180))/ 700);
+					DartsGlobals.instance.gameManager.cursor.position.y = (((275 - a_evt.y) * AppSettings.instance.cursorPositionZ * Math.tan(51 * Math.PI / 180))/ 550);
+					DartsGlobals.instance.gameManager.cursor.position.z = AppSettings.instance.cursorPositionZ;
+					
 					DartsGlobals.instance.gameManager.currentDart.position.x = (((a_evt.x - 350) * AppSettings.instance.dartboardPositionZ * Math.tan(50 * Math.PI / 180)) / 700);
 					DartsGlobals.instance.gameManager.currentDart.position.y = (((275 - a_evt.y) * AppSettings.instance.dartboardPositionZ * Math.tan(50 * Math.PI / 180)) / 550);
 					DartsGlobals.instance.gameManager.currentDart.position.z = 0;
@@ -103,9 +108,19 @@
 			
 			_cumAvgSpeed = _cumAvgSpeed + ((_speed - _cumAvgSpeed) / ++_num);
 			
-			_thrust = Math.min((_cumAvgSpeed / 50), AppSettings.instance.dartMaxThrust);
-			_lean = _velX / 1000;
+			_thrust = clamp((_cumAvgSpeed * AppSettings.instance.dartThrustScale), AppSettings.instance.dartMinThrust, AppSettings.instance.dartMaxThrust);
+			
+			_lean = _velX * AppSettings.instance.dartLeanScale;
 		}//end updateCurrentMouseVelocity()
+		
+		private function clamp(a_num:Number, a_min:Number, a_max:Number):Number
+		{
+			if ( a_num <= a_min ) return a_min;
+			
+			else if ( a_num >= a_max ) return a_max;
+			
+			else return a_num;
+		}//end clamp()
 		
 	}//end GestureThrowController
 

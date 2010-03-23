@@ -2,6 +2,7 @@
 {
 	import com.bored.games.actions.Action;
 	import com.bored.games.objects.GameElement;
+	import com.sven.utils.AppSettings;
 	
 	/**
 	 * ...
@@ -32,9 +33,9 @@
 	
 		override public function update(a_time:Number):void
 		{
-			_gameElement.roll += 3;
+			_gameElement.roll += AppSettings.instance.dartRollSpeed;
 			
-			var z:Number = _gameElement.position.z + _speed/40;
+			var z:Number = _gameElement.position.z + _speed * AppSettings.instance.simulationStepScale;
 			_gameElement.position.z = z;	
 		}//end update()
 		

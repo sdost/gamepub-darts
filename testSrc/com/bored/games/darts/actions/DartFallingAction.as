@@ -3,6 +3,7 @@
 	import com.bored.games.actions.Action;
 	import com.bored.games.objects.GameElement;
 	import flash.utils.getTimer;
+	import com.sven.utils.AppSettings;
 	
 	/**
 	 * ...
@@ -50,7 +51,7 @@
 			
 			var moveY:Number = _gravity * elapsed * elapsed;
 			
-			_gameElement.position.y -= moveY / 40;
+			_gameElement.position.y -= moveY * AppSettings.instance.simulationStepScale;
 			if (_gameElement.position.y <= _yFloor)
 			{
 				this.finished = true;

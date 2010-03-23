@@ -3,7 +3,6 @@
 	import com.bored.games.darts.abilities.Ability;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.objects.Cursor;
-	import com.bored.games.darts.objects.ShieldDart;
 	import com.bored.games.darts.ui.modals.GameResultsModal;
 	import com.bored.games.input.InputController;
 	import com.bored.games.darts.input.ThrowController;
@@ -19,6 +18,7 @@
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
 	import flash.utils.Timer;
+	import flash.ui.Mouse;
 	/**
 	 * ...
 	 * @author sam
@@ -157,6 +157,8 @@
 		
 		public function update(a_time:Number = 0):void
 		{			
+			_cursor.update(a_time);
+			
 			for each ( var dart:Dart in _darts )
 			{
 				dart.update(a_time);
@@ -166,7 +168,7 @@
 			{
 				_currentDart.finishThrow();
 				
-				_currentDart.position.z = AppSettings.instance.dartboardPositionZ;			
+				//_currentDart.position.z = AppSettings.instance.dartboardPositionZ;			
 				
 				var p:Point = new Point( ( _currentDart.position.x / AppSettings.instance.dartboardScale ) * (_dartboardClip.width/2), ( -_currentDart.position.y / AppSettings.instance.dartboardScale ) * (_dartboardClip.height/2) );
 				
@@ -177,9 +179,11 @@
 						var arr:Array = objects[0].parent.name.split("_");
 						this.scoreManager.submitThrow(_currentPlayer, Number(arr[1]), Number(arr[2]));
 						
+						/*
 						if(_currentDart is ShieldDart) {
 							_blockedSections.push(objects[0].parent.name);
 						}
+						*/
 					} 
 					else
 					{
@@ -295,11 +299,16 @@
 				
 		public function playerAim():void
 		{
+			//Mouse.hide();
+			_cursor.show();
 			_inputController.pause = false;
 		}//end playerAim()
 		
 		public function playerThrow(a_x:Number, a_y:Number, a_z:Number, a_thrust:Number, a_lean:Number):void
 		{			
+			//Mouse.show();
+			_cursor.hide();
+			_cursor.resetCursorImage();
 			_inputController.pause = true;
 			_currentDart.initThrowParams(a_x, a_y, a_z, a_thrust, AppSettings.instance.defaultAngle, AppSettings.instance.defaultGravity, a_lean);
 		}//end playerThrow()

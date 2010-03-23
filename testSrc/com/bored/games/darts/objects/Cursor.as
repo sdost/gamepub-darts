@@ -2,13 +2,16 @@
 {
 	import away3dlite.animators.MovieMesh;
 	import away3dlite.core.clip.RectangleClipping;
+	import away3dlite.materials.BitmapMaterial;
 	import away3dlite.materials.Material;
 	import away3dlite.materials.MovieMaterial;
 	import away3dlite.primitives.Plane;
 	import com.sven.utils.AppSettings;
 	import away3dlite.core.base.Object3D;
 	import com.bored.games.objects.GameElement;
+	import flash.display.BitmapData;
 	import flash.display.Sprite;
+	import flash.geom.Matrix;
 	import flash.geom.Rectangle;
 	
 	/**
@@ -19,7 +22,7 @@
 	{
 		private var _cursor:Sprite;
 		private var _cursorModel:Plane;
-		private var _cursorMaterial:MovieMaterial;
+		private var _cursorMaterial:BitmapMaterial;
 		
 		public function Cursor(a_img:Sprite) 
 		{
@@ -30,11 +33,15 @@
 		
 		public function initModels():void
 		{
-			_cursorMaterial = new MovieMaterial(_cursor, new Rectangle(-30, -30, 60, 60), false, true);
+			var bmd:BitmapData = new BitmapData(60, 60, true, 0x00000000);
+			var mtx:Matrix = new Matrix();
+			mtx.translate(30, 30);
+			bmd.draw(_cursor, mtx);			
+			_cursorMaterial = new BitmapMaterial(bmd);
 			
 			_cursorModel = new Plane();
-			_cursorModel.width = 60;
-			_cursorModel.height = 60;
+			_cursorModel.width = 30;
+			_cursorModel.height = 30;
 			_cursorModel.material = _cursorMaterial;
 			_cursorModel.yUp = false;
 			_cursorModel.bothsides = true;
@@ -45,9 +52,10 @@
 		{
 			super.update(a_time);
 			
-			if(_cursorMaterial)	_cursorMaterial.update()
+			//if(_cursorMaterial)	_cursorMaterial.update()
 			
 			if ( _cursorModel ) {
+				//trace("Cursor Model Position: " + _cursorModel.x + ", " + _cursorModel.y);
 				_cursorModel.x = this.position.x * AppSettings.instance.away3dEngineScale;
 				_cursorModel.y = -(this.position.y * AppSettings.instance.away3dEngineScale);
 				_cursorModel.z = this.position.z * AppSettings.instance.away3dEngineScale;
@@ -56,13 +64,31 @@
 		
 		public function setCursorImage(a_spr:Sprite):void
 		{
-			_cursorMaterial.movie = a_spr;
+			var bmd:BitmapData = new BitmapData(60, 60, true, 0x00000000);
+			var mtx:Matrix = new Matrix();
+			mtx.translate(30, 30);
+			bmd.draw(a_spr, mtx);
+			_cursorMaterial.bitmap = bmd;
 		}//end setCursorImage()
 		
 		public function resetCursorImage():void
 		{
-			_cursorMaterial.movie = _cursor;
+			var bmd:BitmapData = new BitmapData(60, 60, true, 0x00000000);
+			var mtx:Matrix = new Matrix();
+			mtx.translate(30, 30);
+			bmd.draw(_cursor, mtx);
+			_cursorMaterial.bitmap = bmd;
 		}//end resetCursorImage()
+		
+		public function show():void
+		{
+			_cursorModel.visible = true;
+		}//end show()
+		
+		public function hide():void
+		{
+			_cursorModel.visible = false;
+		}//end show()
 		
 		public function get model():Object3D
 		{

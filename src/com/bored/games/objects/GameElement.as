@@ -88,11 +88,13 @@
 			
 			for each( var action:Action in _actionsActive ) 
 			{
-				action.update(t);
-				
 				if ( action.finished )
 				{
 					_actionsFinished.push(action);
+				}
+				else
+				{
+					action.update(t);
 				}
 			}
 			

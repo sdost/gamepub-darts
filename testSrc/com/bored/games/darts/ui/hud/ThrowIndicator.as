@@ -7,6 +7,7 @@
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
+	import com.sven.utils.AppSettings;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -84,10 +85,8 @@
 		public function update():void
 		{			
 			_trackingBall.x = _throwController.lean * 8;
-			_trackingBall.y = 119 - _throwController.thrust * 8;
-		}//end update()
-		
-		
+			_trackingBall.y = 119 - 119 * ((_throwController.thrust - AppSettings.instance.dartMinThrust) / (AppSettings.instance.dartMaxThrust - AppSettings.instance.dartMinThrust));
+		}//end update()		
 		
 		public function show():void
 		{
