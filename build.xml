@@ -139,6 +139,16 @@
 	
 	<target name="clean_tester">
 		<delete file="${test.build.dir}/${swf.name}" />
+		<!--
+		<delete>
+            <fileset dir="${test.build.dir}" 
+                includes="playerProductInstall.swf" 
+                defaultexcludes="false"/>
+            <fileset dir="${test.build.dir}" includes="*.html" defaultexcludes="false"/>
+            <fileset dir="${test.build.dir}" includes="*.css" defaultexcludes="false"/>
+            <fileset dir="${test.build.dir}" includes="*.js" defaultexcludes="false"/>
+		</delete>
+		-->
 	</target>
 	
 	<target name="allClassesSwc" depends="doCompileSwc">

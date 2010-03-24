@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<scene name="opening">
+	<shot>
+		<image src="com.bored.games.darts.assets.story.Scene01" />
+		<dialogue>
+			<line frame="com.bored.games.darts.assets.BalloonYellow" actor="Narrator" x="400" y="16">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean semper.</line>
+		</dialogue>
+	</shot>
+	<shot>
+		<image src="com.bored.games.darts.assets.story.Scene02" />
+		<dialogue>
+			<line frame="com.bored.games.darts.assets.BalloonTailLeft" actor="Hero" x="146" y="40">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean semper.</line>
+			<line frame="com.bored.games.darts.assets.BalloonTailRight" actor="Heroine" x="224" y="96">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean semper.</line>
+		</dialogue>
+	</shot>
+	<shot>
+		<image src="com.bored.games.darts.assets.story.Scene03" />
+		<dialogue>
+			<line frame="com.bored.games.darts.assets.BalloonNarrowTailSide" actor="Rogue's Gallery" x="323" y="15">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean semper.</line>
+		</dialogue>
+	</shot>
+	<shot>
+		<image src="com.bored.games.darts.assets.story.Scene04" />
+		<dialogue>
+			<line frame="com.bored.games.darts.assets.BalloonNarrowTailSide" actor="Big Bill" x="229" y="13">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean semper.</line>
+			<line frame="com.bored.games.darts.assets.BalloonNarrowTailTop" actor="Hero" x="381" y="249">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean semper.</line>
+			<line frame="com.bored.games.darts.assets.BalloonNarrowTailLong" actor="Old Man" x="-83" y="309">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean semper.</line>
+		</dialogue>
+	</shot>
+	<shot>
+		<image src="com.bored.games.darts.assets.story.Scene05" />
+		<dialogue>
+			<line frame="com.bored.games.darts.assets.BalloonTailInsideLeft" actor="Old Guy" x="192" y="9">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean semper.</line>
+		</dialogue>
+	</shot>
+</scene>

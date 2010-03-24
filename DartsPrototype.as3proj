@@ -53,6 +53,11 @@
     <element path="swcLibs_includeAll\UIComponents.swc" />
     <element path="swfLibs_includeAll\AttractScreen.swc" />
     <element path="swfLibs_includeAll\GameplayScreen.swc" />
+    <element path="swfLibs_includeAll\HUDAssets.swc" />
+    <element path="swfLibs_includeAll\StoryAssets.swc" />
+    <element path="swfLibs_includeAll\OpponentSelectScreen.swc" />
+    <element path="swfLibs_includeAll\Icons.swc" />
+    <element path="swfLibs_includeAll\Portraits.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>
@@ -64,7 +69,7 @@
   </rslPaths>
   <!-- Intrinsic Libraries -->
   <intrinsics>
-    <!-- example: <element path="..." /> -->
+    <element path="Library\AS3\frameworks\Flex3" />
   </intrinsics>
   <!-- Assets to embed into the output SWF -->
   <library>

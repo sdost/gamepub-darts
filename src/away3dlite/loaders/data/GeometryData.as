@@ -1,42 +1,50 @@
 package away3dlite.loaders.data
-{	import away3dlite.animators.bones.SkinVertex;
+{	
+	import away3dlite.core.*;
+	import away3dlite.animators.bones.SkinVertex;
 	
 	/**
 	 * Data class for the geometry data used in a mesh object
 	 */
-	public class GeometryData
+	public class GeometryData implements IDestroyable
 	{
+		/** @private */
+		protected var _isDestroyed:Boolean;
+		
 		/**
 		 * The name of the geometry used as a unique reference.
 		 */
 		public var name:String;
 		
 		/**
-		 * Array of vertex objects.
-		 *
-		 * @see away3d.core.base.Vertex
+		 * Array of vertex data.
 		 */
 		public var vertices:Vector.<Number> = new Vector.<Number>();
 		
 		/**
-		 * Array of skinvertex objects.
-		 *
-		 * @see away3d.core.base.Vertex
+		 * Array of skinvertex data.
 		 */
 		public var skinVertices:Vector.<SkinVertex> = new Vector.<SkinVertex>();
 		
 		/**
-		 * Array of uv objects.
-		 *
-		 * see@ away3d.core.base.UV
+		 * Array of uv data.
 		 */
 		public var uvtData:Vector.<Number> = new Vector.<Number>();
 		
+		/**
+		 * Array of indices data.
+		 */
 		public var indices:Vector.<int> = new Vector.<int>();
+		
+		/**
+		 * Array of face indices length data.
+		 */
+		public var faceLengths:Vector.<int> = new Vector.<int>();
+		
 		/**
 		 * Array of face data objects.
 		 *
-		 * @see away3d.loaders.data.FaceData
+		 * @see away3dlite.loaders.data.FaceData
 		 */
 		public var faces:Array = [];
 		
@@ -53,7 +61,7 @@ package away3dlite.loaders.data
         /**
          * Array of skin controller objects used in bone animations
          * 
-         * @see away3d.animators.skin.SkinController
+         * @see away3dlite.animators.skin.SkinController
          */
         public var skinControllers:Array = [];
 		
@@ -96,5 +104,27 @@ package away3dlite.loaders.data
     	 * Returns the minimum z value of the geometry data
     	 */
 		public var minZ:Number;
+		
+        public function get destroyed():Boolean
+		{
+			return _isDestroyed;
+		}
+
+		public function destroy():void
+		{
+			if(_isDestroyed)
+				return;
+				
+			_isDestroyed = true;
+			
+			vertices = new null;
+			skinVertices = null;
+			uvtData = null;
+			indices = null;
+			faceLengths = null;
+			faces = null;
+			materials = null;
+	        skinControllers = null;
+		}
 	}
 }

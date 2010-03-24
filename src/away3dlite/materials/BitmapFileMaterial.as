@@ -1,5 +1,6 @@
 package away3dlite.materials
 {
+	import away3dlite.core.utils.Debug;
 	import away3dlite.events.*;
 	
 	import flash.display.*;
@@ -11,21 +12,21 @@ package away3dlite.materials
 	 * 
 	 * @eventType away3dlite.events.MaterialEvent
 	 */
-	[Event(name="loadSuccess",type="away3d.events.MaterialEvent")]
+	[Event(name="loadSuccess",type="away3dlite.events.MaterialEvent")]
     			
 	 /**
 	 * Dispatched when the material fails to load a file.
 	 * 
 	 * @eventType away3dlite.events.MaterialEvent
 	 */
-	[Event(name="loadError",type="away3d.events.MaterialEvent")]
+	[Event(name="loadError",type="away3dlite.events.MaterialEvent")]
     			
 	 /**
 	 * Dispatched every frame the material is loading.
 	 * 
 	 * @eventType away3dlite.events.MaterialEvent
 	 */
-	[Event(name="loadProgress",type="away3d.events.MaterialEvent")]
+	[Event(name="loadProgress",type="away3dlite.events.MaterialEvent")]
 	
     /**
     * Bitmap material that loads it's texture from an external bitmapasset file.
@@ -43,6 +44,7 @@ package away3dlite.materials
 				_materialloaderror = new MaterialEvent(MaterialEvent.LOAD_ERROR, this);
 			
             dispatchEvent(_materialloaderror);
+            Debug.warning(e);
 		}
 		
 		private function onProgress(e:ProgressEvent):void
@@ -60,8 +62,21 @@ package away3dlite.materials
 			if (!_materialloadsuccess)
 				_materialloadsuccess = new MaterialEvent(MaterialEvent.LOAD_SUCCESS, this);
 			
+			_loader.contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, onError);
+            _loader.contentLoaderInfo.removeEventListener(ProgressEvent.PROGRESS, onProgress);
+			_loader.contentLoaderInfo.removeEventListener(Event.COMPLETE, onComplete);
+			
             dispatchEvent(_materialloadsuccess);
 		}
+		
+    	public function load(url:String):void
+    	{
+    		_loader = new Loader();
+			_loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onError);
+            _loader.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS, onProgress);
+			_loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onComplete);
+			_loader.load(new URLRequest(url));
+    	}
     	
 		/**
 		 * Creates a new <code>BitmapFileMaterial</code> object.
@@ -72,11 +87,8 @@ package away3dlite.materials
         {
             super(new BitmapData(100,100));
 			
-			_loader = new Loader();
-			_loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onError);
-            _loader.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS, onProgress);
-			_loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onComplete);
-			_loader.load(new URLRequest(url));
+			if(url!="")
+				load(url);
         }
     }
 }

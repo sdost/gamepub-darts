@@ -1,7 +1,9 @@
 package away3dlite.animators
 {
+	import flash.utils.*;
 	import away3dlite.animators.bones.*;
 	import away3dlite.containers.*;
+	import away3dlite.core.*;
 	import away3dlite.core.utils.*;
 	
 	/**
@@ -9,12 +11,16 @@ package away3dlite.animators
 	 * 
 	 * @see away3dlite.loaders.Collada
 	 */
-	public class BonesAnimator
+	public class BonesAnimator implements IDestroyable
     {
+        /** @private */
+		protected var _isDestroyed:Boolean;
+		
         private var _channels:Vector.<Channel>;
         private var _skinControllers:Vector.<SkinController>;
         private var _skinController:SkinController;
         private var _skinVertices:Vector.<SkinVertex>;
+        private var _uniqueSkinVertices:Dictionary;
         private var _skinVertex:SkinVertex;
         
     	/**
@@ -38,6 +44,7 @@ package away3dlite.animators
 			_channels = new Vector.<Channel>();
 			_skinControllers = new Vector.<SkinController>();
 			_skinVertices = new Vector.<SkinVertex>(); 
+			_uniqueSkinVertices = new Dictionary(true); 
             loop = true;
             length = 0;
         }
@@ -64,6 +71,10 @@ package away3dlite.animators
                 }
         	}
         	
+            // ensure vertex list is populated
+            if (!_skinVertices.fixed)
+                populateVertices();
+
         	//update channels
             for each (var channel:Channel in _channels)
                 channel.update(time, interpolate);
@@ -76,6 +87,18 @@ package away3dlite.animators
             for each(_skinVertex in _skinVertices)
 				_skinVertex.update();
         }
+		
+		/**
+		 * Populates the skin vertex list from the set of unique vertices
+		 */ 
+		public function populateVertices():void 
+		{
+		_skinVertices.fixed = false;
+			for (var obj:Object in _uniqueSkinVertices) 
+				_skinVertices.push(SkinVertex(obj));
+			
+			_skinVertices.fixed = true;
+		}
 		
 		/**
 		 * Clones the animation data into a new <code>BonesAnimator</code> object.
@@ -91,6 +114,7 @@ package away3dlite.animators
 			for each (var channel:Channel in _channels)
 				bonesAnimator.addChannel(channel.clone(object));
 			
+ 			_skinVertices.fixed = false;
 			return bonesAnimator;
 		}
 		
@@ -113,8 +137,25 @@ package away3dlite.animators
 			_skinControllers.push(skinController);
 			
 			for each (_skinVertex in skinController.skinVertices)
-				if (_skinVertices.indexOf(_skinVertex) == -1)
-					_skinVertices.push(_skinVertex);
+                _uniqueSkinVertices[_skinVertex] = 1;
         }
+        
+        public function get destroyed():Boolean
+		{
+			return _isDestroyed;
+		}
+
+		public function destroy():void
+		{
+			if(_isDestroyed)
+				return;
+				
+			_isDestroyed = true;
+			
+			_channels = null;
+			_skinControllers = null;
+			_skinVertices = null;
+			_uniqueSkinVertices = null;
+		}
     }
 }

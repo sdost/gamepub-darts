@@ -18,7 +18,7 @@
 	
 	/**
 	 * ....
-	 * @author Bo Landsman
+	 * @author Samuel Dost
 	 */
 	public class Attract extends State
 	{
@@ -43,6 +43,7 @@
 				_attractScreen = new AttractScreen(attractScreenImg, false, true);
 				_attractScreen.addEventListener(AttractScreen.NEW_GAME_CLICKED_EVT, onNewGameClicked, false, 0, true);
 				_attractScreen.addEventListener(AttractScreen.RESUME_GAME_CLICKED_EVT, onResumeGameClicked, false, 0, true);
+				_attractScreen.addEventListener(AttractScreen.STORE_CLICKED_EVT, onStoreClicked, false, 0, true);
 				DartsGlobals.instance.screenSpace.addChild(_attractScreen);
 			}
 			catch (e:Error)
@@ -54,13 +55,20 @@
 		
 		private function onNewGameClicked(e_evt:Event):void
 		{
-			(this.stateMachine as GameFSM).transitionToStateNamed("Gameplay");
+			(this.stateMachine as GameFSM).transitionToNextState();
 			
 		}//end onNewGameClicked();
 		
 		private function onResumeGameClicked(e_evt:Event):void
 		{
-			// TODO
+			DartsGlobals.instance.gameManager.loadGameState( { } );
+			
+			(this.stateMachine as GameFSM).transitionToNextState();
+		}//end onResumeGameClicked();
+		
+		private function onStoreClicked(e_evt:Event):void
+		{
+			(this.stateMachine as GameFSM).transitionToStateNamed("GameStore");
 		}//end onResumeGameClicked();
 		
 		/**

@@ -1,7 +1,19 @@
 ﻿package com.bored.games.darts.objects 
 {
-	import com.bored.games.elements.GameElement;
-	import com.bored.games.math.TrajectoryCalculator;
+	import away3dlite.containers.ObjectContainer3D;
+	import away3dlite.core.base.Object3D;
+	import away3dlite.loaders.Collada;
+	import away3dlite.materials.Material;
+	import caurina.transitions.Tweener;
+	import com.bored.games.actions.Action;
+	import com.bored.games.darts.actions.DartFallingAction;
+	import com.bored.games.darts.actions.DartPullBackAction;
+	import com.bored.games.darts.actions.DartTrajectoryAction;
+	import com.bored.games.darts.models.dae_DartFlightHeart;
+	import com.bored.games.darts.models.dae_DartShaft;
+	import com.bored.games.objects.GameElement;
+	import com.sven.utils.TrajectoryCalculator;
+	import com.sven.utils.AppSettings;
 	
 	/**
 	 * ...
@@ -9,89 +21,146 @@
 	 */
 	public class Dart extends GameElement
 	{
-		private var _trajCalc:TrajectoryCalculator;
-		private var _throwing:Boolean;
+		protected var _trajectoryAction:DartTrajectoryAction;
+		protected var _pullBackAction:DartPullBackAction;
+		protected var _fallingAction:DartFallingAction;
+		
+		protected var _throwAction:Action;
+		
 		private var _radius:int;
 		
-		private var _orientation:Number;
+		private var _xVel:Number;
 		
-		public function Dart(a_radius:int = 1) 
+		private var _throwing:Boolean;
+		
+		private var _dartSkin:Material;
+		private var _dartModel:ObjectContainer3D;
+		private var _shaft:Object3D;
+		private var _flight:Object3D;
+		
+		public function Dart(a_skin:Material, a_radius:int = 1) 
 		{
-			_trajCalc = new TrajectoryCalculator();
-			_throwing = false;
-			
 			_radius = a_radius;
 			
-			_orientation = 90;
+			this.pitch = 90;
 			
-			reset();
+			_dartSkin = a_skin;
 			
+			initActions();
 		}//end constructor()
 		
-		override public function update(t:Number = 0):void
+		public function initModels():void
+		{			
+			var colladaShaft:Collada = new Collada();
+			colladaShaft.scaling = AppSettings.instance.dartModelScale;
+			colladaShaft.centerMeshes = true;
+			colladaShaft.materials = { "dart_skin": _dartSkin };
+			
+			_shaft = colladaShaft.parseGeometry(dae_DartShaft.data);
+			_shaft.mouseEnabled = false;
+			
+			var colladaFlight:Collada = new Collada();
+			colladaFlight.scaling = AppSettings.instance.dartModelScale;
+			colladaFlight.centerMeshes = true;
+			colladaFlight.materials = { "flight_skin": _dartSkin };
+			
+			_flight = colladaFlight.parseGeometry(dae_DartFlightHeart.data);
+			_flight.mouseEnabled = false;
+			
+			_dartModel = new ObjectContainer3D(_shaft, _flight);
+		}//end initModels()
+		
+		override public function update(a_time:Number = 0):void
 		{
-			super.update(t);
+			super.update(a_time);
 			
-			if ( _throwing ) {			
-				var z:Number = this.position.z + _trajCalc.thrustVector.x/100;
-				var y:Number = _trajCalc.calculateHeightAtPos(z);
-				var x:Number = this.position.x;
-				
-				var rad:Number = Math.atan2(y - this.position.y, z - this.position.z);
-				_orientation = rad * 180 / Math.PI + 90;
-					
-				this.position.x = x;
-				this.position.y = y;
-				this.position.z = z;
+			if ( _dartModel ) {
+				//_dartModel.rotationX = _dartModel.rotationY = _dartModel.rotationZ = 0;
+				//_dartModel.rotationY = this.roll;
+				_dartModel.rotationX = this.pitch;
+				_dartModel.x = this.position.x * AppSettings.instance.away3dEngineScale;
+				_dartModel.y = -(this.position.y * AppSettings.instance.away3dEngineScale);
+				_dartModel.z = this.position.z * AppSettings.instance.away3dEngineScale;
 			}
-			
 		}//end update()
 		
-		public function get throwing():Boolean
+		public function get model():Object3D
 		{
-			return _throwing;
-		}//end get throwing()
+			return _dartModel;
+		}//end get shaft()
+		
+		protected function initActions():void
+		{
+			_trajectoryAction = new DartTrajectoryAction(this);
+			setThrowAction(_trajectoryAction);
+			_pullBackAction = new DartPullBackAction(this, { zPull: -0.5 });
+			addAction(_pullBackAction);
+			_fallingAction = new DartFallingAction(this, { gravity: 9.8, yFloor: -10, zBounceRange: 2 });
+			addAction(_fallingAction);
+		}//end initAction()
+		
+		public function setThrowAction(a_action:Action):void
+		{
+			if (!checkForActionNamed(a_action.actionName)) {
+				addAction(a_action);
+			}
+			
+			_throwAction = a_action;
+		}//end setThrowAction()
+		
+		public function resetThrowAction():void
+		{
+			_throwAction = _trajectoryAction;
+		}//end resetThrowAction()
 		
 		public function get radius():int
 		{
 			return _radius;
 		}//end get radius()
-		
-		public function get angle():Number
+
+		public function initThrowParams(releaseX:Number, releaseY:Number, releaseZ:Number, thrust:Number, angle:Number, grav:Number, lean:Number = 0):void
 		{
-			return _orientation;
-		}//end get angle()
-		
-		public function initThrowParams(releaseX:Number, releaseY:Number, releaseZ:Number, thrust:Number, angle:Number, grav:Number):void
-		{
+			deactivateAction(_pullBackAction.actionName);
+			
+			this.pitch = 90;
+			this.roll = 0;
+			this.yaw = 0;
 			this.position.x = releaseX;
 			this.position.y = releaseY;
 			this.position.z = releaseZ;
 			
-			_trajCalc.initialPosition = this.position;
-			_trajCalc.thrust = thrust;
-			_trajCalc.theta = Math.PI / 180 * angle;
-			_trajCalc.gravity = grav;
+			_throwAction.initParams({
+				"thrust": thrust,
+				"theta": Math.PI / 180 * angle,
+				"gravity": grav,
+				"lean": lean
+			});
 			
-			_throwing = true;
-			
-			trace(_trajCalc.toString());
-		
+			activateAction(_throwAction.actionName);
 		}//end initThrowParams()
 		
-		public function finishThrow():void 
+		override public function reset():void
 		{
-			_throwing = false;
+			super.reset();
+			this.roll = 0;
+			this.pitch = 90;
+		}//end reset()
+		
+		public function finishThrow():void
+		{
+			deactivateAction(_throwAction.actionName);
+			resetThrowAction();
 		}//end finishThrow()
 		
-		public function reset():void
+		public function pullBack():void
 		{
-			_orientation = 90;
-			
-			this.position.x = -1000;
-			this.position.y = -1000;
-			this.position.z = 0;
-		}//end reset()
+			activateAction(_pullBackAction.actionName);
+		}//end pullBack()
+		
+		public function beginFalling():void
+		{
+			activateAction(_fallingAction.actionName);
+		}//end beginFalling()
 		
 	}//end Dart
 

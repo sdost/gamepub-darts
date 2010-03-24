@@ -20,19 +20,18 @@
 	import away3dlite.materials.WireframeMaterial;
 	import away3dlite.primitives.Plane;
 	import caurina.transitions.Tweener;
-	import com.bored.games.assets.VectorDartboard_MC;
-	import com.bored.games.config.ConfigManager;
-	import com.bored.games.controllers.InputController;
-	import com.bored.games.darts.objects.Board;
+	import com.bored.games.darts.models.dae_DartReduced;
 	import com.bored.games.darts.objects.Dart;
-	import com.bored.games.graphics.ImageFactory;
-	import com.bored.games.input.MouseManager;
+	import com.bored.games.darts.ui.hud.AbilityDock;
+	import com.bored.games.darts.ui.hud.ScoreBoard;
+	import com.bored.games.darts.ui.hud.ThrowIndicator;
 	import com.bored.games.events.InputStateEvent;
 	import com.bored.games.darts.DartsGlobals;
-	import com.bored.games.math.TrajectoryCalculator;
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
+	import com.sven.utils.AppSettings;
+	import com.sven.utils.ImageFactory;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.BlendMode;
@@ -42,6 +41,7 @@
 	import flash.display.Sprite;
 	import flash.display.StageQuality;
 	import flash.events.Event;
+	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.geom.Matrix;
 	import flash.geom.Matrix3D;
@@ -54,6 +54,7 @@
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
+	import flash.ui.Keyboard;
 	import flash.utils.Dictionary;
 	import flash.utils.getDefinitionByName;
 	import flash.geom.Utils3D;
@@ -68,16 +69,9 @@
 	 */
 	public class GameplayScreen extends Sprite //ContentHolder
 	{
-		private static var _dartboardMC:BitmapMaterial;
+		private var _wallClip:Bitmap;
 		
-		private static var _wallTexture:BitmapMaterial;
-		private static var _dartOutline:WireframeMaterial;
-		
-		//private var _background:Sprite;
-		//private var _buildBackground:Boolean = false;
-		
-		//private var _viewPort:Sprite;
-		//private var _graphicsLayer:Sprite;
+		private static var _dartboardTexture:BitmapMaterial;
 		
 		//engine variables
 		private var _scene:Scene3D;
@@ -92,38 +86,54 @@
 		
 		private var _stats:Stats;
 		
-		//private var _persp:PerspectiveProjection;
-		//private var _mtransform:Matrix3D = new Matrix3D();
-		//private var _dartPos:Vector3D = new Vector3D();
-		//private var _endPos:Vector3D = new Vector3D();
+		private var _throwIndicator:ThrowIndicator;
+		private var _scoreBoard:ScoreBoard;
+		private var _abilityDock:AbilityDock;
 		
 		private var _collada:Collada;
 		private var _loader:Loader3D;
 		
 		private var _dartTemplate:Object3D;
 		private var _dartModels:Vector.<Object3D>;
+		
 		private var _boardBillboard:Plane;
-		private var _wallBillboard:Plane;
+		private var _cursorBillboard:Plane;
 		
 		private var _dartRefs:Vector.<Dart>;
-		private var _boardRef:Board;
 		
-		private var _wallPosition:Vector3D;
-		
-		private var _wallScale:Number;
-		private var _boardScale:Number;
-		private var _dartScale:Number;
-		
-		public function GameplayScreen(/*a_img:Sprite, a_buildFromAllDescendants:Boolean = false, a_bAddContents:Boolean = true, a_buildBackground:Boolean = false*/) 
+		public function GameplayScreen() 
 		{
-			//super(a_img, a_buildFromAllDescendants, a_bAddContents);
+			_wallClip = new Bitmap(ImageFactory.getBitmapDataByQualifiedName(AppSettings.instance.wallTextureBitmap, AppSettings.instance.wallTextureWidth, AppSettings.instance.wallTextureHeight));
 			
-			//_buildBackground = a_buildBackground;
+			addChild(_wallClip);
+			
+			_engineScale = AppSettings.instance.away3dEngineScale;
 			
 			init();
 			
-			_dartRefs = new Vector.<Dart>();
-			_dartModels = new Vector.<Object3D>();
+			var cls:Class = getDefinitionByName(AppSettings.instance.throwIndicatorMovie) as Class;
+			_throwIndicator = new ThrowIndicator(new cls());
+			DartsGlobals.instance.optionsInterfaceSpace.addChild(_throwIndicator);
+			_throwIndicator.x = AppSettings.instance.throwIndicatorPositionX;
+			_throwIndicator.y = AppSettings.instance.throwIndicatorPositionY;
+			_throwIndicator.registerThrowController(DartsGlobals.instance.gameManager.throwController);
+			_throwIndicator.show();
+			
+			cls = getDefinitionByName(AppSettings.instance.scoreboardMovie) as Class;
+			_scoreBoard = new ScoreBoard(new cls());
+			DartsGlobals.instance.optionsInterfaceSpace.addChild(_scoreBoard);
+			_scoreBoard.x = AppSettings.instance.scoreboardPositionX;
+			_scoreBoard.y = AppSettings.instance.scoreboardPositionY;
+			_scoreBoard.registerScoreManager(DartsGlobals.instance.gameManager.scoreManager);
+			_scoreBoard.show();
+			
+			cls = getDefinitionByName(AppSettings.instance.abilityDockMovie) as Class;
+			_abilityDock = new AbilityDock(new cls());
+			DartsGlobals.instance.optionsInterfaceSpace.addChild(_abilityDock);
+			_abilityDock.x = AppSettings.instance.abilityDockPositionX;
+			_abilityDock.y = AppSettings.instance.abilityDockPositionY;
+			_abilityDock.registerAbilityManager(DartsGlobals.instance.gameManager.abilityManager);
+			_abilityDock.show();
 			
 			if (this.stage)
 			{
@@ -135,62 +145,15 @@
 			}			
 		}//end GameplayScreen() constructor.
 		
-		/*
-		override protected function buildFrom(a_img:Sprite, a_buildFromAllDescendants:Boolean = true):Dictionary
-		{
-			var descendantsDict:Dictionary = super.buildFrom(a_img, a_buildFromAllDescendants);
-						
-			_viewPort = descendantsDict["viewPort_mc"] as Sprite;
-			_graphicsLayer = _viewPort.getChildByName("anchor") as Sprite;			
-			
-			if(_buildBackground)
-			{
-				_background = new Sprite();
-			}
-			
-			return descendantsDict;
-			
-		}//end buildFrom()
-		*/
-		
 		private function addedToStage(a_evt:Event = null):void
 		{
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			this.addEventListener(Event.REMOVED_FROM_STAGE, destroy, false, 0, true);
 			
-			/*
-			// build our background.
-			if (_background)
-			{
-				_background.graphics.beginFill(0xFFFFFF, .75);
-				_background.graphics.drawRect(0, 0, this.stage.stageWidth, this.stage.stageHeight);
-				_background.graphics.endFill();
-			}
-			*/
-			
-			//this.contentsMC.alpha = 1;
-			
 			this.alpha = 0;
-			
-			/*
-			if(_background)
-			{
-				var contentIndex:int = this.getChildIndex(this.contents);
-				this.addChildAt(_background, contentIndex);
-			}
-			*/
-			
-			//this.contentsMC.x = (this.stage.stageWidth / 2) - (this.contentsMC.width / 2);
-			//this.contentsMC.y = (this.stage.stageHeight / 2) - (this.contentsMC.height / 2);
 			
 			_view.x = (this.stage.stageWidth / 2);
 			_view.y = (this.stage.stageHeight / 2);
-			
-			this.stage.quality = StageQuality.MEDIUM;
-			
-			_engineScale = ConfigManager.config.engineScale;
-			
-			trace("Engine Scale: " + _engineScale);
 			
 			Tweener.addTween(this, { alpha:1, time:2 } );
 			
@@ -210,24 +173,19 @@
 		 * Initialise the engine
 		 */
 		private function initEngine():void
-		{
+		{			
 			_scene = new Scene3D();
 			
 			_camera = new Camera3D();
-			_camera.z = -100;
-			
-			_renderer = new FastRenderer();
+			_camera.x = AppSettings.instance.cameraPositionX * _engineScale;
+			_camera.y = AppSettings.instance.cameraPositionY * _engineScale;
+			_camera.z = AppSettings.instance.cameraPositionZ * _engineScale;
 			
 			_view = new View3D();
 			_view.scene = _scene;
 			_view.camera = _camera;
-			_view.renderer = _renderer;
 			
-			addChild(_view);
-			
-			_stats = new Stats();
-            
-            addChild(_stats);
+			addChild(_view);            
 		}//end initEngine()
 		
 		/**
@@ -235,34 +193,10 @@
 		 */
 		private function initMaterials():void
 		{
-			var textureConfig:XML = ConfigManager.getConfigNamespace("textures");
-			
-			_wallTexture = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(textureConfig.wall.bitmap, textureConfig.wall.width, textureConfig.wall.height));
-			_wallTexture.repeat = false;
-			_wallTexture.smooth = true;
-			
-			var bmp:BitmapData = new BitmapData(353, 353, true, 0x0000000000);
-			bmp.draw(new VectorDartboard_MC());
-			
-			_dartboardMC = new BitmapMaterial(bmp);
-			_dartboardMC.repeat = false;
-			_dartboardMC.smooth = true;
-			
-			_dartOutline = new WireframeMaterial(0x000000);
-			
+			_dartboardTexture = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(AppSettings.instance.boardTextureBitmap, AppSettings.instance.boardTextureWidth, AppSettings.instance.boardTextureHeight));
+			_dartboardTexture.repeat = false;
+			_dartboardTexture.smooth = true;
 		}//end initMaterial()
-		
-		private function onSuccess(a_evt:Loader3DEvent):void
-		{
-			_dartTemplate = _loader.handle;			
-			_dartTemplate.mouseEnabled = false;
-			
-			for ( var i:int = 0; i < 3; i++ ) {
-				var newDart:Object3D = _dartTemplate.clone();
-				_dartModels.push(newDart);
-				_scene.addChild(newDart);
-			}
-		}//end onSuccess()
 		
 		/**
 		 * Initialise the scene objects
@@ -271,66 +205,35 @@
 		{
 			Debug.active = true;
 			
-			var textureConfig:XML = ConfigManager.getConfigNamespace("textures");
-			
-			_wallBillboard = new Plane();
-			_wallBillboard.z = 200;
-			_wallBillboard.material = _wallTexture;
-			_wallBillboard.width = textureConfig.wall.width;
-			_wallBillboard.height = textureConfig.wall.height;
-			_wallBillboard.yUp = false;
-			_wallBillboard.bothsides = true;
-			_wallBillboard.mouseEnabled = false;
-			_scene.addChild(_wallBillboard);
-			
 			_boardBillboard = new Plane();
-			_boardBillboard.material = _dartboardMC;
-			_boardBillboard.width = textureConfig.board.width;
-			_boardBillboard.height = textureConfig.board.height;
+			_boardBillboard.x = AppSettings.instance.dartboardPositionX * _engineScale;
+			_boardBillboard.y = AppSettings.instance.dartboardPositionY * _engineScale;
+			_boardBillboard.z = AppSettings.instance.dartboardPositionZ * _engineScale;
+			_boardBillboard.material = _dartboardTexture;
+			_boardBillboard.width = AppSettings.instance.boardTextureWidth;
+			_boardBillboard.height = AppSettings.instance.boardTextureHeight;
 			_boardBillboard.yUp = false;
 			_boardBillboard.bothsides = true;
 			_boardBillboard.mouseEnabled = false;
+			_boardBillboard.lookAt(_camera.position, new Vector3D(0, 1, 0));
 			_scene.addChild(_boardBillboard);
 			
-			_collada = new Collada();
-			_collada.scaling = 2;
-			_collada.centerMeshes = true;
+			DartsGlobals.instance.gameManager.cursor.initModels();
+			_scene.addChild(DartsGlobals.instance.gameManager.cursor.model);
+			DartsGlobals.instance.gameManager.cursor.model.z = AppSettings.instance.dartboardPositionZ * _engineScale - 10;
 			
-			_loader = new Loader3D();
-			_loader.loadGeometry("dart01_reduced.dae", _collada);
-			_loader.addEventListener(Loader3DEvent.LOAD_SUCCESS, onSuccess);
+			for each( var dart:Dart in DartsGlobals.instance.gameManager.darts )
+			{
+				dart.initModels();
+				_scene.addChild(dart.model);
+			}
 		}//end initObjects()
-		
-		public function setDartReferences(a_darts:Vector.<Dart>):void
-		{
-			_dartRefs = a_darts;
-		}//end setDartReferences()
-		
-		public function setBoardReference(a_board:Board):void
-		{
-			_boardRef = a_board;
-		}//end setBoardReference()
-		
+	
 		public function render():void
 		{	
-			if ( _boardRef ) {
-				_boardBillboard.x = _boardRef.position.x * _engineScale;
-				_boardBillboard.y = _boardRef.position.y * _engineScale;
-				_boardBillboard.z = _boardRef.position.z * _engineScale;
-			}
-			
-			if ( _dartTemplate ) {		
-				
-				var followCam:Boolean = false;
-				
-				for ( var i:int = 0; i < _dartRefs.length; i++ ) {
-					_dartModels[i].rotationX = _dartRefs[i].angle;
-					
-					_dartModels[i].x = _dartRefs[i].position.x * _engineScale;
-					_dartModels[i].y = -(_dartRefs[i].position.y * _engineScale);
-					_dartModels[i].z = _dartRefs[i].position.z * _engineScale;
-				}
-			}
+			_scoreBoard.update();
+			_throwIndicator.update();
+			_abilityDock.update();
 			
 			_view.render();
 		}//end render()

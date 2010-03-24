@@ -33,18 +33,21 @@
 		private var _defaultAnimationClip:AnimationData;
 		private var _haveClips:Boolean = false;
 		private var _containers:Dictionary = new Dictionary(true);
-		private var _skinControllers:Dictionary = new Dictionary(true);
+		private var _skinControllers:Vector.<SkinController> = new Vector.<SkinController>();
 		private var _skinController:SkinController;
+
+		public var bothsides:Boolean = true;
+		public var useIDAsName:Boolean = false;
 		
-		private function buildContainers(containerData:ContainerData, parent:ObjectContainer3D):void
+		private function buildContainers(containerData:ContainerData, parent:ObjectContainer3D, depth:int):void
 		{
-			Debug.trace(" + Build Container : " + containerData.name);
+			var spaces:String = "";
+			for (var s:int = 0 ; s < depth ; s++)
+				spaces += " ";
+			Debug.trace(" + Build Container : " + spaces + containerData.name);
 			
 			for each (var _objectData:ObjectData in containerData.children) {
-				if (_objectData is MeshData) {
-					var mesh:Mesh = buildMesh(_objectData as MeshData, parent);
-					_containers[_objectData.name] = mesh;
-				} else if (_objectData is BoneData) {
+				if (_objectData is BoneData) {
 					var _boneData:BoneData = _objectData as BoneData;
 					var bone:Bone = new Bone();
 					bone.name = _boneData.name;
@@ -59,7 +62,7 @@
 					
 					bone.joint.transform.matrix3D = _boneData.jointTransform;
 					
-					buildContainers(_boneData, bone.joint);
+					buildContainers(_boneData, bone.joint, depth+1);
 					
 					parent.addChild(bone);
 					
@@ -68,12 +71,19 @@
 					var objectContainer:ObjectContainer3D = _containerData.container = new ObjectContainer3D();
 					objectContainer.name = _containerData.name;
 					
-					_containers[objectContainer.name] = objectContainer;
-					
 					objectContainer.transform.matrix3D = _objectData.transform;
 					
-					buildContainers(_containerData, objectContainer);
+					if ((_objectData as ContainerData).geometry)	// The container is also mesh
+					{
+						fillMesh(objectContainer as Mesh, _objectData as MeshData, parent);
+						_containers[_objectData.name] = objectContainer;
+					}
+					else
+						_containers[objectContainer.name] = objectContainer;
 					
+					buildContainers(_containerData, objectContainer, depth+1);
+					
+					//TODO: set bounding values (max/min) on _containerData objects
 					if (centerMeshes && objectContainer.children.length) {
 						//center children in container for better bounding radius calulations
 						var i:int = objectContainer.children.length;
@@ -85,23 +95,38 @@
 		                	objectContainer.children[i].y -= _moveVector.y;
 							objectContainer.children[i].z -= _moveVector.z;
 		                }
-						_moveVector = objectContainer.transform.matrix3D.transformVector(_moveVector);
-						objectContainer.x += _moveVector.x;
-						objectContainer.y += _moveVector.y;
-						objectContainer.z += _moveVector.z;
+		                //objectContainer.transform.matrix3D.appendTranslation(_moveVector.x, _moveVector.y, _moveVector.z);
+						//_moveVector = objectContainer.transform.matrix3D.transformVector(_moveVector);
+						//objectContainer.x += _moveVector.x;
+						//objectContainer.y += _moveVector.y;
+						//objectContainer.z += _moveVector.z;
 					}
 					
 					parent.addChild(objectContainer);
 					
+				} else if (_objectData is MeshData) {
+					var mesh:Mesh = buildMesh(_objectData as MeshData, parent, depth+1);
+					_containers[_objectData.name] = mesh;
+					
+					parent.addChild(mesh);
 				}
 			}
 		}
 		
-		private function buildMesh(_meshData:MeshData, parent:ObjectContainer3D):Mesh
+		private function buildMesh(_meshData:MeshData, parent:ObjectContainer3D, depth:int):Mesh
 		{
-			Debug.trace(" + Build Mesh : "+_meshData.name);
+			var spaces:String = "";
+			for (var s:int = 0 ; s < depth ; s++)
+				spaces += " ";
+			Debug.trace(" + Build Mesh      : " + spaces + _meshData.name);
 			
 			var mesh:Mesh = new Mesh();
+			fillMesh(mesh, _meshData, parent);
+			return mesh;
+		}
+				
+		private function fillMesh(mesh:Mesh, _meshData:MeshData, parent:ObjectContainer3D):void
+		{
 			mesh.name = _meshData.name;
 			mesh.transform.matrix3D = _meshData.transform;
 			mesh.bothsides = _meshData.geometry.bothsides;
@@ -139,11 +164,11 @@
 				i1 = _faceData.v1*3;
 				i2 = _faceData.v2*3;
 				mesh._vertices.push(vertices[i0], vertices[i0+1], vertices[i0+2]);
-				buildSkinVertices(_geometryData, _faceData.v0, mesh._vertices);
+				buildSkinVertices(_geometryData, _faceData.v0, mesh._vertices, mesh);
 				mesh._vertices.push(vertices[i1], vertices[i1+1], vertices[i1+2]);
-				buildSkinVertices(_geometryData, _faceData.v1, mesh._vertices);
+				buildSkinVertices(_geometryData, _faceData.v1, mesh._vertices, mesh);
 				mesh._vertices.push(vertices[i2], vertices[i2+1], vertices[i2+2]);
-				buildSkinVertices(_geometryData, _faceData.v2, mesh._vertices);
+				buildSkinVertices(_geometryData, _faceData.v2, mesh._vertices, mesh);
 				
 				//set uvData
 				i0 = _faceData.uv0*3;
@@ -153,6 +178,9 @@
 				
 				//set indices
 				mesh._indices.push(i++, i++, i++);
+				
+				//set facelengths
+				mesh._faceLengths.push(3);
 			}
 			
 			//store mesh material reference for later setting by the materialLibrary
@@ -163,7 +191,7 @@
 			
 			//store element material reference for later setting by the materialLibrary
 			for each (_face in mesh._faces)
-				if ((_materialData = _geometryData.faces[_face.index].materialData))
+				if ((_materialData = _geometryData.faces[_face.faceIndex].materialData))
 					_materialData.faces.push(_face);
 					
 			if (centerMeshes) {
@@ -176,18 +204,13 @@
                 	mesh._vertices[k*3+1] -= _moveVector.y;
 					mesh._vertices[k*3+2] -= _moveVector.z;
                 }
-                _moveVector = mesh.transform.matrix3D.transformVector(_moveVector);
-				mesh.x += _moveVector.x;
-				mesh.y += _moveVector.y;
-				mesh.z += _moveVector.z;
+                mesh.transform.matrix3D.appendTranslation(_moveVector.x, _moveVector.y, _moveVector.z);
 			}
 			
 			mesh.type = ".Collada";
-			parent.addChild(mesh);
-			return mesh;
 		}
 		
-		private function buildSkinVertices(geometryData:GeometryData, i:int, vertices:Vector.<Number>):void
+		private function buildSkinVertices(geometryData:GeometryData, i:int, vertices:Vector.<Number>, mesh:Mesh):void
 		{
 			if (!geometryData.skinVertices.length)
 				return;
@@ -195,11 +218,12 @@
 			var skinController:SkinController;
 			var skinVertex:SkinVertex = geometryData.skinVertices[i].clone();
 			
-			skinVertex.updateVertices(vertices.length - 3, vertices);
-			
-			for each (skinController in geometryData.skinControllers)
-				skinController.skinVertices.push(skinVertex);
+			if (skinVertex.updateVertices(vertices.length - 3, vertices, mesh))
+				for each (skinController in geometryData.skinControllers)
+					skinController.skinVertices.push(skinVertex);
 		}
+		
+		private static const epsilonScale:Number = 0.000001;
 		
 		private function buildAnimations():void
 		{
@@ -333,6 +357,11 @@
 								case "scaleX":
 								case "transform(0)(0)":
 									channel.type = [sX];
+									
+									for each (param in channel.param) {
+										if (param[0] < epsilonScale)
+											param[0] = epsilonScale;
+									}
 				            		break;
 								case "scaleY":
 								case "transform(1)(1)":
@@ -340,6 +369,11 @@
 										channel.type = [sY];
 									else
 										channel.type = [sZ];
+									
+									for each (param in channel.param) {
+										if (param[0] < epsilonScale)
+											param[0] = epsilonScale;
+									}
 				     				break;
 								case "scaleZ":
 								case "transform(2)(2)":
@@ -347,6 +381,11 @@
 										channel.type = [sZ];
 									else
 										channel.type = [sY];
+									
+									for each (param in channel.param) {
+										if (param[0] < epsilonScale)
+											param[0] = epsilonScale;
+									}
 				     				break;
 								case "translate":
 								case "translation":
@@ -371,6 +410,15 @@
 										channel.type = [sX, sY, sZ];
 									else
 										channel.type = [sX, sZ, sY];
+									
+									for each (param in channel.param) {
+										if (param[0] < epsilonScale)
+											param[0] = epsilonScale;
+										if (param[1] < epsilonScale)
+											param[1] = epsilonScale;
+										if (param[2] < epsilonScale)
+											param[2] = epsilonScale;
+									}
 				     				break;
 								case "rotate":
 									if (yUp)
@@ -383,6 +431,13 @@
 									break;
 								case "transform":
 									channel.type = ["transform"];
+									
+									for each (param in channel.param) {
+										if (Math.abs((param[0] as Matrix3D).determinant) < epsilonScale) {
+											(param[0] as Matrix3D).identity();
+											(param[0] as Matrix3D).appendScale(epsilonScale, epsilonScale, epsilonScale);
+										}
+									}
 									break;
 								
 								case "visibility":
@@ -444,11 +499,6 @@
 		
 		/**
 		 * Creates a new <code>Collada</code> object.
-		 *
-		 * @param	init	[optional]	An initialisation object for specifying default instance properties.
-		 *
-		 * @see away3dlite.loaders.Collada#parse()
-		 * @see away3dlite.loaders.Collada#load()
 		 */
         public function Collada()
         {
@@ -473,7 +523,14 @@
         /** @private */
         arcane override function prepareData(data:*):void
         {
-        	collada = Cast.xml(data);
+			// void junk byte, flash player bug
+			try{
+            	collada = Cast.xml(data);
+   			}catch(e:*){
+   				Debug.warning("Junk byte!?");
+   				var _pos:int = String(data).indexOf("</COLLADA>"); 
+  				collada = new XML(String(data).substring(0, _pos+String("</COLLADA>").length));
+   			}
         	
 			default xml namespace = collada.namespace();
 			Debug.trace(" ! ------------- Begin Parse Collada -------------");
@@ -500,7 +557,7 @@
 				buildMaterials();
 				
 				//build the containers
-				buildContainers(containerData, container as ObjectContainer3D);
+				buildContainers(containerData, container as ObjectContainer3D, 0);
 				
 				//build animations
 				buildAnimations();
@@ -558,7 +615,7 @@
 				if (String(node.@type) == "JOINT")
 					_objectData = new BoneData();
 				else {
-					if (String(node["instance_node"].@url) == "" && (String(node["node"]) == "" || parent is BoneData))
+					if (String(node["instance_node"].@url) == "" && (String(node["node"]) == ""))
 						return;
 					_objectData = new ContainerData();
 				}
@@ -566,22 +623,30 @@
 				_objectData = new MeshData();
 			}
 			
-			parent.children.push(_objectData);
-			
 			//ColladaMaya 3.05B
 			if (String(node.@type) == "JOINT")
 				_objectData.id = node.@sid;
 			else
 				_objectData.id = node.@id;
 			
-			//ColladaMaya 3.02
 			if(String(node.@name) != "")
 			{
+				//#case 1 : 3dsMax 8 - Feeling ColladaMax v3.05B.
+				//@example <node id="WheelFL-node_PIVOT" name="WheelFL_PIVOT" type="NODE">
+				
+				//#case 2 : Maya8.5 | ColladaMaya v3.05B
+				//@example <node id="skeleton" name="skeleton" type="NODE">
             	_objectData.name = String(node.@name);
    			}else{
+   				//#case 3 : Maya8.5 | ColladaMaya v3.02
+				//@example <node id="skeleton" type="NODE">
    				_objectData.name = String(node.@id);
    			}
-   
+   			
+   			// force to use id as name
+   			if(useIDAsName || String(node.@type) == "JOINT")
+   				_objectData.name = String(node.@id);
+   				
             _transform = _objectData.transform;
 			
 			Debug.trace(" + Parse Node : " + _objectData.id + " : " + _objectData.name);
@@ -627,6 +692,13 @@
                         break;
 						
                     case "scale":
+                    	if (arrayChild[0] < epsilonScale)
+                    		arrayChild[0] = epsilonScale;
+                    	if (arrayChild[1] < epsilonScale)
+                    		arrayChild[1] = epsilonScale;
+                    	if (arrayChild[2] < epsilonScale)
+                    		arrayChild[2] = epsilonScale;
+                    	
                         if (_objectData is BoneData) {
                         	if (yUp)
 				                boneData.jointTransform.prependScale(arrayChild[0], arrayChild[1], arrayChild[2]);
@@ -645,18 +717,31 @@
                     case "matrix":
                     	var m:Matrix3D = new Matrix3D();
                     	m.rawData = array2matrix(arrayChild, yUp, scaling);
+                    	if (node is MeshData && Math.abs(m.determinant) < epsilonScale) {
+                    		m.identity();
+                    		m.appendScale(epsilonScale, epsilonScale, epsilonScale);
+                    	}
                         _transform.prepend(m);
 						break;
 						
                     case "node":
                     	//3dsMax 11 - Feeling ColladaMax v3.05B
                     	//<node><node/></node>
-                    	if(_objectData is MeshData)
+                    	if((_objectData is MeshData) && !(_objectData is ContainerData))
                     	{
-							parseNode(childNode, parent as ContainerData);
-                    	}else{
-                    		parseNode(childNode, _objectData as ContainerData);
+							//WRONG: parseNode(childNode, parent as ContainerData);
+							
+							// _objectData is a Mesh but ALSO a container!!!
+							// WE MUST preserve the hierarchy because if animation is applied onto the mesh _objectData
+							// then its children must apply this animation too.
+							// We could use the fact that an ObjectContainer3D is also a Mesh, but on the loader side
+							// ContainerData doesn't derive from MeshData.
+							// So I have added this missing derivative to ContainerData class.
+							var fooContainer:ContainerData = new ContainerData();
+							_objectData.clone(fooContainer as MeshData);
+							_objectData = fooContainer;
                     	}
+                    	parseNode(childNode, _objectData as ContainerData);
                         
                         break;
 
@@ -694,6 +779,8 @@
 						break;
                 }
             }
+            
+        	parent.children.push(_objectData);
         }
 		
 		/**
@@ -836,6 +923,9 @@
             else
             	geometryData.bothsides = false;
 			
+			// force bothsides by script
+			geometryData.bothsides = geometryData.bothsides && bothsides;
+			
 			//parse controller
 			if (!geometryData.ctrlXML)
 				return;
@@ -871,7 +961,7 @@
                 geometryData.skinControllers.push(skinController = new SkinController());
                 skinController.name = name;
                 skinController.bindMatrix = matrix;
-                _skinControllers[name] = skinController;
+                _skinControllers.push(skinController);
                 i = i + 16;
             }
 			
@@ -932,32 +1022,67 @@
             
             var _channel_id:uint = 0;
             
-            //loop through all animation channels
+            //loop through all animations and for each through all its channels
+			var _channelName:String;
+			var _channels:XMLList;
+			var channelIndex:int;
+			var id:String;
+			var type:String;
             if(anims["animation"]["animation"].length()==0)
-			for each (var channel:XML in anims["animation"])
-			{
-				if(String(channel.@id).length>0)
+            {
+				for each (var animation:XML in anims["animation"])
 				{
-					channelLibrary.addChannel(channel.@id, channel);
-				}else{
-					// COLLADAMax NextGen;  Version: 1.1.0;  Platform: Win32;  Configuration: Release Max2009
-					// issue#1 : missing channel.@id -> use automatic id instead
-					Debug.trace(" ! COLLADAMax2009 id : _"+_channel_id);
-					channelLibrary.addChannel("_"+String(_channel_id++), channel);
+					if(String(animation.@id).length>0)
+					{
+						_channelName = animation.@id;
+					}else{
+						// COLLADAMax NextGen;  Version: 1.1.0;  Platform: Win32;  Configuration: Release Max2009
+						// issue#1 : missing channel.@id -> use automatic id instead
+						Debug.trace(" ! COLLADAMax2009 id : _"+_channel_id);
+						_channelName = "_"+String(_channel_id++);
+					}
+
+					_channels = animation["channel"];
+					if (_channels.length() == 1)
+						channelLibrary.addChannel(_channelName, animation, 0);
+					else
+					{
+						for (channelIndex = 0 ; channelIndex < _channels.length() ; channelIndex++)
+						{
+							id = _channels[channelIndex].@target;
+				            type = id.split("/")[1];
+							
+							channelLibrary.addChannel(_channelName + "_subAnim_" + type, animation, channelIndex);
+						}
+					}
 				}
-			}
+            }
 
 			// C4D 
 			// issue#1 : animation -> animation.animation
 			// issue#2 : missing channel.@id -> use automatic id instead
-			for each (channel in anims["animation"]["animation"])
+			for each (animation in anims["animation"]["animation"])
 			{
-				if(String(channel.@id).length > 0)
+				if(String(animation.@id).length > 0)
 				{
-					channelLibrary.addChannel(channel.@id, channel);
+					_channelName = animation.@id;
 				}else{
 					Debug.trace(" ! C4D id : _"+_channel_id);
-					channelLibrary.addChannel("_"+String(_channel_id++), channel);
+					_channelName = "_"+String(_channel_id++);
+				}
+				
+				_channels = animation["channel"];
+				if (_channels.length() == 1)
+					channelLibrary.addChannel(_channelName, animation, 0);
+				else
+				{
+					for (channelIndex = 0 ; channelIndex < _channels.length() ; channelIndex++)
+					{
+						id = _channels[channelIndex].@target;
+			            type = id.split("/")[1];
+						
+						channelLibrary.addChannel(_channelName + "_subAnim_" + type, animation, channelIndex);
+					}
 				}
 			}
 					
@@ -983,6 +1108,8 @@
         {
 			var animationClip:AnimationData = animationLibrary.addAnimation(clip.@id);
 			
+			//TODO: Is there a need to handle case where there is multiple channels inside an animation channel (_subAnim_) ?
+			
 			for each (var channel:XML in clip["instance_animation"])
 				animationClip.channels[getId(channel.@url)] = channelLibrary[getId(channel.@url)];
         }
@@ -990,10 +1117,11 @@
 		private function parseChannel(channelData:ChannelData) : void
         {
         	var node:XML = channelData.xml;
-			var id:String = node["channel"].@target;
+        	var channels:XMLList = node["channel"];
+        	var channelChunk:XML = channels[channelData.channelIndex];
+			var id:String = channelChunk.@target;
 			var name:String = id.split("/")[0];
             var type:String = id.split("/")[1];
-			var sampler:XML = node["sampler"][0];
 			
             if (!type) {
             	Debug.trace(" ! No animation type detected");
@@ -1014,16 +1142,14 @@
             	type = type.split(".").join("");
             }
             
-			
-
-            
             var channel:Channel = channelData.channel = new Channel(name);
 			var i:int;
 			var j:int;
 			
 			_defaultAnimationClip.channels[channelData.name] = channelData;
 			
-			Debug.trace(" ! channelType : " + type);
+			var sourceName:String = getId(channelChunk.@source);
+			var sampler:XML = node["sampler"].(@id == sourceName)[0];
 			
             for each (var input:XML in sampler["input"])
             {
@@ -1141,7 +1267,11 @@
 	
 				var image:XML = collada["library_images"].image.(@id == imageId)[0];
 	
-				filename = image["init_from"];
+				//3dsMax 11 - Feeling ColladaMax v3.05B.
+				if(!image)
+					filename = collada["library_images"].image.init_from.text();
+				else
+					filename = image["init_from"];
 	
 				if (filename.substr(0, 2) == "./")
 				{

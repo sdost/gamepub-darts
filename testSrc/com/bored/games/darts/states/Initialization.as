@@ -1,11 +1,13 @@
 ﻿package com.bored.games.darts.states 
 {
-	import com.bored.games.config.ConfigManager;
 	import com.bored.games.darts.DartsGlobals;
+	import com.bored.games.darts.logic.CricketGameLogic;
+	import com.bored.games.darts.logic.DartsGameLogic;
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.bored.services.AbstractExternalService;
 	import com.inassets.statemachines.Finite.State;
 	import com.inassets.statemachines.interfaces.IStateMachine;
+	import com.sven.utils.AppSettings;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.net.URLLoader;
@@ -18,7 +20,7 @@
 	
 	/**
 	 * ...
-	 * @author Bo Landsman
+	 * @author Samuel Dost
 	 */
 	public class Initialization extends State
 	{		
@@ -32,30 +34,24 @@
 		 * Handler for entering (and executing) this state.
 		 */
 		override public function onEnter():void
-		{	
-			var servicesConfig:XML = ConfigManager.getConfigNamespace("externalServices");
+		{		
+			trace("Initialization::onEnter()");
 			
-			trace(servicesConfig.provider);
+			DartsGlobals.instance.gameManager = new CricketGameLogic();
 			
-			//var ServicesClass:Class = getDefinitionByName(servicesConfig.provider) as Class;
+			trace("GameManager: " + DartsGlobals.instance.gameManager);
 			
-			//trace("ServicesClass: " + ServicesClass);
-			
-			//var ext:AbstractExternalService = new ServicesClass();
-			
-			//ext.init(servicesConfig.gameId, DartsGlobals.instance.optionsInterfaceSpace);
-			
-			//DartsGlobals.instance.externalServices = ext;
-			
-			//trace("Initialization::onEnter()");
-			this.finished();
-			
+			var providerCls:Class = getDefinitionByName(AppSettings.instance.externalServicesProvider) as Class;
+			var ext:AbstractExternalService = new providerCls();
+			ext.init(AppSettings.instance.externalServicesGameId, DartsGlobals.instance.optionsInterfaceSpace);
+			DartsGlobals.instance.externalServices = ext;
+
+			this.finished();			
 		}//end onEnter()
 		
 		private function finished(...args):void
 		{
 			(this.stateMachine as GameFSM).transitionToNextState();
-			
 		}//end finished()
 		
 		/**
@@ -63,8 +59,6 @@
 		 */
 		override public function onExit():void
 		{
-			
-			
 		}//end onExit()
 		
 	}//end class Initialization

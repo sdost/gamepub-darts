@@ -1,9 +1,8 @@
 ﻿package com.bored.games.darts
 {
-	import com.bored.games.config.ConfigManager;
-	import com.bored.games.controllers.InputController;
-	import com.bored.games.controllers.MouseInputController;
+	import com.bored.games.darts.logic.DartsGameLogic;
 	import com.bored.services.AbstractExternalService;
+	import com.sven.managers.ModalDisplayManager;
 	import flash.display.Sprite;
 	import flash.display.Stage;
 	import flash.events.Event;
@@ -47,12 +46,10 @@
 		private var _constructed:Boolean = false;
 		
 		private var _debugBuild:Boolean = false;
-		
-		private var _inputController:InputController;
-		
-		private var _config:XML;
-		
+
 		private var _externalService:AbstractExternalService;
+		
+		private var _gameManager:DartsGameLogic;
 		
 		public function DartsGlobals(a_singletonEnforcer:DartsGlobals_SingletonEnforcer) 
 		{
@@ -97,8 +94,6 @@
 		public function set stage(a_stage:Stage):void
 		{
 			_stage = a_stage;
-			
-			_inputController = new MouseInputController(_stage);
 			
 			if (!_optionsInterfaceSpace)
 			{
@@ -181,10 +176,15 @@
 			
 		}//end get flashVars()
 		
-		public function set config(a_xml:String):void 
+		public function set gameManager(a_manager:DartsGameLogic):void
 		{
-			ConfigManager.loadConfig(a_xml);
-		}//end set config()
+			_gameManager = a_manager;
+		}//end set gameManager()
+		
+		public function get gameManager():DartsGameLogic
+		{
+			return _gameManager;
+		}//end get gameManager()
 		
 		public function set externalServices(a_ext:AbstractExternalService):void
 		{
@@ -202,10 +202,10 @@
 			
 		}//end get isDebugBuild()
 		
-		public function get inputController():InputController
+		public function showModalPopup(a_content:Class = null, a_prompt:Object = null):void
 		{
-			return _inputController;
-		}//end get inputController()
+			ModalDisplayManager.createModalDisplay(_popupSpace, a_content, a_prompt);
+		}//end showModalPopup()
 		
 		/*****************************
 		 * 
