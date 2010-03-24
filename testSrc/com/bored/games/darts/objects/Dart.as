@@ -146,6 +146,12 @@
 			this.pitch = 90;
 		}//end reset()
 		
+		public function resetThrow():void
+		{
+			deactivateAction(_pullBackAction.actionName);
+			this.position.z = 0;
+		}//end resetThrow()
+		
 		public function finishThrow():void
 		{
 			deactivateAction(_throwAction.actionName);

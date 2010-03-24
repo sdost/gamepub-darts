@@ -50,7 +50,12 @@
 							_thrust,
 							_lean
 						);
+					} 
+					else
+					{
+						DartsGlobals.instance.gameManager.currentDart.resetThrow();
 					}
+					
 					_mouseTimer.removeEventListener( TimerEvent.TIMER, updateCurrentMouseVelocity );
 					_mouseTimer.stop();
 					_mouseTimer.reset();
@@ -103,14 +108,14 @@
 			
 			if ( Math.floor(_lastMove) < 1 ) {
 				_cumAvgSpeed = 0;
+				_thrust = 0;
+				_lean = 0;
 				_num = 0;
+			} else { 			
+				_cumAvgSpeed = _cumAvgSpeed + ((_speed - _cumAvgSpeed) / ++_num);
+				_thrust = clamp((_cumAvgSpeed * AppSettings.instance.dartThrustScale), AppSettings.instance.dartMinThrust, AppSettings.instance.dartMaxThrust);
+				_lean = _velX * AppSettings.instance.dartLeanScale;
 			}
-			
-			_cumAvgSpeed = _cumAvgSpeed + ((_speed - _cumAvgSpeed) / ++_num);
-			
-			_thrust = clamp((_cumAvgSpeed * AppSettings.instance.dartThrustScale), AppSettings.instance.dartMinThrust, AppSettings.instance.dartMaxThrust);
-			
-			_lean = _velX * AppSettings.instance.dartLeanScale;
 		}//end updateCurrentMouseVelocity()
 		
 		private function clamp(a_num:Number, a_min:Number, a_max:Number):Number
