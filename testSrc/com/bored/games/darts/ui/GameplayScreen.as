@@ -165,7 +165,6 @@
 		private function init():void
 		{
 			initEngine();
-			initMaterials();
 			initObjects();
 		}//end init()
 		
@@ -187,16 +186,6 @@
 			
 			addChild(_view);            
 		}//end initEngine()
-		
-		/**
-		 * Initialise the materials
-		 */
-		private function initMaterials():void
-		{
-			_dartboardTexture = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(AppSettings.instance.boardTextureBitmap, AppSettings.instance.boardTextureWidth, AppSettings.instance.boardTextureHeight));
-			_dartboardTexture.repeat = false;
-			_dartboardTexture.smooth = true;
-		}//end initMaterial()
 		
 		/**
 		 * Initialise the scene objects

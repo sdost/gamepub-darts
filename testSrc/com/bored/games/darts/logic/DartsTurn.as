@@ -32,6 +32,11 @@
 			if (_throwsRemaining > _maxThrows) _throwsRemaining = _maxThrows;
 		}//end redoThrow()
 		
+		public function get throwIndex():int
+		{
+			return (_maxThrows - _throwsRemaining);
+		}//end throwIndex()
+		
 		public function get throwsRemaining():int
 		{
 			return _throwsRemaining;

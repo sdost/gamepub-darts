@@ -18,7 +18,7 @@
 		}//end constructor()
 		
 		override public function useAbility():int
-		{						
+		{					
 			return super.useAbility();
 		}//end useAbility()
 		

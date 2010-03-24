@@ -79,7 +79,7 @@
 			
 			var localPlayer:LocalPlayer = new LocalPlayer();
 			localPlayer.setSkin(dartTexture_UJ);
-			localPlayer.setAbilities(new BeeLineAbility(3), new ShieldAbility(5), new DoOverAbility(7));
+			localPlayer.setAbilities(new BeeLineAbility(1), new ShieldAbility(1), new DoOverAbility(1));
 			DartsGlobals.instance.gameManager.registerPlayer( localPlayer );
 			
 			var cpuPlayer:ComputerPlayer = new ComputerPlayer();

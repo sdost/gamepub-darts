@@ -71,10 +71,7 @@
 		 * Handler for entering (and executing) this state.
 		 */
 		override public function onEnter():void
-		{						
-			var spr:Sprite = SpriteFactory.getSpriteByQualifiedName(AppSettings.instance.boardCollisionMap);
-			DartsGlobals.instance.gameManager.dartboardClip = spr;
-			
+		{									
 			_inputController = new MouseInputController(DartsGlobals.instance.screenSpace);
 			_throwController = new GestureThrowController();
 			

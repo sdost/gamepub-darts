@@ -80,8 +80,8 @@
 			
 			for ( var i:int = 0; i < _clipList.length; i++ ) {
 				
-				var clipScaledX:Number = (_clipList[i].x / (this._game.dartboardClip.width/2)) * AppSettings.instance.dartboardScale;
-				var clipScaledY:Number = (_clipList[i].y / (this._game.dartboardClip.height/2)) * AppSettings.instance.dartboardScale;
+				var clipScaledX:Number = (_clipList[i].x / (this._game.dartboard.boardSprite.width/2)) * AppSettings.instance.dartboardScale;
+				var clipScaledY:Number = (_clipList[i].y / (this._game.dartboard.boardSprite.height/2)) * AppSettings.instance.dartboardScale;
 				
 				shotList.push( new AIShotCandidate(clipScaledX, -clipScaledY) );
 			}

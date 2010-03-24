@@ -11,6 +11,7 @@
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.filters.BlurFilter;
+	import flash.ui.Mouse;
 	import flash.utils.Dictionary;
 	
 	/**
@@ -23,6 +24,8 @@
 		private var _abilityBox:Vector.<MightyButton>;
 		
 		private var _abilityMgr:AbilityManager;
+		
+		private var _mouseHiddenState:Boolean = false;
 		
 		public function AbilityDock(a_img:Sprite, a_buildFromAllDescendants:Boolean = false, a_bAddContents:Boolean = true)
 		{
@@ -51,6 +54,8 @@
 			{
 				
 				_abilityBox[0] = new MightyButton(_abilityGraphic[0], false);
+				_abilityBox[0].buttonContents.addEventListener(MouseEvent.ROLL_OVER, onMouseOver, false, 0, true);
+				_abilityBox[0].buttonContents.addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
 				_abilityBox[0].addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onAbilityClicked, false, 0, true);
 			}
 			else
@@ -63,6 +68,8 @@
 			if ( _abilityGraphic[1] ) 
 			{
 				_abilityBox[1] = new MightyButton(_abilityGraphic[1], false);
+				_abilityBox[1].buttonContents.addEventListener(MouseEvent.ROLL_OVER, onMouseOver, false, 0, true);
+				_abilityBox[1].buttonContents.addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
 				_abilityBox[1].addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onAbilityClicked, false, 0, true);
 			}
 			else
@@ -75,6 +82,8 @@
 			if ( _abilityGraphic[2] ) 
 			{
 				_abilityBox[2] = new MightyButton(_abilityGraphic[2], false);
+				_abilityBox[2].buttonContents.addEventListener(MouseEvent.ROLL_OVER, onMouseOver, false, 0, true);
+				_abilityBox[2].buttonContents.addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
 				_abilityBox[2].addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onAbilityClicked, false, 0, true);
 			}
 			else
@@ -106,20 +115,28 @@
 		{
 			for ( var i:int = 0; i < _abilityMgr.abilities.length; i++ )
 			{
-				if ( _abilityMgr.abilities[i] ) {
+				if ( _abilityMgr.abilities[i] && _abilityMgr.abilities[i].ready && _abilityBox[i].paused ) {
 					_abilityBox[i].pause(false);
 					((_abilityBox[i].buttonContents as Sprite).getChildByName("icon_holder") as MovieClip).addChild(_abilityMgr.abilities[i].icon);
 				}
 				
-				if ( _abilityMgr.abilities[i].ready ) {
+				if ( _abilityMgr.abilities[i].ready && _abilityBox[i].paused ) {
 					_abilityBox[i].pause(false);
-					(_abilityBox[i].buttonContents as Sprite).filters = [];
-				} else {
+				} else if ( !_abilityMgr.abilities[i].ready &&  !_abilityBox[i].paused ) {
 					_abilityBox[i].pause(true);
-					(_abilityBox[i].buttonContents as Sprite).filters = [ new BlurFilter(2, 2, 3) ];
 				}
 			}
 		}//end update()
+		
+		private function onMouseOver(a_evt:MouseEvent):void
+		{
+			Mouse.show();
+		}//end onMouseOver()
+		
+		private function onMouseOut(a_evt:MouseEvent):void
+		{
+			Mouse.hide();
+		}//end onMouseOut()
 		
 		private function onAbilityClicked(a_evt:ButtonEvent):void
 		{

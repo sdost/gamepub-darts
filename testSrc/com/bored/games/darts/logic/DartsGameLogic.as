@@ -3,6 +3,7 @@
 	import com.bored.games.darts.abilities.Ability;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.objects.Cursor;
+	import com.bored.games.darts.objects.Dartboard;
 	import com.bored.games.darts.ui.modals.GameResultsModal;
 	import com.bored.games.input.InputController;
 	import com.bored.games.darts.input.ThrowController;
@@ -30,6 +31,7 @@
 		protected var _currentTurn:DartsTurn;
 		protected var _currentPlayer:int;
 		protected var _currentDart:Dart;
+		protected var _lastDart:Dart;
 		
 		protected var _darts:Vector.<Dart>;
 		
@@ -40,11 +42,11 @@
 		
 		protected var _players:Vector.<DartsPlayer>;
 		
-		protected var _dartboardClip:Sprite;
-		
 		protected var _abilityManager:AbilityManager;
 		
 		protected var _throwsPerTurn:int = 0;
+		
+		protected var _dartboard:Dartboard;
 		
 		protected var _cursor:Cursor;
 		
@@ -56,6 +58,8 @@
 			_scoreManager = new AbstractScoreManager();
 			_abilityManager = new AbilityManager();
 			_blockedSections = new Vector.<String>();
+			
+			_dartboard = new Dartboard(SpriteFactory.getSpriteByQualifiedName("com.bored.games.assets.DartboardColorMap_MC"));
 			_cursor = new Cursor(SpriteFactory.getSpriteByQualifiedName("com.bored.games.darts.assets.hud.Cursor_MC"));
 		}//end constructor()
 		
@@ -69,16 +73,6 @@
 			return null;
 			// TODO translate game logic state into state object
 		}//end saveGameState()
-		
-		public function set dartboardClip(a_clip:Sprite):void
-		{
-			_dartboardClip = a_clip;
-		}//end set dartboardClip()
-		
-		public function get dartboardClip():Sprite
-		{
-			return _dartboardClip;
-		}//end dartboardClip()
 		
 		public function get throwsPerTurn():int
 		{
@@ -107,7 +101,7 @@
 		
 		public function getDartboardClip(a_points:int, a_multiple:int):Sprite
 		{
-			return _dartboardClip.getChildByName("c_" + a_points + "_" + a_multiple + "_mc") as Sprite;
+			return _dartboard.boardSprite.getChildByName("c_" + a_points + "_" + a_multiple + "_mc") as Sprite;
 		}//end getDartboardClip()
 		
 		public function get gameType():String
@@ -170,14 +164,15 @@
 				
 				//_currentDart.position.z = AppSettings.instance.dartboardPositionZ;			
 				
-				var p:Point = new Point( ( _currentDart.position.x / AppSettings.instance.dartboardScale ) * (_dartboardClip.width/2), ( -_currentDart.position.y / AppSettings.instance.dartboardScale ) * (_dartboardClip.height/2) );
+				var p:Point = new Point( ( _currentDart.position.x / AppSettings.instance.dartboardScale ) * (_dartboard.boardSprite.width/2), ( -_currentDart.position.y / AppSettings.instance.dartboardScale ) * (_dartboard.boardSprite.height/2) );
 				
-				var objects:Array = _dartboardClip.getObjectsUnderPoint(p);
+				var objects:Array = _dartboard.boardSprite.getObjectsUnderPoint(p);
 				
 				if (objects.length > 0) {
 					if (_pattern.test(objects[0].parent.name) && _blockedSections.indexOf(objects[0].parent.name) < 0) {
 						var arr:Array = objects[0].parent.name.split("_");
 						this.scoreManager.submitThrow(_currentPlayer, Number(arr[1]), Number(arr[2]));
+						
 						
 						/*
 						if(_currentDart is ShieldDart) {
@@ -230,11 +225,15 @@
 			
 			_blockedSections = new Vector.<String>();
 			
+			_lastDart = null;
+			
 			nextDart();
 		}//end startNewRound()
 		
 		public function nextDart():void
 		{
+			_lastDart = _currentDart;
+			
 			var ind:int = _currentTurn.advanceThrows() - 1;
 			_currentDart = _players[_currentPlayer - 1].darts[ind];
 			_currentDart.reset();
@@ -246,23 +245,28 @@
 			_players[_currentPlayer-1].takeTheShot();
 		}//end createNewDart()
 		
-		public function resetDart():void
+		public function get lastDart():Dart
+		{
+			return _lastDart;
+		}//end lastDart()
+		
+		public function redoDart():void
 		{	
-			/*
-			if (_darts.length > 1) {
-				_currentTurn.redoThrow();
-				_darts.pop();
-				_currentDart = _darts[_darts.length - 1];
-				_currentDart.reset();
-				_currentDart.pitch = 90;
-			}
-			
 			_currentDart.position.x = AppSettings.instance.defaultStartPositionX;
 			_currentDart.position.y = AppSettings.instance.defaultStartPositionY;
 			_currentDart.position.z = AppSettings.instance.defaultStartPositionZ;
 			
+			if( _lastDart ) {
+				_currentTurn.redoThrow();
+				_currentDart = _lastDart;
+				_currentDart.reset();
+				
+				_currentDart.position.x = AppSettings.instance.defaultStartPositionX;
+				_currentDart.position.y = AppSettings.instance.defaultStartPositionY;
+				_currentDart.position.z = AppSettings.instance.defaultStartPositionZ;
+			}
+			
 			_players[_currentPlayer-1].takeTheShot();
-			*/
 		}//end resetDart()
 		
 		public function resetDarts():void
@@ -299,14 +303,14 @@
 				
 		public function playerAim():void
 		{
-			//Mouse.hide();
+			Mouse.hide();
 			_cursor.show();
 			_inputController.pause = false;
 		}//end playerAim()
 		
 		public function playerThrow(a_x:Number, a_y:Number, a_z:Number, a_thrust:Number, a_lean:Number):void
 		{			
-			//Mouse.show();
+			Mouse.show();
 			_cursor.hide();
 			_cursor.resetCursorImage();
 			_inputController.pause = true;
@@ -317,6 +321,11 @@
 		{
 			return _cursor;
 		}//end get cursor()
+		
+		public function get dartboard():Dartboard
+		{
+			return _dartboard;
+		}//end get dartboard()
 		
 	}//end AbstractGameLogic
 
