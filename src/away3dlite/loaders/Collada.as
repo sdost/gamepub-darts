@@ -1,4 +1,4 @@
-﻿package away3dlite.loaders
+package away3dlite.loaders
 {
 	import away3dlite.animators.*;
 	import away3dlite.animators.bones.*;
@@ -35,9 +35,9 @@
 		private var _containers:Dictionary = new Dictionary(true);
 		private var _skinControllers:Vector.<SkinController> = new Vector.<SkinController>();
 		private var _skinController:SkinController;
-
+		
 		public var bothsides:Boolean = true;
-		public var useIDAsName:Boolean = false;
+		public var useIDAsName:Boolean = true;
 		
 		private function buildContainers(containerData:ContainerData, parent:ObjectContainer3D, depth:int):void
 		{
@@ -107,19 +107,19 @@
 				} else if (_objectData is MeshData) {
 					var mesh:Mesh = buildMesh(_objectData as MeshData, parent, depth+1);
 					_containers[_objectData.name] = mesh;
-					
+
 					parent.addChild(mesh);
 				}
 			}
 		}
-		
+
 		private function buildMesh(_meshData:MeshData, parent:ObjectContainer3D, depth:int):Mesh
 		{
 			var spaces:String = "";
 			for (var s:int = 0 ; s < depth ; s++)
 				spaces += " ";
 			Debug.trace(" + Build Mesh      : " + spaces + _meshData.name);
-			
+
 			var mesh:Mesh = new Mesh();
 			fillMesh(mesh, _meshData, parent);
 			return mesh;
@@ -164,11 +164,11 @@
 				i1 = _faceData.v1*3;
 				i2 = _faceData.v2*3;
 				mesh._vertices.push(vertices[i0], vertices[i0+1], vertices[i0+2]);
-				buildSkinVertices(_geometryData, _faceData.v0, mesh._vertices, mesh);
+				buildSkinVertices(_geometryData, _faceData.v0, mesh._vertices);
 				mesh._vertices.push(vertices[i1], vertices[i1+1], vertices[i1+2]);
-				buildSkinVertices(_geometryData, _faceData.v1, mesh._vertices, mesh);
+				buildSkinVertices(_geometryData, _faceData.v1, mesh._vertices);
 				mesh._vertices.push(vertices[i2], vertices[i2+1], vertices[i2+2]);
-				buildSkinVertices(_geometryData, _faceData.v2, mesh._vertices, mesh);
+				buildSkinVertices(_geometryData, _faceData.v2, mesh._vertices);
 				
 				//set uvData
 				i0 = _faceData.uv0*3;
@@ -210,7 +210,7 @@
 			mesh.type = ".Collada";
 		}
 		
-		private function buildSkinVertices(geometryData:GeometryData, i:int, vertices:Vector.<Number>, mesh:Mesh):void
+		private function buildSkinVertices(geometryData:GeometryData, i:int, vertices:Vector.<Number>):void
 		{
 			if (!geometryData.skinVertices.length)
 				return;
@@ -218,12 +218,11 @@
 			var skinController:SkinController;
 			var skinVertex:SkinVertex = geometryData.skinVertices[i].clone();
 			
-			if (skinVertex.updateVertices(vertices.length - 3, vertices, mesh))
-				for each (skinController in geometryData.skinControllers)
-					skinController.skinVertices.push(skinVertex);
+			skinVertex.updateVertices(vertices.length - 3, vertices);
+			
+			for each (skinController in geometryData.skinControllers)
+				skinController.skinVertices.push(skinVertex);
 		}
-		
-		private static const epsilonScale:Number = 0.000001;
 		
 		private function buildAnimations():void
 		{
@@ -357,11 +356,6 @@
 								case "scaleX":
 								case "transform(0)(0)":
 									channel.type = [sX];
-									
-									for each (param in channel.param) {
-										if (param[0] < epsilonScale)
-											param[0] = epsilonScale;
-									}
 				            		break;
 								case "scaleY":
 								case "transform(1)(1)":
@@ -369,11 +363,6 @@
 										channel.type = [sY];
 									else
 										channel.type = [sZ];
-									
-									for each (param in channel.param) {
-										if (param[0] < epsilonScale)
-											param[0] = epsilonScale;
-									}
 				     				break;
 								case "scaleZ":
 								case "transform(2)(2)":
@@ -381,11 +370,6 @@
 										channel.type = [sZ];
 									else
 										channel.type = [sY];
-									
-									for each (param in channel.param) {
-										if (param[0] < epsilonScale)
-											param[0] = epsilonScale;
-									}
 				     				break;
 								case "translate":
 								case "translation":
@@ -410,15 +394,6 @@
 										channel.type = [sX, sY, sZ];
 									else
 										channel.type = [sX, sZ, sY];
-									
-									for each (param in channel.param) {
-										if (param[0] < epsilonScale)
-											param[0] = epsilonScale;
-										if (param[1] < epsilonScale)
-											param[1] = epsilonScale;
-										if (param[2] < epsilonScale)
-											param[2] = epsilonScale;
-									}
 				     				break;
 								case "rotate":
 									if (yUp)
@@ -431,13 +406,6 @@
 									break;
 								case "transform":
 									channel.type = ["transform"];
-									
-									for each (param in channel.param) {
-										if (Math.abs((param[0] as Matrix3D).determinant) < epsilonScale) {
-											(param[0] as Matrix3D).identity();
-											(param[0] as Matrix3D).appendScale(epsilonScale, epsilonScale, epsilonScale);
-										}
-									}
 									break;
 								
 								case "visibility":
@@ -523,7 +491,7 @@
         /** @private */
         arcane override function prepareData(data:*):void
         {
-			// void junk byte, flash player bug
+        	// void junk byte, flash player bug
 			try{
             	collada = Cast.xml(data);
    			}catch(e:*){
@@ -629,24 +597,17 @@
 			else
 				_objectData.id = node.@id;
 			
+			/* Deprecated for ColladaMaya 3.02
 			if(String(node.@name) != "")
 			{
-				//#case 1 : 3dsMax 8 - Feeling ColladaMax v3.05B.
-				//@example <node id="WheelFL-node_PIVOT" name="WheelFL_PIVOT" type="NODE">
-				
-				//#case 2 : Maya8.5 | ColladaMaya v3.05B
-				//@example <node id="skeleton" name="skeleton" type="NODE">
             	_objectData.name = String(node.@name);
    			}else{
-   				//#case 3 : Maya8.5 | ColladaMaya v3.02
-				//@example <node id="skeleton" type="NODE">
    				_objectData.name = String(node.@id);
    			}
+   			*/
    			
-   			// force to use id as name
-   			if(useIDAsName || String(node.@type) == "JOINT")
-   				_objectData.name = String(node.@id);
-   				
+   			_objectData.name = String(node.@id);
+   
             _transform = _objectData.transform;
 			
 			Debug.trace(" + Parse Node : " + _objectData.id + " : " + _objectData.name);
@@ -661,11 +622,11 @@
 			
             for each (var childNode:XML in node.children())
             {
-                arrayChild = getArray(childNode);
                 nodeName = String(childNode.name()["localName"]);
 				switch(nodeName)
                 {
 					case "translate":
+		                arrayChild = getArray(childNode);
 						if (yUp)
 			                _transform.prependTranslation(-arrayChild[0]*scaling, -arrayChild[1]*scaling, arrayChild[2]*scaling);
 			            else
@@ -674,6 +635,7 @@
                         break;
 
                     case "rotate":
+		                arrayChild = getArray(childNode);
                     	sid = childNode.@sid;
                         if (_objectData is BoneData && (sid == "rotateX" || sid == "rotateY" || sid == "rotateZ" || sid == "rotX" || sid == "rotY" || sid == "rotZ")) {
 	                        if (yUp) {
@@ -692,12 +654,10 @@
                         break;
 						
                     case "scale":
-                    	if (arrayChild[0] < epsilonScale)
-                    		arrayChild[0] = epsilonScale;
-                    	if (arrayChild[1] < epsilonScale)
-                    		arrayChild[1] = epsilonScale;
-                    	if (arrayChild[2] < epsilonScale)
-                    		arrayChild[2] = epsilonScale;
+		                arrayChild = getArray(childNode);
+                    	if (arrayChild[0] == 0)	arrayChild[0] = 1;
+                    	if (arrayChild[1] == 0)	arrayChild[1] = 1;
+                    	if (arrayChild[2] == 0)	arrayChild[2] = 1;
                     	
                         if (_objectData is BoneData) {
                         	if (yUp)
@@ -715,12 +675,9 @@
 						
                     // Baked transform matrix
                     case "matrix":
+		                arrayChild = getArray(childNode);
                     	var m:Matrix3D = new Matrix3D();
                     	m.rawData = array2matrix(arrayChild, yUp, scaling);
-                    	if (node is MeshData && Math.abs(m.determinant) < epsilonScale) {
-                    		m.identity();
-                    		m.appendScale(epsilonScale, epsilonScale, epsilonScale);
-                    	}
                         _transform.prepend(m);
 						break;
 						
@@ -742,7 +699,7 @@
 							_objectData = fooContainer;
                     	}
                     	parseNode(childNode, _objectData as ContainerData);
-                        
+                    	
                         break;
 
     				case "instance_node":
@@ -780,7 +737,7 @@
                 }
             }
             
-        	parent.children.push(_objectData);
+			parent.children.push(_objectData);
         }
 		
 		/**
@@ -1109,7 +1066,6 @@
 			var animationClip:AnimationData = animationLibrary.addAnimation(clip.@id);
 			
 			//TODO: Is there a need to handle case where there is multiple channels inside an animation channel (_subAnim_) ?
-			
 			for each (var channel:XML in clip["instance_animation"])
 				animationClip.channels[getId(channel.@url)] = channelLibrary[getId(channel.@url)];
         }
@@ -1148,6 +1104,8 @@
 			
 			_defaultAnimationClip.channels[channelData.name] = channelData;
 			
+			Debug.trace(" ! channelType : " + type);
+
 			var sourceName:String = getId(channelChunk.@source);
 			var sampler:XML = node["sampler"].(@id == sourceName)[0];
 			

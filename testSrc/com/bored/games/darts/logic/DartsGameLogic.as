@@ -50,8 +50,6 @@
 		
 		protected var _cursor:Cursor;
 		
-		private var _pattern:RegExp = /c_[0-9]+_[0-9]+_mc/;
-		
 		public function DartsGameLogic() 
 		{
 			_throwsPerTurn = AppSettings.instance.throwsPerTurn;
@@ -151,6 +149,8 @@
 		
 		public function update(a_time:Number = 0):void
 		{			
+			_dartboard.update(a_time);
+			
 			_cursor.update(a_time);
 			
 			for each ( var dart:Dart in _darts )
@@ -162,30 +162,7 @@
 			{
 				_currentDart.finishThrow();
 				
-				//_currentDart.position.z = AppSettings.instance.dartboardPositionZ;			
-				
-				var p:Point = new Point( ( _currentDart.position.x / AppSettings.instance.dartboardScale ) * (_dartboard.boardSprite.width/2), ( -_currentDart.position.y / AppSettings.instance.dartboardScale ) * (_dartboard.boardSprite.height/2) );
-				
-				var objects:Array = _dartboard.boardSprite.getObjectsUnderPoint(p);
-				
-				if (objects.length > 0) {
-					if (_pattern.test(objects[0].parent.name) && _blockedSections.indexOf(objects[0].parent.name) < 0) {
-						var arr:Array = objects[0].parent.name.split("_");
-						this.scoreManager.submitThrow(_currentPlayer, Number(arr[1]), Number(arr[2]));
-						
-						
-						/*
-						if(_currentDart is ShieldDart) {
-							_blockedSections.push(objects[0].parent.name);
-						}
-						*/
-					} 
-					else
-					{
-						_currentDart.beginFalling();
-					}
-				}
-				else
+				if ( !_dartboard.submitDartPosition(_currentDart.position.x, _currentDart.position.y) ) 
 				{
 					_currentDart.beginFalling();
 				}
@@ -284,6 +261,11 @@
 			return _currentDart;
 		}//end moveDart()
 		
+		public function get currentPlayer():int
+		{
+			return _currentPlayer;
+		}//end get currentPlayer()
+		
 		public function get darts():Vector.<Dart>
 		{
 			if ( _darts == null ) {
@@ -303,15 +285,13 @@
 				
 		public function playerAim():void
 		{
-			Mouse.hide();
-			_cursor.show();
+			//Mouse.hide();
 			_inputController.pause = false;
 		}//end playerAim()
 		
 		public function playerThrow(a_x:Number, a_y:Number, a_z:Number, a_thrust:Number, a_lean:Number):void
 		{			
-			Mouse.show();
-			_cursor.hide();
+			//Mouse.show();
 			_cursor.resetCursorImage();
 			_inputController.pause = true;
 			_currentDart.initThrowParams(a_x, a_y, a_z, a_thrust, AppSettings.instance.defaultAngle, AppSettings.instance.defaultGravity, a_lean);

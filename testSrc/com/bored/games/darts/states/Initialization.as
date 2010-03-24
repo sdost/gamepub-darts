@@ -43,7 +43,7 @@
 			
 			var providerCls:Class = getDefinitionByName(AppSettings.instance.externalServicesProvider) as Class;
 			var ext:AbstractExternalService = new providerCls();
-			ext.init(AppSettings.instance.externalServicesGameId, DartsGlobals.instance.optionsInterfaceSpace);
+			//ext.init(AppSettings.instance.externalServicesGameId, DartsGlobals.instance.optionsInterfaceSpace);
 			DartsGlobals.instance.externalServices = ext;
 
 			this.finished();			

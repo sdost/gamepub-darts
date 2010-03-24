@@ -4,7 +4,6 @@ package away3dlite.core.base
 	import away3dlite.cameras.*;
 	import away3dlite.containers.*;
 	import away3dlite.materials.*;
-	import away3dlite.materials.shaders.*;
 	
 	import flash.display.*;
 	import flash.geom.*;
@@ -56,25 +55,18 @@ package away3dlite.core.base
 			if (_scene)
 				buildMaterials();
 		}
-		
 		/** @private */
 		arcane override function project(camera:Camera3D, parentSceneMatrix3D:Matrix3D = null):void
 		{
 			super.project(camera, parentSceneMatrix3D);
 			
-			if(material.dirty || _materialsDirty)
-				_scene.transfromDirty = true;
-				
 			// project the normals
-			if (material is IShader)
-				_uvtData = IShader(material).getUVData(transform.matrix3D.clone());
+			//if (material is IShader)
+			//	_triangles.uvtData = IShader(material).getUVData(transform.matrix3D.clone());
 			
-			if (_vertices && !_perspCulling) {
+			if (!_perspCulling) {
 				//DO NOT CHANGE vertices getter!!!!!!!
 				Utils3D.projectVectors(_viewMatrix3D, vertices, _screenVertices, _uvtData);
-				
-				projectedPosition = Utils3D.projectVector(transform.matrix3D, transform.matrix3D.position);
-				projectedPosition = Utils3D.projectVector(_viewMatrix3D, projectedPosition);
 				
 				if (_materialsDirty)
 					buildMaterials();
@@ -91,14 +83,7 @@ package away3dlite.core.base
 					}
 				}
 			}
-			
-			if(this!=_scene)
-			{
-				transfromDirty = false;
-				material.dirty = false;
-			}
 		}
-		
 		/** @private */	
 		arcane function buildFaces():void
 		{
@@ -122,10 +107,6 @@ package away3dlite.core.base
 			// speed up
 			_vertices.fixed = _uvtData.fixed = _indices.fixed = _faceLengths.fixed = _faces.fixed = _sort.fixed = true;
  			
-			// calculate normals for the shaders
-			if (_material is IShader)
- 				IShader(_material).calculateNormals(_vertices, _indices, _uvtData, _vertexNormals);
- 			 			
  			updateSortType();
  			
  			_materialsDirty = true;
@@ -157,46 +138,6 @@ package away3dlite.core.base
 			_materialsCacheList[i] = mat;
 		}
 		
-		public function updateMaterials():void
-		{
-			_materialsDirty = false;
-			
-			if (_scene) {
-				var oldMaterial:Material;
-				
-				//update face materials
-				_faceMaterials.fixed = false;
-				_faceMaterials.length = _faceLengths.length;
-				
-				var i:int = _faces.length;
-				while (i--) {
-					oldMaterial = _faces[i].material;
-					
-					//reset face materials
-					if (oldMaterial != _material) {
-						//remove old material from lists
-						if (oldMaterial) {
-							_scene.removeSceneMaterial(oldMaterial);
-							removeMaterial(oldMaterial);
-						}
-						
-						//add new material to lists
-						if (_material) {
-							_scene.addSceneMaterial(_material);
-							addMaterial(_material);
-						}
-						
-						//set face material
-						_faces[i].material = _material;
-						_faceMaterials[i]  = _material;
-					}
-					
-				}
-			}
-			
-			_faceMaterials.fixed = true;
-		}
-
 		private function buildMaterials(clear:Boolean = false):void
 		{
 			_materialsDirty = false;
@@ -209,7 +150,7 @@ package away3dlite.core.base
 				_faceMaterials.fixed = false;
 				_faceMaterials.length = _faceLengths.length;
 				
-				var i:int = _faces?_faces.length:0;
+				var i:int = _faces.length;
 				while (i--) {
 					oldMaterial = _faces[i].material;
 					
@@ -242,25 +183,20 @@ package away3dlite.core.base
 		
 		private function updateSortType():void
 		{
+			
 			var face:Face;
 			switch (_sortType) {
 				case SortType.CENTER:
-					for each (face in _faces) {
-						face.calculateScreenZInt = face.calculateAverageZInt;
-						face.calculateScreenZ    = face.calculateAverageZ;
-					}
+					for each (face in _faces)
+						face.calculateScreenZ = face.calculateAverageZ;
 					break;
 				case SortType.FRONT:
-					for each (face in _faces) {
-						face.calculateScreenZInt = face.calculateNearestZInt;
-						face.calculateScreenZ    = face.calculateNearestZ;
-					}
+					for each (face in _faces)
+						face.calculateScreenZ = face.calculateNearestZ;
 					break;
 				case SortType.BACK:
-					for each (face in _faces) {
-						face.calculateScreenZInt = face.calculateFurthestZInt;
-						face.calculateScreenZ    = face.calculateFurthestZ;
-					}
+					for each (face in _faces)
+						face.calculateScreenZ = face.calculateFurthestZ;
 					break;
 				default:
 			}
@@ -273,14 +209,6 @@ package away3dlite.core.base
 		 */
 		public var sortFaces:Boolean = true;
         
-		/**
-		 * Returns the screen vertices in the mesh.
-		 */
-		public function get screenVertices():Vector.<Number>
-		{
-			return _screenVertices;
-		}
-		
 		/**
 		 * Returns the 3d vertices used in the mesh.
 		 */
@@ -315,9 +243,6 @@ package away3dlite.core.base
 			_material = val;
 			
 			_materialsDirty = true;
-			// calculate normals for the shaders
-			if (_material is IShader)
- 				IShader(_material).calculateNormals(_vertices, _indices, _uvtData, _vertexNormals);
 		}
 		
 		/**
@@ -421,23 +346,5 @@ package away3dlite.core.base
 			
 			return mesh;
         }
-        
-		override public function destroy():void
-		{
-			if(_isDestroyed)
-				return;
-				
-			_materialsCacheList = null;
-			_screenVertices = null;
-			_uvtData = null;
-			_indices = null;
-			_faces = null;
-			_faceLengths = null;
-			_sort = null;
-			_vertices = null;
-			_faceMaterials = null;
-			
-			super.destroy();
-		}
 	}
 }

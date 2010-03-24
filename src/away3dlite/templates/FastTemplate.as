@@ -17,7 +17,7 @@ package away3dlite.templates
 			super.init();
 			
 			view.renderer = renderer;
-			view.clipping = clipping || new Clipping();
+			view.clipping = clipping;
 			view.mouseEnabled3D = false;
 		}
 		
@@ -29,6 +29,6 @@ package away3dlite.templates
 		/**
 		 * The clipping object used in the template.
 		 */
-		public var clipping:Clipping;
+		public var clipping:Clipping = new Clipping();
 	}
 }

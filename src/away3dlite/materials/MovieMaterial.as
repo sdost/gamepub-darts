@@ -3,9 +3,8 @@ package away3dlite.materials
 	import away3dlite.arcane;
 	import away3dlite.containers.*;
 	
-	import flash.display.*;
 	import flash.events.Event;
-	import flash.filters.BitmapFilter;
+	import flash.display.*;
 	import flash.geom.*;
 	
 	use namespace arcane;
@@ -32,7 +31,6 @@ package away3dlite.materials
 		private var _rect:Rectangle;
 		private var _drawRect:Rectangle;
 		private var _bitmapDirty:Boolean;
-		private var _smooth:Boolean = true;
 		
 		private function onEnterFrame(event:Event = null):void
 		{
@@ -46,7 +44,7 @@ package away3dlite.materials
 			
 			_drawRect = _rect || _movieRect;
 			
-			if (!_drawRect || _drawRect.width == 0 || _drawRect.height == 0)
+			if (_drawRect.width == 0 || _drawRect.height == 0)
 				_drawRect = new Rectangle(0, 0, 256, 256);
 			
 			_graphicsBitmapFill.bitmapData = new BitmapData(int(_drawRect.width + 0.99), int(_drawRect.height + 0.99), _transparent, 0);
@@ -84,18 +82,16 @@ package away3dlite.materials
         
         public function set movie(val:Sprite):void
         {
-			if (_movie == val)
+        	if (_movie == val)
         		return;
         	
         	//if (val && val.parent)
         	//	val.parent.removeChild(val);
         	
         	_movie = val;
-			
+        	
         	_movieRect = _movie.getBounds(_movie);
-			
-			trace("Movie Rect: " + _movieRect);
-			
+        	
 			_bitmapDirty = true;
         	
         	if (!autoUpdate)
@@ -116,30 +112,8 @@ package away3dlite.materials
         {
         	_rect = val;
         	
-			trace("Rect: " + _rect);
-			
         	_bitmapDirty = true;
         }
-        
-		/**
-		 * Defines whether smoothing is used when drawing the material.
-		 */
-		override public function get smooth():Boolean
-		{
-			return _smooth;
-		}
-		
-		override public function set smooth(val:Boolean):void
-		{
-			super.smooth = _smooth = val; 
-			
-			_bitmapDirty = true;
-        	
-        	if (!autoUpdate)
-        		update();
-		}
-		
-		public var filters:Array;
         
 		public function MovieMaterial(movie:Sprite, rect:Rectangle = null, autoUpdate:Boolean = true, transparent:Boolean = true)
 		{
@@ -147,8 +121,6 @@ package away3dlite.materials
 			this.movie = movie;
 			this.rect = rect;
 			this.transparent = transparent;
-			
-			trace("Rect: " + rect);
 		}
 		
 		/**
@@ -163,16 +135,11 @@ package away3dlite.materials
         	if (_bitmapDirty)
         		updateBitmap();
         	
-        	var _bitmapData:BitmapData = _graphicsBitmapFill.bitmapData;
-        	var r:Rectangle = _bitmapData.rect;
+        	var r:Rectangle = _graphicsBitmapFill.bitmapData.rect;
         	var m:Matrix = new Matrix(_movie.scaleX, 0, 0, _movie.scaleY, -_drawRect.x, -_drawRect.y);
         	
-        	_bitmapData.fillRect(r, 0x000000);
-			_bitmapData.draw(_movie, m, _movie.transform.colorTransform, _movie.blendMode, r, _smooth);
-			
-			if (filters && filters.length > 0)
-					for each (var filter:BitmapFilter in filters)
-						_bitmapData.applyFilter(_bitmapData, _bitmapData.rect, new Point, filter);
+        	_graphicsBitmapFill.bitmapData.fillRect(r, 0x000000);
+			_graphicsBitmapFill.bitmapData.draw(_movie, m, _movie.transform.colorTransform, _movie.blendMode, r);
         }
 	}
 }

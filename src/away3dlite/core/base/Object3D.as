@@ -3,7 +3,6 @@ package away3dlite.core.base
 	import away3dlite.arcane;
 	import away3dlite.cameras.*;
 	import away3dlite.containers.*;
-	import away3dlite.core.*;
 	import away3dlite.loaders.utils.*;
 	
 	import flash.display.*;
@@ -63,12 +62,8 @@ package away3dlite.core.base
 	/**
 	 * The base class for all 3d objects.
 	 */
-	public class Object3D extends Sprite implements IDestroyable
+	public class Object3D extends Sprite
 	{
-		/** @private */
-		protected var _isDestroyed:Boolean;
-		/** @private */
-		arcane var _frustumCulling:Boolean;
 		/** @private */
 		arcane var _perspCulling:Boolean;
 		/** @private */
@@ -105,53 +100,6 @@ package away3dlite.core.base
 				_perspCulling = true;
 			else
 				_perspCulling = false;
-			
-			// dirty
-			updateDirty(_viewMatrix3D);
-		}
-		
-		private function checkDirty(a:Vector.<Number>, b:Vector.<Number>):Boolean
-		{
-			var i:int = 16;
-			while(--i>-1 && a[int(i)]==b[int(i)]){}
-			if(i>=0)
-				return true;
-			else
-				return false;
-		}
-		
-		private var _cachedViewMatrix3D:Matrix3D;
-		
-		protected function updateDirty(matrix3D:Matrix3D):void
-		{
-			if(!_cachedViewMatrix3D || transfromDirty)
-			{
-				_cachedViewMatrix3D = matrix3D.clone();
-				
-				//mark as dirty
-				transfromDirty = true;
-				
-				//mark parent is dirty
-				if(_scene)
-					_scene.transfromDirty = true;
-			}
-			
-			//transform dirty
-			if(checkDirty(matrix3D.rawData, _cachedViewMatrix3D.rawData))
-			{
-				//mark as dirty
-				transfromDirty = true;
-				
-				//mark parent is dirty
-				if(_scene)
-					_scene.transfromDirty = true;
-					
-				//store
-				_cachedViewMatrix3D = matrix3D.clone();
-			}else{
-				//clean
-				transfromDirty = false || _scene?_scene.transfromDirty:false;
-			}
 		}
 		
 		protected function copyMatrix3D(m1:Matrix3D, m2:Matrix3D):void
@@ -161,62 +109,24 @@ package away3dlite.core.base
 		}
 		
 		/**
-		 * Returns the maxinum length of 3d object to local center aka radius
-		 */
-		public var maxRadius:Number = 0;
-		
-		/**
-		 * Global position in space, use for Frustum object culler 
-		 */		
-		public var projectedPosition:Vector3D;
-		
-		/**
-		 * Transfrom status
-		 */	
-		public var transfromDirty:Boolean = true;
-		
-		/**
 		 * An optional layer sprite used to draw into inseatd of the default view.
 		 */
-		protected var _layer:Sprite;
-		public function set layer(value:Sprite):void
-		{
-			_layer = value;
-		}
-		
-		public function get layer():Sprite
-		{
-			return _layer;
-		}
-		
-		/**
-		 * An optional canvas sprite used to draw into inseatd of the default view.
-		 */
-		public var _canvas:Sprite;
-		public function set canvas(value:Sprite):void
-		{
-			_canvas = value;
-		}
-		
-		public function get canvas():Sprite
-		{
-			return _canvas;
-		}
+		public var layer:Sprite;
 		
 		/**
 		 * Used in loaders to store all parsed materials contained in the model.
 		 */
-		public var materialLibrary:MaterialLibrary;
+		public var materialLibrary:MaterialLibrary = new MaterialLibrary();
 		
 		/**
 		 * Used in loaders to store all parsed geometry data contained in the model.
 		 */
-		public var geometryLibrary:GeometryLibrary;
+		public var geometryLibrary:GeometryLibrary = new GeometryLibrary();
 		
 		/**
 		 * Used in the loaders to store all parsed animation data contained in the model.
 		 */
-		public var animationLibrary:AnimationLibrary;
+		public var animationLibrary:AnimationLibrary = new AnimationLibrary();
 		
 		/**
 		 * Returns the type of 3d object.
@@ -278,34 +188,6 @@ package away3dlite.core.base
 			return transform.matrix3D.position;
 		}
 		
-		override public function set alpha(value:Number):void
-		{
-			super.alpha = value;
-			if(canvas && canvas.alpha != value)
-				canvas.alpha = value;
-		}
-		
-		override public function set blendMode(value:String):void
-		{
-			super.blendMode = value;
-			if(canvas && canvas.blendMode != value)
-				canvas.blendMode = value;
-		}
-		
-		override public function set filters(value:Array):void
-		{
-			super.filters = value;
-			if(canvas && canvas.filters != value)
-				canvas.filters = value;
-		}
-		
-		override public function set visible(value:Boolean):void
-		{
-			super.visible = value;
-			if(canvas && canvas.visible != value)
-				canvas.visible = value;
-		}
-		
 		/**
 		 * Creates a new <code>Object3D</code> object.
 		 */
@@ -349,26 +231,5 @@ package away3dlite.core.base
             
             return object3D;
         }
-        
-        public function get destroyed():Boolean
-		{
-			return _isDestroyed;
-		}
-
-		public function destroy():void
-		{
-			_isDestroyed = true;
-			
-			materialLibrary.destroy();
-			geometryLibrary.destroy();
-			animationLibrary.destroy();
-
-			materialLibrary = null;
-			geometryLibrary = null;
-			animationLibrary = null;
-
-			if(parent != null)
-				parent.removeChild(this);
-		}
 	}
 }

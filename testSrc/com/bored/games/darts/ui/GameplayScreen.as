@@ -194,6 +194,7 @@
 		{
 			Debug.active = true;
 			
+			/*
 			_boardBillboard = new Plane();
 			_boardBillboard.x = AppSettings.instance.dartboardPositionX * _engineScale;
 			_boardBillboard.y = AppSettings.instance.dartboardPositionY * _engineScale;
@@ -206,10 +207,16 @@
 			_boardBillboard.mouseEnabled = false;
 			_boardBillboard.lookAt(_camera.position, new Vector3D(0, 1, 0));
 			_scene.addChild(_boardBillboard);
+			*/
+			
+			DartsGlobals.instance.gameManager.dartboard.initModels();
+			_scene.addSprite(DartsGlobals.instance.gameManager.dartboard.sprite);
+			DartsGlobals.instance.gameManager.dartboard.position.x = AppSettings.instance.dartboardPositionX * _engineScale;
+			DartsGlobals.instance.gameManager.dartboard.position.y = AppSettings.instance.dartboardPositionY * _engineScale;
+			DartsGlobals.instance.gameManager.dartboard.position.z = AppSettings.instance.dartboardPositionZ * _engineScale;
 			
 			DartsGlobals.instance.gameManager.cursor.initModels();
-			_scene.addChild(DartsGlobals.instance.gameManager.cursor.model);
-			DartsGlobals.instance.gameManager.cursor.model.z = AppSettings.instance.dartboardPositionZ * _engineScale - 10;
+			_scene.addSprite(DartsGlobals.instance.gameManager.cursor.sprite);
 			
 			for each( var dart:Dart in DartsGlobals.instance.gameManager.darts )
 			{

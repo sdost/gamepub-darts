@@ -47,11 +47,6 @@ package away3dlite.cameras
 		protected const toRADIANS:Number = Math.PI/180;
 		protected const toDEGREES:Number = 180/Math.PI;
 		
-		public function get projection():PerspectiveProjection
-		{
-			return root.transform.perspectiveProjection;
-		}
-		
 		/**
 		 * Defines the distance from the focal point of the camera to the viewing plane.
 		 */
@@ -79,22 +74,6 @@ package away3dlite.cameras
 			_zoom = val;
 			
 			_lensDirty = true;
-		}
-		
-		/**
-		 * Return current ratio
-		 */		
-		public function get ratio():Number
-		{
-			return 2*_view.screenWidth/_view.screenHeight;
-		}
-		
-		/**
-		 * Return current angle
-		 */	
-		public function get angle():Number
-		{
-			return Math.atan2(_view.screenWidth, Math.abs(z));
 		}
 		
 		/**
@@ -165,9 +144,6 @@ package away3dlite.cameras
 			
 			//set default z position
 			z = -1000;
-			
-			//speed up
-			mouseEnabled = mouseChildren = false;
 		}
     	
     	/**

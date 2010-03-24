@@ -1,10 +1,8 @@
 package away3dlite.animators.bones
 {
-	import away3dlite.arcane;
 	import away3dlite.containers.*;
+	import away3dlite.arcane;
 	import away3dlite.core.base.*;
-	
-	import flash.display.Sprite;
 	
 	use namespace arcane;
 	
@@ -103,11 +101,6 @@ package away3dlite.animators.bones
 			joint.scaleZ = scale;
         }
         
-        override public function set canvas(value:Sprite):void
-        {
-        	// no canvas for bone
-        }
-        
 		/**
 		 * Creates a new <code>Bone</code> object.
 		 */
@@ -117,14 +110,6 @@ package away3dlite.animators.bones
 			
 			//create the joint for the bone
 			addChild(joint = new ObjectContainer3D());
-			
-			// speed up
-			visible = mouseEnabled = mouseChildren = joint.visible = joint.mouseEnabled = joint.mouseChildren = false;
-			_faces = null;
-			_vertices = null;
-			material =  null;
-			materialLibrary =  null;
-			geometryLibrary =  null;
         }
 		
 		/**

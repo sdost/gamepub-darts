@@ -6,6 +6,8 @@
 	import away3dlite.materials.Material;
 	import away3dlite.materials.MovieMaterial;
 	import away3dlite.primitives.Plane;
+	import away3dlite.sprites.AlignmentType;
+	import away3dlite.sprites.Sprite3D;
 	import com.sven.utils.AppSettings;
 	import away3dlite.core.base.Object3D;
 	import com.bored.games.objects.GameElement;
@@ -21,8 +23,8 @@
 	public class Cursor extends GameElement
 	{
 		private var _cursor:Sprite;
-		private var _cursorModel:Plane;
-		private var _cursorMaterial:BitmapMaterial;
+		private var _cursorSprite:Sprite3D;
+		private var _cursorMaterial:MovieMaterial;
 		
 		public function Cursor(a_img:Sprite) 
 		{
@@ -33,66 +35,37 @@
 		
 		public function initModels():void
 		{
-			var bmd:BitmapData = new BitmapData(60, 60, true, 0x00000000);
-			var mtx:Matrix = new Matrix();
-			mtx.translate(30, 30);
-			bmd.draw(_cursor, mtx);			
-			_cursorMaterial = new BitmapMaterial(bmd);
+			_cursorMaterial = new MovieMaterial(_cursor);
+			_cursorMaterial.smooth = true;
 			
-			_cursorModel = new Plane();
-			_cursorModel.width = 30;
-			_cursorModel.height = 30;
-			_cursorModel.material = _cursorMaterial;
-			_cursorModel.yUp = false;
-			_cursorModel.bothsides = true;
-			_cursorModel.mouseEnabled = false;
+			_cursorSprite = new Sprite3D(_cursorMaterial, 0.25);
+			_cursorSprite.alignmentType = AlignmentType.VIEWPOINT;
 		}//end initModels()
 		
 		override public function update(a_time:Number = 0):void
 		{
 			super.update(a_time);
 			
-			//if(_cursorMaterial)	_cursorMaterial.update()
-			
-			if ( _cursorModel ) {
-				//trace("Cursor Model Position: " + _cursorModel.x + ", " + _cursorModel.y);
-				_cursorModel.x = this.position.x * AppSettings.instance.away3dEngineScale;
-				_cursorModel.y = -(this.position.y * AppSettings.instance.away3dEngineScale);
-				_cursorModel.z = this.position.z * AppSettings.instance.away3dEngineScale;
+			if ( _cursorSprite ) {
+				_cursorSprite.x = this.position.x * AppSettings.instance.away3dEngineScale;
+				_cursorSprite.y = -(this.position.y * AppSettings.instance.away3dEngineScale);
+				_cursorSprite.z = this.position.z * AppSettings.instance.away3dEngineScale;
 			}
 		}//end update()
 		
 		public function setCursorImage(a_spr:Sprite):void
 		{
-			var bmd:BitmapData = new BitmapData(60, 60, true, 0x00000000);
-			var mtx:Matrix = new Matrix();
-			mtx.translate(30, 30);
-			bmd.draw(a_spr, mtx);
-			_cursorMaterial.bitmap = bmd;
+			_cursorMaterial.movie = a_spr;
 		}//end setCursorImage()
 		
 		public function resetCursorImage():void
 		{
-			var bmd:BitmapData = new BitmapData(60, 60, true, 0x00000000);
-			var mtx:Matrix = new Matrix();
-			mtx.translate(30, 30);
-			bmd.draw(_cursor, mtx);
-			_cursorMaterial.bitmap = bmd;
+			_cursorMaterial.movie = _cursor;
 		}//end resetCursorImage()
 		
-		public function show():void
+		public function get sprite():Sprite3D
 		{
-			_cursorModel.visible = true;
-		}//end show()
-		
-		public function hide():void
-		{
-			_cursorModel.visible = false;
-		}//end show()
-		
-		public function get model():Object3D
-		{
-			return _cursorModel;
+			return _cursorSprite;
 		}//end get model()
 				
 	}//end Cursor

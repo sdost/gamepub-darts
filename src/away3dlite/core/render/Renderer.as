@@ -1,12 +1,9 @@
 package away3dlite.core.render
 {
-	import __AS3__.vec.Vector;
-	
 	import away3dlite.arcane;
 	import away3dlite.containers.*;
 	import away3dlite.core.base.*;
 	import away3dlite.core.clip.*;
-	import away3dlite.core.culler.FrustumCuller;
 	
 	import flash.display.*;
 	
@@ -21,28 +18,12 @@ package away3dlite.core.render
 		arcane function setView(view:View3D):void
 		{
 			_view = view;
-			_view_graphics = _view.graphics;
 			_view_graphics_drawGraphicsData = _view.graphics.drawGraphicsData;
-			_zoom = _view.camera.zoom;
-			_focus = _view.camera.focus;
-			
-			_culler = new FrustumCuller(_view.camera);
 		}
 		
-		public var useFloatZSort:Boolean = false;
-
-		//---------------------------------------------------
-		// Members not required if we use only Float ZSorting
-		
-		private var ql:Vector.<int> = new Vector.<int>(256, true);
 		private var k:int;
 		private var q0:Vector.<int>;
 		private var np0:Vector.<int>;
-		/** @private */
-		protected var q1:Vector.<int>;
-		
-		//---------------------------------------------------
-
 		private var _screenVertexArrays:Vector.<Vector.<Number>> = new Vector.<Vector.<Number>>();
         private var _screenVertices:Vector.<Number>;
         private var _screenPointVertexArrays:Vector.<Vector.<int>> = new Vector.<Vector.<int>>();
@@ -54,6 +35,8 @@ package away3dlite.core.render
 		protected var i:int;
 		/** @private */
 		protected var j:int;
+		/** @private */
+		protected var q1:Vector.<int>;
 		/** @private */
 		protected var np1:Vector.<int>;
 		/** @private */
@@ -87,86 +70,33 @@ package away3dlite.core.render
 		/** @private */
 		protected var _triangles:GraphicsTrianglePath = new GraphicsTrianglePath();
 		/** @private */
-		protected var _view_graphics:Graphics;
-		/** @private */
 		protected var _view_graphics_drawGraphicsData:Function;
-		/** @private */
-		protected var _culler:FrustumCuller;
-		/** @private */
-		private var _zoom:Number;
-		/** @private */
-		private var _focus:Number;
-        /** @private */
-		protected var _particles:Array;
-		
-		/**
-		 * Determines whether 3d objects are sorted in the view. Defaults to false.
-		 */
-		public var sortObjects:Boolean = true;
-		
-		/**
-		 * Determines whether 3d objects are culled in the view. Defaults to false.
-		 */
-		public var cullObjects:Boolean = false;
-		
-		/**
-		 * The number represent how many object that has been culled
-		 */		
-		public var numCulled:int = 0;
 		
 		/** @private */
 		protected function sortFaces():void
 		{
-			var _faces_length_1:int = int(_faces.length + 1);
-			var _Face_calculateZIntFromZ:Function = Face.calculateZIntFromZ;
-			if (useFloatZSort) {
-				np1 = new Vector.<int>(_faces_length_1, true);
- 				var triangles:Array = [];
- 				
-				//z-axis, for sort-based production
-				i = 1;
-				for each (_face in _faces) {
-					var z:Number = _face.calculateScreenZ();
-					_sort[int(i-1)] = _Face_calculateZIntFromZ(z);
-					if (z > 0) 
-						triangles[int(j++)] = {i:i, z:z};
-					i++;
-				}
-				
-				//z-axis sort
-				triangles = triangles.sortOn("z", Array.NUMERIC);
-				
-				//Put the sorted indices inside a Vector
-				j = 0;
-				for each (var triangle:Object in triangles) 
-					np1[int(j++)] = triangle.i;
-				np1[int(j++)] = 0;
-					
-				triangles = null;
-			}
-			else {
-				// by pass
-		        
-				q0 = new Vector.<int>(256, true);
-				q1 = new Vector.<int>(256, true);
-				np0 = new Vector.<int>(_faces_length_1, true);
-				np1 = new Vector.<int>(_faces_length_1, true);
-		        
-				i = 0;
-        		j = 0;
-	        	
-				for each (_face in _faces) {
-					np0[int(i+1)] = q0[k = (255 & (_sort[i] = _face.calculateScreenZInt()))];
-					q0[k] = int(++i);
-				}
-				
-				i = 256;
-				while (i--) {
-					j = q0[i];
-					while (j) {
-						np1[j] = q1[k = (65280 & _sort[int(j-1)]) >> 8];
-						j = np0[q1[k] = j];
-					}
+	        // by pass
+	        var _faces_length_1:int = int(_faces.length + 1);
+	        
+	        q0 = new Vector.<int>(256, true);
+	        q1 = new Vector.<int>(256, true);
+	        np0 = new Vector.<int>(_faces_length_1, true);
+	        np1 = new Vector.<int>(_faces_length_1, true);
+	        
+            i = 0;
+        	j = 0;
+        	
+            for each (_face in _faces) {
+				np0[int(i+1)] = q0[k = (255 & (_sort[i] = _face.calculateScreenZ()))];
+				q0[k] = int(++i);
+            }
+			
+			i = 256;
+			while (i--) {
+				j = q0[i];
+				while (j) {
+					np1[j] = q1[k = (65280 & _sort[int(j-1)]) >> 8];
+					j = np0[q1[k] = j];
 				}
 			}
 		}
@@ -285,54 +215,6 @@ package away3dlite.core.render
 			return null;
 		}
 		
-		/** @private */
-		protected function drawParticles(screenZ:Number=NaN):void
-		{
-			if(_particles.length==0)
-				return;
-			
-			var _particle:Particle;
-			var _particleIndex:int = 0;
-			var _view_x:Number = _view.x;
-			var _view_y:Number = _view.y;
-			
-			if(_view.scene.bitmap)
-			{
-				var _view_scene_bitmapData:BitmapData = _view.scene.bitmap.bitmapData;
-				
-				if(!screenZ)
-				{
-					// just draw
-					for each (_particle in _particles)
-						_particle.drawBitmapdata(_view_x, _view_y, _view_scene_bitmapData, _zoom, _focus);
-				}else{
-					// draw particle that behind screenZ
-					while((_particle = _particles[_particleIndex++]) && _particle.screenZ > screenZ)
-						_particle.drawBitmapdata(_view_x, _view_y, _view_scene_bitmapData, _zoom, _focus);
-					
-					if(_particleIndex>=2)
-						_particles = _particles.slice(_particleIndex-1, _particles.length); 
-				}
-			}else{
-				
-				_view_graphics.lineStyle();
-				
-				if(!screenZ)
-				{
-					// just draw
-					for each (_particle in _particles)
-						_particle.drawGraphics(_view_x, _view_y, _view_graphics, _zoom, _focus);
-				}else{
-					// draw particle that behind screenZ
-					while((_particle = _particles[_particleIndex++]) && _particle.screenZ > screenZ)
-						_particle.drawGraphics(_view_x, _view_y, _view_graphics, _zoom, _focus);
-					
-					if(_particleIndex>=2)
-						_particles = _particles.slice(_particleIndex-1, _particles.length); 
-				}
-			}
-		}
-		
 		/**
 		 * Renders the contents of the scene to the view.
 		 * 
@@ -350,17 +232,6 @@ package away3dlite.core.render
 			_pointFace = null;
 			
 			_screenVertexArrays.length = 0;
-			
-			// particles
-			_particles = [];
-			
-			// culling
-			numCulled = 0;
-			if(_view.camera.transfromDirty)
-			{
-				_culler.update();
-				_view.camera.transfromDirty = false;
-			}
 		}
 	}
 }

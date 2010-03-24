@@ -40,8 +40,6 @@ package away3dlite.sprites
 			_vertices.push(_width*_scale/2, -_height*_scale/2, 0);
 			_vertices.fixed = true;
 		}
-		
-		public var id:String;
 
     	/**
     	 * Defines the x position of the Sprite3D object. Defaults to 0.

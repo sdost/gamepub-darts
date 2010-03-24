@@ -2,7 +2,6 @@ package away3dlite.loaders.data
 {
 	import away3dlite.animators.*;
 	import away3dlite.containers.*;
-	import away3dlite.core.*;
 	import away3dlite.core.base.*;
 	
 	import flash.utils.*;
@@ -12,11 +11,8 @@ package away3dlite.loaders.data
 	 * 
 	 * @see away3dlite.loaders.data.MeshData
 	 */
-	public class AnimationData implements IDestroyable
-    {
-    	/** @private */
-		protected var _isDestroyed:Boolean;
-		
+	public class AnimationData
+	{
 		/**
 		 * String representing a vertex animation.
 		 */
@@ -73,21 +69,6 @@ package away3dlite.loaders.data
     		animationData.animation = animation.clone(object as ObjectContainer3D);
     		
     		return animationData;
-		}
-		
-		public function get destroyed():Boolean
-		{
-			return _isDestroyed;
-		}
-
-		public function destroy():void
-		{
-			if(_isDestroyed)
-				return;
-				
-			_isDestroyed = true;
-			
-			channels = null;
 		}
 	}
 }

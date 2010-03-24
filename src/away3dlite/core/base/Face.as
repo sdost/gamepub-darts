@@ -228,33 +228,20 @@ package away3dlite.core.base
 		/**
 		 * selected function for calculating the screen Z coordinate of the face.
 		 */
-		public var calculateScreenZInt:Function;
-		public var calculateScreenZ   :Function;
+		public var calculateScreenZ:Function;
 		
-		/**
-		 * Returns the integer representation of a Z value.
-		 */
-		public static function calculateZIntFromZ(z:Number):int
-		{
-			return int(z*3000000);
-		}
-
 		/**
 		 * Returns the average screen Z coordinate of the face.
 		 */
-		public function calculateAverageZInt():int
+		public function calculateAverageZ():int
 		{
 			return i3? int((_uvtData[t0] + _uvtData[t1] + _uvtData[t2] + _uvtData[t3])*750000) : int((_uvtData[t0] + _uvtData[t1] + _uvtData[t2])*1000000);
-		}
-		public function calculateAverageZ():Number
-		{
-			return i3? _uvtData[t0] + _uvtData[t1] + _uvtData[t2] + _uvtData[t3] : _uvtData[t0] + _uvtData[t1] + _uvtData[t2];
 		}
 		
 		/**
 		 * Returns the furthest screen Z coordinate of the face.
 		 */
-		public function calculateFurthestZInt():int
+		public function calculateFurthestZ():int
 		{
 			var z:Number = _uvtData[t0];
 			
@@ -268,27 +255,12 @@ package away3dlite.core.base
 				z = _uvtData[t3];
 			
 			return int(z*3000000);
-		}
-		public function calculateFurthestZ():Number
-		{
-			var z:Number = _uvtData[t0];
-			
-			if (z > _uvtData[t1])
-				z = _uvtData[t1];
-			
-			if (z > _uvtData[t2])
-				z = _uvtData[t2];
-			
-			if (i3 && z > _uvtData[t3])
-				z = _uvtData[t3];
-			
-			return z;
 		}
 		
 		/**
 		 * Returns the nearest screen Z coordinate of the face.
 		 */
-		public function calculateNearestZInt():int
+		public function calculateNearestZ():int
 		{
 			var z:Number = _uvtData[t0];
 			
@@ -302,21 +274,6 @@ package away3dlite.core.base
 				z = _uvtData[t3];
 			
 			return int(z*3000000);
-		}
-		public function calculateNearestZ():Number
-		{
-			var z:Number = _uvtData[t0];
-			
-			if (z < _uvtData[t1])
-				z = _uvtData[t1];
-			
-			if (z < _uvtData[t2])
-				z = _uvtData[t2];
-			
-			if (i3 && z < _uvtData[t3])
-				z = _uvtData[t3];
-			
-			return z;
 		}
 		
 		/**

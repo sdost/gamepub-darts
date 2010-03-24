@@ -16,7 +16,6 @@ package away3dlite.containers
     */
 	public class Scene3D extends ObjectContainer3D
 	{
-		public var bitmap:Bitmap;
 		private var _index:int;
 		
 		arcane var _id:uint;

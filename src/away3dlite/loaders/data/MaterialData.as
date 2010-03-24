@@ -1,7 +1,6 @@
 package away3dlite.loaders.data
 {
 	import away3dlite.arcane;
-	import away3dlite.core.*;
 	import away3dlite.core.base.*;
 	import away3dlite.materials.*;
 	
@@ -14,11 +13,8 @@ package away3dlite.loaders.data
 	 * 
 	 * @see away3dlite.loaders.data.FaceData
 	 */
-	public class MaterialData implements IDestroyable
+	public class MaterialData
 	{
-		/** @private */
-		protected var _isDestroyed:Boolean;
-		
 		private var _material:Material;
 		
 		/**
@@ -147,23 +143,6 @@ package away3dlite.loaders.data
     		}
     		*/
     		return cloneMatData;
-		}
-		
-        public function get destroyed():Boolean
-		{
-			return _isDestroyed;
-		}
-
-		public function destroy():void
-		{
-			if(_isDestroyed)
-				return;
-				
-			_isDestroyed = true;
-			
-			faces = null;
-			meshes = null;
-			_material = null;
 		}
 	}
 }

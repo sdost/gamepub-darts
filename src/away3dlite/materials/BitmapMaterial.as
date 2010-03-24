@@ -18,7 +18,6 @@ package away3dlite.materials
 		public function set bitmap(val:BitmapData):void
 		{
 			_graphicsBitmapFill.bitmapData = val;
-			dirty = true;
 		}
 		
 		/**
@@ -32,7 +31,6 @@ package away3dlite.materials
 		public function set repeat(val:Boolean):void
 		{
 			_graphicsBitmapFill.repeat = val;
-			dirty = true;
 		}
 		
 		/**
@@ -46,7 +44,6 @@ package away3dlite.materials
 		public function set smooth(val:Boolean):void
 		{
 			_graphicsBitmapFill.smooth = val;
-			dirty = true;
 		}
 		
 		/**
@@ -80,7 +77,6 @@ package away3dlite.materials
 			graphicsData.fixed = true;
 			
 			trianglesIndex = 2;
-			smooth = true;
 		}
 	}
 }
