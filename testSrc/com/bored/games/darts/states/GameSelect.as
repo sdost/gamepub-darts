@@ -69,11 +69,11 @@
 		{
 			_opponentSelectScreen.removeEventListener(OpponentSelectScreen.OPPONENT_CHOSEN_EVT, onOpponentChosen);
 			
-			var dartTexture_UJ:BitmapMaterial = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(AppSettings.instance.dartTextureBitmapUJ, AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight));
+			var dartTexture_UJ:BitmapMaterial = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(AppSettings.instance.playerDartTexture, AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight));
 			dartTexture_UJ.repeat = false;
 			dartTexture_UJ.smooth = true;
 			
-			var dartTexture_JR:BitmapMaterial = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(AppSettings.instance.dartTextureBitmapJR, AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight));
+			var dartTexture_JR:BitmapMaterial = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(AppSettings.instance.opponentDartTexture, AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight));
 			dartTexture_JR.repeat = false;
 			dartTexture_JR.smooth = true;
 			

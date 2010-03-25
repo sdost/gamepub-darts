@@ -1,9 +1,9 @@
 ﻿package com.bored.games.darts.states 
 {
-	import com.bored.games.assets.AttractScreen_MC;
-	import com.bored.games.darts.ui.AttractScreen;
+	import com.bored.games.darts.assets.screens.TitleScreen_MC;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.states.statemachines.GameFSM;
+	import com.bored.games.darts.ui.TitleScreen;
 	import com.inassets.statemachines.Finite.State;
 	import com.inassets.statemachines.interfaces.IStateMachine;
 	import flash.display.MovieClip;
@@ -22,7 +22,7 @@
 	 */
 	public class Attract extends State
 	{
-		private var _attractScreen:AttractScreen;
+		private var _titleScreen:TitleScreen;
 		
 		public function Attract(a_name:String, a_stateMachine:IStateMachine)
 		{
@@ -35,16 +35,15 @@
 		 */
 		override public function onEnter():void
 		{
-			var attractScreenImg:MovieClip;
+			var titleScreenImg:MovieClip;
 			
 			try
 			{
-				attractScreenImg = new AttractScreen_MC();
-				_attractScreen = new AttractScreen(attractScreenImg, false, true);
-				_attractScreen.addEventListener(AttractScreen.NEW_GAME_CLICKED_EVT, onNewGameClicked, false, 0, true);
-				_attractScreen.addEventListener(AttractScreen.RESUME_GAME_CLICKED_EVT, onResumeGameClicked, false, 0, true);
-				_attractScreen.addEventListener(AttractScreen.STORE_CLICKED_EVT, onStoreClicked, false, 0, true);
-				DartsGlobals.instance.screenSpace.addChild(_attractScreen);
+				titleScreenImg = new TitleScreen_MC();
+				_titleScreen = new TitleScreen(titleScreenImg, false, true);
+				_titleScreen.addEventListener(TitleScreen.EASY_GAME_CLICKED_EVT, onEasyGameClicked, false, 0, true);
+				_titleScreen.addEventListener(TitleScreen.HARD_GAME_CLICKED_EVT, onHardGameClicked, false, 0, true);
+				DartsGlobals.instance.screenSpace.addChild(_titleScreen);
 			}
 			catch (e:Error)
 			{
@@ -53,22 +52,15 @@
 			
 		}//end onEnter()
 		
-		private function onNewGameClicked(e_evt:Event):void
+		private function onEasyGameClicked(e_evt:Event):void
 		{
 			(this.stateMachine as GameFSM).transitionToNextState();
 			
 		}//end onNewGameClicked();
 		
-		private function onResumeGameClicked(e_evt:Event):void
+		private function onHardGameClicked(e_evt:Event):void
 		{
-			DartsGlobals.instance.gameManager.loadGameState( { } );
-			
 			(this.stateMachine as GameFSM).transitionToNextState();
-		}//end onResumeGameClicked();
-		
-		private function onStoreClicked(e_evt:Event):void
-		{
-			(this.stateMachine as GameFSM).transitionToStateNamed("GameStore");
 		}//end onResumeGameClicked();
 		
 		/**
@@ -76,11 +68,10 @@
 		 */
 		override public function onExit():void
 		{
-			_attractScreen.removeEventListener(AttractScreen.NEW_GAME_CLICKED_EVT, onNewGameClicked);
-			_attractScreen.removeEventListener(AttractScreen.RESUME_GAME_CLICKED_EVT, onResumeGameClicked);
-			
+			_titleScreen.removeEventListener(TitleScreen.EASY_GAME_CLICKED_EVT, onEasyGameClicked);
+			_titleScreen.removeEventListener(TitleScreen.HARD_GAME_CLICKED_EVT, onHardGameClicked);	
 		}//end onExit()
 		
-	}//end class AttractState
+	}//end class Attract
 	
 }//end package com.bored.games.darts.states

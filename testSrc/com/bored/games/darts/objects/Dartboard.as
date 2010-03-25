@@ -80,7 +80,11 @@
 					DartsGlobals.instance.gameManager.scoreManager.submitThrow(DartsGlobals.instance.gameManager.currentPlayer, Number(arr[1]), Number(arr[2]));
 					
 					_blockedSections.push(objects[0].parent.name);
-					_sprite.getChildByName("c_" + Number(arr[1]) + "_" + Number(arr[2]) + "_shield_mc").visible = true;
+					try {
+						_sprite.getChildByName("c_" + Number(arr[1]) + "_" + Number(arr[2]) + "_shield_mc").visible = true;
+					} catch ( e:Error ) {
+						trace("nothing to shield");
+					}
 					
 					return true;
 				}

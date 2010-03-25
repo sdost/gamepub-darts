@@ -2,8 +2,6 @@
 {
 	import com.bored.games.animations.Cutscene;
 	import com.bored.games.animations.CutsceneManager;
-	import com.bored.games.assets.AttractScreen_MC;
-	import com.bored.games.darts.ui.AttractScreen;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.inassets.statemachines.Finite.State;

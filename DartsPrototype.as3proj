@@ -51,13 +51,13 @@
     <element path="swcLibs_includeAll\StateMachines.swc" />
     <element path="swcLibs_includeAll\Tweener.swc" />
     <element path="swcLibs_includeAll\UIComponents.swc" />
-    <element path="swfLibs_includeAll\AttractScreen.swc" />
     <element path="swfLibs_includeAll\GameplayScreen.swc" />
     <element path="swfLibs_includeAll\HUDAssets.swc" />
     <element path="swfLibs_includeAll\StoryAssets.swc" />
     <element path="swfLibs_includeAll\OpponentSelectScreen.swc" />
     <element path="swfLibs_includeAll\Icons.swc" />
     <element path="swfLibs_includeAll\Portraits.swc" />
+    <element path="swfLibs_includeAll\TitleScreen.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>
