@@ -37,6 +37,11 @@
 			return 0;
 		}//end getPlayerScore()
 		
+		public function clearScoreBoard():void
+		{
+			
+		}//end clearScoreBoard()
+		
 	}//end AbstractScoreManager
 
 }//end com.bored.games.darts.logic

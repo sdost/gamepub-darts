@@ -170,9 +170,11 @@
 			<source-path path-element="${src.dir}"/>
 			
 			<!-- Compile against but omit from linking. -->
+			<!--
 			<compiler.external-library-path dir="${swcCompileAgainst.lib}" append="true">
 				<include name="*.swc" />
 			</compiler.external-library-path>
+			-->
 			
 			<!-- Completely include these swc libraries. -->
 			<compiler.include-libraries dir="${swcIncludeAll.lib}" append="true">
@@ -214,9 +216,11 @@
 			<source-path path-element="${test.src.dir}"/>
 			
 			<!-- Compile against but omit from linking. -->
+			<!--
 			<compiler.external-library-path dir="${swfCompileAgainst.lib}" append="true">
 				<include name="*.swc" />
 			</compiler.external-library-path>
+			-->
 			
 			<!-- Completely include these swc libraries. -->
 			<compiler.include-libraries dir="${swfIncludeAll.lib}" append="true">
@@ -224,9 +228,11 @@
 			</compiler.include-libraries>
 			
 			<!-- Compile into the swf if used. -->
+			<!--
 			<compiler.library-path dir="${includeInSwfIfUsed.lib}" append="true">
                 <include name="*.swc" />
             </compiler.library-path>
+			-->
 			
 			<define name="COMPILEVAR::DEBUG" value="${compile.code.debug}" />
 			
@@ -240,7 +246,7 @@
 			<arg line="-doc-sources+='${src.dir}'" />
 			<arg line="-source-path+='${src.dir}'" />
 			<arg line="-l+='${swcIncludeAll.lib}'" />
-			<arg line="-l+='${swcCompileAgainst.lib}'" />
+		<!-- <arg line="-l+='${swcCompileAgainst.lib}'" /> -->
 			<arg line="-output='${doc.output.dir}'" />
 			<arg line="-footer '${docs.footer}'"/>
 		</exec>

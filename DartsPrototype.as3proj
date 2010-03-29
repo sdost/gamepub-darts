@@ -58,6 +58,7 @@
     <element path="swfLibs_includeAll\Icons.swc" />
     <element path="swfLibs_includeAll\Portraits.swc" />
     <element path="swfLibs_includeAll\TitleScreen.swc" />
+    <element path="swfLibs_includeAll\DartUVs.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>

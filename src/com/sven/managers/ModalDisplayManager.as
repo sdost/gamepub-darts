@@ -62,7 +62,7 @@ package com.sven.managers
 			}
 			_overlay = new MovieClip();
 			var g:Graphics = _overlay.graphics as Graphics;
-			g.beginFill(0xeeeeee, overlayAlpha);
+			g.beginFill(0x111111, overlayAlpha);
 			g.moveTo(0,0);
 			g.lineTo(100, 0);
 			g.lineTo(100, 100);

@@ -35,7 +35,7 @@
 		private function setupListeners():void
 		{
 			//trace("Adding mouse listeners...");
-			//_listener.addEventListener(Event.MOUSE_LEAVE, handleMouseLeave, true, 399, true);
+			_listener.addEventListener(Event.MOUSE_LEAVE, handleMouseLeave, true, 399, true);
 			_listener.addEventListener(MouseEvent.MOUSE_MOVE, handleMouseMove, true, 400, true);
 			_listener.addEventListener(MouseEvent.MOUSE_DOWN, handleMouseButtons, true, 401, true);
 			_listener.addEventListener(MouseEvent.MOUSE_UP, handleMouseButtons, true, 402, true);
@@ -44,7 +44,7 @@
 		private function removeListeners():void
 		{
 			//trace("Removing mouse listeners...");
-			//_listener.removeEventListener(Event.MOUSE_LEAVE, handleMouseLeave, true);
+			_listener.removeEventListener(Event.MOUSE_LEAVE, handleMouseLeave, true);
 			_listener.removeEventListener(MouseEvent.MOUSE_MOVE, handleMouseMove, true);
 			_listener.removeEventListener(MouseEvent.MOUSE_DOWN, handleMouseButtons, true);
 			_listener.removeEventListener(MouseEvent.MOUSE_UP, handleMouseButtons, true);

@@ -51,6 +51,8 @@
 		
 		private var _gameManager:DartsGameLogic;
 		
+		private var _modalDisplayManager:ModalDisplayManager;
+		
 		public function DartsGlobals(a_singletonEnforcer:DartsGlobals_SingletonEnforcer) 
 		{
 			super();
@@ -204,8 +206,13 @@
 		
 		public function showModalPopup(a_content:Class = null, a_prompt:Object = null):void
 		{
-			ModalDisplayManager.createModalDisplay(_popupSpace, a_content, a_prompt);
+			_modalDisplayManager = ModalDisplayManager.createModalDisplay(_popupSpace, a_content, a_prompt);
 		}//end showModalPopup()
+		
+		public function processModalQueue():void
+		{
+			if (_modalDisplayManager) _modalDisplayManager.manageQueue();
+		}//end processModalQueue()
 		
 		/*****************************
 		 * 

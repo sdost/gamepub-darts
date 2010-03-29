@@ -82,9 +82,15 @@
 			localPlayer.setAbilities(new BeeLineAbility(1), new ShieldAbility(1), new DoOverAbility(1));
 			DartsGlobals.instance.gameManager.registerPlayer( localPlayer );
 			
-			var cpuPlayer:ComputerPlayer = new ComputerPlayer();
-			cpuPlayer.setSkin(dartTexture_JR);
-			DartsGlobals.instance.gameManager.registerPlayer( cpuPlayer );
+			/*
+			var cpuPlayer1:ComputerPlayer = new ComputerPlayer();
+			cpuPlayer1.setSkin(dartTexture_UJ);			
+			DartsGlobals.instance.gameManager.registerPlayer( cpuPlayer1 );
+			*/
+			
+			var cpuPlayer2:ComputerPlayer = new ComputerPlayer();
+			cpuPlayer2.setSkin(dartTexture_JR);
+			DartsGlobals.instance.gameManager.registerPlayer( cpuPlayer2 );
 			
 			this.finished();
 		}//end pickOpponent()

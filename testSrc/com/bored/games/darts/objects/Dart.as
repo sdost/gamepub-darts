@@ -38,6 +38,8 @@
 		private var _shaft:Object3D;
 		private var _flight:Object3D;
 		
+		private var _blockBoard:Boolean;
+		
 		public function Dart(a_skin:Material, a_radius:int = 1) 
 		{
 			_radius = a_radius;
@@ -139,11 +141,22 @@
 			activateAction(_throwAction.actionName);
 		}//end initThrowParams()
 		
+		public function set blockBoard(a_block:Boolean):void
+		{
+			_blockBoard = a_block;
+		}//end set blockBoard()
+		
+		public function get blockBoard():Boolean
+		{
+			return _blockBoard;
+		}//end get blockBoard()
+		
 		override public function reset():void
 		{
 			super.reset();
 			this.roll = 0;
 			this.pitch = 90;
+			this.blockBoard = false;
 		}//end reset()
 		
 		public function resetThrow():void

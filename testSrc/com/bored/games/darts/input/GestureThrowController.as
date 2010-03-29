@@ -6,6 +6,7 @@
 	import com.sven.utils.AppSettings;
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
+	import flash.ui.Mouse;
 	import flash.utils.Timer;
 	import mx.logging.targets.MiniDebugTarget;
 	
@@ -76,9 +77,11 @@
 					if ( _mouseTimer == null ) {
 						_mouseTimer = new Timer(50);
 					}
+					Mouse.show();
 					_mouseTimer.addEventListener( TimerEvent.TIMER, updateCurrentMouseVelocity );
 					_mouseTimer.start();
 				} else {
+					Mouse.hide();
 					DartsGlobals.instance.gameManager.cursor.position.x = (((a_evt.x - 350) * AppSettings.instance.cursorPositionZ * Math.tan(57.5 * Math.PI / 180))/ 700);
 					DartsGlobals.instance.gameManager.cursor.position.y = (((275 - a_evt.y) * AppSettings.instance.cursorPositionZ * Math.tan(51 * Math.PI / 180))/ 550);
 					DartsGlobals.instance.gameManager.cursor.position.z = AppSettings.instance.cursorPositionZ;

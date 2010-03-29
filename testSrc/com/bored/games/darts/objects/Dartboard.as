@@ -2,6 +2,7 @@
 {
 	import away3dlite.core.base.Object3D;
 	import away3dlite.materials.MovieMaterial;
+	import away3dlite.primitives.AbstractPrimitive;
 	import away3dlite.primitives.Plane;
 	import away3dlite.sprites.AlignmentType;
 	import away3dlite.sprites.Sprite3D;
@@ -31,20 +32,9 @@
 		{
 			super();
 			
-			_blockedSections = new Vector.<String>();
-			
 			_sprite = a_img;
 			
-			for ( var i:int = 1; i <= 20; i++ )
-			{
-				_sprite.getChildByName("c_" + i + "_1_shield_mc").visible = false;
-				_sprite.getChildByName("c_" + i + "_2_shield_mc").visible = false;
-				_sprite.getChildByName("c_" + i + "_3_shield_mc").visible = false;
-			}
-			_sprite.getChildByName("c_25_1_shield_mc").visible = false;
-			_sprite.getChildByName("c_25_2_shield_mc").visible = false;
-			
-			trace("Sprite: " + _sprite);
+			resetBlockedSections();
 		}//end constructor()
 		
 		public function initModels():void
@@ -52,7 +42,7 @@
 			_boardMaterial = new MovieMaterial(_sprite);
 			_boardMaterial.smooth = true;
 			
-			_boardSprite = new Sprite3D(_boardMaterial, 115);
+			_boardSprite = new Sprite3D(_boardMaterial, 130);
 			_boardSprite.alignmentType = AlignmentType.VIEWPOINT;
 		}//end initModels()
 		
@@ -67,7 +57,7 @@
 			}
 		}//end update()
 		
-		public function submitDartPosition(a_x:Number, a_y:Number):Boolean
+		public function submitDartPosition(a_x:Number, a_y:Number, a_block:Boolean):Boolean
 		{
 			var p:Point = new Point( ( a_x / AppSettings.instance.dartboardScale ) * (_sprite.width/2), ( -a_y / AppSettings.instance.dartboardScale ) * (_sprite.height/2) );
 				
@@ -79,11 +69,17 @@
 					var arr:Array = objects[0].parent.name.split("_");
 					DartsGlobals.instance.gameManager.scoreManager.submitThrow(DartsGlobals.instance.gameManager.currentPlayer, Number(arr[1]), Number(arr[2]));
 					
-					_blockedSections.push(objects[0].parent.name);
-					try {
-						_sprite.getChildByName("c_" + Number(arr[1]) + "_" + Number(arr[2]) + "_shield_mc").visible = true;
-					} catch ( e:Error ) {
-						trace("nothing to shield");
+					if (a_block)
+					{
+						_blockedSections.push(objects[0].parent.name);
+						try 
+						{
+							_sprite.getChildByName("c_" + Number(arr[1]) + "_" + Number(arr[2]) + "_shield_mc").visible = true;
+						}
+						catch ( e:Error ) 
+						{
+							trace("nothing to shield");
+						}
 					}
 					
 					return true;
@@ -92,6 +88,20 @@
 			
 			return false;			
 		}//end submitDartPosition()
+		
+		public function resetBlockedSections():void
+		{
+			_blockedSections = new Vector.<String>();
+			
+			for ( var i:int = 1; i <= 20; i++ )
+			{
+				_sprite.getChildByName("c_" + i + "_1_shield_mc").visible = false;
+				_sprite.getChildByName("c_" + i + "_2_shield_mc").visible = false;
+				_sprite.getChildByName("c_" + i + "_3_shield_mc").visible = false;
+			}
+			_sprite.getChildByName("c_25_1_shield_mc").visible = false;
+			_sprite.getChildByName("c_25_2_shield_mc").visible = false;
+		}//end resetBlockedSections()
 		
 		public function get sprite():Sprite3D
 		{

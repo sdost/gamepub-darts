@@ -78,6 +78,7 @@
 			DartsGlobals.instance.gameManager.inputController = _inputController;
 			DartsGlobals.instance.gameManager.throwController = _throwController;
 			DartsGlobals.instance.gameManager.newGame();
+			DartsGlobals.instance.gameManager.addEventListener(DartsGameLogic.GAME_END, onGameEnd, false, 0, true);
 			
 			try
 			{				
@@ -100,17 +101,19 @@
 			DartsGlobals.instance.gameManager.update(getTimer());
 			_gameplayScreen.render();
 		}//end updateDisplay()
-				
-		private function finished(...args):void
+		
+		private function onGameEnd(a_evt:Event):void
 		{
-		}//end finished()
+			(this.stateMachine as GameFSM).transitionToStateNamed("GameSelect");
+		}//end onGameEnd()
 		
 		/**
 		 * Handler for exiting this state.
 		 */
 		override public function onExit():void
 		{
-			_gameplayScreen.removeEventListener(Event.ENTER_FRAME, update);
+			DartsGlobals.instance.stage.removeEventListener(Event.ENTER_FRAME, update);
+			DartsGlobals.instance.screenSpace.removeChild(_gameplayScreen);
 		}//end onExit()
 		
 	}//end class Gameplay

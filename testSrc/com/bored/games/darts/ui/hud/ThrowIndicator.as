@@ -105,13 +105,7 @@
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			this.removeEventListener(Event.REMOVED_FROM_STAGE, destroy);
 			
-			_trackingBall = null;
-			
-			if (this.parent)
-			{
-				this.parent.removeChild(this);
-			}
-			
+			_trackingBall = null;			
 		}//end destroy()
 		
 	}//end class AttractScreen

@@ -63,6 +63,16 @@
 			_cursorMaterial.movie = _cursor;
 		}//end resetCursorImage()
 		
+		public function show():void
+		{
+			_cursor.alpha = 1;
+		}//end show()
+		
+		public function hide():void
+		{
+			_cursor.alpha = 0;
+		}//end hide()
+		
 		public function get sprite():Sprite3D
 		{
 			return _cursorSprite;

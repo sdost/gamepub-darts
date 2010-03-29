@@ -227,11 +227,11 @@
 	
 		public function render():void
 		{	
-			_scoreBoard.update();
-			_throwIndicator.update();
-			_abilityDock.update();
+			if(_scoreBoard) _scoreBoard.update();
+			if(_throwIndicator) _throwIndicator.update();
+			if(_abilityDock) _abilityDock.update();
 			
-			_view.render();
+			if(_view) _view.render();
 		}//end render()
 		
 		public function destroy(...args):void
@@ -239,21 +239,19 @@
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			this.removeEventListener(Event.REMOVED_FROM_STAGE, destroy);
 			
-			_dartRefs = null;
-			_dartModels = null;
-			
 			removeChild(_view);
-			removeChild(_stats);
+			
+			DartsGlobals.instance.optionsInterfaceSpace.removeChild(_throwIndicator);
+			DartsGlobals.instance.optionsInterfaceSpace.removeChild(_scoreBoard);
+			DartsGlobals.instance.optionsInterfaceSpace.removeChild(_abilityDock);
+			
+			_throwIndicator = null;
+			_scoreBoard = null;
+			_abilityDock = null;
 			
 			_view = null;
 			_scene = null;
 			_camera = null;
-			
-			if (this.parent)
-			{
-				this.parent.removeChild(this);
-			}
-			
 		}//end destroy()
 		
 	}//end class GameplayScreen

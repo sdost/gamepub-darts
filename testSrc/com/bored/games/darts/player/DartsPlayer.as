@@ -12,6 +12,7 @@
 	{		
 		protected var _game:DartsGameLogic;
 		protected var _name:String;
+		protected var _num:int;
 		protected var _darts:Vector.<Dart>;
 		
 		protected var _skin:Material;
@@ -42,6 +43,16 @@
 		{
 			return _name;
 		}//end get playerName()
+		
+		public function set playerNum(a_num:int):void
+		{
+			_num = a_num;
+		}//end set playerNum()
+		
+		public function get playerNum():int
+		{
+			return _num;
+		}//end get playerNum()
 		
 		public function setSkin(a_material:Material):void
 		{
