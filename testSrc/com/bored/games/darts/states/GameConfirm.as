@@ -1,7 +1,7 @@
 ﻿package com.bored.games.darts.states 
 {
 	import away3dlite.materials.BitmapMaterial;
-	import com.bored.games.assets.OpponentSelectScreen_MC;
+	import com.bored.games.darts.assets.screen.ConfirmScreen_MC;
 	import com.bored.games.darts.abilities.Ability;
 	import com.bored.games.darts.abilities.BeeLineAbility;
 	import com.bored.games.darts.abilities.DoOverAbility;
@@ -11,7 +11,7 @@
 	import com.bored.games.darts.player.ComputerPlayer;
 	import com.bored.games.darts.player.LocalPlayer;
 	import com.bored.games.darts.states.statemachines.GameFSM;
-	import com.bored.games.darts.ui.OpponentSelectScreen;
+	import com.bored.games.darts.ui.GameConfirmScreen;
 	import com.bored.services.AbstractExternalService;
 	import com.inassets.statemachines.Finite.State;
 	import com.inassets.statemachines.interfaces.IStateMachine;
@@ -32,31 +32,31 @@
 	 * ...
 	 * @author Samuel Dost
 	 */
-	public class GameSelect extends State
+	public class GameConfirm extends State
 	{		
-		private var _opponentSelectScreen:OpponentSelectScreen;
+		private var _gameConfirmScreen:GameConfirmScreen;
 		
-		public function GameSelect(a_name:String, a_stateMachine:IStateMachine)
+		public function GameConfirm(a_name:String, a_stateMachine:IStateMachine)
 		{
 			super(a_name, a_stateMachine);
 			
-		}//end GameSelect() constructor.
+		}//end GameConfirm() constructor.
 		
 		/**
 		 * Handler for entering (and executing) this state.
 		 */
 		override public function onEnter():void
 		{			
-			trace("GameSelect::onEnter()");
+			trace("GameConfirm::onEnter()");
 					
-			var opponentSelectScreenImg:MovieClip;
+			var gameConfirmScreenImg:MovieClip;
 			
 			try
 			{
-				opponentSelectScreenImg = new OpponentSelectScreen_MC();
-				_opponentSelectScreen = new OpponentSelectScreen(opponentSelectScreenImg, false, true);
-				_opponentSelectScreen.addEventListener(OpponentSelectScreen.OPPONENT_CHOSEN_EVT, onOpponentChosen, false, 0, true);
-				DartsGlobals.instance.screenSpace.addChild(_opponentSelectScreen);
+				gameConfirmScreenImg = new ConfirmScreen_MC();
+				_gameConfirmScreen = new GameConfirmScreen(gameConfirmScreenImg, false, true);
+				_gameConfirmScreen.addEventListener(GameConfirmScreen.OPPONENT_CHOSEN_EVT, onOpponentChosen, false, 0, true);
+				DartsGlobals.instance.screenSpace.addChild(_gameConfirmScreen);
 			}
 			catch (e:Error)
 			{
@@ -67,7 +67,7 @@
 		
 		public function onOpponentChosen(a_evt:Event):void
 		{
-			_opponentSelectScreen.removeEventListener(OpponentSelectScreen.OPPONENT_CHOSEN_EVT, onOpponentChosen);
+			_gameConfirmScreen.removeEventListener(GameConfirmScreen.OPPONENT_CHOSEN_EVT, onOpponentChosen);
 			
 			var dartTexture_UJ:BitmapMaterial = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(AppSettings.instance.playerDartTexture, AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight));
 			dartTexture_UJ.repeat = false;

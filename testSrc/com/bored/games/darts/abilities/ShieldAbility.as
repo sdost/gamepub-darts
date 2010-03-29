@@ -18,7 +18,9 @@
 		}//end constructor()
 		
 		override public function useAbility():int
-		{					
+		{	
+			DartsGlobals.instance.gameManager.currentDart.blockBoard = true;
+			
 			return super.useAbility();
 		}//end useAbility()
 		

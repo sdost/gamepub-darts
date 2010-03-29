@@ -67,7 +67,7 @@
 		 * Handler for exiting this state.
 		 */
 		override public function onExit():void
-		{
+		{			
 			_titleScreen.removeEventListener(TitleScreen.EASY_GAME_CLICKED_EVT, onEasyGameClicked);
 			_titleScreen.removeEventListener(TitleScreen.HARD_GAME_CLICKED_EVT, onHardGameClicked);	
 		}//end onExit()

@@ -13,9 +13,14 @@
 		
 		public function AbilityManager() 
 		{
+			initialize();
+		}//end constructor()
+		
+		public function initialize():void
+		{
 			_abilities = new Vector.<Ability>();
 			_timers = new Array();
-		}//end constructor()
+		}//end initialize()
 		
 		public function registerAbility(a_ability:Ability):void
 		{

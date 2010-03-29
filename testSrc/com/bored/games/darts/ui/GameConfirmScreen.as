@@ -1,13 +1,10 @@
-﻿package com.bored.games.darts.ui.hud 
+﻿package com.bored.games.darts.ui 
 {
-	import caurina.transitions.properties.CurveModifiers;
 	import caurina.transitions.Tweener;
 	import com.bored.games.darts.DartsGlobals;
-	import com.bored.games.darts.input.ThrowController;
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
-	import com.sven.utils.AppSettings;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -24,15 +21,18 @@
 	 * ...
 	 * @author Samuel Dost
 	 */
-	public class ThrowIndicator extends ContentHolder
+	public class GameConfirmScreen extends ContentHolder
 	{
-		private var _trackingBall:MovieClip;
+		public static const OPPONENT_CHOSEN_EVT:String = "OpponentChosenEvent";
 		
-		private var _throwController:ThrowController;
+		private var _background:Sprite;
+		private var _buildBackground:Boolean = false;
 		
-		public function ThrowIndicator(a_img:Sprite, a_buildFromAllDescendants:Boolean = false, a_bAddContents:Boolean = true) 
+		public function GameConfirmScreen(a_img:Sprite, a_buildFromAllDescendants:Boolean = false, a_bAddContents:Boolean = true, a_buildBackground:Boolean = false) 
 		{
 			super(a_img, a_buildFromAllDescendants, a_bAddContents);
+			
+			_buildBackground = a_buildBackground;
 			
 			if (this.stage)
 			{
@@ -49,65 +49,67 @@
 		{
 			var descendantsDict:Dictionary = super.buildFrom(a_img, a_buildFromAllDescendants);
 			
-			// now build ourselves from the descendantsDict.
-			
-			_trackingBall = descendantsDict["trackingBall_mc"] as MovieClip;
-			
-			if (_trackingBall)
+			if(_buildBackground)
 			{
-				_trackingBall.gotoAndStop("RED");
-			}
-			else
-			{
-				throw new Error("ThrowIndicator::buildFrom(): _trackingBall=" + _trackingBall);
+				_background = new Sprite();
 			}
 			
 			return descendantsDict;
 			
 		}//end buildFrom()
 		
-		public function registerThrowController(a_controller:ThrowController):void
-		{
-			_throwController = a_controller;
-		}//end registerThrowController()		
-		
 		private function addedToStage(a_evt:Event = null):void
 		{
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			this.addEventListener(Event.REMOVED_FROM_STAGE, destroy, false, 0, true);
 			
+			// build our background.
+			if (_background)
+			{
+				_background.graphics.beginFill(0x000000, .75);
+				_background.graphics.drawRect(0, 0, this.stage.stageWidth, this.stage.stageHeight);
+				_background.graphics.endFill();
+			}
+			
 			this.contentsMC.alpha = 1;
 			
 			this.alpha = 0;
 			
+			if(_background)
+			{
+				var contentIndex:int = this.getChildIndex(this.contents);
+				this.addChildAt(_background, contentIndex);
+			}
+			
+			this.contentsMC.x = (this.stage.stageWidth / 2) - (this.contentsMC.width / 2);
+			this.contentsMC.y = (this.stage.stageHeight / 2) - (this.contentsMC.height / 2);
+			
+			Tweener.addTween(this, {alpha:1, time:2 } );
+			
 		}//end addedToStage()
 		
-		public function update():void
-		{			
-			_trackingBall.x = _throwController.lean * 8;
-			_trackingBall.y = 119 - 119 * ((_throwController.thrust - AppSettings.instance.dartMinThrust) / (AppSettings.instance.dartMaxThrust - AppSettings.instance.dartMinThrust));
-		}//end update()		
-		
-		public function show():void
+		private function onOpponentClicked(a_evt:Event):void
 		{
-			Tweener.addTween(this, {alpha:1, time:2 } );
-		}//end show()
-		
-		public function hide():void
-		{
-			Tweener.addTween(this, {alpha:0, time:2 } );
-		}//end hide()
+			this.dispatchEvent(new Event(OPPONENT_CHOSEN_EVT));
+			
+			Tweener.addTween(this, { alpha:0, onComplete:destroy, time:0.4 } );
+			
+		}//end onPlayNowClicked()
 		
 		override public function destroy(...args):void
 		{
-			super.destroy();
-			
+			super.destroy();			
+						
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			this.removeEventListener(Event.REMOVED_FROM_STAGE, destroy);
 			
-			_trackingBall = null;			
+			if (this.parent)
+			{
+				this.parent.removeChild(this);
+			}
+			
 		}//end destroy()
 		
-	}//end class AttractScreen
+	}//end class GameConfirmScreen
 	
 }//end package com.bored.games.darts.ui 

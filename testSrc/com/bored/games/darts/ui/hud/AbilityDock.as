@@ -163,12 +163,6 @@
 			
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			this.removeEventListener(Event.REMOVED_FROM_STAGE, destroy);
-			
-			if (this.parent)
-			{
-				this.parent.removeChild(this);
-			}
-			
 		}//end destroy()
 		
 	}//end AbilityDock

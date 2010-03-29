@@ -150,13 +150,7 @@
 			this.removeEventListener(Event.REMOVED_FROM_STAGE, destroy);
 			
 			_playerSlots = null;
-			_opponentSlots = null;
-			
-			if (this.parent)
-			{
-				this.parent.removeChild(this);
-			}
-			
+			_opponentSlots = null;			
 		}//end destroy()
 		
 	}//end class AttractScreen

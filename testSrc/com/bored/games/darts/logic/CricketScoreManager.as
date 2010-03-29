@@ -41,8 +41,7 @@
 			_previousScoreboard[a_playerNum][18] = CricketScoreManager.EMPTY;
 			_previousScoreboard[a_playerNum][19] = CricketScoreManager.EMPTY;
 			_previousScoreboard[a_playerNum][20] = CricketScoreManager.EMPTY;
-			_previousScoreboard[a_playerNum][25] = CricketScoreManager.EMPTY;
-			
+			_previousScoreboard[a_playerNum][25] = CricketScoreManager.EMPTY;			
 		}//end initPlayerStats()
 		
 		override public function submitThrow(a_playerNum:int, a_section:uint, a_multiplier:uint = 1):void
@@ -94,6 +93,31 @@
 			
 			return score;
 		}//end getPlayerScore()
+		
+		override public function clearScoreBoard():void
+		{
+			var player:String = null;
+			
+			for( player in _scoreboard ) {
+				_scoreboard[player][15] = CricketScoreManager.EMPTY;
+				_scoreboard[player][16] = CricketScoreManager.EMPTY;
+				_scoreboard[player][17] = CricketScoreManager.EMPTY;
+				_scoreboard[player][18] = CricketScoreManager.EMPTY;
+				_scoreboard[player][19] = CricketScoreManager.EMPTY;
+				_scoreboard[player][20] = CricketScoreManager.EMPTY;
+				_scoreboard[player][25] = CricketScoreManager.EMPTY;
+			}
+			
+			for( player in _previousScoreboard ) {			
+				_previousScoreboard[player][15] = CricketScoreManager.EMPTY;
+				_previousScoreboard[player][16] = CricketScoreManager.EMPTY;
+				_previousScoreboard[player][17] = CricketScoreManager.EMPTY;
+				_previousScoreboard[player][18] = CricketScoreManager.EMPTY;
+				_previousScoreboard[player][19] = CricketScoreManager.EMPTY;
+				_previousScoreboard[player][20] = CricketScoreManager.EMPTY;
+				_previousScoreboard[player][25] = CricketScoreManager.EMPTY;
+			}
+		}//end clearScoreBoard()
 		
 	}//end CricketScoreManager()
 

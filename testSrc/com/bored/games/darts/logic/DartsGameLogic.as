@@ -4,6 +4,7 @@
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.objects.Cursor;
 	import com.bored.games.darts.objects.Dartboard;
+	import com.bored.games.darts.ui.modals.ClickContinueModal;
 	import com.bored.games.darts.ui.modals.GameResultsModal;
 	import com.bored.games.input.InputController;
 	import com.bored.games.darts.input.ThrowController;
@@ -16,6 +17,8 @@
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import com.sven.utils.AppSettings;
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
 	import flash.utils.Timer;
@@ -24,8 +27,10 @@
 	 * ...
 	 * @author sam
 	 */
-	public class DartsGameLogic
+	public class DartsGameLogic extends EventDispatcher
 	{		
+		public static const GAME_END:String = "gameEnd";
+		
 		protected var _scoreManager:AbstractScoreManager;
 		
 		protected var _currentTurn:DartsTurn;
@@ -34,8 +39,6 @@
 		protected var _lastDart:Dart;
 		
 		protected var _darts:Vector.<Dart>;
-		
-		protected var _blockedSections:Vector.<String>;
 		
 		protected var _inputController:InputController;
 		protected var _throwController:ThrowController;
@@ -55,7 +58,6 @@
 			_throwsPerTurn = AppSettings.instance.throwsPerTurn;
 			_scoreManager = new AbstractScoreManager();
 			_abilityManager = new AbilityManager();
-			_blockedSections = new Vector.<String>();
 			
 			_dartboard = new Dartboard(SpriteFactory.getSpriteByQualifiedName("com.bored.games.assets.DartboardColorMap_MC"));
 			_cursor = new Cursor(SpriteFactory.getSpriteByQualifiedName("com.bored.games.darts.assets.hud.Cursor_MC"));
@@ -116,6 +118,7 @@
 			}
 			
 			a_player.dartGame = this;
+			a_player.playerNum = _players.length + 1;
 			
 			for each( var ability:Ability in a_player.abilities )
 			{
@@ -137,6 +140,8 @@
 		{
 			GameUtils.newGame();
 			
+			_scoreManager.clearScoreBoard();
+			
 			if( _inputController && _throwController )
 				_inputController.addEventListener(InputStateEvent.UPDATE, _throwController.onInputUpdate);
 				
@@ -145,12 +150,25 @@
 		public function endGame():void
 		{
 			GameUtils.endGame();
+			
+			if( _inputController && _throwController )
+				_inputController.removeEventListener(InputStateEvent.UPDATE, _throwController.onInputUpdate);
+				
+			_abilityManager.initialize();
+				
+			_darts = null;
+		
+			_inputController = null;
+			_throwController = null;
+		
+			_players = null;
+			
+			this.dispatchEvent(new Event(GAME_END));
 		}//end endGame()
 		
 		public function update(a_time:Number = 0):void
 		{			
 			_dartboard.update(a_time);
-			
 			_cursor.update(a_time);
 			
 			for each ( var dart:Dart in _darts )
@@ -162,23 +180,21 @@
 			{
 				_currentDart.finishThrow();
 				
-				if ( !_dartboard.submitDartPosition(_currentDart.position.x, _currentDart.position.y) ) 
+				if ( !_dartboard.submitDartPosition(_currentDart.position.x, _currentDart.position.y, _currentDart.blockBoard) ) 
 				{
 					_currentDart.beginFalling();
 				}
 				
 				if (_currentTurn.throwsRemaining == 0) {
 					var win:Boolean = checkForWin();
-					resetDarts();
-					
-					endTurn();
 					
 					if (win) {
 						endGame();
 						DartsGlobals.instance.showModalPopup(GameResultsModal);
 					} else {
 						_abilityManager.processTurn();
-						startNewTurn();
+						_currentDart = null;
+						DartsGlobals.instance.showModalPopup(ClickContinueModal);
 					}
 				} else {
 					nextDart();
@@ -199,8 +215,6 @@
 		public function startNewTurn():void
 		{
 			_currentTurn = new DartsTurn(this, _throwsPerTurn);
-			
-			_blockedSections = new Vector.<String>();
 			
 			_lastDart = null;
 			
@@ -285,13 +299,13 @@
 				
 		public function playerAim():void
 		{
-			//Mouse.hide();
+			_cursor.show();
 			_inputController.pause = false;
 		}//end playerAim()
 		
 		public function playerThrow(a_x:Number, a_y:Number, a_z:Number, a_thrust:Number, a_lean:Number):void
 		{			
-			//Mouse.show();
+			_cursor.hide();
 			_cursor.resetCursorImage();
 			_inputController.pause = true;
 			_currentDart.initThrowParams(a_x, a_y, a_z, a_thrust, AppSettings.instance.defaultAngle, AppSettings.instance.defaultGravity, a_lean);
