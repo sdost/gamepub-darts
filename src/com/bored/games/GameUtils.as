@@ -22,6 +22,11 @@
 			_playTime = getTimer() - _playStart;
 		}//end endGame()
 		
+		public static function get playTime():int
+		{
+			return _playTime;
+		}//end get playTime
+		
 	}//end Game
 
 }//end com.bored.games

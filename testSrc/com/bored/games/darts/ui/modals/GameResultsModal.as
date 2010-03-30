@@ -2,6 +2,8 @@
 {
 	import com.bored.games.darts.assets.modal.ResultsModal_MC;
 	import com.bored.games.darts.DartsGlobals;
+	import com.bored.games.darts.logic.DartsGameLogic;
+	import com.bored.games.GameUtils;
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
@@ -9,6 +11,7 @@
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.text.TextField;
 	import flash.utils.Dictionary;
 	/**
 	 * ...
@@ -21,6 +24,10 @@
 		
 		private var _nextMatchBtn:MightyButton;
 		private var _nextMatchBtnImg:MovieClip;
+		
+		private var _matchValue:TextField;
+		private var _statField:TextField;
+		private var _headerField:TextField;
 		
 		public function GameResultsModal() 
 		{
@@ -35,6 +42,10 @@
 			
 			_rematchBtnImg = descendantsDict["rematchBtn_mc"] as MovieClip;
 			_nextMatchBtnImg = descendantsDict["nextMatchBtn_mc"] as MovieClip;
+			
+			_matchValue = descendantsDict["matchValue_text"] as TextField;
+			_statField = descendantsDict["statField_text"] as TextField;
+			_headerField = descendantsDict["headerField_text"] as TextField;
 			
 			if (_rematchBtnImg)
 			{
@@ -58,9 +69,51 @@
 				throw new Error("GameResultsModal::buildFrom(): _nextMatchBtnImg=" + _nextMatchBtnImg);
 			}
 			
+			if (_matchValue) 
+			{
+				_matchValue.text = "Blah blah";
+			}
+			else
+			{
+				throw new Error("GameResultsModal::buildFrom(): _matchValue=" + _matchValue);
+			}
+			
+			if (_statField) 
+			{
+				_statField.text = "Throws: " + DartsGlobals.instance.localPlayer.record.throws + "\n";
+				_statField.appendText("Time: " + formatTime(GameUtils.playTime) + "\n");
+				_statField.appendText("Doubles: " + DartsGlobals.instance.localPlayer.record.doubles + "\n");
+				_statField.appendText("Triples: " + DartsGlobals.instance.localPlayer.record.triples);
+			}
+			else
+			{
+				throw new Error("GameResultsModal::buildFrom(): _statField=" + _statField);
+			}
+			
+			if (_headerField) 
+			{
+				if ( DartsGlobals.instance.localPlayer.record.wonGame() ) {
+					_headerField.text = "Victory!";
+				} else {
+					_headerField.text = "Defeat!";
+				}
+			}
+			else
+			{
+				throw new Error("GameResultsModal::buildFrom(): _headerField=" + _headerField);
+			}
+			
 			return descendantsDict;
 			
 		}//end buildFrom()
+		
+		private function formatTime(a_ms:int):String
+		{
+			var min:int = Math.floor((a_ms / 1000) / 60);
+			var sec:int = Math.floor((a_ms - min * 60 * 1000) % 60);
+			
+			return min + ":" + ((sec < 10) ? "0" : "") + sec;
+		}//end formatTime()
 		
 		public function init(a_object:Object):void
 		{
@@ -73,6 +126,14 @@
 			_nextMatchBtn.removeEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onNextMatchClicked);
 
 			DartsGlobals.instance.processModalQueue();
+			
+			DartsGlobals.instance.gameManager.resetDarts();
+			DartsGlobals.instance.gameManager.endTurn();
+			
+			DartsGlobals.instance.gameManager.newGame();
+			DartsGlobals.instance.gameManager.startNewTurn();
+			
+			DartsGlobals.instance.gameManager.pause(false);
 		}//end onRematchClicked()
 		
 		private function onNextMatchClicked(a_evt:Event):void
@@ -81,6 +142,8 @@
 			_nextMatchBtn.removeEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onNextMatchClicked);
 
 			DartsGlobals.instance.processModalQueue();
+			
+			DartsGlobals.instance.gameManager.dispatchEvent(new Event(DartsGameLogic.GAME_END));
 		}//end onRematchClicked()
 		
 	}//end GameResultsModal

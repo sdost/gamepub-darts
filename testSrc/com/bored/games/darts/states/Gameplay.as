@@ -1,5 +1,6 @@
 ﻿package com.bored.games.darts.states 
 {
+	import com.bored.games.darts.ui.modals.PlayerBanterModal;
 	import com.bored.games.input.InputController;
 	import com.bored.games.input.MouseInputController;
 	import com.bored.games.darts.input.GestureThrowController;
@@ -88,7 +89,7 @@
 				
 				DartsGlobals.instance.stage.addEventListener(Event.ENTER_FRAME, update, false, 0, true);
 				
-				DartsGlobals.instance.gameManager.startNewTurn();
+				DartsGlobals.instance.showModalPopup(PlayerBanterModal);
 			}
 			catch (e:Error)
 			{
@@ -104,6 +105,10 @@
 		
 		private function onGameEnd(a_evt:Event):void
 		{
+			DartsGlobals.instance.gameManager.removeEventListener(DartsGameLogic.GAME_END, onGameEnd);
+			
+			DartsGlobals.instance.gameManager.cleanup();
+			
 			(this.stateMachine as GameFSM).transitionToStateNamed("GameSelect");
 		}//end onGameEnd()
 		
