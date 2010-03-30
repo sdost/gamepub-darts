@@ -192,8 +192,6 @@
 		 */
 		private function initObjects():void
 		{
-			Debug.active = true;
-			
 			/*
 			_boardBillboard = new Plane();
 			_boardBillboard.x = AppSettings.instance.dartboardPositionX * _engineScale;
