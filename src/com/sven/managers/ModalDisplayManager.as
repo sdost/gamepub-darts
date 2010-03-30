@@ -14,6 +14,7 @@ package com.sven.managers
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.display.Graphics;
+	import flash.display.Sprite;
 	import flash.display.Stage;
 	import flash.display.StageScaleMode;
 	import flash.display.StageAlign;
@@ -26,7 +27,7 @@ package com.sven.managers
 	public class ModalDisplayManager extends MovieClip
 	{
 		private static  var _alertQueue:Array = [];
-		private static  var _alert:MovieClip;
+		private static  var _alert:Sprite;
 		private static  var _displayManager:ModalDisplayManager;
 		private static  var _stage:Stage;
 		public static  var overlayAlpha:Number = .16;
@@ -74,20 +75,25 @@ package com.sven.managers
 			_overlay.stageResizeHandler = function():void {
 				this.width = _stage.stageWidth;
 				this.height = _stage.stageHeight;
+				
 				if (this._alert != null ) {
-					this._alert.x = (_stage.stageWidth-this._alert.width)/2;
-					this._alert.y = (_stage.stageHeight-this._alert.height)/2;
+					this._alert.x = (_stage.stageWidth - this._alert.width) / 2;
+					this._alert.y = (_stage.stageHeight - this._alert.height) / 2;
 				}
 			};
 
-			_alert = new content() as MovieClip;
+			_alert = new content() as Sprite;
 			_overlay._alert = _alert;
 			_overlay.stageResizeHandler();
+			
+			/*
 			if (_alert.init) {
 				_alert.init(promp);
 			} else {
 				// trace("ModalDisplayManager: the 2nd parameter should define a function named init(promp:Object) !");
 			}
+			*/
+			
 			_displayManager.addChild(_alert);
 			_displayManager.container = container;
 			var newFilters:Array = _displayManager.container.filters.concat();
