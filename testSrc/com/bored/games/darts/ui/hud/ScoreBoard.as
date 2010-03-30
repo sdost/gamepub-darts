@@ -30,6 +30,9 @@
 		private var _playerSlots:Object;
 		private var _opponentSlots:Object;
 		
+		private var _playerOnePortrait:MovieClip;
+		private var _playerTwoPortrait:MovieClip;
+		
 		private var _scoreMgr:AbstractScoreManager;
 		
 		public function ScoreBoard(a_img:Sprite, a_buildFromAllDescendants:Boolean = false, a_bAddContents:Boolean = true) 
@@ -89,6 +92,9 @@
 				}
 			}
 			
+			_playerOnePortrait = descendantsDict["playerOnePortrait_mc"] as MovieClip;
+			_playerTwoPortrait = descendantsDict["playerTwoPortrait_mc"] as MovieClip;
+			
 			return descendantsDict;
 			
 		}//end buildFrom()
@@ -107,6 +113,18 @@
 		public function registerScoreManager(a_mgr:AbstractScoreManager):void
 		{
 			_scoreMgr = a_mgr;
+			
+			if (_playerOnePortrait) {
+				_playerOnePortrait.addChild(DartsGlobals.instance.gameManager.players[0].portrait);
+			} else {
+				throw new Error("ScoreBoard::registerScoreManager(): _playerOnePortrait=" + _playerOnePortrait);
+			}
+			
+			if (_playerTwoPortrait) {
+				_playerTwoPortrait.addChild(DartsGlobals.instance.gameManager.players[1].portrait);
+			} else {
+				throw new Error("ScoreBoard::registerScoreManager(): _playerTwoPortrait=" + _playerTwoPortrait);
+			}
 		}//end registerScoreManager()
 		
 		public function update():void

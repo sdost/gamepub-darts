@@ -4,8 +4,11 @@
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.objects.Cursor;
 	import com.bored.games.darts.objects.Dartboard;
+	import com.bored.games.darts.statistics.GameRecord;
 	import com.bored.games.darts.ui.modals.ClickContinueModal;
+	import com.bored.games.darts.ui.modals.EndGameBanterModal;
 	import com.bored.games.darts.ui.modals.GameResultsModal;
+	import com.bored.games.darts.ui.modals.PlayerBanterModal;
 	import com.bored.games.input.InputController;
 	import com.bored.games.darts.input.ThrowController;
 	import com.bored.games.darts.objects.Dart;
@@ -52,6 +55,10 @@
 		protected var _dartboard:Dartboard;
 		
 		protected var _cursor:Cursor;
+		
+		protected var _winner:int = -1;
+		
+		protected var _paused:Boolean = false;
 		
 		public function DartsGameLogic() 
 		{
@@ -136,24 +143,42 @@
 			_scoreManager.initPlayerStats(_players.length);
 		}//end registerPlayer()
 		
-		public function newGame():void
+		public function get players():Vector.<DartsPlayer>
 		{
+			return _players;
+		}//end get players()
+		
+		public function newGame():void
+		{			
 			GameUtils.newGame();
+			
+			for ( var i:int = 0; i < _players.length; i++ )
+			{
+				_players[i].initGameRecord();
+			}
 			
 			_scoreManager.clearScoreBoard();
 			
 			if( _inputController && _throwController )
-				_inputController.addEventListener(InputStateEvent.UPDATE, _throwController.onInputUpdate);
-				
+				_inputController.addEventListener(InputStateEvent.UPDATE, _throwController.onInputUpdate);				
 		}//end startGame()
 		
 		public function endGame():void
 		{
 			GameUtils.endGame();
 			
+			for ( var i:int = 0; i < _players.length; i++ )
+			{
+				_players[i].record.recordEndOfGame( _winner == (i + 1) );
+			}
+			
 			if( _inputController && _throwController )
 				_inputController.removeEventListener(InputStateEvent.UPDATE, _throwController.onInputUpdate);
 				
+		}//end endGame()
+		
+		public function cleanup():void
+		{
 			_abilityManager.initialize();
 				
 			_darts = null;
@@ -162,12 +187,12 @@
 			_throwController = null;
 		
 			_players = null;
-			
-			this.dispatchEvent(new Event(GAME_END));
-		}//end endGame()
+		}//end cleanup();
 		
 		public function update(a_time:Number = 0):void
-		{			
+		{	
+			if (_paused) return;
+			
 			_dartboard.update(a_time);
 			_cursor.update(a_time);
 			
@@ -189,11 +214,14 @@
 					var win:Boolean = checkForWin();
 					
 					if (win) {
+						_winner = _currentPlayer;						
 						endGame();
-						DartsGlobals.instance.showModalPopup(GameResultsModal);
+						pause(true);
+						DartsGlobals.instance.showModalPopup(EndGameBanterModal);
 					} else {
 						_abilityManager.processTurn();
 						_currentDart = null;
+						pause(true);
 						DartsGlobals.instance.showModalPopup(ClickContinueModal);
 					}
 				} else {
@@ -280,6 +308,11 @@
 			return _currentPlayer;
 		}//end get currentPlayer()
 		
+		public function recordThrow(a_points:int = 0, a_multiplier:int = 0):void
+		{
+			_players[_currentPlayer - 1].record.recordThrow(a_points, a_multiplier);
+		}//end recordThrow()
+		
 		public function get darts():Vector.<Dart>
 		{
 			if ( _darts == null ) {
@@ -320,6 +353,11 @@
 		{
 			return _dartboard;
 		}//end get dartboard()
+		
+		public function pause(a_bool:Boolean):void
+		{
+			_paused = a_bool;
+		}//end pause()
 		
 	}//end AbstractGameLogic
 

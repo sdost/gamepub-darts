@@ -6,6 +6,8 @@
 	import com.bored.games.darts.abilities.BeeLineAbility;
 	import com.bored.games.darts.abilities.DoOverAbility;
 	import com.bored.games.darts.abilities.ShieldAbility;
+	import com.bored.games.darts.assets.icons.Protagonist_Portrait_BMP;
+	import com.bored.games.darts.assets.icons.Simon_Portrait_BMP;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.logic.CricketGameLogic;
 	import com.bored.games.darts.player.ComputerPlayer;
@@ -17,6 +19,7 @@
 	import com.inassets.statemachines.interfaces.IStateMachine;
 	import com.sven.utils.AppSettings;
 	import com.sven.utils.ImageFactory;
+	import flash.display.Bitmap;
 	import flash.display.MovieClip;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
@@ -77,10 +80,11 @@
 			dartTexture_JR.repeat = false;
 			dartTexture_JR.smooth = true;
 			
-			var localPlayer:LocalPlayer = new LocalPlayer();
-			localPlayer.setSkin(dartTexture_UJ);
-			localPlayer.setAbilities(new BeeLineAbility(1), new ShieldAbility(1), new DoOverAbility(1));
-			DartsGlobals.instance.gameManager.registerPlayer( localPlayer );
+			DartsGlobals.instance.localPlayer = new LocalPlayer();
+			DartsGlobals.instance.localPlayer.setPortrait(new Protagonist_Portrait_BMP(150, 150));
+			DartsGlobals.instance.localPlayer.setSkin(dartTexture_UJ);
+			DartsGlobals.instance.localPlayer.setAbilities(new BeeLineAbility(1), new ShieldAbility(1), new DoOverAbility(1));
+			DartsGlobals.instance.gameManager.registerPlayer( DartsGlobals.instance.localPlayer );
 			
 			/*
 			var cpuPlayer1:ComputerPlayer = new ComputerPlayer();
@@ -89,6 +93,7 @@
 			*/
 			
 			var cpuPlayer2:ComputerPlayer = new ComputerPlayer();
+			cpuPlayer2.setPortrait(new Simon_Portrait_BMP(150, 150));
 			cpuPlayer2.setSkin(dartTexture_JR);
 			DartsGlobals.instance.gameManager.registerPlayer( cpuPlayer2 );
 			

@@ -4,6 +4,9 @@
 	import com.bored.games.darts.abilities.Ability;
 	import com.bored.games.darts.logic.DartsGameLogic;
 	import com.bored.games.darts.objects.Dart;
+	import com.bored.games.darts.statistics.GameRecord;
+	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	/**
 	 * ...
 	 * @author sam
@@ -15,7 +18,11 @@
 		protected var _num:int;
 		protected var _darts:Vector.<Dart>;
 		
+		protected var _gameRecord:GameRecord;
+		
 		protected var _skin:Material;
+		
+		protected var _portrait:Bitmap;
 		
 		private var _abilityStock:Array;
 		
@@ -54,6 +61,17 @@
 			return _num;
 		}//end get playerNum()
 		
+		public function setPortrait(a_bmd:BitmapData):void
+		{
+			_portrait = new Bitmap(a_bmd);
+			_portrait.smoothing = true;
+		}//end setPortrait()
+		
+		public function get portrait():Bitmap
+		{
+			return _portrait;
+		}//end get portrait()
+		
 		public function setSkin(a_material:Material):void
 		{
 			_skin = a_material;
@@ -86,6 +104,16 @@
 		{
 			
 		}//end takeTheShot()
+		
+		public function get record():GameRecord
+		{
+			return _gameRecord;
+		}//end recordThrow()
+		
+		public function initGameRecord():void
+		{
+			_gameRecord = new GameRecord();
+		}
 		
 	}//end DartsPlayer
 

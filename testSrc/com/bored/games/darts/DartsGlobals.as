@@ -1,6 +1,7 @@
 ﻿package com.bored.games.darts
 {
 	import com.bored.games.darts.logic.DartsGameLogic;
+	import com.bored.games.darts.player.DartsPlayer;
 	import com.bored.services.AbstractExternalService;
 	import com.sven.managers.ModalDisplayManager;
 	import flash.display.Sprite;
@@ -52,6 +53,8 @@
 		private var _gameManager:DartsGameLogic;
 		
 		private var _modalDisplayManager:ModalDisplayManager;
+		
+		private var _localPlayer:DartsPlayer;
 		
 		public function DartsGlobals(a_singletonEnforcer:DartsGlobals_SingletonEnforcer) 
 		{
@@ -197,6 +200,16 @@
 		{
 			return _externalService;
 		}//end get externalServices()
+		
+		public function set localPlayer(a_player:DartsPlayer):void
+		{
+			_localPlayer = a_player;
+		}//end set localPlayer()
+		
+		public function get localPlayer():DartsPlayer
+		{
+			return _localPlayer;
+		}//end get localPlayer()
 		
 		public function get isDebugBuild():Boolean
 		{

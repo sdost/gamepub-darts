@@ -25,6 +25,7 @@
 	import com.bored.games.darts.ui.hud.AbilityDock;
 	import com.bored.games.darts.ui.hud.ScoreBoard;
 	import com.bored.games.darts.ui.hud.ThrowIndicator;
+	import com.bored.games.darts.ui.modals.PlayerBanterModal;
 	import com.bored.games.events.InputStateEvent;
 	import com.bored.games.darts.DartsGlobals;
 	import com.inassets.ui.buttons.events.ButtonEvent;
@@ -155,8 +156,7 @@
 			_view.x = (this.stage.stageWidth / 2);
 			_view.y = (this.stage.stageHeight / 2);
 			
-			Tweener.addTween(this, { alpha:1, time:2 } );
-			
+			Tweener.addTween(this, { alpha:1, time:2 } );			
 		}//end addedToStage()
 		
 		/**
@@ -192,8 +192,6 @@
 		 */
 		private function initObjects():void
 		{
-			Debug.active = true;
-			
 			/*
 			_boardBillboard = new Plane();
 			_boardBillboard.x = AppSettings.instance.dartboardPositionX * _engineScale;
