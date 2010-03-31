@@ -55,7 +55,8 @@
 			{
 				gameConfirmScreenImg = new ConfirmScreen_MC();
 				_gameConfirmScreen = new GameConfirmScreen(gameConfirmScreenImg, false, true);
-				_gameConfirmScreen.addEventListener(GameConfirmScreen.OPPONENT_CHOSEN_EVT, onOpponentChosen, false, 0, true);
+				_gameConfirmScreen.addEventListener(GameConfirmScreen.PLAY_CLICKED_EVT, onPlay, false, 0, true);
+				_gameConfirmScreen.addEventListener(GameConfirmScreen.BACK_CLICKED_EVT, onBack, false, 0, true);
 				DartsGlobals.instance.screenSpace.addChild(_gameConfirmScreen);
 			}
 			catch (e:Error)
@@ -65,49 +66,26 @@
 			
 		}//end onEnter()
 		
-		public function onOpponentChosen(a_evt:Event):void
+		public function onPlay(a_evt:Event):void
 		{
-			_gameConfirmScreen.removeEventListener(GameConfirmScreen.OPPONENT_CHOSEN_EVT, onOpponentChosen);
+			DartsGlobals.instance.gameManager.registerPlayer( DartsGlobals.instance.localPlayer );
+			DartsGlobals.instance.gameManager.registerPlayer( DartsGlobals.instance.cpuPlayer );
 			
-			var dartTexture_UJ:BitmapMaterial = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(AppSettings.instance.playerDartTexture, AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight));
-			dartTexture_UJ.repeat = false;
-			dartTexture_UJ.smooth = true;
-			
-			var dartTexture_JR:BitmapMaterial = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(AppSettings.instance.opponentDartTexture, AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight));
-			dartTexture_JR.repeat = false;
-			dartTexture_JR.smooth = true;
-			
-			var localPlayer:LocalPlayer = new LocalPlayer();
-			localPlayer.setSkin(dartTexture_UJ);
-			localPlayer.setAbilities(new BeeLineAbility(1), new ShieldAbility(1), new DoOverAbility(1));
-			DartsGlobals.instance.gameManager.registerPlayer( localPlayer );
-			
-			/*
-			var cpuPlayer1:ComputerPlayer = new ComputerPlayer();
-			cpuPlayer1.setSkin(dartTexture_UJ);			
-			DartsGlobals.instance.gameManager.registerPlayer( cpuPlayer1 );
-			*/
-			
-			var cpuPlayer2:ComputerPlayer = new ComputerPlayer();
-			cpuPlayer2.setSkin(dartTexture_JR);
-			DartsGlobals.instance.gameManager.registerPlayer( cpuPlayer2 );
-			
-			this.finished();
-		}//end pickOpponent()
-		
-		private function finished(...args):void
-		{
 			(this.stateMachine as GameFSM).transitionToNextState();
-			
-		}//end finished()
+		}//end onPlay()
+		
+		public function onBack(a_evt:Event):void
+		{			
+			(this.stateMachine as GameFSM).transitionToStateNamed("CPUOpponentSelect");
+		}//end onBack()
 		
 		/**
 		 * Handler for exiting this state.
 		 */
 		override public function onExit():void
 		{
-			
-			
+			_gameConfirmScreen.removeEventListener(GameConfirmScreen.BACK_CLICKED_EVT, onBack);
+			_gameConfirmScreen.removeEventListener(GameConfirmScreen.PLAY_CLICKED_EVT, onPlay);
 		}//end onExit()
 		
 	}//end class Initialization

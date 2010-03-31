@@ -2,6 +2,7 @@
 {
 	import caurina.transitions.Tweener;
 	import com.bored.games.darts.DartsGlobals;
+	import com.bored.games.darts.profiles.SimonProfile;
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
@@ -226,12 +227,14 @@
 			
 		}//end addedToStage()
 		
-		private function onOpponentClicked(a_evt:Event):void
-		{
-			this.dispatchEvent(new Event(OPPONENT_CHOSEN_EVT));
-			
+		private function onOpponentClicked(a_evt:ButtonEvent):void
+		{						
 			if(_ireneBtn)
 			{
+				if (a_evt.mightyButton == _ireneBtn) {
+					//DartsGlobals.instance.enemyProfile = new IreneProfile();
+				}
+				
 				_ireneBtn.pause(true);
 			}
 			
@@ -242,26 +245,46 @@
 			
 			if(_mackBtn)
 			{
+				if (a_evt.mightyButton == _mackBtn) {
+					//DartsGlobals.instance.enemyProfile = new MackProfile();
+				}
+				
 				_mackBtn.pause(true);
 			}
 			
 			if(_anthonyBtn)
 			{
+				if (a_evt.mightyButton == _anthonyBtn) {
+					//DartsGlobals.instance.enemyProfile = new AnthonyProfile();
+				}
+				
 				_anthonyBtn.pause(true);
 			}
 			
 			if(_professorBtn)
 			{
+				if (a_evt.mightyButton == _professorBtn) {
+					//DartsGlobals.instance.enemyProfile = new ProfessorProfile();
+				}
+				
 				_professorBtn.pause(true);
 			}
 			
 			if(_sammyBtn)
 			{
+				if (a_evt.mightyButton == _sammyBtn) {
+					//DartsGlobals.instance.enemyProfile = new SammyProfile();
+				}
+				
 				_sammyBtn.pause(true);
 			}
 			
 			if(_simonBtn)
 			{
+				if (a_evt.mightyButton == _simonBtn) {
+					DartsGlobals.instance.enemyProfile = new SimonProfile();
+				}
+				
 				_simonBtn.pause(true);
 			}
 			
@@ -272,8 +295,14 @@
 			
 			if(_bigbillBtn)
 			{
+				if (a_evt.mightyButton == _bigbillBtn) {
+					//DartsGlobals.instance.enemyProfile = new BigBillProfile();
+				}
+				
 				_bigbillBtn.pause(true);
 			}
+			
+			this.dispatchEvent(new Event(OPPONENT_CHOSEN_EVT));
 			
 			Tweener.addTween(this, { alpha:0, onComplete:destroy, time:0.4 } );
 			

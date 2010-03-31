@@ -17,19 +17,13 @@
 	{
 		private var _profile:AIProfile;
 		
-		public function ComputerPlayer() 
+		public function ComputerPlayer(a_profile:AIProfile) 
 		{
 			super("COMPUTER");
 			
-			_profile = new AIProfile();
+			_profile = a_profile;
 			
 		}//end constructor()
-		
-		public function set profile(a_profile:AIProfile):void
-		{
-			_profile = a_profile;
-			//this.playerName = _profile.name;
-		}//end set difficulty()
 		
 		override public function takeTheShot():void
 		{
