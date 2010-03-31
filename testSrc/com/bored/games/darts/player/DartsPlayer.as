@@ -113,7 +113,7 @@
 		public function initGameRecord():void
 		{
 			_gameRecord = new GameRecord();
-		}
+		}//end initGameRecord();
 		
 	}//end DartsPlayer
 

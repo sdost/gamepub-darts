@@ -5,6 +5,7 @@
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
+	import flash.display.Bitmap;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -23,9 +24,33 @@
 	 */
 	public class GameConfirmScreen extends ContentHolder
 	{
-		public static const OPPONENT_CHOSEN_EVT:String = "OpponentChosenEvent";
+		public static const PLAY_CLICKED_EVT:String = "PlayClickedEvent";
+		public static const BACK_CLICKED_EVT:String = "BackClickedEvent";
 		
 		private var _background:Sprite;
+		
+		private var _backBtn:MightyButton;
+		private var _backBtnImg:MovieClip;
+		
+		private var _playBtn:MightyButton;
+		private var _playBtnImg:MovieClip;
+		
+		private var _dartUpgradeBtn:MightyButton;
+		private var _dartUpgradeBtnImg:MovieClip;
+		
+		private var _powersUpgradeBtn:MightyButton;
+		private var _powersUpgradeBtnImg:MovieClip;
+		
+		private var _dartSelectLeftBtn:MightyButton;
+		private var _dartSelectLeftBtnImg:MovieClip;
+		
+		private var _dartSelectRightBtn:MightyButton;
+		private var _dartSelectRightBtnImg:MovieClip;
+		
+		private var _opponentDetails:TextField;
+		private var _opponentBio:TextField;
+		private var _opponentPortrait:MovieClip;
+		
 		private var _buildBackground:Boolean = false;
 		
 		public function GameConfirmScreen(a_img:Sprite, a_buildFromAllDescendants:Boolean = false, a_bAddContents:Boolean = true, a_buildBackground:Boolean = false) 
@@ -48,6 +73,124 @@
 		override protected function buildFrom(a_img:Sprite, a_buildFromAllDescendants:Boolean = true):Dictionary
 		{
 			var descendantsDict:Dictionary = super.buildFrom(a_img, a_buildFromAllDescendants);
+			
+			for ( var str:String in descendantsDict ) {
+				trace("descendantsDict[" + str + "] -> " + descendantsDict[str]);
+			}
+			
+			_backBtnImg = descendantsDict["backBtn_mc"] as MovieClip;
+			_playBtnImg = descendantsDict["playBtn_mc"] as MovieClip;
+			
+			_dartUpgradeBtnImg = descendantsDict["dartUpgrade_mc"] as MovieClip;
+			_powersUpgradeBtnImg = descendantsDict["powersUpgrade_mc"] as MovieClip;
+			
+			_dartSelectLeftBtnImg = descendantsDict["dartSelectLeft_mc"] as MovieClip;
+			_dartSelectRightBtnImg = descendantsDict["dartSelectRight_mc"] as MovieClip;
+			
+			_opponentDetails = descendantsDict["opponentDetails_text"] as TextField;
+			_opponentBio = descendantsDict["opponentBio_text"] as TextField;
+			_opponentPortrait = descendantsDict["opponentPortrait_mc"] as MovieClip;
+			
+			if (_backBtnImg)
+			{
+				_backBtn = new MightyButton(_backBtnImg, false);
+				_backBtn.pause(false);
+				_backBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onBackClicked, false, 0, true);
+			}
+			else
+			{
+				throw new Error("GameConfirmScreen::buildFrom(): _backBtnImg=" + _backBtnImg);
+			}
+			
+			if (_playBtnImg)
+			{
+				_playBtn = new MightyButton(_playBtnImg, false);
+				_playBtn.pause(false);
+				_playBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onPlayClicked, false, 0, true);
+			}
+			else
+			{
+				throw new Error("GameConfirmScreen::buildFrom(): _playBtnImg=" + _playBtnImg);
+			}
+			
+			if (_dartUpgradeBtnImg)
+			{
+				_dartUpgradeBtn = new MightyButton(_dartUpgradeBtnImg, false);
+				_dartUpgradeBtn.pause(false);
+				//_dartUpgradeBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onPlayClicked, false, 0, true);
+			}
+			else
+			{
+				throw new Error("GameConfirmScreen::buildFrom(): _dartUpgradeBtnImg=" + _dartUpgradeBtnImg);
+			}
+			
+			if (_powersUpgradeBtnImg)
+			{
+				_powersUpgradeBtn = new MightyButton(_powersUpgradeBtnImg, false);
+				_powersUpgradeBtn.pause(false);
+				//_powersUpgradeBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onPlayClicked, false, 0, true);
+			}
+			else
+			{
+				throw new Error("GameConfirmScreen::buildFrom(): _powersUpgradeBtnImg=" + _powersUpgradeBtnImg);
+			}
+			
+			if (_dartSelectLeftBtnImg)
+			{
+				_dartSelectLeftBtn = new MightyButton(_dartSelectLeftBtnImg, false);
+				_dartSelectLeftBtn.pause(false);
+				//_dartSelectLeftBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onPlayClicked, false, 0, true);
+			}
+			else
+			{
+				throw new Error("GameConfirmScreen::buildFrom(): _dartSelectLeftBtnImg=" + _dartSelectLeftBtnImg);
+			}
+			
+			if (_dartSelectRightBtnImg)
+			{
+				_dartSelectRightBtn = new MightyButton(_dartSelectRightBtnImg, false);
+				_dartSelectRightBtn.pause(false);
+				//_dartSelectRightBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onPlayClicked, false, 0, true);
+			}
+			else
+			{
+				throw new Error("GameConfirmScreen::buildFrom(): _dartSelectRightBtnImg=" + _dartSelectRightBtnImg);
+			}
+			
+			if (_opponentDetails)
+			{
+				_opponentDetails.text = "Name: " + DartsGlobals.instance.enemyProfile.name + "\n";
+				_opponentDetails.appendText("Age: " + DartsGlobals.instance.enemyProfile.age + "\n");
+				_opponentDetails.appendText("Height: " + DartsGlobals.instance.enemyProfile.height + " cm\n");
+				_opponentDetails.appendText("Weight: " + DartsGlobals.instance.enemyProfile.weight + " kg");
+			}
+			else
+			{
+				throw new Error("GameConfirmScreen::buildFrom(): _opponentDetails=" + _opponentDetails);
+			}
+			
+			if (_opponentBio)
+			{
+				_opponentBio.text = DartsGlobals.instance.enemyProfile.bio;
+			}
+			else
+			{
+				throw new Error("GameConfirmScreen::buildFrom(): _opponentBio=" + _opponentBio);
+			}
+			
+			if (_opponentPortrait)
+			{
+				var portrait:Bitmap = new Bitmap(DartsGlobals.instance.enemyProfile.portrait);
+				portrait.smoothing = true;
+				portrait.width = 75;
+				portrait.height = 75;
+				
+				_opponentPortrait.addChild(portrait);
+			}
+			else
+			{
+				throw new Error("GameConfirmScreen::buildFrom(): _opponentPortrait=" + _opponentPortrait);
+			}
 			
 			if(_buildBackground)
 			{
@@ -88,13 +231,27 @@
 			
 		}//end addedToStage()
 		
-		private function onOpponentClicked(a_evt:Event):void
+		private function onPlayClicked(a_evt:Event):void
 		{
-			this.dispatchEvent(new Event(OPPONENT_CHOSEN_EVT));
+			_backBtn.removeEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onBackClicked);
+			_playBtn.removeEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onPlayClicked);
+			
+			this.dispatchEvent(new Event(PLAY_CLICKED_EVT));
 			
 			Tweener.addTween(this, { alpha:0, onComplete:destroy, time:0.4 } );
 			
-		}//end onPlayNowClicked()
+		}//end onPlayClicked()
+		
+		private function onBackClicked(a_evt:Event):void
+		{
+			_backBtn.removeEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onBackClicked);
+			_playBtn.removeEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onPlayClicked);
+			
+			this.dispatchEvent(new Event(BACK_CLICKED_EVT));
+			
+			Tweener.addTween(this, { alpha:0, onComplete:destroy, time:0.4 } );
+			
+		}//end onBackClicked()
 		
 		override public function destroy(...args):void
 		{

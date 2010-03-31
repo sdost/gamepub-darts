@@ -2,6 +2,7 @@
 {
 	import com.bored.games.darts.logic.DartsGameLogic;
 	import com.bored.games.darts.player.DartsPlayer;
+	import com.bored.games.darts.profiles.EnemyProfile;
 	import com.bored.services.AbstractExternalService;
 	import com.sven.managers.ModalDisplayManager;
 	import flash.display.Sprite;
@@ -55,6 +56,10 @@
 		private var _modalDisplayManager:ModalDisplayManager;
 		
 		private var _localPlayer:DartsPlayer;
+		
+		private var _enemyProfile:EnemyProfile;
+		
+		private var _cpuPlayer:DartsPlayer;
 		
 		public function DartsGlobals(a_singletonEnforcer:DartsGlobals_SingletonEnforcer) 
 		{
@@ -210,6 +215,26 @@
 		{
 			return _localPlayer;
 		}//end get localPlayer()
+		
+		public function set enemyProfile(a_profile:EnemyProfile):void
+		{
+			_enemyProfile = a_profile;
+		}//end set enemyProfile()
+		
+		public function get enemyProfile():EnemyProfile
+		{
+			return _enemyProfile;
+		}//end get enemyProfile()
+		
+		public function set cpuPlayer(a_player:DartsPlayer):void
+		{
+			_cpuPlayer = a_player;
+		}//end set cpuPlayer()
+		
+		public function get cpuPlayer():DartsPlayer
+		{
+			return _cpuPlayer;
+		}//end get cpuPlayer()
 		
 		public function get isDebugBuild():Boolean
 		{

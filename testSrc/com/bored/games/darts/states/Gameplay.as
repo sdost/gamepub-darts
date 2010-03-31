@@ -15,6 +15,7 @@
 	import com.bored.games.events.InputStateEvent;
 	import com.inassets.statemachines.Finite.State;
 	import com.inassets.statemachines.interfaces.IStateMachine;
+	import com.sven.managers.ModalDisplayManager;
 	import com.sven.utils.AppSettings;
 	import com.sven.utils.SpriteFactory;
 	import flash.display.Bitmap;
@@ -89,6 +90,7 @@
 				
 				DartsGlobals.instance.stage.addEventListener(Event.ENTER_FRAME, update, false, 0, true);
 				
+				ModalDisplayManager.overlayAlpha = .30;
 				DartsGlobals.instance.showModalPopup(PlayerBanterModal);
 			}
 			catch (e:Error)
