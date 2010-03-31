@@ -30,6 +30,11 @@
 			return shot;
 		}//end pickShot()
 		
+		public function get name():String
+		{
+			return _name;
+		}//end get name()
+		
 	}//end AIProfile
 
 }//end com.bored.games.darts.logic

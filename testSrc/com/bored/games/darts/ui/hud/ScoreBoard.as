@@ -9,6 +9,7 @@
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
+	import flash.display.Bitmap;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -115,13 +116,23 @@
 			_scoreMgr = a_mgr;
 			
 			if (_playerOnePortrait) {
-				_playerOnePortrait.addChild(DartsGlobals.instance.gameManager.players[0].portrait);
+				var portraitOne:Bitmap = new Bitmap(DartsGlobals.instance.gameManager.players[0].portrait.bitmapData);
+				portraitOne.smoothing = true;
+				portraitOne.width = 45;
+				portraitOne.height = 45;
+				
+				_playerOnePortrait.addChild(portraitOne);
 			} else {
 				throw new Error("ScoreBoard::registerScoreManager(): _playerOnePortrait=" + _playerOnePortrait);
 			}
 			
 			if (_playerTwoPortrait) {
-				_playerTwoPortrait.addChild(DartsGlobals.instance.gameManager.players[1].portrait);
+				var portraitTwo:Bitmap = new Bitmap(DartsGlobals.instance.gameManager.players[1].portrait.bitmapData);
+				portraitTwo.smoothing = true;
+				portraitTwo.width = 45;
+				portraitTwo.height = 45;
+				
+				_playerOnePortrait.addChild(portraitTwo);
 			} else {
 				throw new Error("ScoreBoard::registerScoreManager(): _playerTwoPortrait=" + _playerTwoPortrait);
 			}

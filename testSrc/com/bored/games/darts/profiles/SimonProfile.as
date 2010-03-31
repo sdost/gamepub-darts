@@ -17,8 +17,8 @@
 			super("Simon");
 			
 			this.age = 22;
-			this.height = 400;
-			this.weight = 110;
+			this.height = 185;
+			this.weight = 70;
 			this.bio = "Some dude";
 			
 			this.portrait = new Simon_Portrait_BMP(150, 150);

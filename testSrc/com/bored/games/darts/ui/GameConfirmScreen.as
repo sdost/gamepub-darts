@@ -5,6 +5,7 @@
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
+	import flash.display.Bitmap;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -46,6 +47,10 @@
 		private var _dartSelectRightBtn:MightyButton;
 		private var _dartSelectRightBtnImg:MovieClip;
 		
+		private var _opponentDetails:TextField;
+		private var _opponentBio:TextField;
+		private var _opponentPortrait:MovieClip;
+		
 		private var _buildBackground:Boolean = false;
 		
 		public function GameConfirmScreen(a_img:Sprite, a_buildFromAllDescendants:Boolean = false, a_bAddContents:Boolean = true, a_buildBackground:Boolean = false) 
@@ -81,6 +86,10 @@
 			
 			_dartSelectLeftBtnImg = descendantsDict["dartSelectLeft_mc"] as MovieClip;
 			_dartSelectRightBtnImg = descendantsDict["dartSelectRight_mc"] as MovieClip;
+			
+			_opponentDetails = descendantsDict["opponentDetails_text"] as TextField;
+			_opponentBio = descendantsDict["opponentBio_text"] as TextField;
+			_opponentPortrait = descendantsDict["opponentPortrait_mc"] as MovieClip;
 			
 			if (_backBtnImg)
 			{
@@ -146,6 +155,41 @@
 			else
 			{
 				throw new Error("GameConfirmScreen::buildFrom(): _dartSelectRightBtnImg=" + _dartSelectRightBtnImg);
+			}
+			
+			if (_opponentDetails)
+			{
+				_opponentDetails.text = "Name: " + DartsGlobals.instance.enemyProfile.name + "\n";
+				_opponentDetails.appendText("Age: " + DartsGlobals.instance.enemyProfile.age + "\n");
+				_opponentDetails.appendText("Height: " + DartsGlobals.instance.enemyProfile.height + " cm\n");
+				_opponentDetails.appendText("Weight: " + DartsGlobals.instance.enemyProfile.weight + " kg");
+			}
+			else
+			{
+				throw new Error("GameConfirmScreen::buildFrom(): _opponentDetails=" + _opponentDetails);
+			}
+			
+			if (_opponentBio)
+			{
+				_opponentBio.text = DartsGlobals.instance.enemyProfile.bio;
+			}
+			else
+			{
+				throw new Error("GameConfirmScreen::buildFrom(): _opponentBio=" + _opponentBio);
+			}
+			
+			if (_opponentPortrait)
+			{
+				var portrait:Bitmap = new Bitmap(DartsGlobals.instance.enemyProfile.portrait);
+				portrait.smoothing = true;
+				portrait.width = 75;
+				portrait.height = 75;
+				
+				_opponentPortrait.addChild(portrait);
+			}
+			else
+			{
+				throw new Error("GameConfirmScreen::buildFrom(): _opponentPortrait=" + _opponentPortrait);
 			}
 			
 			if(_buildBackground)
