@@ -74,10 +74,6 @@
 		{
 			var descendantsDict:Dictionary = super.buildFrom(a_img, a_buildFromAllDescendants);
 			
-			for ( var str:String in descendantsDict ) {
-				trace("descendantsDict[" + str + "] -> " + descendantsDict[str]);
-			}
-			
 			_backBtnImg = descendantsDict["backBtn_mc"] as MovieClip;
 			_playBtnImg = descendantsDict["playBtn_mc"] as MovieClip;
 			

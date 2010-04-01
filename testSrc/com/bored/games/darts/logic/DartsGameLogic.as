@@ -159,6 +159,8 @@
 			
 			_scoreManager.clearScoreBoard();
 			
+			_currentPlayer = 1;
+			
 			if( _inputController && _throwController )
 				_inputController.addEventListener(InputStateEvent.UPDATE, _throwController.onInputUpdate);				
 		}//end startGame()
@@ -175,6 +177,7 @@
 			if( _inputController && _throwController )
 				_inputController.removeEventListener(InputStateEvent.UPDATE, _throwController.onInputUpdate);
 				
+			Mouse.show();				
 		}//end endGame()
 		
 		public function cleanup():void
@@ -187,6 +190,8 @@
 			_throwController = null;
 		
 			_players = null;
+			
+			_paused = false;
 		}//end cleanup();
 		
 		public function update(a_time:Number = 0):void

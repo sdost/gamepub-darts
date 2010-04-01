@@ -111,7 +111,7 @@
 			
 			DartsGlobals.instance.gameManager.cleanup();
 			
-			(this.stateMachine as GameFSM).transitionToStateNamed("GameSelect");
+			(this.stateMachine as GameFSM).transitionToStateNamed("CPUOpponentSelect");
 		}//end onGameEnd()
 		
 		/**

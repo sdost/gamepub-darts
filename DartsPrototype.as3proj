@@ -60,6 +60,7 @@
     <element path="swfLibs_includeAll\TitleScreen.swc" />
     <element path="swfLibs_includeAll\DartUVs.swc" />
     <element path="swfLibs_includeAll\Confirm_Screen.swc" />
+    <element path="swcLibs_includeAll\greensock.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>

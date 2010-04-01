@@ -143,6 +143,11 @@
 
 			DartsGlobals.instance.processModalQueue();
 			
+			DartsGlobals.instance.gameManager.resetDarts();
+			DartsGlobals.instance.gameManager.endTurn();
+			
+			DartsGlobals.instance.gameManager.pause(false);
+			
 			DartsGlobals.instance.gameManager.dispatchEvent(new Event(DartsGameLogic.GAME_END));
 		}//end onRematchClicked()
 		

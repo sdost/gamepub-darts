@@ -118,8 +118,8 @@
 			if (_playerOnePortrait) {
 				var portraitOne:Bitmap = new Bitmap(DartsGlobals.instance.gameManager.players[0].portrait.bitmapData);
 				portraitOne.smoothing = true;
-				portraitOne.width = 45;
-				portraitOne.height = 45;
+				portraitOne.width = 40;
+				portraitOne.height = 40;
 				
 				_playerOnePortrait.addChild(portraitOne);
 			} else {
@@ -129,10 +129,10 @@
 			if (_playerTwoPortrait) {
 				var portraitTwo:Bitmap = new Bitmap(DartsGlobals.instance.gameManager.players[1].portrait.bitmapData);
 				portraitTwo.smoothing = true;
-				portraitTwo.width = 45;
-				portraitTwo.height = 45;
+				portraitTwo.width = 40;
+				portraitTwo.height = 40;
 				
-				_playerOnePortrait.addChild(portraitTwo);
+				_playerTwoPortrait.addChild(portraitTwo);
 			} else {
 				throw new Error("ScoreBoard::registerScoreManager(): _playerTwoPortrait=" + _playerTwoPortrait);
 			}

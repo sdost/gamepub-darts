@@ -12,7 +12,8 @@
 	public class AIProfile
 	{		
 		protected var _name:String;
-				
+		public var accuracy:Number = 0.5;
+		
 		public function AIProfile(a_name:String = "") 
 		{
 			_name = a_name;

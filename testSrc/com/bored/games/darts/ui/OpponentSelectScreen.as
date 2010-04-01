@@ -93,7 +93,7 @@
 			{
 				_ireneBtn = new MightyButton(_ireneBtnImg, false);
 				_ireneBtn.pause(false);
-				_ireneBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
+				//_ireneBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
 			}
 			else
 			{
@@ -104,7 +104,7 @@
 			{
 				_oldmanBtn = new MightyButton(_oldmanBtnImg, false);
 				_oldmanBtn.pause(false);
-				_oldmanBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
+				//_oldmanBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
 			}
 			else
 			{
@@ -115,7 +115,7 @@
 			{
 				_mackBtn = new MightyButton(_mackBtnImg, false);
 				_mackBtn.pause(false);
-				_mackBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
+				//_mackBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
 			}
 			else
 			{
@@ -126,7 +126,7 @@
 			{
 				_anthonyBtn = new MightyButton(_anthonyBtnImg, false);
 				_anthonyBtn.pause(false);
-				_anthonyBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
+				//_anthonyBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
 			}
 			else
 			{
@@ -137,7 +137,7 @@
 			{
 				_professorBtn = new MightyButton(_professorBtnImg, false);
 				_professorBtn.pause(false);
-				_professorBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
+				//_professorBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
 			}
 			else
 			{
@@ -148,7 +148,7 @@
 			{
 				_sammyBtn = new MightyButton(_sammyBtnImg, false);
 				_sammyBtn.pause(false);
-				_sammyBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
+				//_sammyBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
 			}
 			else
 			{
@@ -170,7 +170,7 @@
 			{
 				_barkeepBtn = new MightyButton(_barkeepBtnImg, false);
 				_barkeepBtn.pause(false);
-				_barkeepBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
+				//_barkeepBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
 			}
 			else
 			{
@@ -181,7 +181,7 @@
 			{
 				_bigbillBtn = new MightyButton(_bigbillBtnImg, false);
 				_bigbillBtn.pause(false);
-				_bigbillBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
+				//_bigbillBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
 			}
 			else
 			{

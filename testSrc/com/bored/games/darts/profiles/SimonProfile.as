@@ -24,6 +24,8 @@
 			this.portrait = new Simon_Portrait_BMP(150, 150);
 			
 			this.setDartSkin(ImageFactory.getBitmapDataByQualifiedName("dartuv_simon", AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight));
+			
+			this.accuracy = 0.2;
 		}//end constructor()
 		
 	}//end SimonProfile
