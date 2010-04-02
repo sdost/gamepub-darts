@@ -5,7 +5,7 @@
 	import com.bored.games.darts.profiles.EnemyProfile;
 	import com.bored.services.AbstractExternalService;
 	import com.sven.managers.ModalDisplayManager;
-	import com.sven.managers.SoundManager;
+	import com.reintroducing.sound.SoundManager;
 	import flash.display.Sprite;
 	import flash.display.Stage;
 	import flash.events.Event;

@@ -4,7 +4,7 @@
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
-	import com.sven.managers.SoundManager;
+	import com.reintroducing.sound.SoundManager;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -26,6 +26,8 @@
 		
 		private var _quitBtn:MightyButton;
 		private var _quitBtnImg:MovieClip;
+		
+		private var _soundManager:SoundManager;
 		
 		public function ControlPanel(a_img:Sprite, a_buildFromAllDescendants:Boolean = false, a_bAddContents:Boolean = true) 
 		{
@@ -103,7 +105,7 @@
 		
 		public function registerSoundManager(a_soundMgr:SoundManager):void
 		{
-			
+			_soundManager = a_soundMgr;
 		}//end registerSoundManager()
 		
 		private function onMouseOver(a_evt:MouseEvent):void
@@ -128,7 +130,7 @@
 		
 		private function onSoundButtonClick(a_evt:Event):void
 		{
-			//TODO: handle sound toggle
+			_soundManager.muteAllSounds();
 		}//end onSoundButtonClick()
 		
 		private function onMusicButtonClick(a_evt:Event):void
