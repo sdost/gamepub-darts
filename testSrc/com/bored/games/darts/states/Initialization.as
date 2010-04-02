@@ -3,6 +3,7 @@
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.logic.CricketGameLogic;
 	import com.bored.games.darts.logic.DartsGameLogic;
+	import com.bored.games.darts.profiles.UserProfile;
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.bored.services.AbstractExternalService;
 	import com.inassets.statemachines.Finite.State;
@@ -45,6 +46,11 @@
 			var ext:AbstractExternalService = new providerCls();
 			//ext.init(AppSettings.instance.externalServicesGameId, DartsGlobals.instance.optionsInterfaceSpace);
 			DartsGlobals.instance.externalServices = ext;
+			
+			DartsGlobals.instance.playerProfile = new UserProfile();
+			DartsGlobals.instance.playerProfile.unlockSkin("basicplaid");
+			DartsGlobals.instance.playerProfile.unlockSkin("techno");
+			DartsGlobals.instance.playerProfile.unlockSkin("pearl");
 
 			this.finished();			
 		}//end onEnter()

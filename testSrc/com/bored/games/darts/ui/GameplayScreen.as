@@ -26,7 +26,6 @@
 	import com.bored.games.darts.ui.hud.ControlPanel;
 	import com.bored.games.darts.ui.hud.ScoreBoard;
 	import com.bored.games.darts.ui.hud.ThrowIndicator;
-	import com.bored.games.darts.ui.modals.PlayerBanterModal;
 	import com.bored.games.events.InputStateEvent;
 	import com.bored.games.darts.DartsGlobals;
 	import com.inassets.ui.buttons.events.ButtonEvent;

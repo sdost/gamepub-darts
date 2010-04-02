@@ -9,6 +9,7 @@
 	import com.bored.games.darts.states.IntroStory;
 	import com.bored.games.darts.states.Initialization;
 	import com.bored.games.darts.states.Attract;
+	import com.reintroducing.sound.SoundManager;
 	import com.sven.containers.Panel;
 	import com.sven.utils.AppSettings;
 	import flash.display.Shape;
@@ -46,6 +47,7 @@
 			
 			// set the global stage value.
 			DartsGlobals.instance.stage = this.stage;
+			DartsGlobals.instance.soundManager = SoundManager.instance;
 			
 			AppSettings.instance.load("development.config");
 			

@@ -3,6 +3,7 @@
 	import com.bored.games.darts.logic.DartsGameLogic;
 	import com.bored.games.darts.player.DartsPlayer;
 	import com.bored.games.darts.profiles.EnemyProfile;
+	import com.bored.games.darts.profiles.UserProfile;
 	import com.bored.services.AbstractExternalService;
 	import com.sven.managers.ModalDisplayManager;
 	import com.reintroducing.sound.SoundManager;
@@ -55,6 +56,8 @@
 		private var _gameManager:DartsGameLogic;
 		
 		private var _modalDisplayManager:ModalDisplayManager;
+		
+		private var _playerProfile:UserProfile;
 		
 		private var _localPlayer:DartsPlayer;
 		
@@ -228,6 +231,16 @@
 		{
 			return _localPlayer;
 		}//end get localPlayer()
+		
+		public function set playerProfile(a_profile:UserProfile):void
+		{
+			_playerProfile = a_profile;
+		}//end set playerProfile()
+		
+		public function get playerProfile():UserProfile
+		{
+			return _playerProfile;
+		}//end get playerProfile()
 		
 		public function set enemyProfile(a_profile:EnemyProfile):void
 		{

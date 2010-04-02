@@ -1,6 +1,6 @@
 ﻿package com.bored.games.darts.states 
 {
-	import com.bored.games.darts.ui.modals.PlayerBanterModal;
+	import com.bored.games.darts.ui.modals.PreGameBanterModal;
 	import com.bored.games.input.InputController;
 	import com.bored.games.input.MouseInputController;
 	import com.bored.games.darts.input.GestureThrowController;
@@ -91,7 +91,7 @@
 				DartsGlobals.instance.stage.addEventListener(Event.ENTER_FRAME, update, false, 0, true);
 				
 				ModalDisplayManager.overlayAlpha = .30;
-				DartsGlobals.instance.showModalPopup(PlayerBanterModal);
+				DartsGlobals.instance.showModalPopup(PreGameBanterModal);
 			}
 			catch (e:Error)
 			{

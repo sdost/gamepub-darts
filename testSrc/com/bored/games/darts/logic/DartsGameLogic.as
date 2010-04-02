@@ -6,9 +6,9 @@
 	import com.bored.games.darts.objects.Dartboard;
 	import com.bored.games.darts.statistics.GameRecord;
 	import com.bored.games.darts.ui.modals.ClickContinueModal;
-	import com.bored.games.darts.ui.modals.EndGameBanterModal;
+	import com.bored.games.darts.ui.modals.PostGameBanterModal;
 	import com.bored.games.darts.ui.modals.GameResultsModal;
-	import com.bored.games.darts.ui.modals.PlayerBanterModal;
+	import com.bored.games.darts.ui.modals.PreGameBanterModal;
 	import com.bored.games.input.InputController;
 	import com.bored.games.darts.input.ThrowController;
 	import com.bored.games.darts.objects.Dart;
@@ -222,7 +222,7 @@
 						_winner = _currentPlayer;						
 						endGame();
 						pause(true);
-						DartsGlobals.instance.showModalPopup(EndGameBanterModal);
+						DartsGlobals.instance.showModalPopup(PostGameBanterModal);
 					} else {
 						_abilityManager.processTurn();
 						_currentDart = null;

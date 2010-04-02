@@ -72,13 +72,8 @@
 		{
 			_opponentSelectScreen.removeEventListener(OpponentSelectScreen.OPPONENT_CHOSEN_EVT, onOpponentChosen);
 			
-			var dartTexture:BitmapMaterial = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(AppSettings.instance.playerDartTexture, AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight));
-			dartTexture.repeat = false;
-			dartTexture.smooth = true;
-			
-			DartsGlobals.instance.localPlayer = new LocalPlayer();
+			DartsGlobals.instance.localPlayer = new LocalPlayer(DartsGlobals.instance.playerProfile);
 			DartsGlobals.instance.localPlayer.setPortrait(new Protagonist_Portrait_BMP(150, 150));
-			DartsGlobals.instance.localPlayer.setSkin(dartTexture);
 			DartsGlobals.instance.localPlayer.setAbilities(new BeeLineAbility(1), new ShieldAbility(1), new DoOverAbility(1));
 			
 			DartsGlobals.instance.cpuPlayer = new ComputerPlayer(DartsGlobals.instance.enemyProfile);

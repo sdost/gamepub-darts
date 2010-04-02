@@ -1,10 +1,12 @@
 ﻿package com.bored.games.darts.ui 
 {
+	import away3dlite.materials.BitmapMaterial;
 	import caurina.transitions.Tweener;
 	import com.bored.games.darts.DartsGlobals;
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
+	import com.sven.utils.ImageFactory;
 	import flash.display.Bitmap;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
@@ -17,6 +19,7 @@
 	import flash.text.TextFormatAlign;
 	import flash.utils.Dictionary;
 	import flash.utils.getDefinitionByName;
+	import com.sven.utils.AppSettings;
 	
 	/**
 	 * ...
@@ -50,6 +53,11 @@
 		private var _opponentDetails:TextField;
 		private var _opponentBio:TextField;
 		private var _opponentPortrait:MovieClip;
+		
+		private var _dartIcon:MovieClip;
+		
+		private var _skinIndex:int;
+		private var _skinBitmap:Bitmap;
 		
 		private var _buildBackground:Boolean = false;
 		
@@ -86,6 +94,8 @@
 			_opponentDetails = descendantsDict["opponentDetails_text"] as TextField;
 			_opponentBio = descendantsDict["opponentBio_text"] as TextField;
 			_opponentPortrait = descendantsDict["opponentPortrait_mc"] as MovieClip;
+			
+			_dartIcon = descendantsDict["dartIcon_mc"] as MovieClip
 			
 			if (_backBtnImg)
 			{
@@ -135,7 +145,7 @@
 			{
 				_dartSelectLeftBtn = new MightyButton(_dartSelectLeftBtnImg, false);
 				_dartSelectLeftBtn.pause(false);
-				//_dartSelectLeftBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onPlayClicked, false, 0, true);
+				_dartSelectLeftBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onPickLeftClicked, false, 0, true);
 			}
 			else
 			{
@@ -146,11 +156,25 @@
 			{
 				_dartSelectRightBtn = new MightyButton(_dartSelectRightBtnImg, false);
 				_dartSelectRightBtn.pause(false);
-				//_dartSelectRightBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onPlayClicked, false, 0, true);
+				_dartSelectRightBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onPickRightClicked, false, 0, true);
 			}
 			else
 			{
 				throw new Error("GameConfirmScreen::buildFrom(): _dartSelectRightBtnImg=" + _dartSelectRightBtnImg);
+			}
+			
+			if (_dartIcon)
+			{	
+				_skinIndex = 0;
+				
+				_skinBitmap = new Bitmap();
+				_skinBitmap.bitmapData = ImageFactory.getBitmapDataByQualifiedName("storeskin_" + DartsGlobals.instance.playerProfile.skins[_skinIndex], 270, 103);
+				_skinBitmap.smoothing = true;
+				_dartIcon.addChild(_skinBitmap);
+			}
+			else
+			{
+				throw new Error("GameConfirmScreen::buildFrom(): _dartIcon=" + _dartIcon);
 			}
 			
 			if (_opponentDetails)
@@ -227,10 +251,47 @@
 			
 		}//end addedToStage()
 		
+		private function onPickLeftClicked(a_evt:Event):void
+		{
+			_skinIndex--;
+			if (_skinIndex < 0) {
+				_skinIndex = DartsGlobals.instance.playerProfile.skins.length - 1;
+			}
+			
+			//_dartIcon.removeChild(_skinBitmap);
+			_skinBitmap.bitmapData = ImageFactory.getBitmapDataByQualifiedName("storeskin_" + DartsGlobals.instance.playerProfile.skins[_skinIndex], 270, 103);
+			_skinBitmap.smoothing = true;
+			//_dartIcon.addChild(_skinBitmap);
+		}//end onPickLeftClicked()
+		
+		private function onPickRightClicked(a_evt:Event):void
+		{
+			_skinIndex++;
+			if (_skinIndex >= DartsGlobals.instance.playerProfile.skins.length) {
+				_skinIndex = 0;
+			}
+			
+			//_dartIcon.removeChild(_skinBitmap);
+			_skinBitmap.bitmapData = ImageFactory.getBitmapDataByQualifiedName("storeskin_" + DartsGlobals.instance.playerProfile.skins[_skinIndex], 270, 103);
+			_skinBitmap.smoothing = true;
+			//_dartIcon.addChild(_skinBitmap);
+		}//end onPickLeftClicked()
+		
 		private function onPlayClicked(a_evt:Event):void
 		{
 			_backBtn.removeEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onBackClicked);
 			_playBtn.removeEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onPlayClicked);
+			
+			var dartTexture:BitmapMaterial = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(
+				"dartuv_" + DartsGlobals.instance.playerProfile.skins[_skinIndex], 
+				AppSettings.instance.dartTextureWidth, 
+				AppSettings.instance.dartTextureHeight)
+			);
+			
+			dartTexture.repeat = false;
+			dartTexture.smooth = true;
+			
+			DartsGlobals.instance.localPlayer.setSkin(dartTexture);
 			
 			this.dispatchEvent(new Event(PLAY_CLICKED_EVT));
 			

@@ -3,6 +3,7 @@
 	import caurina.transitions.Tweener;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.profiles.SimonProfile;
+	import com.hybrid.ui.ToolTip;
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
@@ -56,6 +57,8 @@
 		private var _bigbillBtn:MightyButton;
 		private var _bigbillBtnImg:MovieClip;
 		
+		private var _reusableTip:ToolTip;
+		
 		public function OpponentSelectScreen(a_img:Sprite, a_buildFromAllDescendants:Boolean = false, a_bAddContents:Boolean = true, a_buildBackground:Boolean = false) 
 		{
 			super(a_img, a_buildFromAllDescendants, a_bAddContents);
@@ -88,6 +91,14 @@
 			_simonBtnImg = descendantsDict["simon_mc"] as MovieClip;
 			_barkeepBtnImg = descendantsDict["barkeep_mc"] as MovieClip;
 			_bigbillBtnImg = descendantsDict["bigbill_mc"] as MovieClip;
+			
+			_reusableTip = new ToolTip();
+			_reusableTip.hook = true;
+			_reusableTip.cornerRadius = 20;
+			_reusableTip.tipWidth = 260; 
+			_reusableTip.align = "right";
+			_reusableTip.border = 0xFF0000;
+			_reusableTip.borderSize = 5;
 			
 			if (_ireneBtnImg)
 			{
@@ -201,6 +212,8 @@
 		{
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			this.addEventListener(Event.REMOVED_FROM_STAGE, destroy, false, 0, true);
+			
+			_reusableTip.show( _simonBtnImg, "Simon",  "Punk-rocker with a mouth full of marbles." );
 			
 			// build our background.
 			if (_background)

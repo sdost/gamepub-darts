@@ -1,6 +1,7 @@
 ﻿package com.bored.games.darts.ui.hud 
 {
 	import caurina.transitions.Tweener;
+	import com.bored.games.darts.ui.buttons.ToggleButton;
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
@@ -18,16 +19,19 @@
 	 */
 	public class ControlPanel extends ContentHolder
 	{
-		private var _soundBtn:MightyButton;
+		private var _soundBtn:ToggleButton;
 		private var _soundBtnImg:MovieClip;
 		
-		private var _musicBtn:MightyButton;
+		private var _musicBtn:ToggleButton;
 		private var _musicBtnImg:MovieClip;
 		
 		private var _quitBtn:MightyButton;
 		private var _quitBtnImg:MovieClip;
 		
 		private var _soundManager:SoundManager;
+		
+		private var _muteSound:Boolean = false;
+		private var _muteMusic:Boolean = false;
 		
 		public function ControlPanel(a_img:Sprite, a_buildFromAllDescendants:Boolean = false, a_bAddContents:Boolean = true) 
 		{
@@ -53,7 +57,7 @@
 			
 			if (_soundBtnImg)
 			{
-				_soundBtn = new MightyButton(_soundBtnImg, false);
+				_soundBtn = new ToggleButton(_soundBtnImg, false);
 				_soundBtn.pause(false);
 				_soundBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, onMouseOver, false, 0, true);
 				_soundBtn.buttonContents.addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
@@ -66,7 +70,7 @@
 			
 			if (_musicBtnImg)
 			{
-				_musicBtn = new MightyButton(_musicBtnImg, false);
+				_musicBtn = new ToggleButton(_musicBtnImg, false);
 				_musicBtn.pause(false);
 				_musicBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, onMouseOver, false, 0, true);
 				_musicBtn.buttonContents.addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
@@ -130,7 +134,15 @@
 		
 		private function onSoundButtonClick(a_evt:Event):void
 		{
-			_soundManager.muteAllSounds();
+			_muteSound = !_muteSound;
+			
+			_soundBtn.toggleOn = _muteSound;
+			
+			if(_muteSound) {
+				_soundManager.muteAllSounds();
+			} else {
+				_soundManager.unmuteAllSounds();
+			}
 		}//end onSoundButtonClick()
 		
 		private function onMusicButtonClick(a_evt:Event):void
