@@ -5,6 +5,7 @@
 	import com.bored.games.darts.profiles.EnemyProfile;
 	import com.bored.services.AbstractExternalService;
 	import com.sven.managers.ModalDisplayManager;
+	import com.sven.managers.SoundManager;
 	import flash.display.Sprite;
 	import flash.display.Stage;
 	import flash.events.Event;
@@ -60,6 +61,8 @@
 		private var _enemyProfile:EnemyProfile;
 		
 		private var _cpuPlayer:DartsPlayer;
+		
+		private var _soundManager:SoundManager;
 		
 		public function DartsGlobals(a_singletonEnforcer:DartsGlobals_SingletonEnforcer) 
 		{
@@ -195,6 +198,16 @@
 		{
 			return _gameManager;
 		}//end get gameManager()
+		
+		public function set soundManager(a_manager:SoundManager):void
+		{
+			_soundManager = a_manager;
+		}//end set soundManager()
+		
+		public function get soundManager():SoundManager
+		{
+			return _soundManager;
+		}//end get soundManager()
 		
 		public function set externalServices(a_ext:AbstractExternalService):void
 		{

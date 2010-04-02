@@ -23,6 +23,7 @@
 	import com.bored.games.darts.models.dae_DartReduced;
 	import com.bored.games.darts.objects.Dart;
 	import com.bored.games.darts.ui.hud.AbilityDock;
+	import com.bored.games.darts.ui.hud.ControlPanel;
 	import com.bored.games.darts.ui.hud.ScoreBoard;
 	import com.bored.games.darts.ui.hud.ThrowIndicator;
 	import com.bored.games.darts.ui.modals.PlayerBanterModal;
@@ -90,6 +91,7 @@
 		private var _throwIndicator:ThrowIndicator;
 		private var _scoreBoard:ScoreBoard;
 		private var _abilityDock:AbilityDock;
+		private var _controlPanel:ControlPanel;
 		
 		private var _collada:Collada;
 		private var _loader:Loader3D;
@@ -135,6 +137,14 @@
 			_abilityDock.y = AppSettings.instance.abilityDockPositionY;
 			_abilityDock.registerAbilityManager(DartsGlobals.instance.gameManager.abilityManager);
 			_abilityDock.show();
+			
+			cls = getDefinitionByName(AppSettings.instance.controlPanelMovie) as Class;
+			_controlPanel = new ControlPanel(new cls());
+			DartsGlobals.instance.optionsInterfaceSpace.addChild(_controlPanel);
+			_controlPanel.x = AppSettings.instance.controlPanelPositionX;
+			_controlPanel.y = AppSettings.instance.controlPanelPositionY;
+			_controlPanel.registerSoundManager(DartsGlobals.instance.soundManager);
+			_controlPanel.show();
 			
 			if (this.stage)
 			{
