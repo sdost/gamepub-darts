@@ -2,6 +2,7 @@
 {
 	import caurina.transitions.Tweener;
 	import com.bored.games.darts.DartsGlobals;
+	import com.bored.games.darts.profiles.ProfessorProfile;
 	import com.bored.games.darts.profiles.SimonProfile;
 	import com.hybrid.ui.ToolTip;
 	import com.inassets.ui.buttons.events.ButtonEvent;
@@ -148,7 +149,7 @@
 			{
 				_professorBtn = new MightyButton(_professorBtnImg, false);
 				_professorBtn.pause(false);
-				//_professorBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
+				_professorBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
 			}
 			else
 			{
@@ -277,7 +278,7 @@
 			if(_professorBtn)
 			{
 				if (a_evt.mightyButton == _professorBtn) {
-					//DartsGlobals.instance.enemyProfile = new ProfessorProfile();
+					DartsGlobals.instance.enemyProfile = new ProfessorProfile();
 				}
 				
 				_professorBtn.pause(true);

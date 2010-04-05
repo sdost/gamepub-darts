@@ -2,6 +2,7 @@
 {
 	import caurina.transitions.Tweener;
 	import com.bored.games.darts.abilities.Ability;
+	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.logic.AbilityManager;
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
@@ -113,16 +114,16 @@
 		
 		public function update():void
 		{
-			for ( var i:int = 0; i < _abilityMgr.abilities.length; i++ )
+			for ( var i:int = 0; i < DartsGlobals.instance.localPlayer.abilities.length; i++ )
 			{
-				if ( _abilityMgr.abilities[i] && _abilityMgr.abilities[i].ready && _abilityBox[i].paused ) {
+				if ( DartsGlobals.instance.localPlayer.abilities[i] && DartsGlobals.instance.localPlayer.abilities[i].ready && _abilityBox[i].paused ) {
 					_abilityBox[i].pause(false);
-					((_abilityBox[i].buttonContents as Sprite).getChildByName("icon_holder") as MovieClip).addChild(_abilityMgr.abilities[i].icon);
+					((_abilityBox[i].buttonContents as Sprite).getChildByName("icon_holder") as MovieClip).addChild(DartsGlobals.instance.localPlayer.abilities[i].icon);
 				}
 				
-				if ( _abilityMgr.abilities[i].ready && _abilityBox[i].paused ) {
+				if ( DartsGlobals.instance.localPlayer.abilities[i].ready && _abilityBox[i].paused ) {
 					_abilityBox[i].pause(false);
-				} else if ( !_abilityMgr.abilities[i].ready &&  !_abilityBox[i].paused ) {
+				} else if ( !DartsGlobals.instance.localPlayer.abilities[i].ready &&  !_abilityBox[i].paused ) {
 					_abilityBox[i].pause(true);
 				}
 			}
@@ -142,8 +143,10 @@
 		{
 			for ( var i:int = 0; i < _abilityBox.length; i++ )
 			{
-				if ( _abilityBox[i] == a_evt.mightyButton )
-					_abilityMgr.activateAbility(i);
+				if ( _abilityBox[i] == a_evt.mightyButton ) 
+				{					
+					_abilityMgr.activateAbility(DartsGlobals.instance.localPlayer.abilities[i]);
+				}
 			}
 		}//end onAbilityOneClicked()
 		

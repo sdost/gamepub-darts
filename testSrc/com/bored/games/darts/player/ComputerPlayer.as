@@ -1,6 +1,7 @@
 ﻿package com.bored.games.darts.player 
 {
 	import caurina.transitions.Tweener;
+	import com.bored.games.darts.abilities.Ability;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.logic.AIProfile;
 	import com.bored.games.darts.logic.AIShotCandidate;
@@ -36,37 +37,18 @@
 		
 		override public function takeTheShot():void
 		{
-			var _gameType:String = this._game.gameType;
-			var _myClipList:Vector.<Sprite> = new Vector.<Sprite>();
-			if (_gameType == "CRICKET") {				
-				var myStats:Object = this._game.scoreManager.getPlayerStats(this.playerNum);
-				var points:int = 15;
-				while ( points <= 20 ) {
-					if ( myStats[points] < 3 )
-					{
-						_myClipList.push(this._game.getDartboardClip(points, 1));
-						_myClipList.push(this._game.getDartboardClip(points, 2));
-						_myClipList.push(this._game.getDartboardClip(points, 3));
-					}
-					++points;
-				}
-				if ( myStats[25] < 3 ) {
-					_myClipList.push(this._game.getDartboardClip(25, 1));
-					_myClipList.push(this._game.getDartboardClip(25, 2));
-				}
-			}
+			var myStats:Object = this._game.scoreManager.getPlayerStats(this.playerNum);
+			var allStats:Object = this._game.scoreManager.getAllPlayerStats();
 			
-			var myShotList:Vector.<AIShotCandidate> = new Vector.<AIShotCandidate>();
-			
-			for ( var i:int = 0; i < _myClipList.length; i++ ) {
-				
-				var clipScaledX:Number = (_myClipList[i].x / (this._game.dartboard.boardSprite.width/2)) * AppSettings.instance.dartboardScale;
-				var clipScaledY:Number = (_myClipList[i].y / (this._game.dartboard.boardSprite.height/2)) * AppSettings.instance.dartboardScale;
-				
-				myShotList.push( new AIShotCandidate(clipScaledX, -clipScaledY) );
-			}
-			
+			var myShotList:Vector.<AIShotCandidate> = _profile.generateShotList(this._game.gameType, myStats, allStats);
 			var finalShot:AIShotCandidate = _profile.pickShot(myShotList);
+			
+			for each( var ability:Ability in this.abilities )
+			{
+				if ( ability.name == finalShot.ability ) {
+					DartsGlobals.instance.gameManager.abilityManager.activateAbility(ability);
+				}
+			}
 			
 			DartsGlobals.instance.gameManager.currentDart.position.x = _previousPosition.x;
 			DartsGlobals.instance.gameManager.currentDart.position.y = _previousPosition.y;

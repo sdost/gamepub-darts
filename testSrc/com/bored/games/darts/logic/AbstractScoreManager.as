@@ -32,6 +32,11 @@
 			return null;
 		}//end getPlayerStats()
 		
+		public function getAllPlayerStats():Object
+		{
+			return null;
+		}//end getAllPlayerStats()
+		
 		public function getPlayerScore(a_playerNum:int):Number
 		{
 			return 0;

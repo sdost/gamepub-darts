@@ -84,6 +84,11 @@
 			return _scoreboard[a_playerNum];
 		}//end getPlayerStats();
 		
+		override public function getAllPlayerStats():Object
+		{
+			return _scoreboard;
+		}//end getAllPlayerStats();
+		
 		override public function getPlayerScore(a_playerNum:int):Number
 		{
 			var score:Number = 0;

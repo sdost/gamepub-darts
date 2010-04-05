@@ -7,19 +7,26 @@
 	 * @author sam
 	 */
 	public class Ability
-	{		
+	{	
+		private var _name:String;
 		private var _armed:Boolean;
 		private var _icon:Sprite;
 		
 		private var _player:DartsPlayer;
 		private var _refreshTime:int;
 		
-		public function Ability(a_icon:Sprite, a_time:int = 0) 
+		public function Ability(a_name:String, a_icon:Sprite, a_time:int = 0) 
 		{
+			_name = a_name;
 			_icon = a_icon;
 			_refreshTime = a_time;
 			_armed = true;
 		}//end constructor()
+		
+		public function get name():String
+		{
+			return _name;
+		}//end get name()
 		
 		public function set owner(a_player:DartsPlayer):void
 		{

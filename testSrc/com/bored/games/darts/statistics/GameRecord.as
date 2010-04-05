@@ -9,6 +9,9 @@
 		private var _throws:int;
 		private var _doubles:int;
 		private var _triples:int;
+		
+		private var _lastScore:Object;
+		
 		private var _win:Boolean;
 		
 		public function GameRecord() 
@@ -21,6 +24,8 @@
 		
 		public function recordThrow(a_points:int, a_multiplier:int):void
 		{
+			_lastScore = { points: a_points, multiplier: a_multiplier };
+			
 			_throws++;
 			
 			if (a_multiplier == 2) _doubles++;
@@ -46,6 +51,11 @@
 		{
 			return _triples;
 		}//end get triples()
+		
+		public function get lastScore():Object
+		{
+			return _lastScore;
+		}//end get lastScore()
 		
 		public function wonGame():Boolean
 		{

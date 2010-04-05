@@ -5,6 +5,10 @@
 	import flash.filters.ColorMatrixFilter;
 	import flash.geom.Matrix;
 	import flash.system.System;
+	import flash.display.Sprite;
+	import com.sven.utils.AppSettings;
+	import com.bored.games.darts.DartsGlobals;
+	
 	/**
 	 * ...
 	 * @author sam
@@ -18,6 +22,43 @@
 		{
 			_name = a_name;
 		}//end constructor()
+		
+		public function generateShotList(a_gameType:String, a_myStats:Object, a_allStats:Object):Vector.<AIShotCandidate>
+		{
+			var gameType:String = a_gameType;
+			var myStats:Object = a_myStats;
+			var myShotList:Vector.<AIShotCandidate> = new Vector.<AIShotCandidate>();
+						
+			if (gameType == "CRICKET") {				
+				var points:int = 15;
+				while ( points <= 20 ) {
+					if ( myStats[points] < 3 )
+					{
+						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 1));
+						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 2));
+						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 3));
+					}
+					++points;
+				}
+				if ( myStats[25] < 3 ) {
+					addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(25, 1));
+					addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(25, 2));
+				}
+			}
+			
+			return myShotList;
+		}//end generateShotList()
+		
+		protected function addShot( a_shotList:Vector.<AIShotCandidate>, a_clip:Sprite, a_ability:String = "" ):void
+		{
+			if ( a_clip ) 
+			{			
+				var clipScaledX:Number = (a_clip.x / (DartsGlobals.instance.gameManager.dartboard.boardSprite.width/2)) * AppSettings.instance.dartboardScale;
+				var clipScaledY:Number = (a_clip.y / (DartsGlobals.instance.gameManager.dartboard.boardSprite.height/2)) * AppSettings.instance.dartboardScale;
+				
+				a_shotList.push( new AIShotCandidate(clipScaledX, -clipScaledY, a_ability) );
+			}
+		}//end addShot()
 		
 		public function pickShot(a_shots:Vector.<AIShotCandidate>):AIShotCandidate
 		{

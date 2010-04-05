@@ -28,9 +28,15 @@
 		}//end registerAbility()
 		
 		
-		public function activateAbility(a_ind:int):void
+		public function activateAbility(a_ability:Ability):void
 		{
-			_timers[a_ind] = _abilities[a_ind].useAbility();
+			for ( var i:int = 0; i < _abilities.length; i++ )
+			{
+				if ( _abilities[i] == a_ability )
+				{
+					_timers[i] = _abilities[i].useAbility();
+				}
+			}
 		}//end activateAbility()
 		
 		public function processTurn():void

@@ -106,11 +106,6 @@
 			return _abilityManager;
 		}//end get abilityManager()
 		
-		public function getDartboardClip(a_points:int, a_multiple:int):Sprite
-		{
-			return _dartboard.boardSprite.getChildByName("c_" + a_points + "_" + a_multiple + "_mc") as Sprite;
-		}//end getDartboardClip()
-		
 		public function get gameType():String
 		{
 			return "";

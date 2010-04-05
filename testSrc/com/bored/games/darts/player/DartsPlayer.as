@@ -95,6 +95,21 @@
 			return _abilityStock;
 		}//end get abilities()
 		
+		public function hasAbility(a_name:String):Boolean
+		{
+			var hasAbility:Boolean = false;
+			
+			for each( var ability:Ability in _abilityStock )
+			{
+				if ( a_name == ability.name && ability.ready ) 
+				{
+					hasAbility = true;
+				}
+			}
+			
+			return hasAbility;
+		}//end hasAbility()
+		
 		public function get darts():Vector.<Dart>
 		{
 			return _darts;

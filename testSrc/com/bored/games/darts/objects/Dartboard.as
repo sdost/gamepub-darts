@@ -57,6 +57,18 @@
 			}
 		}//end update()
 		
+		public function getDartboardClip(a_points:int, a_multiple:int, a_nullIfBlocked:Boolean = false):Sprite
+		{
+			var name:String = "c_" + a_points + "_" + a_multiple + "_mc";
+			
+			if ( a_nullIfBlocked && _blockedSections.indexOf(name) >= 0 )
+			{
+				return null;
+			}
+			
+			return this.boardSprite.getChildByName(name) as Sprite;
+		}//end getDartboardClip()
+		
 		public function submitDartPosition(a_x:Number, a_y:Number, a_block:Boolean):Boolean
 		{
 			var p:Point = new Point( ( a_x / AppSettings.instance.dartboardScale ) * (_sprite.width/2), ( -a_y / AppSettings.instance.dartboardScale ) * (_sprite.height/2) );

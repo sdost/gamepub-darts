@@ -14,7 +14,7 @@
 		public function ShieldAbility(a_time:int) 
 		{
 			var icon:Sprite = SpriteFactory.getSpriteByQualifiedName("com.bored.games.darts.assets.icons.ShieldIcon_MC");
-			super(icon, a_time);
+			super("shield", icon, a_time);
 		}//end constructor()
 		
 		override public function useAbility():int
