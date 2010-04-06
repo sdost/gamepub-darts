@@ -25,6 +25,8 @@
 		private var _previousPosition:Object;
 		private var _currentPosition:Object;
 		
+		private var _finalShot:AIShotCandidate;
+		
 		public function ComputerPlayer(a_profile:AIProfile) 
 		{
 			super("COMPUTER");
@@ -41,11 +43,11 @@
 			var allStats:Object = this._game.scoreManager.getAllPlayerStats();
 			
 			var myShotList:Vector.<AIShotCandidate> = _profile.generateShotList(this._game.gameType, myStats, allStats);
-			var finalShot:AIShotCandidate = _profile.pickShot(myShotList);
+			_finalShot = _profile.pickShot(myShotList);
 			
 			for each( var ability:Ability in this.abilities )
 			{
-				if ( ability.name == finalShot.ability ) {
+				if ( ability.name == _finalShot.ability ) {
 					DartsGlobals.instance.gameManager.abilityManager.activateAbility(ability);
 				}
 			}
@@ -54,8 +56,8 @@
 			DartsGlobals.instance.gameManager.currentDart.position.y = _previousPosition.y;
 			
 			TweenLite.to( DartsGlobals.instance.gameManager.currentDart.position, 2, { 
-				x: finalShot.point.x, 
-				y: finalShot.point.y,
+				x: _finalShot.point.x, 
+				y: _finalShot.point.y,
 				delay:1,
 				onComplete: performThrow 
 			} ); 
@@ -66,12 +68,18 @@
 			var thrustErrorRange:Number = ((1.0 - _profile.accuracy) * (AppSettings.instance.aiThrustErrorRangeMax - AppSettings.instance.aiThrustErrorRangeMin)) + AppSettings.instance.aiThrustErrorRangeMin;
 			var leanErrorRange:Number = ((1.0 - _profile.accuracy) * (AppSettings.instance.aiLeanRangeMax - AppSettings.instance.aiLeanRangeMin)) + AppSettings.instance.aiLeanRangeMin;
 			
-			_previousPosition.x = DartsGlobals.instance.gameManager.currentDart.position.x;
-			_previousPosition.y = DartsGlobals.instance.gameManager.currentDart.position.y;
+			if ( _finalShot.ability == "boost" ) 
+			{
+				thrustErrorRange = 0;
+				leanErrorRange = 0;
+			}
+			
+			_previousPosition.x = _finalShot.point.x;
+			_previousPosition.y = _finalShot.point.y;
 			
 			this._game.playerThrow(
-				DartsGlobals.instance.gameManager.currentDart.position.x,
-				DartsGlobals.instance.gameManager.currentDart.position.y,
+				_finalShot.point.x,
+				_finalShot.point.y,
 				0,
 				AppSettings.instance.aiOptimumThrust + (Math.random() * thrustErrorRange * 2) - thrustErrorRange,
 				(Math.random() * leanErrorRange * 2) - leanErrorRange

@@ -6,6 +6,7 @@
 	import away3dlite.primitives.Plane;
 	import away3dlite.sprites.AlignmentType;
 	import away3dlite.sprites.Sprite3D;
+	import com.bored.games.darts.actions.ShieldDartboardAction;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.objects.GameElement;
 	import flash.display.Sprite;
@@ -22,15 +23,20 @@
 		private var _boardSprite:Sprite3D;
 		private var _boardMaterial:MovieMaterial;
 		
-		private var _blockedSections:Vector.<String>;
+		private var _blockedSections:Object;
 		
 		private var _sprite:Sprite;
 				
 		private var _pattern:RegExp = /c_[0-9]+_[0-9]+_mc/;
 		
+		private var _shieldAction:ShieldDartboardAction;
+		
 		public function Dartboard(a_img:Sprite) 
 		{
 			super();
+			
+			_shieldAction = new ShieldDartboardAction(this, { turns: 2 } );
+			this.addAction(_shieldAction);
 			
 			_sprite = a_img;
 			
@@ -44,6 +50,8 @@
 			
 			_boardSprite = new Sprite3D(_boardMaterial, 130);
 			_boardSprite.alignmentType = AlignmentType.VIEWPOINT;
+			
+			this.activateAction(_shieldAction.actionName);
 		}//end initModels()
 		
 		override public function update(a_time:Number = 0):void
@@ -61,7 +69,7 @@
 		{
 			var name:String = "c_" + a_points + "_" + a_multiple + "_mc";
 			
-			if ( a_nullIfBlocked && _blockedSections.indexOf(name) >= 0 )
+			if ( a_nullIfBlocked && _blockedSections[name] )
 			{
 				return null;
 			}
@@ -76,7 +84,7 @@
 			var objects:Array = _sprite.getObjectsUnderPoint(p);
 			
 			if (objects.length > 0) {
-				if (_pattern.test(objects[0].parent.name) && _blockedSections.indexOf(objects[0].parent.name) < 0) 
+				if (_pattern.test(objects[0].parent.name) && !_blockedSections[objects[0].parent.name]) 
 				{
 					var arr:Array = objects[0].parent.name.split("_");
 					DartsGlobals.instance.gameManager.scoreManager.submitThrow(DartsGlobals.instance.gameManager.currentPlayer, Number(arr[1]), Number(arr[2]));
@@ -84,15 +92,7 @@
 					
 					if (a_block)
 					{
-						_blockedSections.push(objects[0].parent.name);
-						try 
-						{
-							_sprite.getChildByName("c_" + Number(arr[1]) + "_" + Number(arr[2]) + "_shield_mc").visible = true;
-						}
-						catch ( e:Error ) 
-						{
-							trace("nothing to shield");
-						}
+						_shieldAction.startBlocking(arr[1]);						
 					}
 					
 					return true;
@@ -104,16 +104,63 @@
 			return false;			
 		}//end submitDartPosition()
 		
+		public function blockSection(a_section:int):void
+		{
+			_blockedSections["c_" + a_section + "_1_mc"] = true;
+			_blockedSections["c_" + a_section + "_2_mc"] = true;
+			
+			if ( a_section != 25 ) _blockedSections["c_" + a_section + "_3_mc"] = true;
+			
+			try 
+			{
+				_sprite.getChildByName("c_" + a_section + "_1_shield_mc").visible = true;
+				_sprite.getChildByName("c_" + a_section + "_2_shield_mc").visible = true;
+				
+				if( a_section != 25 ) _sprite.getChildByName("c_" + a_section + "_3_shield_mc").visible = true;
+			}
+			catch ( e:Error ) 
+			{
+				trace("nothing to shield");
+			}
+		}//end blockSection()
+		
+		public function unblockSection(a_section:int):void
+		{
+			_blockedSections["c_" + a_section + "_1_mc"] = false;
+			_blockedSections["c_" + a_section + "_2_mc"] = false;
+			
+			if ( a_section != 25 ) _blockedSections["c_" + a_section + "_3_mc"] = false;
+			
+			try 
+			{
+				_sprite.getChildByName("c_" + a_section + "_1_shield_mc").visible = false;
+				_sprite.getChildByName("c_" + a_section + "_2_shield_mc").visible = false;
+				
+				if( a_section != 25 ) _sprite.getChildByName("c_" + a_section + "_3_shield_mc").visible = false;
+			}
+			catch ( e:Error ) 
+			{
+				trace("nothing to shield");
+			}
+		}//end unblockSection()
+		
 		public function resetBlockedSections():void
 		{
-			_blockedSections = new Vector.<String>();
+			_blockedSections = new Object();;
 			
 			for ( var i:int = 1; i <= 20; i++ )
 			{
+				_blockedSections["c_" + i + "_1_mc"] = false;
+				_blockedSections["c_" + i + "_2_mc"] = false;
+				_blockedSections["c_" + i + "_3_mc"] = false;
+				
 				_sprite.getChildByName("c_" + i + "_1_shield_mc").visible = false;
 				_sprite.getChildByName("c_" + i + "_2_shield_mc").visible = false;
 				_sprite.getChildByName("c_" + i + "_3_shield_mc").visible = false;
 			}
+			_blockedSections["c_25_1_mc"] = false;
+			_blockedSections["c_25_2_mc"] = false;
+			
 			_sprite.getChildByName("c_25_1_shield_mc").visible = false;
 			_sprite.getChildByName("c_25_2_shield_mc").visible = false;
 		}//end resetBlockedSections()

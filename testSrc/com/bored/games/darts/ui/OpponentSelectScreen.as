@@ -2,7 +2,12 @@
 {
 	import caurina.transitions.Tweener;
 	import com.bored.games.darts.DartsGlobals;
+	import com.bored.games.darts.profiles.AnthonyProfile;
+	import com.bored.games.darts.profiles.BigBillProfile;
+	import com.bored.games.darts.profiles.IreneProfile;
+	import com.bored.games.darts.profiles.MackProfile;
 	import com.bored.games.darts.profiles.ProfessorProfile;
+	import com.bored.games.darts.profiles.SammyProfile;
 	import com.bored.games.darts.profiles.SimonProfile;
 	import com.hybrid.ui.ToolTip;
 	import com.inassets.ui.buttons.events.ButtonEvent;
@@ -12,8 +17,10 @@
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.filters.GlowFilter;
 	import flash.geom.Rectangle;
 	import flash.system.ApplicationDomain;
+	import flash.text.Font;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
@@ -93,19 +100,39 @@
 			_barkeepBtnImg = descendantsDict["barkeep_mc"] as MovieClip;
 			_bigbillBtnImg = descendantsDict["bigbill_mc"] as MovieClip;
 			
+			var myFont:Font = new CooperStd();
+			
+			var titleFont:TextFormat = new TextFormat();
+			titleFont.font = myFont.fontName;
+			titleFont.size = 20;
+			titleFont.bold = true;
+			titleFont.color = 0x000000;
+			
+			var consoleFont:TextFormat = new TextFormat();
+			consoleFont.font = myFont.fontName;
+			consoleFont.size = 18;
+			consoleFont.bold = false;
+			consoleFont.color = 0x000000;
+			
 			_reusableTip = new ToolTip();
-			_reusableTip.hook = true;
+			_reusableTip.colors = [ 0xFFFFFF, 0xFFFFCD6 ];
+			_reusableTip.tipHeight = 75
 			_reusableTip.cornerRadius = 20;
-			_reusableTip.tipWidth = 260; 
-			_reusableTip.align = "right";
-			_reusableTip.border = 0xFF0000;
-			_reusableTip.borderSize = 5;
+			_reusableTip.align = "center";
+			_reusableTip.border = 0x000000;
+			_reusableTip.borderSize = 1;
+			_reusableTip.titleFormat = titleFont;
+			_reusableTip.contentFormat = consoleFont;
 			
 			if (_ireneBtnImg)
 			{
 				_ireneBtn = new MightyButton(_ireneBtnImg, false);
 				_ireneBtn.pause(false);
-				//_ireneBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
+				_ireneBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
+				
+				_ireneBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_MOUSE_OVER_EVT, function(a_evt:Event):void {
+					_reusableTip.show(_ireneBtnImg, "Irene", "$1000");
+				}, false, 0, true);
 			}
 			else
 			{
@@ -127,7 +154,11 @@
 			{
 				_mackBtn = new MightyButton(_mackBtnImg, false);
 				_mackBtn.pause(false);
-				//_mackBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
+				_mackBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
+				
+				_mackBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_MOUSE_OVER_EVT, function(a_evt:Event):void {
+					_reusableTip.show(_mackBtnImg, "Mack", "$100");
+				}, false, 0, true);
 			}
 			else
 			{
@@ -138,7 +169,11 @@
 			{
 				_anthonyBtn = new MightyButton(_anthonyBtnImg, false);
 				_anthonyBtn.pause(false);
-				//_anthonyBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
+				_anthonyBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
+				
+				_anthonyBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_MOUSE_OVER_EVT, function(a_evt:Event):void {
+					_reusableTip.show(_anthonyBtnImg, "Anthony", "$250");
+				}, false, 0, true);
 			}
 			else
 			{
@@ -150,6 +185,10 @@
 				_professorBtn = new MightyButton(_professorBtnImg, false);
 				_professorBtn.pause(false);
 				_professorBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
+				
+				_professorBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_MOUSE_OVER_EVT, function(a_evt:Event):void {
+					_reusableTip.show(_professorBtnImg, "The Professor", "$2000");
+				}, false, 0, true);
 			}
 			else
 			{
@@ -160,7 +199,11 @@
 			{
 				_sammyBtn = new MightyButton(_sammyBtnImg, false);
 				_sammyBtn.pause(false);
-				//_sammyBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
+				_sammyBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
+				
+				_sammyBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_MOUSE_OVER_EVT, function(a_evt:Event):void {
+					_reusableTip.show(_sammyBtnImg, "Sammy", "$50");
+				}, false, 0, true);
 			}
 			else
 			{
@@ -172,6 +215,10 @@
 				_simonBtn = new MightyButton(_simonBtnImg, false);
 				_simonBtn.pause(false);
 				_simonBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
+				
+				_simonBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_MOUSE_OVER_EVT, function(a_evt:Event):void {
+					_reusableTip.show(_simonBtnImg, "Simon", "$500");
+				}, false, 0, true);
 			}
 			else
 			{
@@ -193,7 +240,11 @@
 			{
 				_bigbillBtn = new MightyButton(_bigbillBtnImg, false);
 				_bigbillBtn.pause(false);
-				//_bigbillBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
+				_bigbillBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
+				
+				_bigbillBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_MOUSE_OVER_EVT, function(a_evt:Event):void {
+					_reusableTip.show(_bigbillBtnImg, "Big Bill", "$1500");
+				}, false, 0, true);
 			}
 			else
 			{
@@ -213,8 +264,6 @@
 		{
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			this.addEventListener(Event.REMOVED_FROM_STAGE, destroy, false, 0, true);
-			
-			_reusableTip.show( _simonBtnImg, "Simon",  "Punk-rocker with a mouth full of marbles." );
 			
 			// build our background.
 			if (_background)
@@ -246,7 +295,7 @@
 			if(_ireneBtn)
 			{
 				if (a_evt.mightyButton == _ireneBtn) {
-					//DartsGlobals.instance.enemyProfile = new IreneProfile();
+					DartsGlobals.instance.enemyProfile = new IreneProfile();
 				}
 				
 				_ireneBtn.pause(true);
@@ -260,7 +309,7 @@
 			if(_mackBtn)
 			{
 				if (a_evt.mightyButton == _mackBtn) {
-					//DartsGlobals.instance.enemyProfile = new MackProfile();
+					DartsGlobals.instance.enemyProfile = new MackProfile();
 				}
 				
 				_mackBtn.pause(true);
@@ -269,7 +318,7 @@
 			if(_anthonyBtn)
 			{
 				if (a_evt.mightyButton == _anthonyBtn) {
-					//DartsGlobals.instance.enemyProfile = new AnthonyProfile();
+					DartsGlobals.instance.enemyProfile = new AnthonyProfile();
 				}
 				
 				_anthonyBtn.pause(true);
@@ -287,7 +336,7 @@
 			if(_sammyBtn)
 			{
 				if (a_evt.mightyButton == _sammyBtn) {
-					//DartsGlobals.instance.enemyProfile = new SammyProfile();
+					DartsGlobals.instance.enemyProfile = new SammyProfile();
 				}
 				
 				_sammyBtn.pause(true);
@@ -310,7 +359,7 @@
 			if(_bigbillBtn)
 			{
 				if (a_evt.mightyButton == _bigbillBtn) {
-					//DartsGlobals.instance.enemyProfile = new BigBillProfile();
+					DartsGlobals.instance.enemyProfile = new BigBillProfile();
 				}
 				
 				_bigbillBtn.pause(true);

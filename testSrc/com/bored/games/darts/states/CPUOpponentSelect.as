@@ -42,7 +42,6 @@
 		public function CPUOpponentSelect(a_name:String, a_stateMachine:IStateMachine)
 		{
 			super(a_name, a_stateMachine);
-			
 		}//end GameSelect() constructor.
 		
 		/**

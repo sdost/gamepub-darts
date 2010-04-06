@@ -33,6 +33,7 @@
 	public class DartsGameLogic extends EventDispatcher
 	{		
 		public static const GAME_END:String = "gameEnd";
+		public static const TURN_END:String = "turnEnd";
 		
 		protected var _scoreManager:AbstractScoreManager;
 		
@@ -323,6 +324,8 @@
 		
 		public function endTurn():void
 		{
+			this.dispatchEvent( new Event(TURN_END) );
+			
 			_currentDart = null;
 			
 			_currentPlayer++;
