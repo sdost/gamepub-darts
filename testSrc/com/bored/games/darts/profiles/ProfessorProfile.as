@@ -30,7 +30,7 @@
 			
 			this.portrait = new TheProfessor_Portrait_BMP(150, 150);
 			
-			this.setDartSkin(new DartSkin(ImageFactory.getBitmapDataByQualifiedName("dartuv_professor", AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight), dae_DartShaft.data, dae_DartFlightThin.data));
+			this.setDartSkin(new DartSkin(ImageFactory.getBitmapDataByQualifiedName("dartuv_theprofessor", AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight), dae_DartShaft.data, dae_DartFlightThin.data));
 			
 			this.accuracy = 0.9;
 		}//end constructor()

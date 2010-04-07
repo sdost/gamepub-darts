@@ -50,17 +50,20 @@
 			if (_gameType == "CRICKET") {				
 				var points:int = 15;
 				while ( points <= 20 ) {
-					if ( points % 2 == 0 )
+					if ( myStats[points] < 3 ) 
 					{
-						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 3, false), "boost");
-						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 2, false), "boost");
-						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 1, false), "boost");
-					} 
-					else
-					{
-						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 3, false), "");
-						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 2, false), "");
-						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 1, false), "");
+						if ( points % 2 == 1 )
+						{
+							addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 3, false), "boost");
+							addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 2, false), "boost");
+							addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 1, false), "boost");
+						} 
+						else
+						{
+							addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 3, false), "");
+							addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 2, false), "");
+							addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 1, false), "");
+						}
 					}
 					if ( myStats[points] == 2 )
 					{
