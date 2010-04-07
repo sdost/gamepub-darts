@@ -3,6 +3,7 @@
 	import away3dlite.materials.BitmapMaterial;
 	import com.bored.games.darts.abilities.Ability;
 	import com.bored.games.darts.logic.AIProfile;
+	import com.bored.games.darts.skins.DartSkin;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	
@@ -12,7 +13,7 @@
 	 */
 	public class EnemyProfile extends AIProfile
 	{		
-		private var _dartSkin:BitmapMaterial;
+		private var _dartSkin:DartSkin;
 		private var _abilities:Vector.<Ability>;
 		
 		public var portrait:BitmapData;
@@ -27,14 +28,12 @@
 			super(a_name);
 		}//end constructor()
 		
-		public function setDartSkin(a_bmd:BitmapData):void
+		public function setDartSkin(a_skin:DartSkin):void
 		{
-			_dartSkin = new BitmapMaterial(a_bmd);
-			_dartSkin.repeat = false;
-			_dartSkin.smooth = true;
+			_dartSkin = a_skin;
 		}//end set dartSkin()
 		
-		public function get dartSkin():BitmapMaterial
+		public function get dartSkin():DartSkin
 		{
 			return _dartSkin;
 		}//end get dartSkin()

@@ -3,6 +3,11 @@
 	import away3dlite.materials.BitmapMaterial;
 	import caurina.transitions.Tweener;
 	import com.bored.games.darts.DartsGlobals;
+	import com.bored.games.darts.models.dae_DartFlightHeart;
+	import com.bored.games.darts.models.dae_DartFlightHexagon;
+	import com.bored.games.darts.models.dae_DartFlightModHex;
+	import com.bored.games.darts.models.dae_DartShaft;
+	import com.bored.games.darts.skins.DartSkin;
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
@@ -20,6 +25,7 @@
 	import flash.utils.Dictionary;
 	import flash.utils.getDefinitionByName;
 	import com.sven.utils.AppSettings;
+	import mx.controls.Text;
 	
 	/**
 	 * ...
@@ -55,6 +61,18 @@
 		private var _opponentPortrait:MovieClip;
 		
 		private var _dartIcon:MovieClip;
+		
+		private var _abilityIconOne:MovieClip;
+		private var _abilityIconTwo:MovieClip;
+		private var _abilityIconThree:MovieClip;
+		
+		private var _abilityNameOne:TextField;
+		private var _abilityNameTwo:TextField;
+		private var _abilityNameThree:TextField;
+		
+		private var _opponentAbilityIconOne:MovieClip;
+		private var _opponentAbilityIconTwo:MovieClip;
+		private var _opponentAbilityIconThree:MovieClip;
 		
 		private var _skinIndex:int;
 		private var _skinBitmap:Bitmap;
@@ -95,7 +113,19 @@
 			_opponentBio = descendantsDict["opponentBio_text"] as TextField;
 			_opponentPortrait = descendantsDict["opponentPortrait_mc"] as MovieClip;
 			
-			_dartIcon = descendantsDict["dartIcon_mc"] as MovieClip
+			_dartIcon = descendantsDict["dartIcon_mc"] as MovieClip;
+			
+			_abilityIconOne = descendantsDict["abilityOne_mc"] as MovieClip;
+			_abilityIconTwo = descendantsDict["abilityTwo_mc"] as MovieClip;
+			_abilityIconThree = descendantsDict["abilityThree_mc"] as MovieClip;
+			
+			_abilityNameOne = descendantsDict["abilityOne_text"] as TextField;
+			_abilityNameTwo = descendantsDict["abilityTwo_text"] as TextField;
+			_abilityNameThree = descendantsDict["abilityThree_text"] as TextField;
+		
+			_opponentAbilityIconOne = descendantsDict["opponentAbilityOne_mc"] as MovieClip;
+			_opponentAbilityIconTwo = descendantsDict["opponentAbilityTwo_mc"] as MovieClip;
+			_opponentAbilityIconThree = descendantsDict["opponentAbilityThree_mc"] as MovieClip;
 			
 			if (_backBtnImg)
 			{
@@ -212,6 +242,69 @@
 				throw new Error("GameConfirmScreen::buildFrom(): _opponentPortrait=" + _opponentPortrait);
 			}
 			
+			if (_abilityIconOne && _abilityNameOne)
+			{
+				_abilityIconOne.addChild(DartsGlobals.instance.localPlayer.abilities[0].icon);
+				_abilityNameOne.text = DartsGlobals.instance.localPlayer.abilities[0].name;
+			}
+			else
+			{
+				throw new Error("GameConfirmScreen::buildFrom(): _abilityIconOne=" + _abilityIconOne);
+			}
+			
+			if (_abilityIconTwo && _abilityNameTwo)
+			{
+				_abilityIconTwo.addChild(DartsGlobals.instance.localPlayer.abilities[1].icon);
+				_abilityNameTwo.text = DartsGlobals.instance.localPlayer.abilities[1].name;
+			}
+			else
+			{
+				throw new Error("GameConfirmScreen::buildFrom(): _abilityIconTwo=" + _abilityIconTwo);
+			}
+			
+			if (_abilityIconThree && _abilityNameThree)
+			{
+				_abilityIconThree.addChild(DartsGlobals.instance.localPlayer.abilities[2].icon);
+				_abilityNameThree.text = DartsGlobals.instance.localPlayer.abilities[2].name;
+			}
+			else
+			{
+				throw new Error("GameConfirmScreen::buildFrom(): _abilityIconThree=" + _abilityIconThree);
+			}
+			
+			if (_opponentAbilityIconOne)
+			{
+				_opponentAbilityIconOne.addChild(DartsGlobals.instance.cpuPlayer.abilities[0].icon);
+				DartsGlobals.instance.cpuPlayer.abilities[0].icon.width = 15;
+				DartsGlobals.instance.cpuPlayer.abilities[0].icon.height = 15;
+			}
+			else
+			{
+				throw new Error("GameConfirmScreen::buildFrom(): _opponentAbilityIconOne=" + _opponentAbilityIconOne);
+			}
+			
+			if (_opponentAbilityIconTwo)
+			{
+				_opponentAbilityIconTwo.addChild(DartsGlobals.instance.cpuPlayer.abilities[1].icon);
+				DartsGlobals.instance.cpuPlayer.abilities[1].icon.width = 15;
+				DartsGlobals.instance.cpuPlayer.abilities[1].icon.height = 15;
+			}
+			else
+			{
+				throw new Error("GameConfirmScreen::buildFrom(): _opponentAbilityIconTwo=" + _opponentAbilityIconTwo);
+			}
+			
+			if (_opponentAbilityIconThree)
+			{
+				_opponentAbilityIconThree.addChild(DartsGlobals.instance.cpuPlayer.abilities[2].icon);
+				DartsGlobals.instance.cpuPlayer.abilities[2].icon.width = 15;
+				DartsGlobals.instance.cpuPlayer.abilities[2].icon.height = 15;
+			}
+			else
+			{
+				throw new Error("GameConfirmScreen::buildFrom(): _opponentAbilityIconThree=" + _opponentAbilityIconThree);
+			}
+			
 			if(_buildBackground)
 			{
 				_background = new Sprite();
@@ -282,16 +375,7 @@
 			_backBtn.removeEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onBackClicked);
 			_playBtn.removeEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onPlayClicked);
 			
-			var dartTexture:BitmapMaterial = new BitmapMaterial(ImageFactory.getBitmapDataByQualifiedName(
-				"dartuv_" + DartsGlobals.instance.playerProfile.skins[_skinIndex], 
-				AppSettings.instance.dartTextureWidth, 
-				AppSettings.instance.dartTextureHeight)
-			);
-			
-			dartTexture.repeat = false;
-			dartTexture.smooth = true;
-			
-			DartsGlobals.instance.localPlayer.setSkin(dartTexture);
+			DartsGlobals.instance.localPlayer.setSkin(new DartSkin(ImageFactory.getBitmapDataByQualifiedName("dartuv_" + DartsGlobals.instance.playerProfile.skins[_skinIndex], AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight), dae_DartShaft.data, dae_DartFlightModHex.data));
 			
 			this.dispatchEvent(new Event(PLAY_CLICKED_EVT));
 			

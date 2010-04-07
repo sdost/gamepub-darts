@@ -1,12 +1,16 @@
 ﻿package com.bored.games.darts.profiles 
 {
 	import com.bored.games.darts.DartsGlobals;
+	import com.bored.games.darts.models.dae_DartFlightThin;
 	import com.sven.utils.AppSettings;
 	import com.sven.utils.ImageFactory;
 	import com.bored.games.darts.profiles.EnemyProfile;
 	import com.bored.games.darts.assets.icons.TheProfessor_Portrait_BMP;
 	import com.bored.games.darts.logic.AIShotCandidate;
 	import flash.display.Sprite;
+	import com.bored.games.darts.models.dae_DartFlightHeart;
+	import com.bored.games.darts.models.dae_DartShaft;
+	import com.bored.games.darts.skins.DartSkin;
 	
 	/**
 	 * ...
@@ -26,7 +30,7 @@
 			
 			this.portrait = new TheProfessor_Portrait_BMP(150, 150);
 			
-			this.setDartSkin(ImageFactory.getBitmapDataByQualifiedName("dartuv_theprofessor", AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight));
+			this.setDartSkin(new DartSkin(ImageFactory.getBitmapDataByQualifiedName("dartuv_professor", AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight), dae_DartShaft.data, dae_DartFlightThin.data));
 			
 			this.accuracy = 0.9;
 		}//end constructor()
@@ -107,7 +111,7 @@
 			
 			for each( shot in a_shots ) 
 			{
-				if ( shot.ability == "shield" )
+				if ( shot.modifier == "shield" )
 				{
 					return shot;
 				}
@@ -120,6 +124,11 @@
 				
 			return shot;
 		}//end pickShot()
+		
+		override public function handleShot(a_points:int, a_multiplayer:int):void
+		{
+			// TODO: allow the AI to react to the results of the shot.
+		}//end handleShot()
 		
 	}//end ProfessorProfile
 

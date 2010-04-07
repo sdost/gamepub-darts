@@ -309,11 +309,6 @@
 			return _currentPlayer;
 		}//end get currentPlayer()
 		
-		public function recordThrow(a_points:int = 0, a_multiplier:int = 0):void
-		{
-			_players[_currentPlayer - 1].record.recordThrow(a_points, a_multiplier);
-		}//end recordThrow()
-		
 		public function get darts():Vector.<Dart>
 		{
 			if ( _darts == null ) {

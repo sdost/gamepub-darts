@@ -11,6 +11,7 @@
 	import com.bored.games.darts.actions.DartTrajectoryAction;
 	import com.bored.games.darts.models.dae_DartFlightHeart;
 	import com.bored.games.darts.models.dae_DartShaft;
+	import com.bored.games.darts.skins.DartSkin;
 	import com.bored.games.objects.GameElement;
 	import com.sven.utils.TrajectoryCalculator;
 	import com.sven.utils.AppSettings;
@@ -33,14 +34,16 @@
 		
 		private var _throwing:Boolean;
 		
-		private var _dartSkin:Material;
+		private var _dartSkin:DartSkin;
+		
 		private var _dartModel:ObjectContainer3D;
+		
 		private var _shaft:Object3D;
 		private var _flight:Object3D;
 		
 		private var _blockBoard:Boolean;
 		
-		public function Dart(a_skin:Material, a_radius:int = 1) 
+		public function Dart(a_skin:DartSkin, a_radius:int = 1) 
 		{
 			_radius = a_radius;
 			
@@ -56,17 +59,17 @@
 			var colladaShaft:Collada = new Collada();
 			colladaShaft.scaling = AppSettings.instance.dartModelScale;
 			colladaShaft.centerMeshes = true;
-			colladaShaft.materials = { "dart_skin": _dartSkin };
+			colladaShaft.materials = { "dart_skin": _dartSkin.material };
 			
-			_shaft = colladaShaft.parseGeometry(dae_DartShaft.data);
+			_shaft = colladaShaft.parseGeometry(_dartSkin.shaft);
 			_shaft.mouseEnabled = false;
 			
 			var colladaFlight:Collada = new Collada();
 			colladaFlight.scaling = AppSettings.instance.dartModelScale;
 			colladaFlight.centerMeshes = true;
-			colladaFlight.materials = { "flight_skin": _dartSkin };
+			colladaFlight.materials = { "flight_skin": _dartSkin.material };
 			
-			_flight = colladaFlight.parseGeometry(dae_DartFlightHeart.data);
+			_flight = colladaFlight.parseGeometry(_dartSkin.flight);
 			_flight.mouseEnabled = false;
 			
 			_dartModel = new ObjectContainer3D(_shaft, _flight);

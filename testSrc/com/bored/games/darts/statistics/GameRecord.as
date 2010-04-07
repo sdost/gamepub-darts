@@ -19,6 +19,7 @@
 			_throws = 0;
 			_doubles = 0;
 			_triples = 0;
+			_lastScore = { };
 			_win = false;
 		}//end constructor()
 		

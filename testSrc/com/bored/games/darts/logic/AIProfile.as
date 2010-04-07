@@ -72,6 +72,11 @@
 			return shot;
 		}//end pickShot()
 		
+		public function handleShot(a_points:int, a_multiplayer:int):void
+		{
+			// TODO: allow the AI to react to the results of the shot.
+		}//end handleShot()
+		
 		public function get name():String
 		{
 			return _name;

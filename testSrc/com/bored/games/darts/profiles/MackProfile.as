@@ -2,7 +2,11 @@
 {
 	import com.bored.games.darts.assets.icons.Mack_Portrait_BMP;
 	import com.bored.games.darts.assets.icons.Sammy_Portrait_BMP;
+	import com.bored.games.darts.models.dae_DartFlightHeart;
+	import com.bored.games.darts.models.dae_DartFlightOval;
+	import com.bored.games.darts.models.dae_DartShaft;
 	import com.bored.games.darts.profiles.EnemyProfile;
+	import com.bored.games.darts.skins.DartSkin;
 	import com.sven.utils.ImageFactory;
 	import com.sven.utils.AppSettings;
 	import flash.display.Sprite;
@@ -27,7 +31,7 @@
 			
 			this.portrait = new Mack_Portrait_BMP(150, 150);
 			
-			this.setDartSkin(ImageFactory.getBitmapDataByQualifiedName("dartuv_mack", AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight));
+			this.setDartSkin(new DartSkin(ImageFactory.getBitmapDataByQualifiedName("dartuv_mack", AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight), dae_DartShaft.data, dae_DartFlightOval.data));
 			
 			this.accuracy = 0.1;
 		}//end constructor()
@@ -50,15 +54,15 @@
 						
 						if ( die < .4 )
 						{
-							clipList.push(DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 2, true));
+							clipList.push(DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 2, false));
 						}
 						else if ( die < .8 )
 						{
-							clipList.push(DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 3, true));
+							clipList.push(DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 3, false));
 						}
 						else if ( die < 1.0 )
 						{
-							clipList.push(DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 1, true));
+							clipList.push(DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 1, false));
 						}
 					}
 					++points;
@@ -68,15 +72,15 @@
 					
 					if ( die < .4 )
 					{
-						clipList.push(DartsGlobals.instance.gameManager.dartboard.getDartboardClip(25, 2, true));
+						clipList.push(DartsGlobals.instance.gameManager.dartboard.getDartboardClip(25, 2, false));
 					}
 					else if ( die < .8 )
 					{
-						clipList.push(DartsGlobals.instance.gameManager.dartboard.getDartboardClip(25, 2, true));
+						clipList.push(DartsGlobals.instance.gameManager.dartboard.getDartboardClip(25, 2, false));
 					}
 					else if ( die < 1.0 )
 					{
-						clipList.push(DartsGlobals.instance.gameManager.dartboard.getDartboardClip(25, 1, true));
+						clipList.push(DartsGlobals.instance.gameManager.dartboard.getDartboardClip(25, 1, false));
 					}
 				}
 			}
@@ -97,7 +101,7 @@
 				
 				if ( die < .5 )
 				{
-					addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(lastPlayerScore.points, lastPlayerScore.multiplier, true), "shield");
+					addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(lastPlayerScore.points, lastPlayerScore.multiplier, false), "shield");
 				}
 			}
 			
@@ -110,7 +114,9 @@
 			
 			for each( shot in a_shots ) 
 			{
-				if ( shot.ability == "shield" )
+				var die:Number = Math.random();
+				
+				if ( shot.modifier == "shield" && die < .5 )
 				{
 					return shot;
 				}

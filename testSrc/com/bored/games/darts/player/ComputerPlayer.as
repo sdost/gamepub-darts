@@ -47,7 +47,7 @@
 			
 			for each( var ability:Ability in this.abilities )
 			{
-				if ( ability.name == _finalShot.ability ) {
+				if ( ability.name == _finalShot.modifier ) {
 					DartsGlobals.instance.gameManager.abilityManager.activateAbility(ability);
 				}
 			}
@@ -63,12 +63,18 @@
 			} ); 
 		}//end takeTheShot()
 		
+		override public function processShotResult(a_points:int, a_multiplier:int):void
+		{
+			super.processShotResult(a_points, a_multiplier);
+			_profile.handleShot(a_points, a_multiplier);
+		}//end processShotResults()
+		
 		private function performThrow():void
 		{
 			var thrustErrorRange:Number = ((1.0 - _profile.accuracy) * (AppSettings.instance.aiThrustErrorRangeMax - AppSettings.instance.aiThrustErrorRangeMin)) + AppSettings.instance.aiThrustErrorRangeMin;
 			var leanErrorRange:Number = ((1.0 - _profile.accuracy) * (AppSettings.instance.aiLeanRangeMax - AppSettings.instance.aiLeanRangeMin)) + AppSettings.instance.aiLeanRangeMin;
 			
-			if ( _finalShot.ability == "boost" ) 
+			if ( _finalShot.modifier == "boost" ) 
 			{
 				thrustErrorRange = 0;
 				leanErrorRange = 0;

@@ -1,9 +1,11 @@
 ﻿package com.bored.games.darts.player 
 {
 	import away3dlite.materials.Material;
+	import away3dlite.primitives.AbstractPrimitive;
 	import com.bored.games.darts.abilities.Ability;
 	import com.bored.games.darts.logic.DartsGameLogic;
 	import com.bored.games.darts.objects.Dart;
+	import com.bored.games.darts.skins.DartSkin;
 	import com.bored.games.darts.statistics.GameRecord;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -20,11 +22,11 @@
 		
 		protected var _gameRecord:GameRecord;
 		
-		protected var _skin:Material;
+		protected var _skin:DartSkin;
 		
 		protected var _portrait:Bitmap;
 		
-		private var _abilityStock:Array;
+		private var _abilityStock:Vector.<Ability>;
 		
 		public function DartsPlayer(a_name:String = "") 
 		{
@@ -72,14 +74,14 @@
 			return _portrait;
 		}//end get portrait()
 		
-		public function setSkin(a_material:Material):void
+		public function setSkin(a_skin:DartSkin):void
 		{
-			_skin = a_material;
+			_skin = a_skin;
 		}//end setSkin()
 		
 		public function setAbilities(...args):void
 		{
-			_abilityStock = new Array(args.length);
+			_abilityStock = new Vector.<Ability>(args.length);
 			
 			var i:int = 0;
 			
@@ -90,7 +92,7 @@
 			}
 		}//end setAbility()
 		
-		public function get abilities():Array
+		public function get abilities():Vector.<Ability>
 		{
 			return _abilityStock;
 		}//end get abilities()
@@ -119,6 +121,11 @@
 		{
 			
 		}//end takeTheShot()
+		
+		public function processShotResult(a_points:int, a_multiplier:int):void
+		{
+			_gameRecord.recordThrow(a_points, a_multiplier);
+		}//end processShotResult()
 		
 		public function get record():GameRecord
 		{

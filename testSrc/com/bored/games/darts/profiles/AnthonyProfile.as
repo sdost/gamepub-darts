@@ -3,11 +3,15 @@
 	import com.bored.games.darts.assets.icons.Anthony_Portrait_BMP;
 	import com.bored.games.darts.assets.icons.Simon_Portrait_BMP;
 	import com.bored.games.darts.logic.AIShotCandidate;
+	import com.bored.games.darts.models.dae_DartFlightModHex;
 	import com.bored.games.darts.profiles.EnemyProfile;
 	import com.sven.utils.ImageFactory;
 	import com.sven.utils.AppSettings;
 	import flash.display.Sprite;
 	import com.bored.games.darts.DartsGlobals;
+	import com.bored.games.darts.models.dae_DartFlightHeart;
+	import com.bored.games.darts.models.dae_DartShaft;
+	import com.bored.games.darts.skins.DartSkin;
 	
 	/**
 	 * ...
@@ -27,7 +31,7 @@
 			
 			this.portrait = new Anthony_Portrait_BMP(150, 150);
 			
-			this.setDartSkin(ImageFactory.getBitmapDataByQualifiedName("dartuv_anthony", AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight));
+			this.setDartSkin(new DartSkin(ImageFactory.getBitmapDataByQualifiedName("dartuv_anthony", AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight), dae_DartShaft.data, dae_DartFlightModHex.data));
 			
 			this.accuracy = 0.2;
 		}//end constructor()
@@ -48,23 +52,23 @@
 				while ( points <= 20 ) {
 					if ( points % 2 == 0 )
 					{
-						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 3, true), "boost");
-						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 2, true), "boost");
-						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 1, true), "boost");
+						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 3, false), "boost");
+						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 2, false), "boost");
+						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 1, false), "boost");
 					} 
 					else
 					{
-						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 3, true), "");
-						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 2, true), "");
-						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 1, true), "");
+						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 3, false), "");
+						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 2, false), "");
+						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 1, false), "");
 					}
 					if ( myStats[points] == 2 )
 					{
 						die = Math.random();
 						if ( die < .5 && points % 2 == 0 ) {
-							addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 1, true), "beeline");
+							addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 1, false), "beeline");
 						} else {
-							addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 1, true), "");
+							addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 1, false), "");
 						}
 					}
 					++points;
@@ -72,21 +76,21 @@
 				if ( myStats[25] < 3 ) {	
 					if ( points % 2 == 0 )
 					{
-						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(25, 2, true), "boost");
-						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(25, 1, true), "boost");
+						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(25, 2, false), "boost");
+						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(25, 1, false), "boost");
 					} 
 					else
 					{
-						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(25, 2, true), "");
-						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(25, 1, true), "");
+						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(25, 2, false), "");
+						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(25, 1, false), "");
 					}
 					if ( myStats[25] == 2 )
 					{
 						die = Math.random();
 						if( die < .5 ) {
-							addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(25, 1, true), "beeline");
+							addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(25, 1, false), "beeline");
 						} else {
-							addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(25, 1, true), "");
+							addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(25, 1, false), "");
 						}
 					}
 				}
@@ -103,7 +107,7 @@
 			
 			for each( shot in a_shots ) 
 			{
-				if ( shot.ability == "shield" )
+				if ( shot.modifier == "boost" )
 				{
 					return shot;
 				}

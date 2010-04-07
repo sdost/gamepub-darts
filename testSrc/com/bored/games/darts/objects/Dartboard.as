@@ -88,7 +88,7 @@
 				{
 					var arr:Array = objects[0].parent.name.split("_");
 					DartsGlobals.instance.gameManager.scoreManager.submitThrow(DartsGlobals.instance.gameManager.currentPlayer, Number(arr[1]), Number(arr[2]));
-					DartsGlobals.instance.gameManager.recordThrow(Number(arr[1]), Number(arr[2]));
+					DartsGlobals.instance.gameManager.players[DartsGlobals.instance.gameManager.currentPlayer-1].processShotResult(Number(arr[1]), Number(arr[2]));
 					
 					if (a_block)
 					{
@@ -99,7 +99,7 @@
 				}
 			}
 			
-			DartsGlobals.instance.gameManager.recordThrow();
+			DartsGlobals.instance.gameManager.players[DartsGlobals.instance.gameManager.currentPlayer-1].processShotResult(0,0);
 			
 			return false;			
 		}//end submitDartPosition()
