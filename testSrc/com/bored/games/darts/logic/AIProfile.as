@@ -36,15 +36,15 @@
 				while ( points <= 20 ) {
 					if ( myStats[points] < 3 )
 					{
-						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 1));
-						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 2));
-						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 3));
+						addShot(myShotList, points, 1);
+						addShot(myShotList, points, 2);
+						addShot(myShotList, points, 3);
 					}
 					++points;
 				}
 				if ( myStats[25] < 3 ) {
-					addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(25, 1));
-					addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(25, 2));
+					addShot(myShotList, 25, 1);
+					addShot(myShotList, 25, 2);
 				}
 			}
 			
@@ -69,7 +69,7 @@
 			if( a_shots.length > 0 )
 				_shotIntention = a_shots[Math.floor(Math.random() * a_shots.length)];
 			else
-				_shotIntention = new AIShotCandidate(0, 0);
+				_shotIntention = new AIShotCandidate(0, 0, 25, 2);
 				
 			return _shotIntention;
 		}//end pickShot()

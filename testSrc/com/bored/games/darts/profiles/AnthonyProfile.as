@@ -118,7 +118,7 @@
 			if( a_shots.length > 0 )
 				_shotIntention = a_shots[Math.floor(Math.random() * a_shots.length)];
 			else
-				_shotIntention = new AIShotCandidate(0, 0);
+				_shotIntention = new AIShotCandidate(0, 0, 25, 2);
 				
 			return _shotIntention;
 		}//end pickShot()

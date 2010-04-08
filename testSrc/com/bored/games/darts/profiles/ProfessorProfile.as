@@ -43,63 +43,56 @@
 			
 			var sectionCount:int = 0;
 			
-			if (_gameType == "CRICKET") {				
-				var points:int = 15;
-				while ( points <= 20 ) {
-					if ( myStats[points] == 0 )
-					{
-						clipList.push(DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 3, true));
-						sectionCount++;
-					}
-					else if ( myStats[points] == 1 )
-					{
-						clipList.push(DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 2, true));
-						sectionCount++;
-					}
-					else if ( myStats[points] == 2 )
-					{
-						clipList.push(DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 1, true));
-						sectionCount++;
-					}
-					++points;
-				}
-				if ( myStats[25] < 3 ) {						
-					clipList.push(DartsGlobals.instance.gameManager.dartboard.getDartboardClip(25, 2, true));
+			while ( points <= 20 ) {
+				if ( a_allStats[DartsGlobals.instance.localPlayer.playerNum][points] < 3 )
+				{
 					sectionCount++;
 				}
+				++points;
+			}
+			if ( a_allStats[DartsGlobals.instance.localPlayer.playerNum][25] < 3 ) {						
+				sectionCount++;
 			}
 			
-			var myShotList:Vector.<AIShotCandidate> = new Vector.<AIShotCandidate>();
-			var clip:Sprite;
-			
+			var modifier:String = "";
 			
 			if (sectionCount <= 3) 
 			{
 				var die:Number = Math.random();
 				
-				for each( clip in clipList ) {
-					if ( die < .35 && DartsGlobals.instance.cpuPlayer.hasAbility("beeline") ) 
-					{
-						addShot(myShotList, clip, "beeline");
-					}
-					else
-					{
-						addShot(myShotList, clip, "");
-					}	
+				if ( die < .35 ) 
+				{
+					modifier = "beeline";
 				}
 			}
-			else 
-			{
-				for each( clip in clipList ) {
-					addShot(myShotList, clip, "");
+			
+			var myShotList:Vector.<AIShotCandidate> = new Vector.<AIShotCandidate>();
+			
+			var points:int = 15;
+			while ( points <= 20 ) {
+				if ( myStats[points] == 0 )
+				{
+					addShot(myShotList, points, 3, true, modifier);
 				}
+				else if ( myStats[points] == 1 )
+				{
+					addShot(myShotList, points, 2, true, modifier);
+				}
+				else if ( myStats[points] == 2 )
+				{
+					addShot(myShotList, points, 1, true, modifier);
+				}
+				++points;
+			}
+			if ( myStats[25] < 3 ) {						
+				addShot(myShotList, 25, 2, true, modifier);
 			}
 			
 			var lastPlayerScore:Object = DartsGlobals.instance.localPlayer.record.lastScore;
 			
 			if ( a_allStats[DartsGlobals.instance.localPlayer.playerNum][lastPlayerScore.points] < 3 && DartsGlobals.instance.cpuPlayer.hasAbility("shield") )
 			{
-				addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(lastPlayerScore.points, lastPlayerScore.multiplier, true), "shield");
+				addShot(myShotList, lastPlayerScore.points, lastPlayerScore.multiplier, true, "shield");
 			}
 			
 			return myShotList;
@@ -119,7 +112,7 @@
 			if( a_shots.length > 0 )
 				_shotIntention = a_shots[Math.floor(Math.random() * a_shots.length)];
 			else
-				_shotIntention = new AIShotCandidate(0, 0);
+				_shotIntention = new AIShotCandidate(0, 0, 25, 2);
 				
 			return _shotIntention;
 		}//end pickShot()
