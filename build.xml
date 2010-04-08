@@ -165,6 +165,10 @@
 	
 	<target name="doCompileSwc" if="classes.exist" depends="clean, testClassesExistence">
 		
+		<exec executable="./cloc-1.09.exe" failonerror="true">
+			<arg line="--skip-win-hidden --no3 --out=${swc.build.dir}\linecount.txt src\com" />
+		</exec>
+		
 		<compc output="${swc.build.dir}/${swc.name}" include-classes="${src.classes}">
 			
 			<source-path path-element="${src.dir}"/>
@@ -196,6 +200,10 @@
 	</target>
 	
 	<target name="tester_alone" depends="clean_tester">
+		
+		<exec executable="./cloc-1.09.exe" failonerror="true">
+			<arg line="--skip-win-hidden --no3 --out=${test.build.dir}\linecount.txt testSrc\com" />
+		</exec>
 		
 		<mxmlc 
 			debug="${compile.code.debug}"

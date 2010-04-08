@@ -8,11 +8,15 @@
 	public class AIShotCandidate
 	{
 		private var _point:Point;
+		private var _points:int;
+		private var _multiplier:int;
 		private var _modifier:String;
 		
-		public function AIShotCandidate(a_x:Number, a_y:Number, a_modifier:String = "") 
+		public function AIShotCandidate(a_x:Number, a_y:Number, a_points:int, a_multiplier:int, a_modifier:String = "") 
 		{
 			_point = new Point(a_x, a_y);
+			_points = a_points;
+			_multiplier = a_multiplier;
 			_modifier = a_modifier;
 		}//end construtor()
 		
@@ -20,6 +24,16 @@
 		{
 			return _point;
 		}//end get point()
+		
+		public function get points():int
+		{
+			return _points;
+		}//end get points()
+		
+		public function get multiplier():int
+		{
+			return _multiplier;
+		}//end get multiplier()
 		
 		public function get modifier():String
 		{

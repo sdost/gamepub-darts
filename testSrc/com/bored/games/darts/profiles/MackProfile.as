@@ -46,6 +46,8 @@
 			
 			var die:Number;
 			
+			var myShotList:Vector.<AIShotCandidate> = new Vector.<AIShotCandidate>();
+			
 			if (_gameType == "CRICKET") {				
 				var points:int = 15;
 				while ( points <= 20 ) {
@@ -54,15 +56,15 @@
 						
 						if ( die < .4 )
 						{
-							clipList.push(DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 2, false));
+							addShot(myShotList, points, 2);
 						}
 						else if ( die < .8 )
 						{
-							clipList.push(DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 3, false));
+							addShot(myShotList, points, 3);
 						}
 						else if ( die < 1.0 )
 						{
-							clipList.push(DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 1, false));
+							addShot(myShotList, points, 1);
 						}
 					}
 					++points;
@@ -72,25 +74,17 @@
 					
 					if ( die < .4 )
 					{
-						clipList.push(DartsGlobals.instance.gameManager.dartboard.getDartboardClip(25, 2, false));
+						addShot(myShotList, 25, 2);
 					}
 					else if ( die < .8 )
 					{
-						clipList.push(DartsGlobals.instance.gameManager.dartboard.getDartboardClip(25, 2, false));
+						addShot(myShotList, 25, 2);
 					}
 					else if ( die < 1.0 )
 					{
-						clipList.push(DartsGlobals.instance.gameManager.dartboard.getDartboardClip(25, 1, false));
+						addShot(myShotList, 25, 1);
 					}
 				}
-			}
-			
-			var myShotList:Vector.<AIShotCandidate> = new Vector.<AIShotCandidate>();
-			var clip:Sprite;
-			
-			for each( clip in clipList ) 
-			{
-				addShot(myShotList, clip, "");
 			}
 			
 			var lastPlayerScore:Object = DartsGlobals.instance.localPlayer.record.lastScore;
@@ -101,34 +95,39 @@
 				
 				if ( die < .5 )
 				{
-					addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(lastPlayerScore.points, lastPlayerScore.multiplier, false), "shield");
+					addShot(myShotList, lastPlayerScore.points, lastPlayerScore.multiplier, false, "shield");
 				}
 			}
 			
 			return myShotList;
 		}//end generateShotList()
 		
-		override public function pickShot(a_shots:Vector.<AIShotCandidate>):AIShotCandidate
+		override public function pickShot(a_dartsRemaining:int, a_shots:Vector.<AIShotCandidate>):AIShotCandidate
 		{
-			var shot:AIShotCandidate;
-			
-			for each( shot in a_shots ) 
+			for each( var shot:AIShotCandidate in a_shots )
 			{
 				var die:Number = Math.random();
 				
-				if ( shot.modifier == "shield" && die < .5 )
+				if ( a_dartsRemaining == 0 && shot.modifier == "shield" && die < .5 )
 				{
-					return shot;
+					_shotIntention = shot;
+					return _shotIntention;
 				}
 			}
 			
 			if( a_shots.length > 0 )
-				shot = a_shots[Math.floor(Math.random() * a_shots.length)];
+				_shotIntention = a_shots[Math.floor(Math.random() * a_shots.length)];
 			else
-				shot = new AIShotCandidate(0, 0);
+				_shotIntention = new AIShotCandidate(0, 0);
 				
-			return shot;
+			return _shotIntention;
 		}//end pickShot()
+		
+				
+		override public function handleShot(a_points:int, a_multiplier:int):void
+		{
+			
+		}//end handleShot()
 		
 	}//end MackProfile		
 

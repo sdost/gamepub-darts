@@ -37,13 +37,13 @@
 			_currentPosition = { x:0, y:0 };
 		}//end constructor()
 		
-		override public function takeTheShot():void
+		override public function takeTheShot(a_dartsRemaining:int):void
 		{
 			var myStats:Object = this._game.scoreManager.getPlayerStats(this.playerNum);
 			var allStats:Object = this._game.scoreManager.getAllPlayerStats();
 			
 			var myShotList:Vector.<AIShotCandidate> = _profile.generateShotList(this._game.gameType, myStats, allStats);
-			_finalShot = _profile.pickShot(myShotList);
+			_finalShot = _profile.pickShot(a_dartsRemaining, myShotList);
 			
 			for each( var ability:Ability in this.abilities )
 			{
