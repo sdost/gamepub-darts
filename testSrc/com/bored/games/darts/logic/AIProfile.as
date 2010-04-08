@@ -18,6 +18,8 @@
 		protected var _name:String;
 		public var accuracy:Number = 0.5;
 		
+		protected var _shotIntention:AIShotCandidate;
+		
 		public function AIProfile(a_name:String = "") 
 		{
 			_name = a_name;
@@ -49,27 +51,27 @@
 			return myShotList;
 		}//end generateShotList()
 		
-		protected function addShot( a_shotList:Vector.<AIShotCandidate>, a_clip:Sprite, a_ability:String = "" ):void
+		protected function addShot( a_shotList:Vector.<AIShotCandidate>, a_points:int, a_multiplier:int, a_nullIfBlocked:Boolean = false, a_ability:String = "" ):void
 		{
-			if ( a_clip ) 
+			var clip:Sprite = DartsGlobals.instance.gameManager.dartboard.getDartboardClip(a_points, a_multiplier, a_nullIfBlocked);
+			
+			if ( clip ) 
 			{			
-				var clipScaledX:Number = (a_clip.x / (DartsGlobals.instance.gameManager.dartboard.boardSprite.width/2)) * AppSettings.instance.dartboardScale;
-				var clipScaledY:Number = (a_clip.y / (DartsGlobals.instance.gameManager.dartboard.boardSprite.height/2)) * AppSettings.instance.dartboardScale;
+				var clipScaledX:Number = (clip.x / (DartsGlobals.instance.gameManager.dartboard.boardSprite.width/2)) * AppSettings.instance.dartboardScale;
+				var clipScaledY:Number = (clip.y / (DartsGlobals.instance.gameManager.dartboard.boardSprite.height/2)) * AppSettings.instance.dartboardScale;
 				
-				a_shotList.push( new AIShotCandidate(clipScaledX, -clipScaledY, a_ability) );
+				a_shotList.push( new AIShotCandidate(clipScaledX, -clipScaledY, a_points, a_multiplier, a_ability) );
 			}
 		}//end addShot()
 		
-		public function pickShot(a_shots:Vector.<AIShotCandidate>):AIShotCandidate
+		public function pickShot(a_dartsRemaining:int, a_shots:Vector.<AIShotCandidate>):AIShotCandidate
 		{
-			var shot:AIShotCandidate;
-			
 			if( a_shots.length > 0 )
-				shot = a_shots[Math.floor(Math.random() * a_shots.length)];
+				_shotIntention = a_shots[Math.floor(Math.random() * a_shots.length)];
 			else
-				shot = new AIShotCandidate(0, 0);
+				_shotIntention = new AIShotCandidate(0, 0);
 				
-			return shot;
+			return _shotIntention;
 		}//end pickShot()
 		
 		public function handleShot(a_points:int, a_multiplayer:int):void

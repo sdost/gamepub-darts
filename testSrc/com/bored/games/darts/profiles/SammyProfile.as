@@ -32,6 +32,12 @@
 			this.accuracy = 0.1;
 		}//end constructor()
 		
+				
+		override public function handleShot(a_points:int, a_multiplier:int):void
+		{
+			
+		}//end handleShot()
+		
 	}//end SammyProfile
 		
 

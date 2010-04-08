@@ -26,8 +26,7 @@
 		{
 			_abilities.push(a_ability);
 		}//end registerAbility()
-		
-		
+	
 		public function activateAbility(a_ability:Ability):void
 		{
 			for ( var i:int = 0; i < _abilities.length; i++ )

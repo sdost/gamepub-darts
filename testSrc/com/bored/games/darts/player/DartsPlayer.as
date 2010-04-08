@@ -117,7 +117,7 @@
 			return _darts;
 		}//end getDart()
 		
-		public function takeTheShot():void
+		public function takeTheShot(a_dartsRemaining:int):void
 		{
 			
 		}//end takeTheShot()

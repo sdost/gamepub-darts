@@ -211,20 +211,22 @@
 					_currentDart.beginFalling();
 				}
 				
-				if (_currentTurn.throwsRemaining == 0) {
-					var win:Boolean = checkForWin();
+				var win:Boolean = checkForWin();
 					
-					if (win) {
-						_winner = _currentPlayer;						
-						endGame();
-						pause(true);
-						DartsGlobals.instance.showModalPopup(PostGameBanterModal);
-					} else {
-						_abilityManager.processTurn();
-						_currentDart = null;
-						pause(true);
-						DartsGlobals.instance.showModalPopup(ClickContinueModal);
-					}
+				if (win) 
+				{
+					_winner = _currentPlayer;						
+					endGame();
+					pause(true);
+					DartsGlobals.instance.showModalPopup(PostGameBanterModal);
+				}
+				
+				if (_currentTurn.throwsRemaining == 0) 
+				{
+					_abilityManager.processTurn();
+					_currentDart = null;
+					pause(true);
+					DartsGlobals.instance.showModalPopup(ClickContinueModal);
 				} else {
 					nextDart();
 				}
@@ -262,7 +264,7 @@
 			_currentDart.position.y = AppSettings.instance.defaultStartPositionY;
 			_currentDart.position.z = AppSettings.instance.defaultStartPositionZ;
 			
-			_players[_currentPlayer-1].takeTheShot();
+			_players[_currentPlayer-1].takeTheShot(_currentTurn.throwsRemaining);
 		}//end createNewDart()
 		
 		public function get lastDart():Dart
@@ -286,7 +288,7 @@
 				_currentDart.position.z = AppSettings.instance.defaultStartPositionZ;
 			}
 			
-			_players[_currentPlayer-1].takeTheShot();
+			_players[_currentPlayer-1].takeTheShot(_currentTurn.throwsRemaining);
 		}//end resetDart()
 		
 		public function resetDarts():void

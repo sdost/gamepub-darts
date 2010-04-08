@@ -52,12 +52,12 @@
 				while ( points <= 20 ) {					
 					if ( myStats[points] < 3 )
 					{
-						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 3, true), (lastCPUScore.points == 17) ? "boost" : "");
+						addShot(myShotList, points, 3, true, (lastCPUScore.points == 17) ? "boost" : "");
 					}
 					++points;
 				}
 				if ( myStats[25] < 3 ) {	
-					addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(25, 2, true), (lastCPUScore.points == 17) ? "boost" : "");
+					addShot(myShotList, 25, 2, true, (lastCPUScore.points == 17) ? "boost" : "");
 				}
 			}
 			
@@ -66,25 +66,30 @@
 			return myShotList;
 		}//end generateShotList()
 		
-		override public function pickShot(a_shots:Vector.<AIShotCandidate>):AIShotCandidate
+		override public function pickShot(a_dartsRemaining:int, a_shots:Vector.<AIShotCandidate>):AIShotCandidate
 		{
-			var shot:AIShotCandidate;
-			
-			for each( shot in a_shots ) 
+			for each( var shot:AIShotCandidate in a_shots )
 			{
-				if ( shot.modifier == "shield" )
+				if ( a_dartsRemaining == 0 && shot.modifier == "shield" )
 				{
-					return shot;
+					_shotIntention = shot;
+					return _shotIntention;
 				}
 			}
 			
 			if( a_shots.length > 0 )
-				shot = a_shots[Math.floor(Math.random() * a_shots.length)];
+				_shotIntention = a_shots[Math.floor(Math.random() * a_shots.length)];
 			else
-				shot = new AIShotCandidate(0, 0);
+				_shotIntention = new AIShotCandidate(0, 0);
 				
-			return shot;
+			return _shotIntention;
 		}//end pickShot()
+		
+				
+		override public function handleShot(a_points:int, a_multiplier:int):void
+		{
+			
+		}//end handleShot()
 		
 	}//end BigBillProfile
 		

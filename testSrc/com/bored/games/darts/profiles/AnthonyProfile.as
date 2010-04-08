@@ -54,24 +54,24 @@
 					{
 						if ( points % 2 == 1 )
 						{
-							addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 3, false), "boost");
-							addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 2, false), "boost");
-							addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 1, false), "boost");
+							addShot(myShotList, points, 3, false, "boost");
+							addShot(myShotList, points, 2, false, "boost");
+							addShot(myShotList, points, 1, false, "boost");
 						} 
 						else
 						{
-							addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 3, false), "");
-							addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 2, false), "");
-							addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 1, false), "");
+							addShot(myShotList, points, 3);
+							addShot(myShotList, points, 2);
+							addShot(myShotList, points, 1);
 						}
 					}
 					if ( myStats[points] == 2 )
 					{
 						die = Math.random();
 						if ( die < .5 && points % 2 == 0 ) {
-							addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 1, false), "beeline");
+							addShot(myShotList, points, 1, false, "beeline");
 						} else {
-							addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(points, 1, false), "");
+							addShot(myShotList, points, 1);
 						}
 					}
 					++points;
@@ -79,21 +79,21 @@
 				if ( myStats[25] < 3 ) {	
 					if ( points % 2 == 0 )
 					{
-						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(25, 2, false), "boost");
-						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(25, 1, false), "boost");
+						addShot(myShotList, 25, 2, false, "boost");
+						addShot(myShotList, 25, 1, false, "boost");
 					} 
 					else
 					{
-						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(25, 2, false), "");
-						addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(25, 1, false), "");
+						addShot(myShotList, 25, 2, false, "");
+						addShot(myShotList, 25, 1, false, "");
 					}
 					if ( myStats[25] == 2 )
 					{
 						die = Math.random();
 						if( die < .5 ) {
-							addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(25, 1, false), "beeline");
+							addShot(myShotList, 25, 1, false, "beeline");
 						} else {
-							addShot(myShotList, DartsGlobals.instance.gameManager.dartboard.getDartboardClip(25, 1, false), "");
+							addShot(myShotList, 25, 1, false, "");
 						}
 					}
 				}
@@ -104,24 +104,23 @@
 			return myShotList;
 		}//end generateShotList()
 		
-		override public function pickShot(a_shots:Vector.<AIShotCandidate>):AIShotCandidate
+		override public function pickShot(a_dartsRemaining:int, a_shots:Vector.<AIShotCandidate>):AIShotCandidate
 		{
-			var shot:AIShotCandidate;
-			
-			for each( shot in a_shots ) 
+			for each( var shot:AIShotCandidate in a_shots )
 			{
 				if ( shot.modifier == "boost" )
 				{
-					return shot;
+					_shotIntention = shot;
+					return _shotIntention;
 				}
 			}
 			
 			if( a_shots.length > 0 )
-				shot = a_shots[Math.floor(Math.random() * a_shots.length)];
+				_shotIntention = a_shots[Math.floor(Math.random() * a_shots.length)];
 			else
-				shot = new AIShotCandidate(0, 0);
+				_shotIntention = new AIShotCandidate(0, 0);
 				
-			return shot;
+			return _shotIntention;
 		}//end pickShot()
 		
 	}//end AnthonyProfile

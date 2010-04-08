@@ -38,7 +38,7 @@
 			_cursorMaterial = new MovieMaterial(_cursor);
 			_cursorMaterial.smooth = true;
 			
-			_cursorSprite = new Sprite3D(_cursorMaterial, 0.25);
+			_cursorSprite = new Sprite3D(_cursorMaterial, 0.35);
 			_cursorSprite.alignmentType = AlignmentType.VIEWPOINT;
 		}//end initModels()
 		
