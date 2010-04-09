@@ -124,7 +124,7 @@
 		
 		public function processShotResult(a_points:int, a_multiplier:int):void
 		{
-			_gameRecord.recordThrow(a_points, a_multiplier);
+			_gameRecord.recordThrow(a_points, a_multiplier);			
 		}//end processShotResult()
 		
 		public function get record():GameRecord

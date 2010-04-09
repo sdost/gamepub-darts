@@ -1,5 +1,9 @@
 ﻿package com.bored.games.darts.profiles 
 {
+	import com.bored.games.darts.abilities.Ability;
+	import com.bored.games.darts.abilities.BeeLineAbility;
+	import com.bored.games.darts.abilities.DoOverAbility;
+	import com.bored.games.darts.abilities.ShieldAbility;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.models.dae_DartFlightThin;
 	import com.sven.utils.AppSettings;
@@ -62,7 +66,7 @@
 				
 				if ( die < .35 ) 
 				{
-					modifier = "beeline";
+					modifier = BeeLineAbility.NAME;
 				}
 			}
 			
@@ -90,9 +94,9 @@
 			
 			var lastPlayerScore:Object = DartsGlobals.instance.localPlayer.record.lastScore;
 			
-			if ( a_allStats[DartsGlobals.instance.localPlayer.playerNum][lastPlayerScore.points] < 3 && DartsGlobals.instance.cpuPlayer.hasAbility("shield") )
+			if ( a_allStats[DartsGlobals.instance.localPlayer.playerNum][lastPlayerScore.points] < 3 && DartsGlobals.instance.cpuPlayer.hasAbility(ShieldAbility.NAME) )
 			{
-				addShot(myShotList, lastPlayerScore.points, lastPlayerScore.multiplier, true, "shield");
+				addShot(myShotList, lastPlayerScore.points, lastPlayerScore.multiplier, true, ShieldAbility.NAME);
 			}
 			
 			return myShotList;
@@ -102,7 +106,7 @@
 		{
 			for each( var shot:AIShotCandidate in a_shots )
 			{
-				if ( a_dartsRemaining == 0 && shot.modifier == "shield" )
+				if ( a_dartsRemaining == 0 && shot.modifier == ShieldAbility.NAME )
 				{
 					_shotIntention = shot;
 					return _shotIntention;
@@ -117,9 +121,16 @@
 			return _shotIntention;
 		}//end pickShot()
 		
-		override public function handleShot(a_points:int, a_multiplayer:int):void
+		override public function handleShot(a_points:int, a_multiplier:int):void
 		{
-			
+			if ( _shotIntention.points != a_points && _shotIntention.multiplier == 1 && DartsGlobals.instance.cpuPlayer.hasAbility(DoOverAbility.NAME) ) {
+				for each( var ability:Ability in abilities )
+				{
+					if ( ability.name == DoOverAbility.NAME ) {
+						DartsGlobals.instance.gameManager.abilityManager.activateAbility(ability);
+					}
+				}
+			}
 		}//end handleShot()
 		
 	}//end ProfessorProfile

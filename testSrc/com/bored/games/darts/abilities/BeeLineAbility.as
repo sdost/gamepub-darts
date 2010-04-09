@@ -12,11 +12,12 @@
 	 */
 	public class BeeLineAbility extends Ability
 	{
+		public static const NAME:String = "Beeline";
 		
 		public function BeeLineAbility(a_time:int) 
 		{
 			var icon:Sprite = SpriteFactory.getSpriteByQualifiedName("com.bored.games.darts.assets.icons.BeelineIcon_MC");
-			super("Beeline", icon, a_time);			
+			super(NAME, icon, a_time);			
 		}//end constructor()
 		
 		override public function useAbility():int

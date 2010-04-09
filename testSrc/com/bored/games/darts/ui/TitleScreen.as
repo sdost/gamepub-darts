@@ -25,6 +25,7 @@
 	{
 		public static const EASY_GAME_CLICKED_EVT:String = "EasyGameClickedEvent";
 		public static const HARD_GAME_CLICKED_EVT:String = "HardGameClickedEvent";
+		public static const MULTIPLAYER_GAME_CLICKED_EVT:String = "MutliplayerGameClickedEvent";
 		
 		private var _background:Sprite;
 		private var _buildBackground:Boolean = false;
@@ -35,8 +36,8 @@
 		private var _hardGameBtn:MightyButton;
 		private var _hardGameBtnImg:MovieClip;
 		
-		private var _storeBtn:MightyButton;
-		private var _storeBtnImg:MovieClip;
+		private var _multiplayerGameBtn:MightyButton;
+		private var _multiplayerGameBtnImg:MovieClip;
 		
 		public function TitleScreen(a_img:Sprite, a_buildFromAllDescendants:Boolean = false, a_bAddContents:Boolean = true, a_buildBackground:Boolean = false) 
 		{
@@ -63,6 +64,7 @@
 			
 			_easyGameBtnImg = descendantsDict["easyButton_mc"] as MovieClip;
 			_hardGameBtnImg = descendantsDict["hardButton_mc"] as MovieClip;
+			_multiplayerGameBtnImg = descendantsDict["multiplayerButton_mc"] as MovieClip;
 			
 			if (_easyGameBtnImg)
 			{
@@ -84,6 +86,17 @@
 			else
 			{
 				throw new Error("TitleScreen::buildFrom(): _hardGameBtnImg=" + _hardGameBtnImg);
+			}
+			
+			if (_multiplayerGameBtnImg)
+			{
+				_multiplayerGameBtn = new MightyButton(_multiplayerGameBtnImg, false);
+				_multiplayerGameBtn.pause(false);
+				_multiplayerGameBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onMultiplayerGameClicked, false, 0, true);
+			}
+			else
+			{
+				throw new Error("TitleScreen::buildFrom(): _multiplayerGameBtnImg=" + _multiplayerGameBtnImg);
 			}
 			
 			if(_buildBackground)
@@ -139,9 +152,14 @@
 				_hardGameBtn.pause(true);
 			}
 			
+			if (_multiplayerGameBtn)
+			{
+				_multiplayerGameBtn.pause(true);
+			}
+			
 			Tweener.addTween(this, { alpha:0, onComplete:destroy, time:0.4 } );
 			
-		}//end onPlayNowClicked()
+		}//end onEasyGameClicked()
 		
 		private function onHardGameClicked(a_evt:Event):void
 		{
@@ -157,10 +175,39 @@
 				_hardGameBtn.pause(true);
 			}
 			
+			if (_multiplayerGameBtn)
+			{
+				_multiplayerGameBtn.pause(true);
+			}
+			
 			// simply hide ourselves and remove ourselves from the display list.
 			Tweener.addTween(this, {alpha:0, onComplete:destroy, time:0.4 } );
 			
-		}//end onIgnoreClicked()
+		}//end onHardGameClicked()
+		
+		private function onMultiplayerGameClicked(a_evt:Event):void
+		{
+			this.dispatchEvent(new Event(MULTIPLAYER_GAME_CLICKED_EVT));
+			
+			if (_easyGameBtn)
+			{
+				_easyGameBtn.pause(true);
+			}
+			
+			if (_hardGameBtn)
+			{
+				_hardGameBtn.pause(true);
+			}
+			
+			if (_multiplayerGameBtn)
+			{
+				_multiplayerGameBtn.pause(true);
+			}
+			
+			// simply hide ourselves and remove ourselves from the display list.
+			Tweener.addTween(this, {alpha:0, onComplete:destroy, time:0.4 } );
+			
+		}//end onMultiplayerGameClicked()
 		
 		override public function destroy(...args):void
 		{
@@ -176,11 +223,18 @@
 				_hardGameBtn.removeEventListener(MouseEvent.CLICK, onHardGameClicked);
 			}
 			
+			if (_multiplayerGameBtn)
+			{
+				_multiplayerGameBtn.removeEventListener(MouseEvent.CLICK, onMultiplayerGameClicked);
+			}
+			
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			this.removeEventListener(Event.REMOVED_FROM_STAGE, destroy);
 			
 			_easyGameBtn = null;
 			_hardGameBtn = null;
+			_multiplayerGameBtn = null;
+			
 			_background = null;
 			
 			if (this.parent)

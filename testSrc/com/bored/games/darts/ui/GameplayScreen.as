@@ -112,13 +112,17 @@
 			
 			init();
 			
-			var cls:Class = getDefinitionByName(AppSettings.instance.throwIndicatorMovie) as Class;
+			var cls:Class;
+			
+			/*
+			cls = getDefinitionByName(AppSettings.instance.throwIndicatorMovie) as Class;
 			_throwIndicator = new ThrowIndicator(new cls());
 			DartsGlobals.instance.optionsInterfaceSpace.addChild(_throwIndicator);
 			_throwIndicator.x = AppSettings.instance.throwIndicatorPositionX;
 			_throwIndicator.y = AppSettings.instance.throwIndicatorPositionY;
 			_throwIndicator.registerThrowController(DartsGlobals.instance.gameManager.throwController);
 			_throwIndicator.show();
+			*/
 			
 			cls = getDefinitionByName(AppSettings.instance.scoreboardMovie) as Class;
 			_scoreBoard = new ScoreBoard(new cls());
@@ -247,7 +251,7 @@
 			
 			removeChild(_view);
 			
-			DartsGlobals.instance.optionsInterfaceSpace.removeChild(_throwIndicator);
+			//DartsGlobals.instance.optionsInterfaceSpace.removeChild(_throwIndicator);
 			DartsGlobals.instance.optionsInterfaceSpace.removeChild(_scoreBoard);
 			DartsGlobals.instance.optionsInterfaceSpace.removeChild(_abilityDock);
 			

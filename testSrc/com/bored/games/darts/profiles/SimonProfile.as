@@ -1,5 +1,7 @@
 ﻿package com.bored.games.darts.profiles 
 {
+	import com.bored.games.darts.abilities.BeeLineAbility;
+	import com.bored.games.darts.abilities.ShieldAbility;
 	import com.bored.games.darts.assets.icons.Simon_Portrait_BMP;
 	import com.bored.games.darts.models.dae_DartFlightPincer;
 	import com.bored.games.darts.profiles.EnemyProfile;
@@ -66,7 +68,7 @@
 				
 				if ( die < .35 ) 
 				{
-					modifier = "beeline";
+					modifier = BeeLineAbility.NAME;
 				}
 			}
 			
@@ -109,9 +111,9 @@
 						
 			var lastPlayerScore:Object = DartsGlobals.instance.localPlayer.record.lastScore;
 			
-			if ( a_allStats[DartsGlobals.instance.localPlayer.playerNum][lastPlayerScore.points] < 3 && DartsGlobals.instance.cpuPlayer.hasAbility("shield") )
+			if ( a_allStats[DartsGlobals.instance.localPlayer.playerNum][lastPlayerScore.points] < 3 && DartsGlobals.instance.cpuPlayer.hasAbility(ShieldAbility.NAME) )
 			{
-				addShot(myShotList, lastPlayerScore.points, lastPlayerScore.multiplier, false, "shield");
+				addShot(myShotList, lastPlayerScore.points, lastPlayerScore.multiplier, false, ShieldAbility.NAME);
 			}
 			
 			return myShotList;
@@ -121,7 +123,7 @@
 		{
 			for each( var shot:AIShotCandidate in a_shots ) 
 			{
-				if ( a_dartsRemaining == 0 && shot.modifier == "shield" )
+				if ( a_dartsRemaining == 0 && shot.modifier == ShieldAbility.NAME )
 				{
 					_shotIntention = shot;
 					return _shotIntention;

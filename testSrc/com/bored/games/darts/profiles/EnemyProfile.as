@@ -2,10 +2,16 @@
 {
 	import away3dlite.materials.BitmapMaterial;
 	import com.bored.games.darts.abilities.Ability;
+	import com.bored.games.darts.abilities.DoOverAbility;
+	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.logic.AIProfile;
+	import com.bored.games.darts.logic.DartsGameLogic;
+	import com.bored.games.darts.player.ComputerPlayer;
 	import com.bored.games.darts.skins.DartSkin;
+	import com.greensock.TweenMax;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import flash.events.Event;
 	
 	/**
 	 * ...
@@ -52,6 +58,23 @@
 		{
 			return _abilities;
 		}//end get abilities()
+		
+		public function useDoOver(evt:Event):void
+		{
+			DartsGlobals.instance.gameManager.removeEventListener(DartsGameLogic.THROW_END, useDoOver);
+			
+			(DartsGlobals.instance.cpuPlayer as ComputerPlayer).cancelShot();
+			
+			TweenMax.killAll();
+			
+			for each( var ability:Ability in DartsGlobals.instance.cpuPlayer.abilities )
+			{
+				if ( ability.name == DoOverAbility.NAME ) 
+				{
+					DartsGlobals.instance.gameManager.abilityManager.activateAbility(ability);
+				}
+			}
+		}//end performDoOver()
 		
 	}//end EnemyProfile
 

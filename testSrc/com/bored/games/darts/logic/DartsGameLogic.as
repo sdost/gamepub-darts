@@ -15,6 +15,7 @@
 	import com.bored.games.darts.player.DartsPlayer;
 	import com.bored.games.events.InputStateEvent;
 	import com.bored.games.GameUtils;
+	import com.greensock.TweenLite;
 	import com.sven.utils.SpriteFactory;
 	import flash.display.Bitmap;
 	import flash.display.MovieClip;
@@ -34,6 +35,7 @@
 	{		
 		public static const GAME_END:String = "gameEnd";
 		public static const TURN_END:String = "turnEnd";
+		public static const THROW_END:String = "throwEnd";
 		
 		protected var _scoreManager:AbstractScoreManager;
 		
@@ -219,6 +221,7 @@
 					endGame();
 					pause(true);
 					DartsGlobals.instance.showModalPopup(PostGameBanterModal);
+					return;
 				}
 				
 				if (_currentTurn.throwsRemaining == 0) 
@@ -253,7 +256,7 @@
 		}//end startNewRound()
 		
 		public function nextDart():void
-		{
+		{			
 			_lastDart = _currentDart;
 			
 			var ind:int = _currentTurn.advanceThrows() - 1;
@@ -264,8 +267,10 @@
 			_currentDart.position.y = AppSettings.instance.defaultStartPositionY;
 			_currentDart.position.z = AppSettings.instance.defaultStartPositionZ;
 			
+			dispatchEvent(new Event(THROW_END));
+			
 			_players[_currentPlayer-1].takeTheShot(_currentTurn.throwsRemaining);
-		}//end createNewDart()
+		}//end nextDart()
 		
 		public function get lastDart():Dart
 		{

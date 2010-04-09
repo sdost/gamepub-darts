@@ -1,5 +1,6 @@
 ﻿package com.bored.games.darts.profiles 
 {
+	import com.bored.games.darts.abilities.ShieldAbility;
 	import com.bored.games.darts.assets.icons.Mack_Portrait_BMP;
 	import com.bored.games.darts.assets.icons.Sammy_Portrait_BMP;
 	import com.bored.games.darts.models.dae_DartFlightHeart;
@@ -89,13 +90,13 @@
 			
 			var lastPlayerScore:Object = DartsGlobals.instance.localPlayer.record.lastScore;
 			
-			if ( a_allStats[DartsGlobals.instance.localPlayer.playerNum][lastPlayerScore.points] < 3 && DartsGlobals.instance.cpuPlayer.hasAbility("shield") )
+			if ( a_allStats[DartsGlobals.instance.localPlayer.playerNum][lastPlayerScore.points] < 3 && DartsGlobals.instance.cpuPlayer.hasAbility(ShieldAbility.NAME) )
 			{
 				die = Math.random();
 				
 				if ( die < .5 )
 				{
-					addShot(myShotList, lastPlayerScore.points, lastPlayerScore.multiplier, false, "shield");
+					addShot(myShotList, lastPlayerScore.points, lastPlayerScore.multiplier, false, ShieldAbility.NAME);
 				}
 			}
 			
@@ -108,7 +109,7 @@
 			{
 				var die:Number = Math.random();
 				
-				if ( a_dartsRemaining == 0 && shot.modifier == "shield" && die < .5 )
+				if ( a_dartsRemaining == 0 && shot.modifier == ShieldAbility.NAME && die < .5 )
 				{
 					_shotIntention = shot;
 					return _shotIntention;

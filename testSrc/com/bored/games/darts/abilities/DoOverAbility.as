@@ -14,11 +14,12 @@
 	 */
 	public class DoOverAbility extends Ability
 	{
+		public static const NAME:String = "Do-Over";
 		
 		public function DoOverAbility(a_time:int) 
 		{
 			var icon:Sprite = SpriteFactory.getSpriteByQualifiedName("com.bored.games.darts.assets.icons.DoOverIcon_MC");
-			super("Do-Over", icon, a_time);	
+			super(NAME, icon, a_time);	
 		}//end constructor()
 		
 		override public function useAbility():int

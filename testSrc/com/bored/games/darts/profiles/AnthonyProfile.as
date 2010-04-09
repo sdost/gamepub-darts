@@ -1,5 +1,6 @@
 ﻿package com.bored.games.darts.profiles 
 {
+	import com.bored.games.darts.abilities.BeeLineAbility;
 	import com.bored.games.darts.assets.icons.Anthony_Portrait_BMP;
 	import com.bored.games.darts.assets.icons.Simon_Portrait_BMP;
 	import com.bored.games.darts.logic.AIShotCandidate;
@@ -69,7 +70,7 @@
 					{
 						die = Math.random();
 						if ( die < .5 && points % 2 == 0 ) {
-							addShot(myShotList, points, 1, false, "beeline");
+							addShot(myShotList, points, 1, false, BeeLineAbility.NAME);
 						} else {
 							addShot(myShotList, points, 1);
 						}
@@ -91,7 +92,7 @@
 					{
 						die = Math.random();
 						if( die < .5 ) {
-							addShot(myShotList, 25, 1, false, "beeline");
+							addShot(myShotList, 25, 1, false, BeeLineAbility.NAME);
 						} else {
 							addShot(myShotList, 25, 1, false, "");
 						}

@@ -11,10 +11,12 @@
 	 */
 	public class ShieldAbility extends Ability
 	{
+		public static const NAME:String = "Shield";
+		
 		public function ShieldAbility(a_time:int) 
 		{
 			var icon:Sprite = SpriteFactory.getSpriteByQualifiedName("com.bored.games.darts.assets.icons.ShieldIcon_MC");
-			super("Shield", icon, a_time);
+			super(NAME, icon, a_time);
 		}//end constructor()
 		
 		override public function useAbility():int

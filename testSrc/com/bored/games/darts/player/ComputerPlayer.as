@@ -8,7 +8,7 @@
 	import com.bored.games.darts.logic.CricketGameLogic;
 	import com.bored.games.darts.logic.DartsGameLogic;
 	import com.bored.games.darts.player.DartsPlayer;
-	import com.greensock.TweenLite;
+	import com.greensock.TweenMax;
 	import com.sven.utils.AppSettings;
 	import flash.display.Sprite;
 	import flash.geom.Point;
@@ -26,6 +26,8 @@
 		private var _currentPosition:Object;
 		
 		private var _finalShot:AIShotCandidate;
+		
+		private var _throwTween:TweenMax;
 		
 		public function ComputerPlayer(a_profile:AIProfile) 
 		{
@@ -55,13 +57,18 @@
 			DartsGlobals.instance.gameManager.currentDart.position.x = _previousPosition.x;
 			DartsGlobals.instance.gameManager.currentDart.position.y = _previousPosition.y;
 			
-			TweenLite.to( DartsGlobals.instance.gameManager.currentDart.position, 2, { 
+			TweenMax.to( DartsGlobals.instance.gameManager.currentDart.position, 1, { 
 				x: _finalShot.point.x, 
 				y: _finalShot.point.y,
-				delay:1,
+				delay:2,
 				onComplete: performThrow 
 			} ); 
 		}//end takeTheShot()
+		
+		public function cancelShot():void
+		{
+			TweenMax.killAll();
+		}//end cancelShot()
 		
 		override public function processShotResult(a_points:int, a_multiplier:int):void
 		{

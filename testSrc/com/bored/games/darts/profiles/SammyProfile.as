@@ -1,6 +1,10 @@
 ﻿package com.bored.games.darts.profiles 
 {
+	import com.bored.games.darts.abilities.Ability;
+	import com.bored.games.darts.abilities.DoOverAbility;
 	import com.bored.games.darts.assets.icons.Sammy_Portrait_BMP;
+	import com.bored.games.darts.DartsGlobals;
+	import com.bored.games.darts.logic.DartsGameLogic;
 	import com.bored.games.darts.models.dae_DartFlightHexagon;
 	import com.bored.games.darts.profiles.EnemyProfile;
 	import com.sven.utils.ImageFactory;
@@ -35,7 +39,26 @@
 				
 		override public function handleShot(a_points:int, a_multiplier:int):void
 		{
+			var stats:Object = DartsGlobals.instance.gameManager.scoreManager.getPlayerStats(DartsGlobals.instance.cpuPlayer.playerNum);
 			
+			var sectionCount:int = 0;
+			
+			var points:int = 15;
+			while ( points <= 20 ) {
+				if ( stats[points] < 3 )
+				{
+					sectionCount++;
+				}
+				++points;
+			}
+			if ( stats[25] < 3 ) {						
+				sectionCount++;
+			}
+			
+			if ( _shotIntention.points != a_points /*&& sectionCount < 4*/ && DartsGlobals.instance.cpuPlayer.hasAbility(DoOverAbility.NAME) ) 
+			{
+				DartsGlobals.instance.gameManager.addEventListener(DartsGameLogic.THROW_END, useDoOver, false, 0, true);
+			}
 		}//end handleShot()
 		
 	}//end SammyProfile

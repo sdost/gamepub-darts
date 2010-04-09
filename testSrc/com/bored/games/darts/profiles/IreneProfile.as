@@ -1,5 +1,9 @@
 ﻿package com.bored.games.darts.profiles 
 {
+	import com.bored.games.darts.abilities.Ability;
+	import com.bored.games.darts.abilities.BeeLineAbility;
+	import com.bored.games.darts.abilities.DoOverAbility;
+	import com.bored.games.darts.abilities.ShieldAbility;
 	import com.bored.games.darts.assets.icons.Irene_Portrait_BMP;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.models.dae_DartFlightThin;
@@ -66,7 +70,7 @@
 					
 					if ( die < .35 ) 
 					{
-						modifier = "beeline";
+						modifier = BeeLineAbility.NAME;
 					}
 				}
 				
@@ -93,9 +97,9 @@
 			
 			var lastPlayerScore:Object = DartsGlobals.instance.localPlayer.record.lastScore;
 			
-			if ( a_allStats[DartsGlobals.instance.localPlayer.playerNum][lastPlayerScore.points] < 3 && DartsGlobals.instance.cpuPlayer.hasAbility("shield") )
+			if ( a_allStats[DartsGlobals.instance.localPlayer.playerNum][lastPlayerScore.points] < 3 && DartsGlobals.instance.cpuPlayer.hasAbility(ShieldAbility.NAME) )
 			{
-				addShot(myShotList, lastPlayerScore.points, lastPlayerScore.multiplier, false, "shield");
+				addShot(myShotList, lastPlayerScore.points, lastPlayerScore.multiplier, false, ShieldAbility.NAME);
 			}
 			
 			return myShotList;
@@ -103,7 +107,30 @@
 				
 		override public function handleShot(a_points:int, a_multiplier:int):void
 		{
+			var stats:Object = DartsGlobals.instance.gameManager.scoreManager.getPlayerStats(DartsGlobals.instance.localPlayer.playerNum);
 			
+			var sectionCount:int = 0;
+			
+			var points:int = 15;
+			while ( points <= 20 ) {
+				if ( stats[points] < 3 )
+				{
+					sectionCount++;
+				}
+				++points;
+			}
+			if ( stats[25] < 3 ) {						
+				sectionCount++;
+			}
+			
+			if ( _shotIntention.points != a_points && sectionCount > 3 && DartsGlobals.instance.cpuPlayer.hasAbility(DoOverAbility.NAME) ) {
+				for each( var ability:Ability in abilities )
+				{
+					if ( ability.name == DoOverAbility.NAME ) {
+						DartsGlobals.instance.gameManager.abilityManager.activateAbility(ability);
+					}
+				}
+			}
 		}//end handleShot()
 		
 	}//end IreneProfile
