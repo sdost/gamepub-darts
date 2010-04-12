@@ -12,8 +12,10 @@
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.filters.BlurFilter;
+	import flash.text.TextField;
 	import flash.ui.Mouse;
 	import flash.utils.Dictionary;
+	import flash.filters.ColorMatrixFilter;
 	
 	/**
 	 * ...
@@ -21,12 +23,16 @@
 	 */
 	public class AbilityDock extends ContentHolder
 	{
+		private var _abilityCountText:Vector.<TextField>;
 		private var _abilityGraphic:Vector.<MovieClip>;
 		private var _abilityBox:Vector.<MightyButton>;
+		private var _abilityBurst:Vector.<MovieClip>;
 		
 		private var _abilityMgr:AbilityManager;
 		
 		private var _mouseHiddenState:Boolean = false;
+		
+		private var _cmFilter:ColorMatrixFilter;
 		
 		public function AbilityDock(a_img:Sprite, a_buildFromAllDescendants:Boolean = false, a_bAddContents:Boolean = true)
 		{
@@ -46,46 +52,73 @@
 		{
 			var descendantsDict:Dictionary = super.buildFrom(a_img, a_buildFromAllDescendants);
 			
+			// create an array to store your matrix values
+			var matrix:Array = new Array(0.309, 0.609, 0.082, 0, 0, 0.309, 0.609, 0.082, 0, 0, 0.309, 0.609, 0.082, 0, 0, 0, 0, 0, 1, 0);
+			// create a new colourmatrixfilter using the matrix array values
+			_cmFilter = new ColorMatrixFilter(matrix);
+			
+			_abilityCountText = new Vector.<TextField>(3);
 			_abilityGraphic = new Vector.<MovieClip>(3);
 			_abilityBox = new Vector.<MightyButton>(3);
+			_abilityBurst = new Vector.<MovieClip>(3);
 			
+			_abilityCountText[0] = descendantsDict["countOne_text"] as TextField;
 			_abilityGraphic[0] = descendantsDict["box_1"] as MovieClip;
+			_abilityBurst[0] = descendantsDict["burstOne_mc"] as MovieClip;
 			
 			if ( _abilityGraphic[0] ) 
 			{
+				_abilityCountText[0].text = "";
+				_abilityCountText[0].mouseEnabled = false;
 				
 				_abilityBox[0] = new MightyButton(_abilityGraphic[0], false);
 				_abilityBox[0].buttonContents.addEventListener(MouseEvent.ROLL_OVER, onMouseOver, false, 0, true);
 				_abilityBox[0].buttonContents.addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
 				_abilityBox[0].addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onAbilityClicked, false, 0, true);
+				
+				_abilityBurst[0].gotoAndStop(1);
 			}
 			else
 			{
 				throw new Error("AbilityDock::buildFrom(): _abilityBox[0]=" + _abilityBox[0]);
 			}
 			
+			_abilityCountText[1] = descendantsDict["countTwo_text"] as TextField;
 			_abilityGraphic[1] = descendantsDict["box_2"] as MovieClip;
+			_abilityBurst[1] = descendantsDict["burstTwo_mc"] as MovieClip;
 			
 			if ( _abilityGraphic[1] ) 
 			{
+				_abilityCountText[1].text = "";
+				_abilityCountText[1].mouseEnabled = false;
+				
 				_abilityBox[1] = new MightyButton(_abilityGraphic[1], false);
 				_abilityBox[1].buttonContents.addEventListener(MouseEvent.ROLL_OVER, onMouseOver, false, 0, true);
 				_abilityBox[1].buttonContents.addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
 				_abilityBox[1].addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onAbilityClicked, false, 0, true);
+				
+				_abilityBurst[1].gotoAndStop(1);
 			}
 			else
 			{
 				throw new Error("AbilityDock::buildFrom(): _abilityBox[1]=" + _abilityBox[1]);
 			}
 			
+			_abilityCountText[2] = descendantsDict["countThree_text"] as TextField;
 			_abilityGraphic[2] = descendantsDict["box_3"] as MovieClip;
+			_abilityBurst[2] = descendantsDict["burstThree_mc"] as MovieClip;
 			
 			if ( _abilityGraphic[2] ) 
 			{
+				_abilityCountText[2].text = "";
+				_abilityCountText[2].mouseEnabled = false;
+				
 				_abilityBox[2] = new MightyButton(_abilityGraphic[2], false);
 				_abilityBox[2].buttonContents.addEventListener(MouseEvent.ROLL_OVER, onMouseOver, false, 0, true);
 				_abilityBox[2].buttonContents.addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
 				_abilityBox[2].addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onAbilityClicked, false, 0, true);
+				
+				_abilityBurst[2].gotoAndStop(1);
 			}
 			else
 			{
@@ -118,13 +151,16 @@
 			{
 				if ( DartsGlobals.instance.localPlayer.abilities[i] && DartsGlobals.instance.localPlayer.abilities[i].ready && _abilityBox[i].paused ) {
 					_abilityBox[i].pause(false);
+					DartsGlobals.instance.localPlayer.abilities[i].icon.filters = [];
 					((_abilityBox[i].buttonContents as Sprite).getChildByName("icon_holder") as MovieClip).addChild(DartsGlobals.instance.localPlayer.abilities[i].icon);
 				}
 				
 				if ( DartsGlobals.instance.localPlayer.abilities[i].ready && _abilityBox[i].paused ) {
 					_abilityBox[i].pause(false);
+					DartsGlobals.instance.localPlayer.abilities[i].icon.filters = [];
 				} else if ( !DartsGlobals.instance.localPlayer.abilities[i].ready &&  !_abilityBox[i].paused ) {
 					_abilityBox[i].pause(true);
+					DartsGlobals.instance.localPlayer.abilities[i].icon.filters = [_cmFilter];
 				}
 			}
 		}//end update()
@@ -146,6 +182,7 @@
 				if ( _abilityBox[i] == a_evt.mightyButton ) 
 				{					
 					_abilityMgr.activateAbility(DartsGlobals.instance.localPlayer.abilities[i]);
+					_abilityBurst[i].gotoAndPlay(1);
 				}
 			}
 		}//end onAbilityOneClicked()

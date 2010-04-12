@@ -25,6 +25,7 @@
 	import com.bored.games.darts.ui.hud.ControlPanel;
 	import com.bored.games.darts.ui.hud.ScoreBoard;
 	import com.bored.games.darts.ui.hud.ThrowIndicator;
+	import com.bored.games.darts.ui.hud.ThrowIndicatorV2;
 	import com.bored.games.events.InputStateEvent;
 	import com.bored.games.darts.DartsGlobals;
 	import com.inassets.ui.buttons.events.ButtonEvent;
@@ -86,7 +87,7 @@
 		
 		private var _stats:Stats;
 		
-		private var _throwIndicator:ThrowIndicator;
+		private var _throwIndicator:ThrowIndicatorV2;
 		private var _scoreBoard:ScoreBoard;
 		private var _abilityDock:AbilityDock;
 		private var _controlPanel:ControlPanel;
@@ -114,16 +115,14 @@
 			
 			var cls:Class;
 			
-			/*
 			cls = getDefinitionByName(AppSettings.instance.throwIndicatorMovie) as Class;
-			_throwIndicator = new ThrowIndicator(new cls());
+			_throwIndicator = new ThrowIndicatorV2(new cls());
 			DartsGlobals.instance.optionsInterfaceSpace.addChild(_throwIndicator);
 			_throwIndicator.x = AppSettings.instance.throwIndicatorPositionX;
 			_throwIndicator.y = AppSettings.instance.throwIndicatorPositionY;
 			_throwIndicator.registerThrowController(DartsGlobals.instance.gameManager.throwController);
 			_throwIndicator.show();
-			*/
-			
+						
 			cls = getDefinitionByName(AppSettings.instance.scoreboardMovie) as Class;
 			_scoreBoard = new ScoreBoard(new cls());
 			DartsGlobals.instance.optionsInterfaceSpace.addChild(_scoreBoard);
