@@ -101,6 +101,8 @@
 			var nY:Number = _mousePosition.y;
 			var dx:Number = nX - _oX;
 			var dy:Number = nY - _oY;
+			var oldVelX:Number = _velX;
+			var oldVelY:Number = _velY;
 			_lastMove = Math.sqrt( dx * dx + dy * dy );			
     
 			_oX = nX;
@@ -109,6 +111,14 @@
 			_velY = dy * 1000 / _mouseTimer.delay;
 			_speed = Math.sqrt( _velX * _velX + _velY * _velY );
 			
+			if ( _velY * oldVelY < 0 ) {
+				_cumAvgSpeed = 0;
+				_thrust = 0;
+				_lean = 0;
+				_num = 0;
+				return;
+			}
+			
 			if ( Math.floor(_lastMove) < 1 ) {
 				_cumAvgSpeed = 0;
 				_thrust = 0;
@@ -116,7 +126,7 @@
 				_num = 0;
 			} else { 			
 				_cumAvgSpeed = _cumAvgSpeed + ((_speed - _cumAvgSpeed) / ++_num);
-				_thrust = clamp((_cumAvgSpeed * AppSettings.instance.dartThrustScale), AppSettings.instance.dartMinThrust, AppSettings.instance.dartMaxThrust);
+				_thrust = clamp((_cumAvgSpeed * AppSettings.instance.dartThrustScale), 0, AppSettings.instance.dartMaxThrust);
 				_lean = _velX * AppSettings.instance.dartLeanScale;
 			}
 		}//end updateCurrentMouseVelocity()

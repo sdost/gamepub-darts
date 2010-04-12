@@ -25,6 +25,12 @@
 		private var _musicBtn:ToggleButton;
 		private var _musicBtnImg:MovieClip;
 		
+		private var _helpBtn:ToggleButton;
+		private var _helpBtnImg:MovieClip;
+		
+		private var _trophyBtn:ToggleButton;
+		private var _trophyBtnImg:MovieClip;
+		
 		private var _quitBtn:MightyButton;
 		private var _quitBtnImg:MovieClip;
 		
@@ -53,6 +59,8 @@
 			
 			_soundBtnImg = descendantsDict["soundBtn_mc"] as MovieClip;
 			_musicBtnImg = descendantsDict["musicBtn_mc"] as MovieClip;
+			_helpBtnImg = descendantsDict["helpBtn_mc"] as MovieClip;
+			_trophyBtnImg = descendantsDict["trophyBtn_mc"] as MovieClip;
 			_quitBtnImg = descendantsDict["quitBtn_mc"] as MovieClip;
 			
 			if (_soundBtnImg)
@@ -79,6 +87,32 @@
 			else
 			{
 				throw new Error("ControlPanel::buildFrom(): _musicBtnImg=" + _musicBtnImg);
+			}
+			
+			if (_helpBtnImg)
+			{
+				_helpBtn = new ToggleButton(_helpBtnImg, false);
+				_helpBtn.pause(false);
+				_helpBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, onMouseOver, false, 0, true);
+				_helpBtn.buttonContents.addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
+				//_helpBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onMusicButtonClick, false, 0, true);
+			}
+			else
+			{
+				throw new Error("ControlPanel::buildFrom(): _helpBtnImg=" + _helpBtnImg);
+			}
+			
+			if (_trophyBtnImg)
+			{
+				_trophyBtn = new ToggleButton(_trophyBtnImg, false);
+				_trophyBtn.pause(false);
+				_trophyBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, onMouseOver, false, 0, true);
+				_trophyBtn.buttonContents.addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
+				//_trophyBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onMusicButtonClick, false, 0, true);
+			}
+			else
+			{
+				throw new Error("ControlPanel::buildFrom(): _trophyBtnImg=" + _trophyBtnImg);
 			}
 			
 			if (_quitBtnImg)
