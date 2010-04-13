@@ -1,5 +1,6 @@
 ﻿package com.bored.games.darts
 {
+	import com.bored.games.darts.states.LogoSplash;
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.bored.games.animations.CutsceneManager;
 	import com.bored.games.darts.states.GameConfirm;
@@ -67,6 +68,7 @@
 		
 		protected function addStates():void
 		{
+			_myStateMachine.addState(new LogoSplash("LogoSplash", _myStateMachine));
 			_myStateMachine.addState(new Initialization("Initialization", _myStateMachine));
 			_myStateMachine.addState(new Attract("Attract", _myStateMachine));
 			_myStateMachine.addState(new IntroStory("IntroStory", _myStateMachine));
@@ -74,7 +76,7 @@
 			_myStateMachine.addState(new GameConfirm("GameConfirm", _myStateMachine));
 			_myStateMachine.addState(new Gameplay("Gameplay", _myStateMachine));
 			
-			_myStateMachine.addState(new GameStore("GameStore", _myStateMachine));			
+			_myStateMachine.addState(new GameStore("GameStore", _myStateMachine));
 		}//end addStates()
 		
 	}//end class DartsEntryPoint

@@ -1,6 +1,7 @@
 ﻿package com.bored.services 
 {
 	import com.bored.services.AbstractExternalService;
+	import com.inassets.events.ObjectEvent;
 	import flash.events.Event;
 	import mochi.as3.MochiCoins;
 	import mochi.as3.MochiInventory;
@@ -32,10 +33,8 @@
             MochiSocial.addEventListener(MochiSocial.LOGGED_IN, onLogin);
             MochiSocial.addEventListener(MochiSocial.LOGGED_OUT, onLogout);
             MochiCoins.addEventListener(MochiCoins.ITEM_OWNED, coinsEvent);
-            MochiCoins.addEventListener(MochiCoins.STORE_ITEMS, storeItems);
 			MochiCoins.addEventListener(MochiCoins.STORE_HIDE, onStoreHide);
 			
-			MochiCoins.getStoreItems();
             MochiSocial.showLoginWidget( { x:0, y:0 } );
 
             MochiInventory.addEventListener(MochiInventory.READY, inventoryReady );
@@ -97,13 +96,27 @@
             }
         }//end set loginEvent()
 		
+		override public function initializeStore():void
+		{
+			MochiCoins.addEventListener(MochiCoins.STORE_ITEMS, storeItems);
+			MochiCoins.getStoreItems();
+		}//end initializeStore()
+		
 		private function storeItems(arg:Object):void 
 		{
-            _storeItems = arg;
-            for (var i:String in _storeItems) {
-                trace("[GAME] [StoreItems] " + _storeItems[i]);
-                _item = _storeItems[i].id;
-            }
+			var items:Vector.<StoreItem> = new Vector.<StoreItem>();
+			
+			_storeItems = arg;
+			for each( var storeItem:Object in _storeItems )
+			{
+				var item:StoreItem = new StoreItem();
+				item.name = storeItem.name;
+				item.description = storeItem.desc;
+				item.price = int(storeItem.cost);
+				item.iconURL = storeItem.imgURL;
+				items.push(item);
+			}
+			this.dispatchEvent(new ObjectEvent(STORE_ITEMS_AVAILABLE, items));
         }//end storeItems()
 		
 		override public function loadGameData(a_callback:Function):void

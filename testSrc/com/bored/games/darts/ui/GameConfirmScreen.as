@@ -35,6 +35,7 @@
 	{
 		public static const PLAY_CLICKED_EVT:String = "PlayClickedEvent";
 		public static const BACK_CLICKED_EVT:String = "BackClickedEvent";
+		public static const LAUNCH_STORE_EVT:String = "LaunchClickedEvent";
 		
 		private var _background:Sprite;
 		
@@ -153,7 +154,7 @@
 			{
 				_dartUpgradeBtn = new MightyButton(_dartUpgradeBtnImg, false);
 				_dartUpgradeBtn.pause(false);
-				//_dartUpgradeBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onPlayClicked, false, 0, true);
+				_dartUpgradeBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onUpgradeClicked, false, 0, true);
 			}
 			else
 			{
@@ -164,7 +165,7 @@
 			{
 				_powersUpgradeBtn = new MightyButton(_powersUpgradeBtnImg, false);
 				_powersUpgradeBtn.pause(false);
-				//_powersUpgradeBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onPlayClicked, false, 0, true);
+				_powersUpgradeBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onUpgradeClicked, false, 0, true);
 			}
 			else
 			{
@@ -343,6 +344,13 @@
 			Tweener.addTween(this, {alpha:1, time:2 } );
 			
 		}//end addedToStage()
+		
+		private function onUpgradeClicked(a_evt:Event):void
+		{
+			this.dispatchEvent(new Event(LAUNCH_STORE_EVT));
+			
+			Tweener.addTween(this, { alpha:0, onComplete:destroy, time:0.4 } );
+		}//end onUpgradeClicked()
 		
 		private function onPickLeftClicked(a_evt:Event):void
 		{

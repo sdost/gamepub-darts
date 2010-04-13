@@ -8,6 +8,7 @@
 	public class AbstractExternalService extends EventDispatcher
 	{
 		public static const STORE_HIDDEN:String = "storeHidden";
+		public static const STORE_ITEMS_AVAILABLE:String = "storeItemsAvailable";
 		
 		public function AbstractExternalService()
 		{
@@ -24,6 +25,10 @@
 		public function saveGameData(a_callback:Function, a_data:Object):void
 		{
 		}//end saveGameData()
+		
+		public function initializeStore():void
+		{
+		}//end initializeStore()
 		
 		public function showStore():void
 		{

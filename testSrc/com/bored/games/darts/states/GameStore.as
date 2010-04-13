@@ -1,5 +1,6 @@
 ﻿package com.bored.games.darts.states 
 {
+	import com.bored.games.darts.assets.screen.GameStore_MC;
 	import com.bored.games.input.InputController;
 	import com.bored.games.input.MouseInputController;
 	import com.bored.games.darts.input.GestureThrowController;
@@ -13,6 +14,7 @@
 	import com.bored.games.darts.ui.GameStoreScreen;
 	import com.bored.games.events.InputStateEvent;
 	import com.bored.services.AbstractExternalService;
+	import com.inassets.events.ObjectEvent;
 	import com.inassets.statemachines.Finite.State;
 	import com.inassets.statemachines.interfaces.IStateMachine;
 	import com.sven.utils.AppSettings;
@@ -59,8 +61,9 @@
 			
 			try
 			{
-				gameStoreScreenImg = new MovieClip();
+				gameStoreScreenImg = new GameStore_MC();
 				_gameStoreScreen = new GameStoreScreen(gameStoreScreenImg, false, true);
+				_gameStoreScreen.addEventListener(GameStoreScreen.BACK_CLICKED_EVT, onBackClicked, false, 0, true);
 				DartsGlobals.instance.screenSpace.addChild(_gameStoreScreen);
 			}
 			catch (e:Error)
@@ -68,15 +71,12 @@
 				DartsGlobals.addWarning("GameStore::onEnter(): Caught error=" + e);
 			}
 			
-			DartsGlobals.instance.externalServices.showStore();
-			DartsGlobals.instance.externalServices.addEventListener(AbstractExternalService.STORE_HIDDEN, onStoreHidden);
-			
 		}//end onEnter()
 		
-		private function onStoreHidden(a_evt:Event):void
+		private function onBackClicked(evt:Event):void
 		{
-			(this.stateMachine as GameFSM).transitionToStateNamed("Attract");
-		}//end onStoreHidden()
+			(this.stateMachine as GameFSM).transitionToStateNamed("GameConfirm");
+		}//end onBackClicked()
 				
 		private function finished(...args):void
 		{

@@ -57,6 +57,7 @@
 				_gameConfirmScreen = new GameConfirmScreen(gameConfirmScreenImg, false, true);
 				_gameConfirmScreen.addEventListener(GameConfirmScreen.PLAY_CLICKED_EVT, onPlay, false, 0, true);
 				_gameConfirmScreen.addEventListener(GameConfirmScreen.BACK_CLICKED_EVT, onBack, false, 0, true);
+				_gameConfirmScreen.addEventListener(GameConfirmScreen.LAUNCH_STORE_EVT, onLaunchStore, false, 0, true);
 				DartsGlobals.instance.screenSpace.addChild(_gameConfirmScreen);
 			}
 			catch (e:Error)
@@ -79,6 +80,11 @@
 			(this.stateMachine as GameFSM).transitionToStateNamed("CPUOpponentSelect");
 		}//end onBack()
 		
+		public function onLaunchStore(a_evt:Event):void
+		{
+			(this.stateMachine as GameFSM).transitionToStateNamed("GameStore");
+		}//end onLaunchStore()
+		
 		/**
 		 * Handler for exiting this state.
 		 */
@@ -86,6 +92,7 @@
 		{
 			_gameConfirmScreen.removeEventListener(GameConfirmScreen.BACK_CLICKED_EVT, onBack);
 			_gameConfirmScreen.removeEventListener(GameConfirmScreen.PLAY_CLICKED_EVT, onPlay);
+			_gameConfirmScreen.removeEventListener(GameConfirmScreen.LAUNCH_STORE_EVT, onLaunchStore);
 		}//end onExit()
 		
 	}//end class Initialization
