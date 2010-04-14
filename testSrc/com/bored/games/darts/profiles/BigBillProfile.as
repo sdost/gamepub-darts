@@ -36,7 +36,8 @@
 			
 			this.setDartSkin(new DartSkin(ImageFactory.getBitmapDataByQualifiedName("dartuv_bigbill", AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight), dae_DartShaft.data, dae_DartFlightPincer.data));
 			
-			this.accuracy = 0.7;
+			this.accuracy = AppSettings.instance.bigBillAccuracy;
+			this.stepScale = AppSettings.instance.bigBillStepScale;
 		}//end constructor()
 		
 		override public function generateShotList(a_gameType:String, a_myStats:Object, a_allStats:Object):Vector.<AIShotCandidate>

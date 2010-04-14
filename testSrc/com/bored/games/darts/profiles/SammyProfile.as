@@ -33,7 +33,8 @@
 			
 			this.setDartSkin(new DartSkin(ImageFactory.getBitmapDataByQualifiedName("dartuv_sammy", AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight), dae_DartShaft.data, dae_DartFlightHexagon.data));
 			
-			this.accuracy = 0.1;
+			this.accuracy = AppSettings.instance.sammyAccuracy;
+			this.stepScale = AppSettings.instance.sammyStepScale;
 		}//end constructor()
 		
 				

@@ -16,13 +16,16 @@
 	public class AIProfile
 	{		
 		protected var _name:String;
-		public var accuracy:Number = 0.5;
+		public var accuracy:Number;
+		public var stepScale:Number;
 		
 		protected var _shotIntention:AIShotCandidate;
 		
 		public function AIProfile(a_name:String = "") 
 		{
 			_name = a_name;
+			accuracy = 0.5;
+			stepScale = AppSettings.instance.simulationStepScale;
 		}//end constructor()
 		
 		public function generateShotList(a_gameType:String, a_myStats:Object, a_allStats:Object):Vector.<AIShotCandidate>

@@ -123,7 +123,7 @@
 			return _radius;
 		}//end get radius()
 
-		public function initThrowParams(releaseX:Number, releaseY:Number, releaseZ:Number, thrust:Number, angle:Number, grav:Number, lean:Number = 0):void
+		public function initThrowParams(releaseX:Number, releaseY:Number, releaseZ:Number, thrust:Number, angle:Number, grav:Number, lean:Number, stepScale:Number):void
 		{
 			deactivateAction(_pullBackAction.actionName);
 			
@@ -138,7 +138,8 @@
 				"thrust": thrust,
 				"theta": Math.PI / 180 * angle,
 				"gravity": grav,
-				"lean": lean
+				"lean": lean,
+				"stepScale": stepScale
 			});
 			
 			activateAction(_throwAction.actionName);

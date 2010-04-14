@@ -8,7 +8,9 @@
 	import away3dlite.sprites.Sprite3D;
 	import com.bored.games.darts.actions.ShieldDartboardAction;
 	import com.bored.games.darts.DartsGlobals;
+	import com.bored.games.darts.ui.effects.AnimatedText;
 	import com.bored.games.objects.GameElement;
+	import com.greensock.TweenMax;
 	import flash.display.Sprite;
 	import com.sven.utils.AppSettings;
 	import flash.geom.Point;
@@ -88,6 +90,13 @@
 				{
 					var arr:Array = objects[0].parent.name.split("_");
 					DartsGlobals.instance.gameManager.scoreManager.submitThrow(DartsGlobals.instance.gameManager.currentPlayer, Number(arr[1]), Number(arr[2]));
+					
+					var text:AnimatedText = new AnimatedText(Number(arr[1]) + " x " + Number(arr[2]), new CooperStd(), TweenMax.fromTo(null, 0.75, { x: p.x, y: p.y, alpha: 1 }, { x: p.x, y: p.y - 15, alpha: 0 } ));
+					text.alpha = 0;
+					_sprite.addChild(text);
+					text.animate();
+	
+					
 					DartsGlobals.instance.gameManager.players[DartsGlobals.instance.gameManager.currentPlayer-1].processShotResult(Number(arr[1]), Number(arr[2]));
 					
 					if (a_block)

@@ -18,6 +18,7 @@
 		private var _theta:Number = 0;
 		private var _gravity:Number = 0;
 		private var _lean:Number = 0;
+		private var _stepScale:Number = 0;
 		
 		public function DartTrajectoryAction(a_gameElement:GameElement, a_params:Object = null) 
 		{
@@ -33,6 +34,7 @@
 			_theta = a_params.theta;
 			_gravity = a_params.gravity;
 			_lean = a_params.lean;
+			_stepScale = a_params.stepScale;
 		}//end initParams()
 		
 		override public function startAction():void
@@ -50,9 +52,9 @@
 	
 		override public function update(a_time:Number):void
 		{
-			var z:Number = _gameElement.position.z + _calc.thrustVector.x * AppSettings.instance.simulationStepScale;
+			var z:Number = _gameElement.position.z + _calc.thrustVector.x * _stepScale;
 			var y:Number = _calc.calculateHeightAtPos(z);
-			var x:Number = _gameElement.position.x + _lean * AppSettings.instance.simulationStepScale;
+			var x:Number = _gameElement.position.x + _lean * _stepScale;
 				
 			var rad:Number = Math.atan2(y - _gameElement.position.y, z - _gameElement.position.z);
 	

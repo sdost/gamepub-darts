@@ -49,7 +49,8 @@
 							DartsGlobals.instance.gameManager.currentDart.position.y,
 							0,
 							_thrust,
-							_lean
+							_lean,
+							AppSettings.instance.simulationStepScale
 						);
 					} 
 					else

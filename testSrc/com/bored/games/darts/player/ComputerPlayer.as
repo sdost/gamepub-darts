@@ -57,7 +57,7 @@
 			DartsGlobals.instance.gameManager.currentDart.position.x = _previousPosition.x;
 			DartsGlobals.instance.gameManager.currentDart.position.y = _previousPosition.y;
 			
-			TweenMax.to( DartsGlobals.instance.gameManager.currentDart.position, 1, { 
+			_throwTween = TweenMax.to( DartsGlobals.instance.gameManager.currentDart.position, 1, { 
 				x: _finalShot.point.x, 
 				y: _finalShot.point.y,
 				delay:2,
@@ -67,7 +67,7 @@
 		
 		public function cancelShot():void
 		{
-			TweenMax.killAll();
+			_throwTween.kill();
 		}//end cancelShot()
 		
 		override public function processShotResult(a_points:int, a_multiplier:int):void
@@ -95,7 +95,8 @@
 				_finalShot.point.y,
 				0,
 				AppSettings.instance.aiOptimumThrust + (Math.random() * thrustErrorRange * 2) - thrustErrorRange,
-				(Math.random() * leanErrorRange * 2) - leanErrorRange
+				(Math.random() * leanErrorRange * 2) - leanErrorRange,
+				_profile.stepScale
 			);
 		}//end performThrow()
 		

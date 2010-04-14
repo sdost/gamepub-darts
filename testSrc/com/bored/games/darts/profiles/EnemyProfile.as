@@ -29,6 +29,12 @@
 		public var weight:int;
 		public var bio:String;
 		
+		public var firstMatch:String;
+		public var rematch:String;
+		
+		public var winMatch:String;
+		public var lossMatch:String;
+		
 		public function EnemyProfile(a_name:String = "") 
 		{
 			super(a_name);
@@ -65,7 +71,7 @@
 			
 			(DartsGlobals.instance.cpuPlayer as ComputerPlayer).cancelShot();
 			
-			TweenMax.killAll();
+			//TweenMax.killAll();
 			
 			for each( var ability:Ability in DartsGlobals.instance.cpuPlayer.abilities )
 			{
