@@ -30,6 +30,10 @@
 		{
 		}//end initializeStore()
 		
+		public function initiatePurchase(a_itemID:String):void
+		{
+		}//end initiatePurchase()
+		
 		public function showStore():void
 		{
 		}//end showStore()

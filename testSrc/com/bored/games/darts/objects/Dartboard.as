@@ -42,8 +42,48 @@
 			
 			_sprite = a_img;
 			
+			initSounds();
+			
 			resetBlockedSections();
 		}//end constructor()
+		
+		private function initSounds():void
+		{
+			DartsGlobals.instance.soundManager.addLibrarySound(darthit_noscore1_mp3, "noscore_1");
+			DartsGlobals.instance.soundManager.addLibrarySound(darthit_noscore2_mp3, "noscore_2");
+			DartsGlobals.instance.soundManager.addLibrarySound(darthit_noscore3_mp3, "noscore_3");
+			DartsGlobals.instance.soundManager.addLibrarySound(darthit_noscore4_mp3, "noscore_4");
+			
+			DartsGlobals.instance.soundManager.addLibrarySound(darthit_opponentsingle1_mp3, "opponent_single_1");
+			DartsGlobals.instance.soundManager.addLibrarySound(darthit_opponentsingle2_mp3, "opponent_single_2");
+			DartsGlobals.instance.soundManager.addLibrarySound(darthit_opponentsingle3_mp3, "opponent_single_3");
+			DartsGlobals.instance.soundManager.addLibrarySound(darthit_opponentsingle4_mp3, "opponent_single_4");
+			
+			DartsGlobals.instance.soundManager.addLibrarySound(darthit_opponentdouble1_mp3, "opponent_double_1");
+			DartsGlobals.instance.soundManager.addLibrarySound(darthit_opponentdouble2_mp3, "opponent_double_2");
+			DartsGlobals.instance.soundManager.addLibrarySound(darthit_opponentdouble3_mp3, "opponent_double_3");
+			DartsGlobals.instance.soundManager.addLibrarySound(darthit_opponentdouble4_mp3, "opponent_double_4");
+			
+			DartsGlobals.instance.soundManager.addLibrarySound(darthit_opponenttriple1_mp3, "opponent_triple_1");
+			DartsGlobals.instance.soundManager.addLibrarySound(darthit_opponenttriple2_mp3, "opponent_triple_2");
+			DartsGlobals.instance.soundManager.addLibrarySound(darthit_opponenttriple3_mp3, "opponent_triple_3");
+			DartsGlobals.instance.soundManager.addLibrarySound(darthit_opponenttriple4_mp3, "opponent_triple_4");
+			
+			DartsGlobals.instance.soundManager.addLibrarySound(darthit_playersingle1_mp3, "player_single_1");
+			DartsGlobals.instance.soundManager.addLibrarySound(darthit_playersingle2_mp3, "player_single_2");
+			DartsGlobals.instance.soundManager.addLibrarySound(darthit_playersingle3_mp3, "player_single_3");
+			DartsGlobals.instance.soundManager.addLibrarySound(darthit_playersingle4_mp3, "player_single_4");
+			
+			DartsGlobals.instance.soundManager.addLibrarySound(darthit_playerdouble1_mp3, "player_double_1");
+			DartsGlobals.instance.soundManager.addLibrarySound(darthit_playerdouble2_mp3, "player_double_2");
+			DartsGlobals.instance.soundManager.addLibrarySound(darthit_playerdouble3_mp3, "player_double_3");
+			DartsGlobals.instance.soundManager.addLibrarySound(darthit_playerdouble4_mp3, "player_double_4");
+			
+			DartsGlobals.instance.soundManager.addLibrarySound(darthit_playertriple1_mp3, "player_triple_1");
+			DartsGlobals.instance.soundManager.addLibrarySound(darthit_playertriple2_mp3, "player_triple_2");
+			DartsGlobals.instance.soundManager.addLibrarySound(darthit_playertriple3_mp3, "player_triple_3");
+			DartsGlobals.instance.soundManager.addLibrarySound(darthit_playertriple4_mp3, "player_triple_4");
+		}//end initSounds()
 		
 		public function initModels():void
 		{
@@ -89,13 +129,15 @@
 				if (_pattern.test(objects[0].parent.name) && !_blockedSections[objects[0].parent.name]) 
 				{
 					var arr:Array = objects[0].parent.name.split("_");
+					
+					playHitSound(DartsGlobals.instance.gameManager.currentPlayer, Number(arr[2]));
+					
 					DartsGlobals.instance.gameManager.scoreManager.submitThrow(DartsGlobals.instance.gameManager.currentPlayer, Number(arr[1]), Number(arr[2]));
 					
 					var text:AnimatedText = new AnimatedText(Number(arr[1]) + " x " + Number(arr[2]), new CooperStd(), TweenMax.fromTo(null, 0.75, { x: p.x, y: p.y, alpha: 1 }, { x: p.x, y: p.y - 15, alpha: 0 } ));
 					text.alpha = 0;
 					_sprite.addChild(text);
-					text.animate();
-	
+					text.animate();					
 					
 					DartsGlobals.instance.gameManager.players[DartsGlobals.instance.gameManager.currentPlayer-1].processShotResult(Number(arr[1]), Number(arr[2]));
 					
@@ -112,6 +154,27 @@
 			
 			return false;			
 		}//end submitDartPosition()
+		
+		private function playHitSound(a_player:int, multiplier:int):void
+		{
+			var version:int = Math.ceil(Math.random() * 4);
+			
+			var player:String = a_player == DartsGlobals.instance.localPlayer.playerNum ? "player" : "opponent";
+			
+			var score:String;
+			if ( multiplier == 3 ) {
+				score = "triple";
+			} else if ( multiplier == 2 ) {
+				score = "double";
+			} else if ( multiplier == 1 ) {
+				score = "single";
+			} else {
+				DartsGlobals.instance.soundManager.playSound("noscore_" + version.toString());
+				return;
+			}
+			
+			DartsGlobals.instance.soundManager.playSound(player + "_" + score + "_" + version.toString(), 0.8, 80);
+		}
 		
 		public function blockSection(a_section:int):void
 		{

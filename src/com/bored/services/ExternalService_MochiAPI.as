@@ -108,16 +108,22 @@
 			
 			_storeItems = arg;
 			for each( var storeItem:Object in _storeItems )
-			{
+			{				
 				var item:StoreItem = new StoreItem();
 				item.name = storeItem.name;
+				item.id = storeItem.id;
 				item.description = storeItem.desc;
 				item.price = int(storeItem.cost);
-				item.iconURL = storeItem.imgURL;
+				item.storeIcon = storeItem.properties["storeskin"];
 				items.push(item);
 			}
 			this.dispatchEvent(new ObjectEvent(STORE_ITEMS_AVAILABLE, items));
         }//end storeItems()
+		
+		override public function initiatePurchase(a_itemID:String):void
+		{
+			MochiCoins.showItem({ x:150, y: 150, item: a_itemID });
+		}//end initiatePurchase()
 		
 		override public function loadGameData(a_callback:Function):void
 		{

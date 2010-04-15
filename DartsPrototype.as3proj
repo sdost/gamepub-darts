@@ -63,6 +63,7 @@
     <element path="swcLibs_includeAll\greensock.swc" />
     <element path="swfLibs_includeAll\MonsterproofLogo.swc" />
     <element path="swfLibs_includeAll\GamestoreScreen.swc" />
+    <element path="swfLibs_includeAll\Sounds.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>

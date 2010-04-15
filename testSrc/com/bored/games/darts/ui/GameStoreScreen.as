@@ -9,6 +9,7 @@
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
+	import com.sven.utils.ImageFactory;
 	import flash.display.Bitmap;
 	import flash.display.Loader;
 	import flash.display.MovieClip;
@@ -32,6 +33,7 @@
 	{
 		public static const BACK_CLICKED_EVT:String = "backClicked";
 		
+		/*
 		private var _dartFilterBtnImg:MovieClip;
 		private var _dartFilterBtn:MightyButton;
 		
@@ -40,14 +42,10 @@
 		
 		private var _premiumFilterBtnImg:MovieClip;
 		private var _premiumFilterBtn:MightyButton;
+		*/
 		
 		private var _backBtnImg:MovieClip;
 		private var _backBtn:MightyButton;
-		
-		private var _purchaseBtnImg:MovieClip;
-		private var _purchaseBtn:MightyButton;
-		
-		private var _totalCostField:TextField;
 		
 		private var _storeSlotOne:MovieClip;
 		private var _storeSlotTwo:MovieClip;
@@ -107,12 +105,13 @@
 			var descendantsDict:Dictionary = super.buildFrom(a_img, a_buildFromAllDescendants);
 			
 			// now build ourselves from the descendantsDict.
+			/*
 			_dartFilterBtnImg = descendantsDict["dartsFilterBtn_mc"] as MovieClip;
 			_powersFilterBtnImg = descendantsDict["powersFilterBtn_mc"] as MovieClip;
 			_premiumFilterBtnImg = descendantsDict["premiumFilterBtn_mc"] as MovieClip;
+			*/
 			
 			_backBtnImg = descendantsDict["backBtn_mc"] as MovieClip;
-			_purchaseBtnImg = descendantsDict["purchaseBtn_mc"] as MovieClip;
 			
 			_storeSlotOne = descendantsDict["storeSlotOne_mc"] as MovieClip;
 			_storeSlotTwo = descendantsDict["storeSlotTwo_mc"] as MovieClip;
@@ -143,6 +142,7 @@
 			_pageSelectLeftBtnImg = descendantsDict["pageSelectLeftBtn_mc"] as MovieClip;
 			_pageSelectRightBtnImg = descendantsDict["pageSelectRightBtn_mc"] as MovieClip;
 			
+			/*
 			if (_dartFilterBtnImg)
 			{
 				_dartFilterBtn = new MightyButton(_dartFilterBtnImg, false);
@@ -175,6 +175,7 @@
 			{
 				throw new Error("GameConfirmScreen::buildFrom(): _premiumFilterBtnImg=" + _premiumFilterBtnImg);
 			}
+			*/
 			
 			if (_backBtnImg)
 			{
@@ -187,22 +188,11 @@
 				throw new Error("GameConfirmScreen::buildFrom(): _backBtnImg=" + _backBtnImg);
 			}
 			
-			if (_purchaseBtnImg)
-			{
-				_purchaseBtn = new MightyButton(_purchaseBtnImg, false);
-				_purchaseBtn.pause(false);
-				//_dartFilterBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onDartFilterClicked, false, 0, true);
-			}
-			else
-			{
-				throw new Error("GameConfirmScreen::buildFrom(): _purchaseBtnImg=" + _purchaseBtnImg);
-			}
-			
 			if (_slotAddBtnImgOne)
 			{
 				_slotAddBtnOne = new MightyButton(_slotAddBtnImgOne, false);
 				_slotAddBtnOne.pause(false);
-				//_dartFilterBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onDartFilterClicked, false, 0, true);
+				_slotAddBtnOne.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onAddSlotOneClicked, false, 0, true);
 			}
 			else
 			{
@@ -213,7 +203,7 @@
 			{
 				_slotAddBtnTwo = new MightyButton(_slotAddBtnImgTwo, false);
 				_slotAddBtnTwo.pause(false);
-				//_dartFilterBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onDartFilterClicked, false, 0, true);
+				_slotAddBtnTwo.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onAddSlotTwoClicked, false, 0, true);
 			}
 			else
 			{
@@ -224,7 +214,7 @@
 			{
 				_slotAddBtnThree = new MightyButton(_slotAddBtnImgThree, false);
 				_slotAddBtnThree.pause(false);
-				//_dartFilterBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onDartFilterClicked, false, 0, true);
+				_slotAddBtnThree.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onAddSlotThreeClicked, false, 0, true);
 			}
 			else
 			{
@@ -235,7 +225,7 @@
 			{
 				_pageSelectLeftBtn = new MightyButton(_pageSelectLeftBtnImg, false);
 				_pageSelectLeftBtn.pause(false);
-				//_dartFilterBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onDartFilterClicked, false, 0, true);
+				_pageSelectLeftBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onPageLeftClicked, false, 0, true);
 			}
 			else
 			{
@@ -246,7 +236,7 @@
 			{
 				_pageSelectRightBtn = new MightyButton(_pageSelectRightBtnImg, false);
 				_pageSelectRightBtn.pause(false);
-				//_dartFilterBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onDartFilterClicked, false, 0, true);
+				_pageSelectRightBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onPageRightClicked, false, 0, true);
 			}
 			else
 			{
@@ -292,10 +282,26 @@
 			
 		}//end addedToStage()
 		
+		private function onPageLeftClicked(evt:Event):void
+		{
+			_itemInd -= 3;
+			
+			if (_itemInd < 0) _itemInd = Math.floor(_items.length / 3) * 3;
+			
+			refreshStoreList();
+		}
+		
+		private function onPageRightClicked(evt:Event):void
+		{
+			_itemInd += 3;
+			
+			if (_itemInd > _items.length) _itemInd = 0;
+			
+			refreshStoreList();
+		}
+		
 		private function onLoadOneComplete(evt:Event):void
 		{
-			trace("onLoadOneComplete -> " + _slotLoaderOne.content);
-			
 			_slotLoaderOne.removeEventListener(Event.COMPLETE, onLoadOneComplete);
 			
 			_slotBitmapOne.bitmapData = Bitmap(_slotLoaderOne.content).bitmapData;
@@ -304,8 +310,6 @@
 		
 		private function onLoadTwoComplete(evt:Event):void
 		{
-			trace("onLoadTwoComplete -> " + _slotLoaderTwo.content);
-			
 			_slotLoaderTwo.removeEventListener(Event.COMPLETE, onLoadTwoComplete);
 			
 			_slotBitmapTwo.bitmapData = Bitmap(_slotLoaderTwo.content).bitmapData;
@@ -314,13 +318,26 @@
 		
 		private function onLoadThreeComplete(evt:Event):void
 		{
-			trace("onLoadThreeComplete -> " + _slotLoaderThree.content);
-			
 			_slotLoaderThree.removeEventListener(Event.COMPLETE, onLoadThreeComplete);
 			
 			_slotBitmapThree.bitmapData = Bitmap(_slotLoaderThree.content).bitmapData;
 			_slotBitmapThree.smoothing = true;
 		}//end onLoadThreeComplete()
+		
+		private function onAddSlotOneClicked(evt:Event):void
+		{
+			DartsGlobals.instance.externalServices.initiatePurchase(_items[_itemInd].id);
+		}//end onAddSlotOneClicked()
+		
+		private function onAddSlotTwoClicked(evt:Event):void
+		{
+			DartsGlobals.instance.externalServices.initiatePurchase(_items[_itemInd + 1].id);
+		}//end onAddSlotTwoClicked()
+		
+		private function onAddSlotThreeClicked(evt:Event):void
+		{
+			DartsGlobals.instance.externalServices.initiatePurchase(_items[_itemInd + 2].id);
+		}//end onAddSlotThreeClicked()
 		
 		private function onStoreItemsAvailable(a_evt:ObjectEvent):void
 		{
@@ -332,28 +349,61 @@
 		
 		private function refreshStoreList():void
 		{
-			if ( _items.length > 0 ) 
+			if ( _items.length > _itemInd ) 
 			{
-				_slotLoaderOne = new Loader();
-				_slotLoaderOne.addEventListener(Event.COMPLETE, onLoadOneComplete);
-				_slotLoaderOne.load( new URLRequest(_items[_itemInd].iconURL) );
-				_slotPriceOne.text = _items[_itemInd].price.toString();
+				_slotBitmapOne.visible = true;
+				_slotBitmapOne.bitmapData = ImageFactory.getBitmapDataByQualifiedName(_items[_itemInd].storeIcon, 270, 103);
+				_slotBitmapOne.smoothing = true;
+				
+				_slotPriceOne.text = "$" + _items[_itemInd].price.toString();
+				
+				_slotAddBtnOne.pause(false);
+				_slotAddBtnOne.buttonContents.visible = true;
+			} else {
+				_slotBitmapOne.visible = false;
+				
+				_slotPriceOne.text = "";
+				
+				_slotAddBtnOne.pause(true);
+				_slotAddBtnOne.buttonContents.visible = false;
 			}
 			
-			if ( _items.length > 1 ) 
+			if ( _items.length > _itemInd+1 ) 
 			{
-				_slotLoaderOne = new Loader();
-				_slotLoaderTwo.addEventListener(Event.COMPLETE, onLoadTwoComplete);
-				_slotLoaderTwo.load( new URLRequest(_items[_itemInd + 1].iconURL) );
-				_slotPriceTwo.text = _items[_itemInd + 1].price.toString();	
+				_slotBitmapTwo.visible = true;
+				_slotBitmapTwo.bitmapData = ImageFactory.getBitmapDataByQualifiedName(_items[_itemInd+1].storeIcon, 270, 103);
+				_slotBitmapTwo.smoothing = true;
+				
+				_slotPriceTwo.text = "$" + _items[_itemInd + 1].price.toString();	
+				
+				_slotAddBtnTwo.pause(false);
+				_slotAddBtnTwo.buttonContents.visible = true;
+			} else {
+				_slotBitmapTwo.visible = false;
+				
+				_slotPriceTwo.text = "";
+				
+				_slotAddBtnTwo.pause(true);
+				_slotAddBtnTwo.buttonContents.visible = false;
 			}
 			
-			if ( _items.length > 2 ) 
+			if ( _items.length > _itemInd+2 ) 
 			{
-				_slotLoaderOne = new Loader();
-				_slotLoaderThree.addEventListener(Event.COMPLETE, onLoadThreeComplete);
-				_slotLoaderThree.load( new URLRequest(_items[_itemInd + 2].iconURL) );
-				_slotPriceThree.text = _items[_itemInd + 2].price.toString();
+				_slotBitmapThree.visible = true;
+				_slotBitmapThree.bitmapData = ImageFactory.getBitmapDataByQualifiedName(_items[_itemInd+2].storeIcon, 270, 103);
+				_slotBitmapThree.smoothing = true;
+				
+				_slotPriceThree.text = "$" + _items[_itemInd + 2].price.toString();
+				
+				_slotAddBtnThree.pause(false);
+				_slotAddBtnThree.buttonContents.visible = true;
+			} else {
+				_slotBitmapThree.visible = false;
+				
+				_slotPriceThree.text = "";
+				
+				_slotAddBtnThree.pause(true);
+				_slotAddBtnThree.buttonContents.visible = false;
 			}
 		}//end refreshStoreList()
 		
