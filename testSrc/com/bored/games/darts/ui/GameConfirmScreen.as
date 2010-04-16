@@ -45,11 +45,8 @@
 		private var _playBtn:MightyButton;
 		private var _playBtnImg:MovieClip;
 		
-		private var _dartUpgradeBtn:MightyButton;
-		private var _dartUpgradeBtnImg:MovieClip;
-		
-		private var _powersUpgradeBtn:MightyButton;
-		private var _powersUpgradeBtnImg:MovieClip;
+		private var _storeBtn:MightyButton;
+		private var _storeBtnImg:MovieClip;
 		
 		private var _dartSelectLeftBtn:MightyButton;
 		private var _dartSelectLeftBtnImg:MovieClip;
@@ -104,8 +101,7 @@
 			_backBtnImg = descendantsDict["backBtn_mc"] as MovieClip;
 			_playBtnImg = descendantsDict["playBtn_mc"] as MovieClip;
 			
-			_dartUpgradeBtnImg = descendantsDict["dartUpgrade_mc"] as MovieClip;
-			_powersUpgradeBtnImg = descendantsDict["powersUpgrade_mc"] as MovieClip;
+			_storeBtnImg = descendantsDict["store_mc"] as MovieClip;
 			
 			_dartSelectLeftBtnImg = descendantsDict["dartSelectLeft_mc"] as MovieClip;
 			_dartSelectRightBtnImg = descendantsDict["dartSelectRight_mc"] as MovieClip;
@@ -150,26 +146,15 @@
 				throw new Error("GameConfirmScreen::buildFrom(): _playBtnImg=" + _playBtnImg);
 			}
 			
-			if (_dartUpgradeBtnImg)
+			if (_storeBtnImg)
 			{
-				_dartUpgradeBtn = new MightyButton(_dartUpgradeBtnImg, false);
-				_dartUpgradeBtn.pause(false);
-				_dartUpgradeBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onUpgradeClicked, false, 0, true);
+				_storeBtn = new MightyButton(_storeBtnImg, false);
+				_storeBtn.pause(false);
+				_storeBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onStoreClicked, false, 0, true);
 			}
 			else
 			{
-				throw new Error("GameConfirmScreen::buildFrom(): _dartUpgradeBtnImg=" + _dartUpgradeBtnImg);
-			}
-			
-			if (_powersUpgradeBtnImg)
-			{
-				_powersUpgradeBtn = new MightyButton(_powersUpgradeBtnImg, false);
-				_powersUpgradeBtn.pause(false);
-				_powersUpgradeBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onUpgradeClicked, false, 0, true);
-			}
-			else
-			{
-				throw new Error("GameConfirmScreen::buildFrom(): _powersUpgradeBtnImg=" + _powersUpgradeBtnImg);
+				throw new Error("GameConfirmScreen::buildFrom(): _storeBtnImg=" + _storeBtnImg);
 			}
 			
 			if (_dartSelectLeftBtnImg)
@@ -345,7 +330,7 @@
 			
 		}//end addedToStage()
 		
-		private function onUpgradeClicked(a_evt:Event):void
+		private function onStoreClicked(a_evt:Event):void
 		{
 			this.dispatchEvent(new Event(LAUNCH_STORE_EVT));
 			

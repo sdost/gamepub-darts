@@ -12,7 +12,6 @@
 	{
 		private static const NAME:String = "com.bored.games.darts.actions.BeeLineTrajectoryAction";
 		
-		private var _speed:Number = 0;
 		private var _stepScale:Number = 0;
 		
 		public function BeeLineTrajectoryAction(a_gameElement:GameElement, a_params:Object = null) 
@@ -22,7 +21,6 @@
 		
 		override public function initParams(a_params:Object):void
 		{
-			_speed = a_params.thrust;
 			_stepScale = a_params.stepScale;
 		}//end initParams()
 		
@@ -32,12 +30,17 @@
 			
 			_gameElement.roll = 0;
 		}//end startAction()
+		
+		public function get minimumThrust():int
+		{
+			return 0;
+		}//end get minimumThrust()
 	
 		override public function update(a_time:Number):void
 		{
 			_gameElement.roll += AppSettings.instance.dartRollSpeed;
 			
-			var z:Number = _gameElement.position.z + _speed * _stepScale;
+			var z:Number = _gameElement.position.z + AppSettings.instance.beelineSpeed * _stepScale;
 			_gameElement.position.z = z;	
 		}//end update()
 		

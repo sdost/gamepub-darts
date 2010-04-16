@@ -42,7 +42,7 @@
 			
 			if (_buttonDown) {
 				if ( !a_evt.button ) {
-					if ( _thrust >= AppSettings.instance.dartMinThrust ) 
+					if ( _thrust >= DartsGlobals.instance.gameManager.currentDart.minThrust ) 
 					{
 						DartsGlobals.instance.gameManager.playerThrow(
 							DartsGlobals.instance.gameManager.currentDart.position.x,

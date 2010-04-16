@@ -5,7 +5,7 @@
 	 * ...
 	 * @author sam
 	 */
-	public class Action
+	public dynamic class Action
 	{
 		protected var _actionName:String;
 		protected var _gameElement:GameElement;

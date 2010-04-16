@@ -122,6 +122,11 @@
 		{
 			return _radius;
 		}//end get radius()
+		
+		public function get minThrust():int
+		{
+			return _throwAction.minimumThrust;
+		}//end get minThrust()
 
 		public function initThrowParams(releaseX:Number, releaseY:Number, releaseZ:Number, thrust:Number, angle:Number, grav:Number, lean:Number, stepScale:Number):void
 		{

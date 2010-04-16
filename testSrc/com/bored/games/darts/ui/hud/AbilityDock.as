@@ -149,7 +149,8 @@
 		{
 			for ( var i:int = 0; i < DartsGlobals.instance.localPlayer.abilities.length; i++ )
 			{
-				if ( DartsGlobals.instance.localPlayer.abilities[i] && DartsGlobals.instance.localPlayer.abilities[i].ready && _abilityBox[i].paused ) {
+				if ( DartsGlobals.instance.localPlayer.abilities[i] && DartsGlobals.instance.localPlayer.abilities[i].ready && _abilityBox[i].paused ) 
+				{
 					_abilityBox[i].pause(false);
 					DartsGlobals.instance.localPlayer.abilities[i].icon.filters = [];
 					((_abilityBox[i].buttonContents as Sprite).getChildByName("icon_holder") as MovieClip).addChild(DartsGlobals.instance.localPlayer.abilities[i].icon);
@@ -161,6 +162,16 @@
 				} else if ( !DartsGlobals.instance.localPlayer.abilities[i].ready &&  !_abilityBox[i].paused ) {
 					_abilityBox[i].pause(true);
 					DartsGlobals.instance.localPlayer.abilities[i].icon.filters = [_cmFilter];
+				}
+				
+				var turnsLeft:int = DartsGlobals.instance.gameManager.abilityManager.turnsLeft(DartsGlobals.instance.localPlayer.abilities[i]);
+				if ( turnsLeft > 0 ) 
+				{
+					_abilityCountText[i].text = turnsLeft.toString();
+				}
+				else 
+				{
+					_abilityCountText[i].text = "";
 				}
 			}
 		}//end update()

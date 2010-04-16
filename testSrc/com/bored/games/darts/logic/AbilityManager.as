@@ -53,6 +53,19 @@
 			}
 		}//end processTurn()
 		
+		public function turnsLeft(a_ability:Ability):int
+		{
+			for ( var i:int = 0; i < _abilities.length; i++ )
+			{
+				if ( _abilities[i] == a_ability )
+				{
+					return Math.ceil(_timers[i] / 2);
+				}
+			}
+			
+			return 0;
+		}//end turnsLeft()
+		
 		public function get abilities():Vector.<Ability>
 		{
 			return _abilities;

@@ -59,7 +59,7 @@
 			
 			// TODO: activate...
 			
-			return _refreshTime;
+			return _refreshTime * 2;
 		}//end useAbility()
 		
 	}//end Ability

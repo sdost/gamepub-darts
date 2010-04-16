@@ -49,6 +49,11 @@
 			_gameElement.pitch = 90;
 			_gameElement.roll = 0;
 		}//end startAction()
+		
+		public function get minimumThrust():int
+		{
+			return AppSettings.instance.dartMinThrust;
+		}//end get minimumThrust()
 	
 		override public function update(a_time:Number):void
 		{
