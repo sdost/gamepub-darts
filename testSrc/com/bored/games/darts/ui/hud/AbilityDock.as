@@ -183,6 +183,8 @@
 		
 		private function onAbilityClicked(a_evt:ButtonEvent):void
 		{
+			if (DartsGlobals.instance.gameManager.currentPlayer != DartsGlobals.instance.localPlayer.playerNum) return;
+			
 			for ( var i:int = 0; i < _abilityBox.length; i++ )
 			{
 				if ( _abilityBox[i] == a_evt.mightyButton ) 

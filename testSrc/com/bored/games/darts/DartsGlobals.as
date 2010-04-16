@@ -1,9 +1,12 @@
 ﻿package com.bored.games.darts
 {
+	import com.sven.utils.AppSettings;
+	import flash.utils.getDefinitionByName;
 	import com.bored.games.darts.logic.DartsGameLogic;
 	import com.bored.games.darts.player.DartsPlayer;
 	import com.bored.games.darts.profiles.EnemyProfile;
 	import com.bored.games.darts.profiles.UserProfile;
+	import com.bored.games.darts.ui.hud.ControlPanel;
 	import com.bored.services.AbstractExternalService;
 	import com.sven.managers.ModalDisplayManager;
 	import com.reintroducing.sound.SoundManager;
@@ -66,6 +69,8 @@
 		private var _cpuPlayer:DartsPlayer;
 		
 		private var _soundManager:SoundManager;
+		
+		private var _controlPanel:ControlPanel;
 		
 		public function DartsGlobals(a_singletonEnforcer:DartsGlobals_SingletonEnforcer) 
 		{
@@ -267,6 +272,17 @@
 			return _debugBuild;
 			
 		}//end get isDebugBuild()
+		
+		public function setupControlPanel():void
+		{
+			var cls:Class = getDefinitionByName(AppSettings.instance.controlPanelMovie) as Class;
+			_controlPanel = new ControlPanel(new cls());
+			DartsGlobals.instance.optionsInterfaceSpace.addChild(_controlPanel);
+			_controlPanel.x = AppSettings.instance.controlPanelPositionX;
+			_controlPanel.y = AppSettings.instance.controlPanelPositionY;
+			_controlPanel.registerSoundManager(DartsGlobals.instance.soundManager);
+			_controlPanel.show();
+		}//end setupControlPanel()
 		
 		public function showModalPopup(a_content:Class = null, a_prompt:Object = null):void
 		{

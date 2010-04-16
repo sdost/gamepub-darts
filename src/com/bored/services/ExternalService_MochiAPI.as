@@ -1,5 +1,6 @@
 ﻿package com.bored.services 
 {
+	import com.sven.utils.AppSettings;
 	import com.bored.services.AbstractExternalService;
 	import com.inassets.events.ObjectEvent;
 	import flash.events.Event;
@@ -35,7 +36,10 @@
             MochiCoins.addEventListener(MochiCoins.ITEM_OWNED, coinsEvent);
 			MochiCoins.addEventListener(MochiCoins.STORE_HIDE, onStoreHide);
 			
-            MochiSocial.showLoginWidget( { x:0, y:0 } );
+            MochiSocial.showLoginWidget( {
+				x: AppSettings.instance.mochiDockPositionX,
+				y: AppSettings.instance.mochiDockPositionY 
+			});
 
             MochiInventory.addEventListener(MochiInventory.READY, inventoryReady );
             MochiInventory.addEventListener(MochiInventory.WRITTEN, inventorySynced );

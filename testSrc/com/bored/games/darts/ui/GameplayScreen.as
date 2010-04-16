@@ -139,14 +139,6 @@
 			_abilityDock.registerAbilityManager(DartsGlobals.instance.gameManager.abilityManager);
 			_abilityDock.show();
 			
-			cls = getDefinitionByName(AppSettings.instance.controlPanelMovie) as Class;
-			_controlPanel = new ControlPanel(new cls());
-			DartsGlobals.instance.optionsInterfaceSpace.addChild(_controlPanel);
-			_controlPanel.x = AppSettings.instance.controlPanelPositionX;
-			_controlPanel.y = AppSettings.instance.controlPanelPositionY;
-			_controlPanel.registerSoundManager(DartsGlobals.instance.soundManager);
-			_controlPanel.show();
-			
 			if (this.stage)
 			{
 				addedToStage();
@@ -250,7 +242,7 @@
 			
 			removeChild(_view);
 			
-			//DartsGlobals.instance.optionsInterfaceSpace.removeChild(_throwIndicator);
+			DartsGlobals.instance.optionsInterfaceSpace.removeChild(_throwIndicator);
 			DartsGlobals.instance.optionsInterfaceSpace.removeChild(_scoreBoard);
 			DartsGlobals.instance.optionsInterfaceSpace.removeChild(_abilityDock);
 			

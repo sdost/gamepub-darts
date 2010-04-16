@@ -48,7 +48,7 @@
 		override public function onEnter():void
 		{			
 			trace("GameConfirm::onEnter()");
-					
+			
 			var gameConfirmScreenImg:MovieClip;
 			
 			try

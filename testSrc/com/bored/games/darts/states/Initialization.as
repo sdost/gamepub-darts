@@ -5,6 +5,7 @@
 	import com.bored.games.darts.logic.DartsGameLogic;
 	import com.bored.games.darts.profiles.UserProfile;
 	import com.bored.games.darts.states.statemachines.GameFSM;
+	import com.bored.games.darts.ui.hud.ControlPanel;
 	import com.bored.services.AbstractExternalService;
 	import com.inassets.statemachines.Finite.State;
 	import com.inassets.statemachines.interfaces.IStateMachine;
@@ -24,7 +25,7 @@
 	 * @author Samuel Dost
 	 */
 	public class Initialization extends State
-	{		
+	{			
 		public function Initialization(a_name:String, a_stateMachine:IStateMachine)
 		{
 			super(a_name, a_stateMachine);

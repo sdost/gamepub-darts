@@ -50,6 +50,8 @@
 		override public function onEnter():void
 		{			
 			trace("GameSelect::onEnter()");
+			
+			DartsGlobals.instance.setupControlPanel();
 					
 			var opponentSelectScreenImg:MovieClip;
 			
