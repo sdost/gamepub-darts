@@ -73,7 +73,7 @@
 				
 				_abilityBox[0] = new MightyButton(_abilityGraphic[0], false);
 				_abilityBox[0].buttonContents.addEventListener(MouseEvent.ROLL_OVER, onMouseOver, false, 0, true);
-				_abilityBox[0].buttonContents.addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
+				//_abilityBox[0].buttonContents.addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
 				_abilityBox[0].addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onAbilityClicked, false, 0, true);
 				
 				_abilityBurst[0].gotoAndStop(1);
@@ -94,7 +94,7 @@
 				
 				_abilityBox[1] = new MightyButton(_abilityGraphic[1], false);
 				_abilityBox[1].buttonContents.addEventListener(MouseEvent.ROLL_OVER, onMouseOver, false, 0, true);
-				_abilityBox[1].buttonContents.addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
+				//_abilityBox[1].buttonContents.addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
 				_abilityBox[1].addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onAbilityClicked, false, 0, true);
 				
 				_abilityBurst[1].gotoAndStop(1);
@@ -115,7 +115,7 @@
 				
 				_abilityBox[2] = new MightyButton(_abilityGraphic[2], false);
 				_abilityBox[2].buttonContents.addEventListener(MouseEvent.ROLL_OVER, onMouseOver, false, 0, true);
-				_abilityBox[2].buttonContents.addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
+				//_abilityBox[2].buttonContents.addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
 				_abilityBox[2].addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onAbilityClicked, false, 0, true);
 				
 				_abilityBurst[2].gotoAndStop(1);
@@ -180,11 +180,6 @@
 		{
 			Mouse.show();
 		}//end onMouseOver()
-		
-		private function onMouseOut(a_evt:MouseEvent):void
-		{
-			Mouse.hide();
-		}//end onMouseOut()
 		
 		private function onAbilityClicked(a_evt:ButtonEvent):void
 		{

@@ -65,8 +65,6 @@
 			DartsGlobals.instance.processModalQueue();
 			
 			DartsGlobals.instance.gameManager.pause(false);
-			
-			Mouse.hide();
 		}//end onOkayClicked()
 		
 	}//end AchievementsModal

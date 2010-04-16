@@ -4,6 +4,7 @@
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.ui.buttons.ToggleButton;
 	import com.bored.games.darts.ui.modals.AchievementsModal;
+	import com.bored.games.darts.ui.modals.HelpModal;
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
@@ -97,7 +98,7 @@
 				_helpBtn.pause(false);
 				_helpBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, onMouseOver, false, 0, true);
 				//_helpBtn.buttonContents.addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
-				//_helpBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onMusicButtonClick, false, 0, true);
+				_helpBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onHelpButtonClick, false, 0, true);
 			}
 			else
 			{
@@ -153,11 +154,6 @@
 			Mouse.show();
 		}//end onMouseOver()
 		
-		private function onMouseOut(a_evt:MouseEvent):void
-		{
-			Mouse.hide();
-		}//end onMouseOut()
-		
 		public function show():void
 		{
 			Tweener.addTween(this, {alpha:1, time:2 } );
@@ -185,6 +181,15 @@
 		{
 			//TODO: handle music toggle
 		}//end onMusicButtonClick()
+		
+		private function onHelpButtonClick(a_evt:Event):void
+		{			
+			DartsGlobals.instance.gameManager.pause(true);
+			
+			DartsGlobals.instance.showModalPopup(HelpModal);
+			
+			Mouse.show();
+		}//end onHelpButtonClick()
 		
 		private function onTrophyButtonClick(a_evt:Event):void
 		{			
