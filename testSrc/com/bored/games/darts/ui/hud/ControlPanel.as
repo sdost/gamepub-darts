@@ -1,7 +1,9 @@
 ﻿package com.bored.games.darts.ui.hud 
 {
 	import caurina.transitions.Tweener;
+	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.ui.buttons.ToggleButton;
+	import com.bored.games.darts.ui.modals.AchievementsModal;
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
@@ -68,7 +70,7 @@
 				_soundBtn = new ToggleButton(_soundBtnImg, false);
 				_soundBtn.pause(false);
 				_soundBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, onMouseOver, false, 0, true);
-				_soundBtn.buttonContents.addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
+				//_soundBtn.buttonContents.addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
 				_soundBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onSoundButtonClick, false, 0, true);
 			}
 			else
@@ -81,7 +83,7 @@
 				_musicBtn = new ToggleButton(_musicBtnImg, false);
 				_musicBtn.pause(false);
 				_musicBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, onMouseOver, false, 0, true);
-				_musicBtn.buttonContents.addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
+				//_musicBtn.buttonContents.addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
 				_musicBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onMusicButtonClick, false, 0, true);
 			}
 			else
@@ -94,7 +96,7 @@
 				_helpBtn = new ToggleButton(_helpBtnImg, false);
 				_helpBtn.pause(false);
 				_helpBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, onMouseOver, false, 0, true);
-				_helpBtn.buttonContents.addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
+				//_helpBtn.buttonContents.addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
 				//_helpBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onMusicButtonClick, false, 0, true);
 			}
 			else
@@ -107,8 +109,8 @@
 				_trophyBtn = new ToggleButton(_trophyBtnImg, false);
 				_trophyBtn.pause(false);
 				_trophyBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, onMouseOver, false, 0, true);
-				_trophyBtn.buttonContents.addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
-				//_trophyBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onMusicButtonClick, false, 0, true);
+				//_trophyBtn.buttonContents.addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
+				_trophyBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onTrophyButtonClick, false, 0, true);
 			}
 			else
 			{
@@ -120,7 +122,7 @@
 				_quitBtn = new MightyButton(_quitBtnImg, false);
 				_quitBtn.pause(false);
 				_quitBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, onMouseOver, false, 0, true);
-				_quitBtn.buttonContents.addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
+				//_quitBtn.buttonContents.addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
 				_quitBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onQuitButtonClick, false, 0, true);
 			}
 			else
@@ -183,6 +185,15 @@
 		{
 			//TODO: handle music toggle
 		}//end onMusicButtonClick()
+		
+		private function onTrophyButtonClick(a_evt:Event):void
+		{			
+			DartsGlobals.instance.gameManager.pause(true);
+			
+			DartsGlobals.instance.showModalPopup(AchievementsModal);
+			
+			Mouse.show();
+		}//end onTrophyButtonClick()
 		
 		private function onQuitButtonClick(a_evt:Event):void
 		{
