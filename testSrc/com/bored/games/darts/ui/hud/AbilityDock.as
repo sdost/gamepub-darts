@@ -4,6 +4,7 @@
 	import com.bored.games.darts.abilities.Ability;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.logic.AbilityManager;
+	import com.hybrid.ui.ToolTip;
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
@@ -12,7 +13,9 @@
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.filters.BlurFilter;
+	import flash.text.Font;
 	import flash.text.TextField;
+	import flash.text.TextFormat;
 	import flash.ui.Mouse;
 	import flash.utils.Dictionary;
 	import flash.filters.ColorMatrixFilter;
@@ -33,6 +36,8 @@
 		private var _mouseHiddenState:Boolean = false;
 		
 		private var _cmFilter:ColorMatrixFilter;
+		
+		private var _reusableTip:ToolTip;
 		
 		public function AbilityDock(a_img:Sprite, a_buildFromAllDescendants:Boolean = false, a_bAddContents:Boolean = true)
 		{
@@ -66,6 +71,30 @@
 			_abilityGraphic[0] = descendantsDict["box_1"] as MovieClip;
 			_abilityBurst[0] = descendantsDict["burstOne_mc"] as MovieClip;
 			
+			var myFont:Font = new CooperStd();
+			
+			var titleFont:TextFormat = new TextFormat();
+			titleFont.font = myFont.fontName;
+			titleFont.size = 20;
+			titleFont.bold = true;
+			titleFont.color = 0x000000;
+			
+			var consoleFont:TextFormat = new TextFormat();
+			consoleFont.font = myFont.fontName;
+			consoleFont.size = 16;
+			consoleFont.bold = false;
+			consoleFont.color = 0x000000;
+			
+			_reusableTip = new ToolTip();
+			_reusableTip.colors = [ 0xFFFFFF, 0xFFFFCD6 ];
+			_reusableTip.tipHeight = 100;
+			_reusableTip.cornerRadius = 20;
+			_reusableTip.align = "center";
+			_reusableTip.border = 0x000000;
+			_reusableTip.borderSize = 1;
+			_reusableTip.titleFormat = titleFont;
+			_reusableTip.contentFormat = consoleFont;
+			
 			if ( _abilityGraphic[0] ) 
 			{
 				_abilityCountText[0].text = "";
@@ -75,6 +104,8 @@
 				_abilityBox[0].buttonContents.addEventListener(MouseEvent.ROLL_OVER, onMouseOver, false, 0, true);
 				//_abilityBox[0].buttonContents.addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
 				_abilityBox[0].addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onAbilityClicked, false, 0, true);
+				
+				_abilityBox[0].addEventListener(ButtonEvent.MIGHTYBUTTON_MOUSE_OVER_EVT, showToolTip, false, 0, true);
 				
 				_abilityBurst[0].gotoAndStop(1);
 			}
@@ -97,6 +128,8 @@
 				//_abilityBox[1].buttonContents.addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
 				_abilityBox[1].addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onAbilityClicked, false, 0, true);
 				
+				_abilityBox[1].addEventListener(ButtonEvent.MIGHTYBUTTON_MOUSE_OVER_EVT, showToolTip, false, 0, true);
+				
 				_abilityBurst[1].gotoAndStop(1);
 			}
 			else
@@ -117,6 +150,8 @@
 				_abilityBox[2].buttonContents.addEventListener(MouseEvent.ROLL_OVER, onMouseOver, false, 0, true);
 				//_abilityBox[2].buttonContents.addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
 				_abilityBox[2].addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onAbilityClicked, false, 0, true);
+				
+				_abilityBox[2].addEventListener(ButtonEvent.MIGHTYBUTTON_MOUSE_OVER_EVT, showToolTip, false, 0, true);
 				
 				_abilityBurst[2].gotoAndStop(1);
 			}
@@ -175,6 +210,17 @@
 				}
 			}
 		}//end update()
+		
+		private function showToolTip(a_evt:ButtonEvent):void
+		{
+			for ( var i:int = 0; i < _abilityBox.length; i++ )
+			{
+				if ( _abilityBox[i] == a_evt.mightyButton ) 
+				{	
+					_reusableTip.show(_abilityBox[i].buttonContents, DartsGlobals.instance.localPlayer.abilities[i].name, DartsGlobals.instance.localPlayer.abilities[i].description);
+				}
+			}
+		}//end showToolTip()
 		
 		private function onMouseOver(a_evt:MouseEvent):void
 		{

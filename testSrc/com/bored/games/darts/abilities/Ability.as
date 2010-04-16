@@ -9,15 +9,17 @@
 	public class Ability
 	{	
 		private var _name:String;
+		private var _description:String;
 		private var _armed:Boolean;
 		private var _icon:Sprite;
 		
 		private var _player:DartsPlayer;
 		private var _refreshTime:int;
 		
-		public function Ability(a_name:String, a_icon:Sprite, a_time:int = 0) 
+		public function Ability(a_name:String, a_desc:String, a_icon:Sprite, a_time:int = 0) 
 		{
 			_name = a_name;
+			_description = a_desc;
 			_icon = a_icon;
 			_refreshTime = a_time;
 			_armed = true;
@@ -27,6 +29,11 @@
 		{
 			return _name;
 		}//end get name()
+		
+		public function get description():String
+		{
+			return _description;
+		}//end get description()
 		
 		public function set owner(a_player:DartsPlayer):void
 		{
@@ -47,6 +54,11 @@
 		{
 			return _icon;
 		}//end get icon()
+		
+		public function get refreshTime():int
+		{
+			return _refreshTime;
+		}//end get refreshTime()
 		
 		public function armAbility():void
 		{

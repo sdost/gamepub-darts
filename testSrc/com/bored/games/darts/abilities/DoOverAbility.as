@@ -19,7 +19,7 @@
 		public function DoOverAbility(a_time:int) 
 		{
 			var icon:Sprite = SpriteFactory.getSpriteByQualifiedName("com.bored.games.darts.assets.icons.DoOverIcon_MC");
-			super(NAME, icon, a_time);	
+			super(NAME, "Get a Mulligan on your last dart throw.", icon, a_time);	
 		}//end constructor()
 		
 		override public function useAbility():int

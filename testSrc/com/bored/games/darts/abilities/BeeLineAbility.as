@@ -17,7 +17,7 @@
 		public function BeeLineAbility(a_time:int) 
 		{
 			var icon:Sprite = SpriteFactory.getSpriteByQualifiedName("com.bored.games.darts.assets.icons.BeelineIcon_MC");
-			super(NAME, icon, a_time);			
+			super(NAME, "Darts go straight to where you aim.", icon, a_time);			
 		}//end constructor()
 		
 		override public function useAbility():int

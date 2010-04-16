@@ -64,6 +64,10 @@
 		private var _abilityIconTwo:MovieClip;
 		private var _abilityIconThree:MovieClip;
 		
+		private var _abilityOnePowerGauge:MovieClip;
+		private var _abilityTwoPowerGauge:MovieClip;
+		private var _abilityThreePowerGauge:MovieClip;
+		
 		private var _abilityNameOne:TextField;
 		private var _abilityNameTwo:TextField;
 		private var _abilityNameThree:TextField;
@@ -71,6 +75,10 @@
 		private var _opponentAbilityIconOne:MovieClip;
 		private var _opponentAbilityIconTwo:MovieClip;
 		private var _opponentAbilityIconThree:MovieClip;
+		
+		private var _opponentAbilityOnePowerGauge:MovieClip;
+		private var _opponentAbilityTwoPowerGauge:MovieClip;
+		private var _opponentAbilityThreePowerGauge:MovieClip;
 		
 		private var _skinIndex:int;
 		private var _skinBitmap:Bitmap;
@@ -116,6 +124,10 @@
 			_abilityIconTwo = descendantsDict["abilityTwo_mc"] as MovieClip;
 			_abilityIconThree = descendantsDict["abilityThree_mc"] as MovieClip;
 			
+			_abilityOnePowerGauge = descendantsDict["abilityOnePowerGauge_mc"] as MovieClip;
+			_abilityTwoPowerGauge = descendantsDict["abilityTwoPowerGauge_mc"] as MovieClip;
+			_abilityThreePowerGauge = descendantsDict["abilityThreePowerGauge_mc"] as MovieClip;
+			
 			_abilityNameOne = descendantsDict["abilityOne_text"] as TextField;
 			_abilityNameTwo = descendantsDict["abilityTwo_text"] as TextField;
 			_abilityNameThree = descendantsDict["abilityThree_text"] as TextField;
@@ -123,6 +135,10 @@
 			_opponentAbilityIconOne = descendantsDict["opponentAbilityOne_mc"] as MovieClip;
 			_opponentAbilityIconTwo = descendantsDict["opponentAbilityTwo_mc"] as MovieClip;
 			_opponentAbilityIconThree = descendantsDict["opponentAbilityThree_mc"] as MovieClip;
+			
+			_opponentAbilityOnePowerGauge = descendantsDict["opponentAbilityOnePowerGauge_mc"] as MovieClip;
+			_opponentAbilityTwoPowerGauge = descendantsDict["opponentAbilityTwoPowerGauge_mc"] as MovieClip;
+			_opponentAbilityThreePowerGauge = descendantsDict["opponentAbilityThreePowerGauge_mc"] as MovieClip;
 			
 			if (_backBtnImg)
 			{
@@ -228,63 +244,69 @@
 				throw new Error("GameConfirmScreen::buildFrom(): _opponentPortrait=" + _opponentPortrait);
 			}
 			
-			if (_abilityIconOne && _abilityNameOne)
+			if (_abilityIconOne && _abilityNameOne && _abilityOnePowerGauge)
 			{
 				_abilityIconOne.addChild(DartsGlobals.instance.localPlayer.abilities[0].icon);
 				_abilityNameOne.text = DartsGlobals.instance.localPlayer.abilities[0].name;
+				_abilityOnePowerGauge.gotoAndStop(10 - DartsGlobals.instance.localPlayer.abilities[0].refreshTime + 1);
 			}
 			else
 			{
 				throw new Error("GameConfirmScreen::buildFrom(): _abilityIconOne=" + _abilityIconOne);
 			}
 			
-			if (_abilityIconTwo && _abilityNameTwo)
+			if (_abilityIconTwo && _abilityNameTwo && _abilityTwoPowerGauge)
 			{
 				_abilityIconTwo.addChild(DartsGlobals.instance.localPlayer.abilities[1].icon);
 				_abilityNameTwo.text = DartsGlobals.instance.localPlayer.abilities[1].name;
+				_abilityTwoPowerGauge.gotoAndStop(10 - DartsGlobals.instance.localPlayer.abilities[1].refreshTime + 1);
 			}
 			else
 			{
 				throw new Error("GameConfirmScreen::buildFrom(): _abilityIconTwo=" + _abilityIconTwo);
 			}
 			
-			if (_abilityIconThree && _abilityNameThree)
+			if (_abilityIconThree && _abilityNameThree && _abilityThreePowerGauge)
 			{
 				_abilityIconThree.addChild(DartsGlobals.instance.localPlayer.abilities[2].icon);
 				_abilityNameThree.text = DartsGlobals.instance.localPlayer.abilities[2].name;
+				_abilityThreePowerGauge.gotoAndStop(10 - DartsGlobals.instance.localPlayer.abilities[2].refreshTime + 1);
 			}
 			else
 			{
 				throw new Error("GameConfirmScreen::buildFrom(): _abilityIconThree=" + _abilityIconThree);
 			}
 			
-			if (_opponentAbilityIconOne)
+			if (_opponentAbilityIconOne && _opponentAbilityOnePowerGauge)
 			{
 				_opponentAbilityIconOne.addChild(DartsGlobals.instance.cpuPlayer.abilities[0].icon);
 				DartsGlobals.instance.cpuPlayer.abilities[0].icon.width = 15;
 				DartsGlobals.instance.cpuPlayer.abilities[0].icon.height = 15;
+				_opponentAbilityOnePowerGauge.gotoAndStop(10 - DartsGlobals.instance.cpuPlayer.abilities[0].refreshTime + 1);
 			}
 			else
 			{
 				throw new Error("GameConfirmScreen::buildFrom(): _opponentAbilityIconOne=" + _opponentAbilityIconOne);
 			}
 			
-			if (_opponentAbilityIconTwo)
+			if (_opponentAbilityIconTwo && _opponentAbilityTwoPowerGauge)
 			{
 				_opponentAbilityIconTwo.addChild(DartsGlobals.instance.cpuPlayer.abilities[1].icon);
 				DartsGlobals.instance.cpuPlayer.abilities[1].icon.width = 15;
 				DartsGlobals.instance.cpuPlayer.abilities[1].icon.height = 15;
+				_opponentAbilityTwoPowerGauge.gotoAndStop(10 - DartsGlobals.instance.cpuPlayer.abilities[1].refreshTime + 1);
 			}
 			else
 			{
 				throw new Error("GameConfirmScreen::buildFrom(): _opponentAbilityIconTwo=" + _opponentAbilityIconTwo);
 			}
 			
-			if (_opponentAbilityIconThree)
+			if (_opponentAbilityIconThree && _opponentAbilityThreePowerGauge)
 			{
 				_opponentAbilityIconThree.addChild(DartsGlobals.instance.cpuPlayer.abilities[2].icon);
 				DartsGlobals.instance.cpuPlayer.abilities[2].icon.width = 15;
 				DartsGlobals.instance.cpuPlayer.abilities[2].icon.height = 15;
+				_opponentAbilityThreePowerGauge.gotoAndStop(10 - DartsGlobals.instance.cpuPlayer.abilities[2].refreshTime + 1);
 			}
 			else
 			{
