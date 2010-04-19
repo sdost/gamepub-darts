@@ -85,7 +85,11 @@
 			
 			if (_playerTwoBanter) 
 			{
-				_playerTwoBanter.text = "Blah blah...";
+				if( DartsGlobals.instance.localPlayer.record.wonGame() ) {
+					_playerTwoBanter.text = DartsGlobals.instance.enemyProfile.winMatch;
+				} else {
+					_playerTwoBanter.text = DartsGlobals.instance.enemyProfile.lossMatch;
+				}
 			}
 			else
 			{

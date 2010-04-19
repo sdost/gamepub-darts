@@ -1,6 +1,8 @@
 ﻿package com.bored.games.darts
 {
+	import com.jac.soundManager.SoundController;
 	import com.sven.utils.AppSettings;
+	import flash.media.SoundChannel;
 	import flash.utils.getDefinitionByName;
 	import com.bored.games.darts.logic.DartsGameLogic;
 	import com.bored.games.darts.player.DartsPlayer;
@@ -9,7 +11,7 @@
 	import com.bored.games.darts.ui.hud.ControlPanel;
 	import com.bored.services.AbstractExternalService;
 	import com.sven.managers.ModalDisplayManager;
-	import com.reintroducing.sound.SoundManager;
+	import com.jac.soundManager.SoundManager;
 	import flash.display.Sprite;
 	import flash.display.Stage;
 	import flash.events.Event;
@@ -207,13 +209,13 @@
 			return _gameManager;
 		}//end get gameManager()
 		
-		public function set soundManager(a_manager:SoundManager):void
-		{
-			_soundManager = a_manager;
-		}//end set soundManager()
-		
 		public function get soundManager():SoundManager
 		{
+			if (!_soundManager) 
+			{
+				_soundManager = SoundManager.getInstance();
+			}
+			
 			return _soundManager;
 		}//end get soundManager()
 		

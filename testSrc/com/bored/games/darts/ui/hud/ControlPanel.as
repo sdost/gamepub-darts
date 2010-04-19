@@ -8,7 +8,7 @@
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
-	import com.reintroducing.sound.SoundManager;
+	import com.jac.soundManager.SoundManager;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -166,15 +166,8 @@
 		
 		private function onSoundButtonClick(a_evt:Event):void
 		{
-			_muteSound = !_muteSound;
-			
-			_soundBtn.toggleOn = _muteSound;
-			
-			if(_muteSound) {
-				_soundManager.muteAllSounds();
-			} else {
-				_soundManager.unmuteAllSounds();
-			}
+			_soundManager.toggleMute();
+			_soundBtn.toggleOn = _soundManager.isMuted;
 		}//end onSoundButtonClick()
 		
 		private function onMusicButtonClick(a_evt:Event):void

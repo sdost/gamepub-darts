@@ -30,6 +30,9 @@
 			this.weight = 70;
 			this.bio = "Crazy sociopath.";
 			
+			this.firstMatch = "A brosay eegra bitva for you and me! I hope you're dobby, you merzky sod!";
+			this.winMatch = "I hope you'll accept my humble Appypolly loggy for being so baddiwad to a fine chelloveck like yourself.";
+			
 			this.portrait = new Anthony_Portrait_BMP(150, 150);
 			
 			this.setDartSkin(new DartSkin(ImageFactory.getBitmapDataByQualifiedName("dartuv_anthony", AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight), dae_DartShaft.data, dae_DartFlightModHex.data));

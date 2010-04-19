@@ -29,11 +29,11 @@
 		public var weight:int;
 		public var bio:String;
 		
-		public var firstMatch:String;
-		public var rematch:String;
+		public var firstMatch:String = "";
+		public var rematch:String = "";
 		
-		public var winMatch:String;
-		public var lossMatch:String;
+		public var winMatch:String = "";
+		public var lossMatch:String = "";
 		
 		public function EnemyProfile(a_name:String = "") 
 		{

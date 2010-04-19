@@ -85,7 +85,7 @@
 			
 			if (_playerTwoBanter) 
 			{
-				_playerTwoBanter.text = "Blah blah...";
+				_playerTwoBanter.text = DartsGlobals.instance.enemyProfile.firstMatch;
 			}
 			else
 			{

@@ -32,6 +32,8 @@
 			this.weight = 90;
 			this.bio = "A big guy with a big ego, and a big temper.";
 			
+			this.firstMatch = "Now you're snookered, you gormless Yank. Time to throw a spanner in the works of your arrows!";
+			
 			this.portrait = new BigBill_Portrait_BMP(150, 150);
 			
 			this.setDartSkin(new DartSkin(ImageFactory.getBitmapDataByQualifiedName("dartuv_bigbill", AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight), dae_DartShaft.data, dae_DartFlightPincer.data));
