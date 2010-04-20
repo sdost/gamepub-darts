@@ -37,7 +37,7 @@
 		{
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			
-			TweenMax.delayedCall(4, dismissPopup);
+			TweenMax.delayedCall(10, dismissPopup);
 		}//end addedToStage()
 		
 		override protected function buildFrom(a_img:Sprite, a_buildFromAllDescendants:Boolean = true):Dictionary

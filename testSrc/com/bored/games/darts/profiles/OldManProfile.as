@@ -63,7 +63,7 @@
 			
 			// Second Turn!
 			addShot(a_list, 20, 1, false, "boost");
-			addShot(a_list, 1, 1, false, "boost");
+			addShot(a_list, 1, 2, false, "boost");
 			addShot(a_list, 18, 3, false, "boost");
 			
 			// Third Turn!
