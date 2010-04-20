@@ -40,6 +40,11 @@
 			return _modifier;
 		}//end get risk()
 		
+		public function toString():String
+		{
+			return _point + ", " + points + ", " + multiplier + ", " + modifier;
+		}//end toString()
+		
 	}//end AIShotCandidate
 
 }//end com.bored.games.darts.logic

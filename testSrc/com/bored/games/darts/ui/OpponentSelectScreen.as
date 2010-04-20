@@ -6,6 +6,7 @@
 	import com.bored.games.darts.profiles.BigBillProfile;
 	import com.bored.games.darts.profiles.IreneProfile;
 	import com.bored.games.darts.profiles.MackProfile;
+	import com.bored.games.darts.profiles.OldManProfile;
 	import com.bored.games.darts.profiles.ProfessorProfile;
 	import com.bored.games.darts.profiles.SammyProfile;
 	import com.bored.games.darts.profiles.SimonProfile;
@@ -143,7 +144,11 @@
 			{
 				_oldmanBtn = new MightyButton(_oldmanBtnImg, false);
 				_oldmanBtn.pause(false);
-				//_oldmanBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
+				_oldmanBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
+				
+				_oldmanBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_MOUSE_OVER_EVT, function(a_evt:Event):void {
+					_reusableTip.show(_oldmanBtnImg, "Old Man", "Tutorial");
+				}, false, 0, true);
 			}
 			else
 			{
@@ -303,6 +308,10 @@
 			
 			if(_oldmanBtn)
 			{
+				if (a_evt.mightyButton == _oldmanBtn) {
+					DartsGlobals.instance.enemyProfile = new OldManProfile();
+				}
+				
 				_oldmanBtn.pause(true);
 			}
 			
