@@ -53,9 +53,9 @@
 			var score:uint = _scoreboard[a_playerNum][a_section];
 			
 			if ( score < CLOSED_OUT ) 
-			{
-				score += a_multiplier;
-				if (score > CLOSED_OUT) score = CLOSED_OUT;
+			{				
+				if ( (score + a_multiplier) >= 3 ) score += CLOSED_OUT;
+				else score += a_multiplier;
 				
 				_scoreboard[a_playerNum][a_section] = score;
 			}

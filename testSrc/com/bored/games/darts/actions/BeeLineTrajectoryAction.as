@@ -1,6 +1,7 @@
 ﻿package com.bored.games.darts.actions 
 {
 	import com.bored.games.actions.Action;
+	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.objects.GameElement;
 	import com.sven.utils.AppSettings;
 	
@@ -29,6 +30,8 @@
 			super.startAction();
 			
 			_gameElement.roll = 0;
+			
+			DartsGlobals.instance.soundManager.getSoundControllerByID("abilitySounds").stop("beelineActivate");
 		}//end startAction()
 		
 		public function get minimumThrust():int

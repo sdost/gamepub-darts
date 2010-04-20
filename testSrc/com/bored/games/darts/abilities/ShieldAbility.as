@@ -2,6 +2,7 @@
 {
 	import com.bored.games.darts.abilities.Ability;
 	import com.bored.games.darts.DartsGlobals;
+	import com.jac.soundManager.SoundController;
 	import com.sven.utils.SpriteFactory;
 	import flash.display.Sprite;
 	

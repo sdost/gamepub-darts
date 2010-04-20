@@ -228,7 +228,7 @@
 				{
 					_abilityManager.processTurn();
 					_currentDart = null;
-					pause(true);
+					//pause(true);
 					DartsGlobals.instance.showModalPopup(ClickContinueModal);
 				} else {
 					nextDart();
@@ -282,7 +282,7 @@
 			_currentDart.position.x = AppSettings.instance.defaultStartPositionX;
 			_currentDart.position.y = AppSettings.instance.defaultStartPositionY;
 			_currentDart.position.z = AppSettings.instance.defaultStartPositionZ;
-			
+						
 			if( _lastDart ) {
 				_currentTurn.redoThrow();
 				_currentDart = _lastDart;
@@ -292,7 +292,7 @@
 				_currentDart.position.y = AppSettings.instance.defaultStartPositionY;
 				_currentDart.position.z = AppSettings.instance.defaultStartPositionZ;
 			}
-			
+						
 			_players[_currentPlayer-1].takeTheShot(_currentTurn.throwsRemaining);
 		}//end resetDart()
 		

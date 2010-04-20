@@ -38,7 +38,7 @@
 			DartsGlobals.instance.gameManager.endTurn();
 			DartsGlobals.instance.gameManager.startNewTurn();
 			
-			DartsGlobals.instance.gameManager.pause(false);
+			//DartsGlobals.instance.gameManager.pause(false);
 		}//end handleClick()
 		
 	}//end ClickContinueModal
