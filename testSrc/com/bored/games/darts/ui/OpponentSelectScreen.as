@@ -35,6 +35,7 @@
 	public class OpponentSelectScreen extends ContentHolder
 	{
 		public static const OPPONENT_CHOSEN_EVT:String = "OpponentChosenEvent";
+		public static const SHOW_STORE_EVT:String = "ShowStoreEvent";
 		
 		private var _background:Sprite;
 		private var _buildBackground:Boolean = false;
@@ -234,7 +235,11 @@
 			{
 				_barkeepBtn = new MightyButton(_barkeepBtnImg, false);
 				_barkeepBtn.pause(false);
-				//_barkeepBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
+				_barkeepBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
+				
+				_barkeepBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_MOUSE_OVER_EVT, function(a_evt:Event):void {
+					_reusableTip.show(_barkeepBtnImg, "Barkeep", "Store");
+				}, false, 0, true);
 			}
 			else
 			{
@@ -362,6 +367,11 @@
 			
 			if(_barkeepBtn)
 			{
+				if (a_evt.mightyButton == _barkeepBtn) {
+					this.dispatchEvent(new Event(SHOW_STORE_EVT));
+					return;
+				}
+				
 				_barkeepBtn.pause(true);
 			}
 			

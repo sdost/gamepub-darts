@@ -75,7 +75,7 @@
 		
 		private function onBackClicked(evt:Event):void
 		{
-			(this.stateMachine as GameFSM).transitionToStateNamed("GameConfirm");
+			(this.stateMachine as GameFSM).transitionToPreviousState();
 		}//end onBackClicked()
 				
 		private function finished(...args):void
@@ -88,6 +88,11 @@
 		 */
 		override public function onExit():void
 		{
+			_gameStoreScreen.removeEventListener(GameStoreScreen.BACK_CLICKED_EVT, onBackClicked);
+			
+			_gameStoreScreen.destroy();
+			
+			_gameStoreScreen = null;
 		}//end onExit()
 		
 	}//end class GameStore

@@ -119,6 +119,8 @@
 		 */
 		override public function onExit():void
 		{
+			DartsGlobals.instance.gameManager.removeEventListener(DartsGameLogic.GAME_END, onGameEnd);
+			
 			DartsGlobals.instance.stage.removeEventListener(Event.ENTER_FRAME, update);
 			DartsGlobals.instance.screenSpace.removeChild(_gameplayScreen);
 		}//end onExit()

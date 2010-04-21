@@ -5,6 +5,7 @@
 	import com.bored.games.darts.ui.buttons.ToggleButton;
 	import com.bored.games.darts.ui.modals.AchievementsModal;
 	import com.bored.games.darts.ui.modals.HelpModal;
+	import com.bored.games.darts.ui.modals.QuitModal;
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
@@ -195,7 +196,11 @@
 		
 		private function onQuitButtonClick(a_evt:Event):void
 		{
-			//TODO: handle quit button
+			DartsGlobals.instance.gameManager.pause(true);
+			
+			DartsGlobals.instance.showModalPopup(QuitModal);
+			
+			Mouse.show();
 		}//end onQuitButtonClick()
 		
 		override public function destroy(...args):void

@@ -33,6 +33,7 @@
 	 */
 	public class DartsGameLogic extends EventDispatcher
 	{		
+		public static const QUIT_TO_TITLE:String = "quitToTitle";
 		public static const GAME_END:String = "gameEnd";
 		public static const TURN_END:String = "turnEnd";
 		public static const THROW_END:String = "throwEnd";

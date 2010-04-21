@@ -93,6 +93,10 @@
 			_gameConfirmScreen.removeEventListener(GameConfirmScreen.BACK_CLICKED_EVT, onBack);
 			_gameConfirmScreen.removeEventListener(GameConfirmScreen.PLAY_CLICKED_EVT, onPlay);
 			_gameConfirmScreen.removeEventListener(GameConfirmScreen.LAUNCH_STORE_EVT, onLaunchStore);
+			
+			_gameConfirmScreen.destroy();
+			
+			_gameConfirmScreen = null;
 		}//end onExit()
 		
 	}//end class Initialization

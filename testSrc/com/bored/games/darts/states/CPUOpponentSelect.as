@@ -10,6 +10,7 @@
 	import com.bored.games.darts.assets.icons.Simon_Portrait_BMP;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.logic.CricketGameLogic;
+	import com.bored.games.darts.logic.DartsGameLogic;
 	import com.bored.games.darts.player.ComputerPlayer;
 	import com.bored.games.darts.player.LocalPlayer;
 	import com.bored.games.darts.states.statemachines.GameFSM;
@@ -60,6 +61,7 @@
 				opponentSelectScreenImg = new OpponentSelectScreen_MC();
 				_opponentSelectScreen = new OpponentSelectScreen(opponentSelectScreenImg, false, true);
 				_opponentSelectScreen.addEventListener(OpponentSelectScreen.OPPONENT_CHOSEN_EVT, onOpponentChosen, false, 0, true);
+				_opponentSelectScreen.addEventListener(OpponentSelectScreen.SHOW_STORE_EVT, onShowStoreChosen, false, 0, true);
 				DartsGlobals.instance.screenSpace.addChild(_opponentSelectScreen);
 			}
 			catch (e:Error)
@@ -85,6 +87,11 @@
 			this.finished();
 		}//end pickOpponent()
 		
+		public function onShowStoreChosen(a_evt:Event):void
+		{
+			(this.stateMachine as GameFSM).transitionToStateNamed("GameStore");
+		}//end pickOpponent()
+		
 		private function finished(...args):void
 		{
 			(this.stateMachine as GameFSM).transitionToNextState();
@@ -96,8 +103,12 @@
 		 */
 		override public function onExit():void
 		{
+			_opponentSelectScreen.removeEventListener(OpponentSelectScreen.OPPONENT_CHOSEN_EVT, onOpponentChosen);
+			_opponentSelectScreen.removeEventListener(OpponentSelectScreen.SHOW_STORE_EVT, onShowStoreChosen);
 			
+			_opponentSelectScreen.destroy();
 			
+			_opponentSelectScreen = null;
 		}//end onExit()
 		
 	}//end class Initialization

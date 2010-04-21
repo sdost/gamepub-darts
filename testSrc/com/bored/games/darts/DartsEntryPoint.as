@@ -37,7 +37,7 @@
 		{
 			super.addedToStage();
 		
-			_myStateMachine = new GameFSM();
+			DartsGlobals.instance.stateMachine = _myStateMachine = new GameFSM();
 			
 			addStates();
 			

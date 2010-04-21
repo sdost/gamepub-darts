@@ -12,6 +12,8 @@
 	{
 		protected var _states:Array;
 		
+		protected var _previousState:IState;
+		
 		protected var _initialized:Boolean = false;
 		
 		public function GameFSM(a_name:String = "GameFSM" ) 
@@ -79,8 +81,17 @@
 				throw new Error("GameFSM::transitionToNextState() Currently in last state, '" + (_states[indexOfCurrentState-1] as State).name + "', cannot continue!");
 			}
 			
+			_previousState = this._currState;
 			this.transition(_states[indexOfCurrentState] as IState);
 			
+		}//end transitionToNextState()
+		
+		public function transitionToPreviousState():void
+		{				
+			if(_previousState) {
+				this.transition(_previousState);
+				_previousState = null;
+			}
 		}//end transitionToNextState()
 		
 		public function transitionToStateNamed(a_stateName:String):void
@@ -99,6 +110,7 @@
 			
 			if(foundState)
 			{
+				_previousState = this._currState;
 				this.transition(foundState);
 			}
 			else

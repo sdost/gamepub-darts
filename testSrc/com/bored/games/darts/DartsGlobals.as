@@ -1,8 +1,11 @@
 ﻿package com.bored.games.darts
 {
+	import com.bored.games.darts.states.statemachines.GameFSM;
+	import com.inassets.statemachines.interfaces.IStateMachine;
 	import com.jac.soundManager.SoundController;
 	import com.sven.utils.AppSettings;
 	import flash.media.SoundChannel;
+	import flash.sampler.NewObjectSample;
 	import flash.utils.getDefinitionByName;
 	import com.bored.games.darts.logic.DartsGameLogic;
 	import com.bored.games.darts.player.DartsPlayer;
@@ -74,6 +77,8 @@
 		
 		private var _controlPanel:ControlPanel;
 		
+		private var _stateMachine:IStateMachine;
+		
 		public function DartsGlobals(a_singletonEnforcer:DartsGlobals_SingletonEnforcer) 
 		{
 			super();
@@ -113,6 +118,16 @@
 			_constructed = true;
 			
 		}//end construct()
+		
+		public function set stateMachine(a_fsm:IStateMachine):void
+		{
+			_stateMachine = a_fsm;
+		}//end set stateMachine()
+		
+		public function get stateMachine():IStateMachine
+		{
+			return _stateMachine;
+		}//end get stateMachine()	
 		
 		public function set stage(a_stage:Stage):void
 		{
@@ -284,7 +299,20 @@
 			_controlPanel.y = AppSettings.instance.controlPanelPositionY;
 			_controlPanel.registerSoundManager(DartsGlobals.instance.soundManager);
 			_controlPanel.show();
+			
+			_gameManager.addEventListener(DartsGameLogic.QUIT_TO_TITLE, onQuitToTitle, false, 0, true);			
 		}//end setupControlPanel()
+		
+		private function onQuitToTitle(a_evt:Event):void
+		{
+			_gameManager.removeEventListener(DartsGameLogic.QUIT_TO_TITLE, onQuitToTitle);
+			
+			DartsGlobals.instance.gameManager.cleanup();
+			
+			_controlPanel.hide();
+			
+			(this.stateMachine as GameFSM).transitionToStateNamed("Attract");
+		}//end onGameEnd()
 		
 		public function showModalPopup(a_content:Class = null, a_prompt:Object = null):void
 		{
