@@ -2,6 +2,7 @@
 {
 	import com.bored.games.darts.logic.DartsGameLogic;
 	import com.bored.games.events.InputStateEvent;
+	import com.bored.games.input.InputController;
 	/**
 	 * ...
 	 * @author sam
@@ -10,6 +11,11 @@
 	{		
 		protected var _thrust:Number = 0;
 		protected var _lean:Number = 0;
+		
+		public function startThrow(a_inputController:InputController):void
+		{
+			a_inputController.pause = false;
+		}//end startThrow()
 		
 		public function onInputUpdate(a_evt:InputStateEvent):void
 		{

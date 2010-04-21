@@ -29,6 +29,9 @@
 	 */
 	public class DartsGlobals extends EventDispatcher
 	{
+		public static const EASY:int = 0;
+		public static const HARD:int = 1;
+		
 		// protected var _optionsInterface:Sprite;  ??
 		
 		protected var _flashVars:Object;
@@ -78,6 +81,8 @@
 		private var _controlPanel:ControlPanel;
 		
 		private var _stateMachine:IStateMachine;
+		
+		private var _gameMode:int;
 		
 		public function DartsGlobals(a_singletonEnforcer:DartsGlobals_SingletonEnforcer) 
 		{
@@ -177,6 +182,16 @@
 			return _stage;
 			
 		}//end set stage()
+		
+		public function set gameMode(a_mode:int):void
+		{
+			_gameMode = a_mode;
+		}//end set gameMode()
+		
+		public function get gameMode():int
+		{
+			return _gameMode;
+		}//end set gameMode()
 		
 		public function get screenSpace():Sprite
 		{

@@ -1,5 +1,6 @@
 ﻿package com.bored.games.darts.states 
 {
+	import com.bored.games.darts.input.EasyThrowController;
 	import com.bored.games.darts.ui.modals.PreGameBanterModal;
 	import com.bored.games.input.InputController;
 	import com.bored.games.input.MouseInputController;
@@ -75,7 +76,12 @@
 		override public function onEnter():void
 		{									
 			_inputController = new MouseInputController(DartsGlobals.instance.screenSpace);
-			_throwController = new GestureThrowController();
+		
+			if( DartsGlobals.instance.gameMode == DartsGlobals.EASY ) {
+				_throwController = new EasyThrowController();
+			} else if ( DartsGlobals.instance.gameMode == DartsGlobals.HARD ) {
+				_throwController = new GestureThrowController();
+			}
 			
 			DartsGlobals.instance.gameManager.inputController = _inputController;
 			DartsGlobals.instance.gameManager.throwController = _throwController;

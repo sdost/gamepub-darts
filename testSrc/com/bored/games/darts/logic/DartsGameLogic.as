@@ -339,7 +339,7 @@
 		public function playerAim():void
 		{
 			_cursor.show();
-			_inputController.pause = false;
+			_throwController.startThrow(_inputController);
 		}//end playerAim()
 		
 		public function playerThrow(a_x:Number, a_y:Number, a_z:Number, a_thrust:Number, a_lean:Number, a_stepScale:Number):void
@@ -347,7 +347,23 @@
 			_cursor.hide();
 			_cursor.resetCursorImage();
 			_inputController.pause = true;
-			_currentDart.initThrowParams(a_x, a_y, a_z, a_thrust, AppSettings.instance.defaultAngle, AppSettings.instance.defaultGravity, a_lean, a_stepScale);
+			
+			var thrust:Number;
+			var lean:Number;
+			
+			if ( a_thrust < AppSettings.instance.dartSweetSpotMin ) {
+				thrust = a_thrust * 0.8;
+				lean = a_lean * 1.2
+			} else if ( a_thrust > AppSettings.instance.dartSweetSpotMax ) {
+				thrust = a_thrust * 1.2;
+				lean = a_lean * 1.2;
+			} else {
+				thrust = AppSettings.instance.dartSweetSpotThrust;
+				lean = a_lean;
+			}
+			
+			
+			_currentDart.initThrowParams(a_x, a_y, a_z, thrust, AppSettings.instance.defaultAngle, AppSettings.instance.defaultGravity, lean, a_stepScale);
 		}//end playerThrow()
 		
 		public function get cursor():Cursor

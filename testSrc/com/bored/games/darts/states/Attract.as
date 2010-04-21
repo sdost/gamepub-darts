@@ -55,12 +55,14 @@
 		
 		private function onEasyGameClicked(e_evt:Event):void
 		{
+			DartsGlobals.instance.gameMode = DartsGlobals.EASY;
 			(this.stateMachine as GameFSM).transitionToNextState();
 			
 		}//end onNewGameClicked();
 		
 		private function onHardGameClicked(e_evt:Event):void
 		{
+			DartsGlobals.instance.gameMode = DartsGlobals.HARD;
 			(this.stateMachine as GameFSM).transitionToNextState();
 		}//end onResumeGameClicked();
 		
