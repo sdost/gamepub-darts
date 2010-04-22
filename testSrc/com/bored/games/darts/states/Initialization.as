@@ -48,13 +48,28 @@
 			ext.init(AppSettings.instance.externalServicesGameId, DartsGlobals.instance.optionsInterfaceSpace);
 			DartsGlobals.instance.externalServices = ext;
 			
-			DartsGlobals.instance.playerProfile = new UserProfile();
-			DartsGlobals.instance.playerProfile.unlockSkin("basicplaid");
-			DartsGlobals.instance.playerProfile.unlockSkin("techno");
-			DartsGlobals.instance.playerProfile.unlockSkin("pearl");
-
-			this.finished();			
+			DartsGlobals.instance.externalServices.showLoginUI();
+			
+			DartsGlobals.instance.externalServices.addEventListener(AbstractExternalService.USER_DATA_AVAILABLE, onUserData, false, 0, true);
+			DartsGlobals.instance.externalServices.pullUserData();			
 		}//end onEnter()
+		
+		private function onUserData(a_evt:Event):void
+		{
+			DartsGlobals.instance.playerProfile = new UserProfile();
+			
+			DartsGlobals.instance.playerProfile.name = "blech";
+			DartsGlobals.instance.playerProfile.unlockSkin("basicplaid");
+			
+			for ( var key:String in DartsGlobals.instance.externalServices.data ) 
+			{				
+				if (DartsGlobals.instance.externalServices.data[key].properties["skinid"]) {
+					DartsGlobals.instance.playerProfile.unlockSkin(DartsGlobals.instance.externalServices.data[key].properties["skinid"]);
+				}
+			}
+			
+			this.finished();
+		}//end onUserData()
 		
 		private function finished(...args):void
 		{

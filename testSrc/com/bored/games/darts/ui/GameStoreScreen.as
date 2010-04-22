@@ -300,30 +300,6 @@
 			refreshStoreList();
 		}
 		
-		private function onLoadOneComplete(evt:Event):void
-		{
-			_slotLoaderOne.removeEventListener(Event.COMPLETE, onLoadOneComplete);
-			
-			_slotBitmapOne.bitmapData = Bitmap(_slotLoaderOne.content).bitmapData;
-			_slotBitmapOne.smoothing = true;
-		}//end onLoadOneComplete()
-		
-		private function onLoadTwoComplete(evt:Event):void
-		{
-			_slotLoaderTwo.removeEventListener(Event.COMPLETE, onLoadTwoComplete);
-			
-			_slotBitmapTwo.bitmapData = Bitmap(_slotLoaderTwo.content).bitmapData;
-			_slotBitmapTwo.smoothing = true;
-		}//end onLoadTwoComplete()
-		
-		private function onLoadThreeComplete(evt:Event):void
-		{
-			_slotLoaderThree.removeEventListener(Event.COMPLETE, onLoadThreeComplete);
-			
-			_slotBitmapThree.bitmapData = Bitmap(_slotLoaderThree.content).bitmapData;
-			_slotBitmapThree.smoothing = true;
-		}//end onLoadThreeComplete()
-		
 		private function onAddSlotOneClicked(evt:Event):void
 		{
 			DartsGlobals.instance.externalServices.initiatePurchase(_items[_itemInd].id);
@@ -342,6 +318,14 @@
 		private function onStoreItemsAvailable(a_evt:ObjectEvent):void
 		{
 			_items = a_evt.obj as Vector.<StoreItem>;
+			
+			trace("No of items: " + _items.length);
+			
+			for each( var item:StoreItem in _items) 
+			{
+				trace("Item: " + item);
+			}
+			
 			_itemInd = 0;
 			
 			refreshStoreList();

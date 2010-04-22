@@ -1,30 +1,48 @@
 ﻿package com.bored.services 
 {
 	import flash.events.EventDispatcher;
+	import flash.net.SharedObject;
 	/**
 	 * ...
 	 * @author sam
 	 */
 	public class AbstractExternalService extends EventDispatcher
 	{
+		protected var _userDataSO:SharedObject;
+		
 		public static const STORE_HIDDEN:String = "storeHidden";
 		public static const STORE_ITEMS_AVAILABLE:String = "storeItemsAvailable";
+		public static const USER_DATA_AVAILABLE:String = "userDataAvailable";
 		
 		public function AbstractExternalService()
 		{
+			_userDataSO = SharedObject.getLocal("localUserDataStore");
 		}//end constructor()
 		
 		public function init( a_gameId:String, a_parentClip:Object ):void
 		{
 		}//end init()
 		
-		public function loadGameData(a_callback:Function):void
+		public function showLoginUI():void
 		{
-		}//end loadeGameData()
+		}//end showLoginUI()
 		
-		public function saveGameData(a_callback:Function, a_data:Object):void
+		public function hideLoginUI():void
 		{
-		}//end saveGameData()
+		}//end hideLoginUI()
+		
+		public function pullUserData():void
+		{
+		}//end pullUserData()
+		
+		public function pushUserData():void
+		{
+		}//end pushUserData()
+		
+		public function get data():Object
+		{
+			return _userDataSO.data;
+		}//end getData()
 		
 		public function initializeStore():void
 		{
