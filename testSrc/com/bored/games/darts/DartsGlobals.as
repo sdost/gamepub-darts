@@ -252,12 +252,29 @@
 		public function set externalServices(a_ext:AbstractExternalService):void
 		{
 			_externalService = a_ext;
+			_externalService.addEventListener(AbstractExternalService.USER_INVENTORY_UPDATE, onInventoryUpdate, false, 0, true);
 		}//end set externalServices()
 		
 		public function get externalServices():AbstractExternalService
 		{
 			return _externalService;
 		}//end get externalServices()
+		
+		private function onInventoryUpdate(evt:Event):void
+		{
+			for each( var obj:Object in _externalService.getData("ownedItems") ) 
+			{
+				for ( var key:String in obj.properties ) 
+				{
+					trace("obj[" + key + "]: " + obj.properties[key]);
+				}				
+				
+				if (obj.properties.skinid && obj.properties.flightid) 
+				{
+					_playerProfile.unlockSkin(obj.properties.skinid, obj.properties.flightid);
+				}
+			}
+		}//end onInventoryUpdate()
 		
 		public function set localPlayer(a_player:DartsPlayer):void
 		{

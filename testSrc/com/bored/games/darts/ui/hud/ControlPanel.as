@@ -14,6 +14,7 @@
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.text.TextField;
 	import flash.ui.Mouse;
 	import flash.utils.Dictionary;
 	
@@ -23,6 +24,8 @@
 	 */
 	public class ControlPanel extends ContentHolder
 	{
+		private var _gameCash:TextField;
+		
 		private var _soundBtn:ToggleButton;
 		private var _soundBtnImg:MovieClip;
 		
@@ -61,11 +64,21 @@
 		{
 			var descendantsDict:Dictionary = super.buildFrom(a_img, a_buildFromAllDescendants);
 			
+			_gameCash = descendantsDict["gameCash_text"] as TextField;
 			_soundBtnImg = descendantsDict["soundBtn_mc"] as MovieClip;
 			_musicBtnImg = descendantsDict["musicBtn_mc"] as MovieClip;
 			_helpBtnImg = descendantsDict["helpBtn_mc"] as MovieClip;
 			_trophyBtnImg = descendantsDict["trophyBtn_mc"] as MovieClip;
 			_quitBtnImg = descendantsDict["quitBtn_mc"] as MovieClip;
+			
+			if (_gameCash)
+			{
+				_gameCash.text = "$" + DartsGlobals.instance.externalServices.getData("gameCash");
+			}
+			else
+			{
+				throw new Error("ControlPanel::buildFrom(): _gameCash=" + _gameCash);
+			}
 			
 			if (_soundBtnImg)
 			{

@@ -10,12 +10,15 @@
 	 */
 	public class DartSkin
 	{
+		public var skinid:String;
+		public var flightid:String;
+		
 		protected var _dartMaterial:BitmapMaterial;
 		protected var _shaftModelXML:XML;
 		protected var _flightModelXML:XML;
 		
 		public function DartSkin(a_bitmapData:BitmapData, a_shaftXML:XML, a_flightXML:XML) 
-		{
+		{			
 			_dartMaterial = new BitmapMaterial(a_bitmapData);
 			_dartMaterial.repeat = false;
 			_dartMaterial.smooth = true;

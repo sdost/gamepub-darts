@@ -26,6 +26,9 @@
 	 */
 	public class Initialization extends State
 	{			
+		private var _infoLoaded:Boolean;
+		private var _dataLoaded:Boolean;
+		
 		public function Initialization(a_name:String, a_stateMachine:IStateMachine)
 		{
 			super(a_name, a_stateMachine);
@@ -48,27 +51,46 @@
 			ext.init(AppSettings.instance.externalServicesGameId, DartsGlobals.instance.optionsInterfaceSpace);
 			DartsGlobals.instance.externalServices = ext;
 			
+			_infoLoaded = false;
+			_dataLoaded = false;
+			
 			DartsGlobals.instance.externalServices.showLoginUI();
 			
+			DartsGlobals.instance.externalServices.addEventListener(AbstractExternalService.USER_INFO_AVAILABLE, onUserInfo, false, 0, true);
 			DartsGlobals.instance.externalServices.addEventListener(AbstractExternalService.USER_DATA_AVAILABLE, onUserData, false, 0, true);
-			DartsGlobals.instance.externalServices.pullUserData();			
+			
+			if (DartsGlobals.instance.externalServices.loggedIn) 
+			{
+				DartsGlobals.instance.externalServices.getUserInfo();
+			}
+			
+			DartsGlobals.instance.externalServices.pullUserData();
 		}//end onEnter()
+		
+		private function onUserInfo(a_evt:Event):void
+		{
+			var userInfo:Object = DartsGlobals.instance.externalServices.getData("userInfo");
+			
+			DartsGlobals.instance.playerProfile.name = userInfo.name;
+			DartsGlobals.instance.playerProfile.unlockSkin("basicplaid", "heart");
+			
+			_infoLoaded = true;
+			
+			if( _infoLoaded && _dataLoaded ) this.finished();
+		}//end onUserData()
 		
 		private function onUserData(a_evt:Event):void
 		{
-			DartsGlobals.instance.playerProfile = new UserProfile();
+			var userInfo:Object = DartsGlobals.instance.externalServices.getData("userData");
 			
-			DartsGlobals.instance.playerProfile.name = "blech";
-			DartsGlobals.instance.playerProfile.unlockSkin("basicplaid");
+			var gameCash:int = DartsGlobals.instance.externalServices.getData("gameCash");
 			
-			for ( var key:String in DartsGlobals.instance.externalServices.data ) 
-			{				
-				if (DartsGlobals.instance.externalServices.data[key].properties["skinid"]) {
-					DartsGlobals.instance.playerProfile.unlockSkin(DartsGlobals.instance.externalServices.data[key].properties["skinid"]);
-				}
-			}
+			if (gameCash <= 0)
+				DartsGlobals.instance.externalServices.setData("gameCash", 0);
 			
-			this.finished();
+			_dataLoaded = true;
+			
+			if( _infoLoaded && _dataLoaded ) this.finished();
 		}//end onUserData()
 		
 		private function finished(...args):void

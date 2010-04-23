@@ -5,6 +5,7 @@
 	import com.inassets.events.ObjectEvent;
 	import flash.events.Event;
 	import mochi.as3.MochiCoins;
+	import mochi.as3.MochiEvents;
 	import mochi.as3.MochiInventory;
 	import mochi.as3.MochiServices;
 	import mochi.as3.MochiSocial;
@@ -27,20 +28,28 @@
 			super();
 		}//end constructor()
 		
+		override public function get loggedIn():Boolean
+		{
+			return MochiSocial.loggedIn;
+		}//end get loggedIn()
+		
 		override public function init( a_gameId:String, a_parentClip:Object ):void 
-		{			
+		{
+			MochiSocial.addEventListener(MochiSocial.USER_INFO, onUserInfo);
+			MochiSocial.addEventListener(MochiSocial.LOGGED_IN, onLoggedIn);
+			MochiCoins.addEventListener(MochiCoins.ITEM_OWNED, registerItem);
+			MochiCoins.addEventListener(MochiCoins.ITEM_NEW, newItem);
+			MochiCoins.addEventListener(MochiCoins.STORE_ITEMS, storeItems);
+			
 			MochiServices.connect(a_gameId, a_parentClip);
 		}//end init()
 		
 		override public function showLoginUI():void
-		{
-			MochiCoins.addEventListener(MochiCoins.ITEM_OWNED, registerItem);
-			MochiCoins.addEventListener(MochiCoins.ITEM_NEW, newItem);
-			
+		{			
 			MochiSocial.showLoginWidget( {
 				x: AppSettings.instance.mochiDockPositionX,
 				y: AppSettings.instance.mochiDockPositionY 
-			});
+			} );
 		}//end showLoginUI()
 		
 		override public function hideLoginUI():void
@@ -48,22 +57,60 @@
 			MochiSocial.hideLoginWidget();
 		}//end hideLoginUI()
 		
+		private function onLoggedIn( event:Object ):void
+		{
+			_userDataSO.data.userInfo = event;			
+			_userDataSO.flush();
+			
+			this.dispatchEvent(new Event(USER_INFO_AVAILABLE));
+		}//end onLoggedIn()
+		
+		private function onUserInfo( event:Object ):void
+		{
+			trace("Event: " + event);
+			
+			_userDataSO.data.userInfo = event;			
+			_userDataSO.flush();
+			
+			this.dispatchEvent(new Event(USER_INFO_AVAILABLE));
+		}//end onUserInfo()
+		
+		override public function getUserInfo():void
+		{
+			MochiSocial.getUserInfo();
+		}//end getUserInfo()
+		
 		private function registerItem( event:Object ):void
 		{
-			_userDataSO.data[event.id] = event;
+			var obj:Object = _userDataSO.data.ownedItems;
+			
+			if (!obj) obj = new Object();
+			
+			obj[event.id] = event;
+			_userDataSO.data.ownedItems = obj;			
+			
 			_userDataSO.flush();
+			
+			this.dispatchEvent(new Event(USER_INVENTORY_UPDATE))
 		}//end registerItem()
 		
 		private function newItem( event:Object ):void
 		{
-			_userDataSO.data[event.id] = event;
+			var obj:Object = _userDataSO.data.ownedItems;
+			
+			if (!obj) obj = new Object();
+			
+			obj[event.id] = event;
+			_userDataSO.data.ownedItems = obj;
+			
 			_userDataSO.flush();
+			
+			this.dispatchEvent(new Event(USER_INVENTORY_UPDATE))
 		}//end newItem()
 		
 		override public function initializeStore():void
 		{
 			MochiCoins.getStoreItems();
-			MochiCoins.addEventListener(MochiCoins.STORE_ITEMS, storeItems);
 		}//end initializeStore()
 		
 		private function storeItems(arg:Object):void 
@@ -78,7 +125,7 @@
 				item.id = storeItem.id;
 				item.description = storeItem.desc;
 				item.price = int(storeItem.cost);
-				item.storeIcon = storeItem.properties["storeskin"];
+				item.storeIcon = storeItem.properties["skinid"];
 				items.push(item);
 			}
 			this.dispatchEvent(new ObjectEvent(STORE_ITEMS_AVAILABLE, items));

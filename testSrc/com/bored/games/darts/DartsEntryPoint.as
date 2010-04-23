@@ -1,5 +1,6 @@
 ﻿package com.bored.games.darts
 {
+	import com.bored.games.darts.profiles.UserProfile;
 	import com.bored.games.darts.states.LogoSplash;
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.bored.games.animations.CutsceneManager;
@@ -47,6 +48,8 @@
 			
 			// set the global stage value.
 			DartsGlobals.instance.stage = this.stage;
+			
+			DartsGlobals.instance.playerProfile = new UserProfile();
 			
 			AppSettings.instance.load("development.config");
 			
