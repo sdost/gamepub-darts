@@ -134,10 +134,14 @@
 			_slotBitmapThree = new Bitmap();
 			_storeSlotThree.addChild(_slotBitmapThree);
 			
+			_items = new Vector.<StoreItem>();
+			
 			_powerItems = new Vector.<StoreItem>();
 			
 			_shieldSlot = new PowerSlot_MC();
-			(_shieldSlot.getChildByName("ability_mc") as MovieClip).addChild(new ShieldIcon_MC());
+			var icon1:MovieClip = new ShieldIcon_MC();
+			icon1.width = icon1.height = 70;
+			(_shieldSlot.getChildByName("ability_mc") as MovieClip).addChild(icon1);
 			(_shieldSlot.getChildByName("ability_text") as TextField).text = "Shield";
 			//(_shieldSlot.getChildByName("abilityPowerGauge_mc") as MovieClip).gotoAndStop(10 - DartsGlobals.instance.localPlayer.abilities[0].refreshTime + 1);
 			var shieldItem:StoreItem = new StoreItem();
@@ -146,7 +150,9 @@
 			_powerItems.push(shieldItem);
 			
 			_beelineSlot = new PowerSlot_MC();
-			(_beelineSlot.getChildByName("ability_mc") as MovieClip).addChild(new BeelineIcon_MC());
+			var icon2:MovieClip = new BeelineIcon_MC();
+			icon2.width = icon2.height = 70;
+			(_beelineSlot.getChildByName("ability_mc") as MovieClip).addChild(icon2);
 			(_beelineSlot.getChildByName("ability_text") as TextField).text = "Beeline";
 			//(_beelineSlot.getChildByName("abilityPowerGauge_mc") as MovieClip).gotoAndStop(10 - DartsGlobals.instance.localPlayer.abilities[1].refreshTime + 1);
 			var beelineItem:StoreItem = new StoreItem();
@@ -155,7 +161,9 @@
 			_powerItems.push(beelineItem);
 			
 			_dooverSlot = new PowerSlot_MC();
-			(_dooverSlot.getChildByName("ability_mc") as MovieClip).addChild(new DoOverIcon_MC());
+			var icon3:MovieClip = new DoOverIcon_MC();
+			icon3.width = icon3.height = 70;
+			(_dooverSlot.getChildByName("ability_mc") as MovieClip).addChild(icon3);
 			(_dooverSlot.getChildByName("ability_text") as TextField).text = "Do-Over";
 			//(_dooverSlot.getChildByName("abilityPowerGauge_mc") as MovieClip).gotoAndStop(10 - DartsGlobals.instance.localPlayer.abilities[2].refreshTime + 1);
 			var dooverItem:StoreItem = new StoreItem();
@@ -280,6 +288,8 @@
 				_background = new Sprite();
 			}
 			
+			refreshStoreList();
+			
 			return descendantsDict;
 			
 		}//end buildFrom()
@@ -324,6 +334,8 @@
 			_storeSlotTwo.addChild(_beelineSlot);
 			_storeSlotThree.addChild(_dooverSlot);
 			
+			refreshPowerGauge();
+			
 			processStoreItems(_powerItems);
 		}//end onPowersClicked()
 		
@@ -341,11 +353,18 @@
 			DartsGlobals.instance.externalServices.addEventListener(AbstractExternalService.STORE_ITEMS_AVAILABLE, onStoreItemsAvailable);
 		}//end onPowersClicked()
 		
+		private function refreshPowerGauge():void
+		{
+			(_shieldSlot.getChildByName("abilityPowerGauge_mc") as MovieClip).gotoAndStop(10 - DartsGlobals.instance.localPlayer.abilities[0].refreshTime + 1);
+			(_beelineSlot.getChildByName("abilityPowerGauge_mc") as MovieClip).gotoAndStop(10 - DartsGlobals.instance.localPlayer.abilities[1].refreshTime + 1);
+			(_dooverSlot.getChildByName("abilityPowerGauge_mc") as MovieClip).gotoAndStop(10 - DartsGlobals.instance.localPlayer.abilities[2].refreshTime + 1);
+		}//end refreshPowerGauge()
+		
 		private function onPageLeftClicked(evt:Event):void
 		{
 			_itemInd -= 3;
 			
-			if (_itemInd < 0) _itemInd = Math.floor(_items.length / 3) * 3;
+			if (_itemInd < 0) _itemInd = Math.floor((_items.length - 1)/ 3) * 3;
 			
 			refreshStoreList();
 		}
@@ -354,24 +373,64 @@
 		{
 			_itemInd += 3;
 			
-			if (_itemInd > _items.length) _itemInd = 0;
+			if (_itemInd >= _items.length) _itemInd = 0;
 			
 			refreshStoreList();
 		}
 		
 		private function onAddSlotOneClicked(evt:Event):void
 		{
-			DartsGlobals.instance.externalServices.initiatePurchase(_items[_itemInd].id);
+			if ( _items[_itemInd].id == "shield") {
+				var gameCash:int = DartsGlobals.instance.externalServices.getData("gameCash");
+				
+				if (gameCash >= _items[_itemInd].price) 
+				{
+					gameCash -= _items[_itemInd].price;
+					DartsGlobals.instance.localPlayer.abilities[0].refreshTime--;
+					DartsGlobals.instance.externalServices.setData("shieldLevel", DartsGlobals.instance.localPlayer.abilities[0].refreshTime);
+					DartsGlobals.instance.externalServices.setData("gameCash", gameCash);
+					refreshPowerGauge();
+				}
+				
+			} else {
+				DartsGlobals.instance.externalServices.initiatePurchase(_items[_itemInd].id);
+			}
 		}//end onAddSlotOneClicked()
 		
 		private function onAddSlotTwoClicked(evt:Event):void
 		{
-			DartsGlobals.instance.externalServices.initiatePurchase(_items[_itemInd + 1].id);
+			if ( _items[_itemInd+1].id == "beeline") {
+				var gameCash:int = DartsGlobals.instance.externalServices.getData("gameCash");
+				
+				if (gameCash >= _items[_itemInd+1].price) 
+				{
+					gameCash -= _items[_itemInd+1].price;
+					DartsGlobals.instance.localPlayer.abilities[1].refreshTime--;
+					DartsGlobals.instance.externalServices.setData("beelineLevel", DartsGlobals.instance.localPlayer.abilities[1].refreshTime);
+					DartsGlobals.instance.externalServices.setData("gameCash", gameCash);
+					refreshPowerGauge();
+				}
+			} else {
+				DartsGlobals.instance.externalServices.initiatePurchase(_items[_itemInd+1].id);
+			}
 		}//end onAddSlotTwoClicked()
 		
 		private function onAddSlotThreeClicked(evt:Event):void
 		{
-			DartsGlobals.instance.externalServices.initiatePurchase(_items[_itemInd + 2].id);
+			if ( _items[_itemInd+2].id == "doover") {
+				var gameCash:int = DartsGlobals.instance.externalServices.getData("gameCash");
+				
+				if (gameCash >= _items[_itemInd+2].price) 
+				{
+					gameCash -= _items[_itemInd+2].price;
+					DartsGlobals.instance.localPlayer.abilities[2].refreshTime--;
+					DartsGlobals.instance.externalServices.setData("dooverLevel", DartsGlobals.instance.localPlayer.abilities[2].refreshTime);
+					DartsGlobals.instance.externalServices.setData("gameCash", gameCash);
+					refreshPowerGauge();
+				}
+			} else {
+				DartsGlobals.instance.externalServices.initiatePurchase(_items[_itemInd+2].id);
+			}
 		}//end onAddSlotThreeClicked()
 		
 		private function onStoreItemsAvailable(a_evt:ObjectEvent):void
@@ -388,6 +447,8 @@
 		
 		private function refreshStoreList():void
 		{
+			trace("itemInd: " + _itemInd);
+			
 			if ( _items.length > _itemInd ) 
 			{
 				_slotBitmapOne.visible = true;
@@ -448,6 +509,8 @@
 		
 		private function onBackClicked(evt:Event):void
 		{
+			DartsGlobals.instance.externalServices.pushUserData();
+			
 			this.dispatchEvent(new Event(BACK_CLICKED_EVT));
 			
 			TweenLite.to(this, 0.4, { alpha:0, onComplete:destroy } );

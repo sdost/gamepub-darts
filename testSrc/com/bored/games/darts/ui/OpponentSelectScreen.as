@@ -317,6 +317,8 @@
 		
 		private function onOpponentClicked(a_evt:ButtonEvent):void
 		{						
+			DartsGlobals.instance.enemyProfile = null;
+			
 			if(_ireneBtn)
 			{
 				if (a_evt.mightyButton == _ireneBtn) {
@@ -399,7 +401,10 @@
 				_bigbillBtn.pause(true);
 			}
 			
-			this.dispatchEvent(new Event(OPPONENT_CHOSEN_EVT));
+			if (DartsGlobals.instance.enemyProfile) 
+			{
+				this.dispatchEvent(new Event(OPPONENT_CHOSEN_EVT));
+			}
 			
 			Tweener.addTween(this, { alpha:0, onComplete:destroy, time:0.4 } );
 			

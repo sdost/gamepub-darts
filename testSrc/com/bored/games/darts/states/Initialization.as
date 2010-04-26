@@ -1,8 +1,13 @@
 ﻿package com.bored.games.darts.states 
 {
+	import com.bored.games.darts.abilities.BeeLineAbility;
+	import com.bored.games.darts.abilities.DoOverAbility;
+	import com.bored.games.darts.abilities.ShieldAbility;
+	import com.bored.games.darts.assets.icons.Protagonist_Portrait_BMP;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.logic.CricketGameLogic;
 	import com.bored.games.darts.logic.DartsGameLogic;
+	import com.bored.games.darts.player.LocalPlayer;
 	import com.bored.games.darts.profiles.UserProfile;
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.bored.games.darts.ui.hud.ControlPanel;
@@ -57,40 +62,70 @@
 			DartsGlobals.instance.externalServices.showLoginUI();
 			
 			DartsGlobals.instance.externalServices.addEventListener(AbstractExternalService.USER_INFO_AVAILABLE, onUserInfo, false, 0, true);
-			DartsGlobals.instance.externalServices.addEventListener(AbstractExternalService.USER_DATA_AVAILABLE, onUserData, false, 0, true);
 			
 			if (DartsGlobals.instance.externalServices.loggedIn) 
 			{
 				DartsGlobals.instance.externalServices.getUserInfo();
 			}
-			
-			DartsGlobals.instance.externalServices.pullUserData();
 		}//end onEnter()
 		
 		private function onUserInfo(a_evt:Event):void
 		{
+			DartsGlobals.instance.externalServices.removeEventListener(AbstractExternalService.USER_INFO_AVAILABLE, onUserInfo);
+			
 			var userInfo:Object = DartsGlobals.instance.externalServices.getData("userInfo");
 			
 			DartsGlobals.instance.playerProfile.name = userInfo.name;
 			DartsGlobals.instance.playerProfile.unlockSkin("basicplaid", "heart");
 			
-			_infoLoaded = true;
+			DartsGlobals.instance.localPlayer = new LocalPlayer();
+			DartsGlobals.instance.localPlayer.setPortrait(new Protagonist_Portrait_BMP(150, 150));
 			
-			if( _infoLoaded && _dataLoaded ) this.finished();
+			DartsGlobals.instance.externalServices.addEventListener(AbstractExternalService.USER_DATA_AVAILABLE, onUserData, false, 0, true);
+			DartsGlobals.instance.externalServices.pullUserData();
 		}//end onUserData()
 		
 		private function onUserData(a_evt:Event):void
 		{
+			DartsGlobals.instance.externalServices.removeEventListener(AbstractExternalService.USER_DATA_AVAILABLE, onUserData);
+			
 			var userInfo:Object = DartsGlobals.instance.externalServices.getData("userData");
 			
 			var gameCash:int = DartsGlobals.instance.externalServices.getData("gameCash");
 			
-			if (gameCash <= 0)
-				DartsGlobals.instance.externalServices.setData("gameCash", 0);
+			if (gameCash <= 0) 
+			{
+				gameCash = 100000;
+				DartsGlobals.instance.externalServices.setData("gameCash", gameCash);
+			}
+				
+			var shieldLvl:int = DartsGlobals.instance.externalServices.getData("shieldLevel");
 			
-			_dataLoaded = true;
+			if (shieldLvl <= 0) 
+			{
+				DartsGlobals.instance.externalServices.setData("shieldLevel", 10);
+				shieldLvl = 10;
+			}
 			
-			if( _infoLoaded && _dataLoaded ) this.finished();
+			var beelineLvl:int = DartsGlobals.instance.externalServices.getData("beelineLevel");
+			
+			if (beelineLvl <= 0)
+			{
+				DartsGlobals.instance.externalServices.setData("beelineLevel", 10);
+				beelineLvl = 10;
+			}
+				
+			var dooverLvl:int = DartsGlobals.instance.externalServices.getData("dooverLevel");
+			
+			if (dooverLvl <= 0)
+			{
+				DartsGlobals.instance.externalServices.setData("dooverLevel", 10);
+				dooverLvl = 10;
+			}
+				
+			DartsGlobals.instance.localPlayer.setAbilities(new ShieldAbility(shieldLvl), new BeeLineAbility(beelineLvl), new DoOverAbility(dooverLvl));
+				
+			this.finished();
 		}//end onUserData()
 		
 		private function finished(...args):void

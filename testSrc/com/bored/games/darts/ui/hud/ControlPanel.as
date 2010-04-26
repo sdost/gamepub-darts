@@ -74,6 +74,7 @@
 			if (_gameCash)
 			{
 				_gameCash.text = "$" + DartsGlobals.instance.externalServices.getData("gameCash");
+				this.addEventListener(Event.ENTER_FRAME, update, false, 0, true);
 			}
 			else
 			{
@@ -162,6 +163,11 @@
 		{
 			_soundManager = a_soundMgr;
 		}//end registerSoundManager()
+		
+		private function update(a_evt:Event):void
+		{
+			_gameCash.text = "$" + DartsGlobals.instance.externalServices.getData("gameCash");
+		}//end update()
 		
 		private function onMouseOver(a_evt:MouseEvent):void
 		{

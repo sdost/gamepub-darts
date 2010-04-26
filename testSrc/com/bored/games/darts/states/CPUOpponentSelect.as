@@ -75,10 +75,6 @@
 		{
 			_opponentSelectScreen.removeEventListener(OpponentSelectScreen.OPPONENT_CHOSEN_EVT, onOpponentChosen);
 			
-			DartsGlobals.instance.localPlayer = new LocalPlayer(DartsGlobals.instance.playerProfile);
-			DartsGlobals.instance.localPlayer.setPortrait(new Protagonist_Portrait_BMP(150, 150));
-			DartsGlobals.instance.localPlayer.setAbilities(new BeeLineAbility(3), new ShieldAbility(3), new DoOverAbility(3));
-			
 			DartsGlobals.instance.cpuPlayer = new ComputerPlayer(DartsGlobals.instance.enemyProfile);
 			DartsGlobals.instance.cpuPlayer.setPortrait(DartsGlobals.instance.enemyProfile.portrait);
 			DartsGlobals.instance.cpuPlayer.setAbilities(new BeeLineAbility(3), new ShieldAbility(3), new DoOverAbility(3));
