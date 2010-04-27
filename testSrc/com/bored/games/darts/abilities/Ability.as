@@ -60,6 +60,11 @@
 			return _refreshTime;
 		}//end get refreshTime()
 		
+		public function set refreshTime(a_time:int):void
+		{
+			_refreshTime = a_time;
+		}//end set refreshTime()
+		
 		public function armAbility():void
 		{
 			_armed = true;

@@ -44,7 +44,7 @@
 			_textField.setTextFormat(_textFormat);
 			_textField.x = -_textField.width / 2;
 			_textField.y = -_textField.height * 2;
-			_textField.filters = [ new GlowFilter(0x000000, 1, 4, 4, 200, 3, false, false) ];
+			_textField.filters = [ new GlowFilter(0x000000, 1, 4, 4, 100, 3, false, false) ];
 			
 			addChild(_textField);
 		}//end constructor()

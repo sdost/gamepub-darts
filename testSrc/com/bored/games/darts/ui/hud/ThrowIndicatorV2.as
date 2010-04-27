@@ -114,7 +114,7 @@
 				_terminus,
 				0.05, 
 				{
-					x: _throwController.lean * 8,
+					x: _throwController.lean * 12,
 					y: -_throwController.thrust * (_harness.height / AppSettings.instance.dartMaxThrust)
 				}
 			);

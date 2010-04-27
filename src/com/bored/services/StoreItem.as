@@ -36,7 +36,7 @@
 		
 		public function set storeIcon(a_str:String):void
 		{
-			_itemStoreIcon = a_str;
+			_itemStoreIcon = "storeskin_" + a_str;
 		}//end set iconURL()
 		
 		public function get name():String

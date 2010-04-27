@@ -200,7 +200,7 @@
 				_skinIndex = 0;
 				
 				_skinBitmap = new Bitmap();
-				_skinBitmap.bitmapData = ImageFactory.getBitmapDataByQualifiedName("storeskin_" + DartsGlobals.instance.playerProfile.skins[_skinIndex], 270, 103);
+				_skinBitmap.bitmapData = ImageFactory.getBitmapDataByQualifiedName("storeskin_" + DartsGlobals.instance.playerProfile.skins[_skinIndex].skinid, 270, 103);
 				_skinBitmap.smoothing = true;
 				_dartIcon.addChild(_skinBitmap);
 			}
@@ -367,7 +367,7 @@
 			}
 			
 			//_dartIcon.removeChild(_skinBitmap);
-			_skinBitmap.bitmapData = ImageFactory.getBitmapDataByQualifiedName("storeskin_" + DartsGlobals.instance.playerProfile.skins[_skinIndex], 270, 103);
+			_skinBitmap.bitmapData = ImageFactory.getBitmapDataByQualifiedName("storeskin_" + DartsGlobals.instance.playerProfile.skins[_skinIndex].skinid, 270, 103);
 			_skinBitmap.smoothing = true;
 			//_dartIcon.addChild(_skinBitmap);
 		}//end onPickLeftClicked()
@@ -380,7 +380,7 @@
 			}
 			
 			//_dartIcon.removeChild(_skinBitmap);
-			_skinBitmap.bitmapData = ImageFactory.getBitmapDataByQualifiedName("storeskin_" + DartsGlobals.instance.playerProfile.skins[_skinIndex], 270, 103);
+			_skinBitmap.bitmapData = ImageFactory.getBitmapDataByQualifiedName("storeskin_" + DartsGlobals.instance.playerProfile.skins[_skinIndex].skinid, 270, 103);
 			_skinBitmap.smoothing = true;
 			//_dartIcon.addChild(_skinBitmap);
 		}//end onPickLeftClicked()
@@ -390,7 +390,7 @@
 			_backBtn.removeEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onBackClicked);
 			_playBtn.removeEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onPlayClicked);
 			
-			DartsGlobals.instance.localPlayer.setSkin(new DartSkin(ImageFactory.getBitmapDataByQualifiedName("dartuv_" + DartsGlobals.instance.playerProfile.skins[_skinIndex], AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight), dae_DartShaft.data, dae_DartFlightModHex.data));
+			DartsGlobals.instance.localPlayer.setSkin(DartsGlobals.instance.playerProfile.skins[_skinIndex]);
 			
 			this.dispatchEvent(new Event(PLAY_CLICKED_EVT));
 			

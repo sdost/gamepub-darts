@@ -6,6 +6,7 @@
 	import com.bored.games.darts.profiles.BigBillProfile;
 	import com.bored.games.darts.profiles.IreneProfile;
 	import com.bored.games.darts.profiles.MackProfile;
+	import com.bored.games.darts.profiles.OldManProfile;
 	import com.bored.games.darts.profiles.ProfessorProfile;
 	import com.bored.games.darts.profiles.SammyProfile;
 	import com.bored.games.darts.profiles.SimonProfile;
@@ -34,6 +35,9 @@
 	public class OpponentSelectScreen extends ContentHolder
 	{
 		public static const OPPONENT_CHOSEN_EVT:String = "OpponentChosenEvent";
+		public static const SHOW_STORE_EVT:String = "ShowStoreEvent";
+		
+		private var _toolTipDict:Dictionary;
 		
 		private var _background:Sprite;
 		private var _buildBackground:Boolean = false;
@@ -65,7 +69,8 @@
 		private var _bigbillBtn:MightyButton;
 		private var _bigbillBtnImg:MovieClip;
 		
-		private var _reusableTip:ToolTip;
+		private var _titleFont:TextFormat;
+		private var _consoleFont:TextFormat;
 		
 		public function OpponentSelectScreen(a_img:Sprite, a_buildFromAllDescendants:Boolean = false, a_bAddContents:Boolean = true, a_buildBackground:Boolean = false) 
 		{
@@ -90,6 +95,8 @@
 			
 			// now build ourselves from the descendantsDict.
 			
+			_toolTipDict = new Dictionary(false);
+			
 			_ireneBtnImg = descendantsDict["irene_mc"] as MovieClip;
 			_oldmanBtnImg = descendantsDict["oldman_mc"] as MovieClip;		
 			_mackBtnImg = descendantsDict["mack_mc"] as MovieClip;		
@@ -102,27 +109,17 @@
 			
 			var myFont:Font = new CooperStd();
 			
-			var titleFont:TextFormat = new TextFormat();
-			titleFont.font = myFont.fontName;
-			titleFont.size = 20;
-			titleFont.bold = true;
-			titleFont.color = 0x000000;
+			_titleFont = new TextFormat();
+			_titleFont.font = myFont.fontName;
+			_titleFont.size = 20;
+			_titleFont.bold = true;
+			_titleFont.color = 0x000000;
 			
-			var consoleFont:TextFormat = new TextFormat();
-			consoleFont.font = myFont.fontName;
-			consoleFont.size = 18;
-			consoleFont.bold = false;
-			consoleFont.color = 0x000000;
-			
-			_reusableTip = new ToolTip();
-			_reusableTip.colors = [ 0xFFFFFF, 0xFFFFCD6 ];
-			_reusableTip.tipHeight = 75
-			_reusableTip.cornerRadius = 20;
-			_reusableTip.align = "center";
-			_reusableTip.border = 0x000000;
-			_reusableTip.borderSize = 1;
-			_reusableTip.titleFormat = titleFont;
-			_reusableTip.contentFormat = consoleFont;
+			_consoleFont = new TextFormat();
+			_consoleFont.font = myFont.fontName;
+			_consoleFont.size = 18;
+			_consoleFont.bold = false;
+			_consoleFont.color = 0x000000;
 			
 			if (_ireneBtnImg)
 			{
@@ -131,7 +128,7 @@
 				_ireneBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
 				
 				_ireneBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_MOUSE_OVER_EVT, function(a_evt:Event):void {
-					_reusableTip.show(_ireneBtnImg, "Irene", "$1000");
+					generateToolTip(_ireneBtnImg).show(_ireneBtnImg, "Irene", "$1000");
 				}, false, 0, true);
 			}
 			else
@@ -143,7 +140,11 @@
 			{
 				_oldmanBtn = new MightyButton(_oldmanBtnImg, false);
 				_oldmanBtn.pause(false);
-				//_oldmanBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
+				_oldmanBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
+				
+				_oldmanBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_MOUSE_OVER_EVT, function(a_evt:Event):void {
+					generateToolTip(_oldmanBtnImg).show(_oldmanBtnImg, "Old Man", "Tutorial");
+				}, false, 0, true);
 			}
 			else
 			{
@@ -157,7 +158,7 @@
 				_mackBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
 				
 				_mackBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_MOUSE_OVER_EVT, function(a_evt:Event):void {
-					_reusableTip.show(_mackBtnImg, "Mack", "$100");
+					generateToolTip(_mackBtnImg).show(_mackBtnImg, "Mack", "$100");
 				}, false, 0, true);
 			}
 			else
@@ -172,7 +173,7 @@
 				_anthonyBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
 				
 				_anthonyBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_MOUSE_OVER_EVT, function(a_evt:Event):void {
-					_reusableTip.show(_anthonyBtnImg, "Anthony", "$250");
+					generateToolTip(_anthonyBtnImg).show(_anthonyBtnImg, "Anthony", "$250");
 				}, false, 0, true);
 			}
 			else
@@ -187,7 +188,7 @@
 				_professorBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
 				
 				_professorBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_MOUSE_OVER_EVT, function(a_evt:Event):void {
-					_reusableTip.show(_professorBtnImg, "The Professor", "$2000");
+					generateToolTip(_professorBtnImg).show(_professorBtnImg, "The Professor", "$2000");
 				}, false, 0, true);
 			}
 			else
@@ -202,7 +203,7 @@
 				_sammyBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
 				
 				_sammyBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_MOUSE_OVER_EVT, function(a_evt:Event):void {
-					_reusableTip.show(_sammyBtnImg, "Sammy", "$50");
+					generateToolTip(_sammyBtnImg).show(_sammyBtnImg, "Sammy", "$50");
 				}, false, 0, true);
 			}
 			else
@@ -217,7 +218,7 @@
 				_simonBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
 				
 				_simonBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_MOUSE_OVER_EVT, function(a_evt:Event):void {
-					_reusableTip.show(_simonBtnImg, "Simon", "$500");
+					generateToolTip(_simonBtnImg).show(_simonBtnImg, "Simon", "$500");
 				}, false, 0, true);
 			}
 			else
@@ -229,7 +230,11 @@
 			{
 				_barkeepBtn = new MightyButton(_barkeepBtnImg, false);
 				_barkeepBtn.pause(false);
-				//_barkeepBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
+				_barkeepBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
+				
+				_barkeepBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_MOUSE_OVER_EVT, function(a_evt:Event):void {
+					generateToolTip(_barkeepBtnImg).show(_barkeepBtnImg, "Barkeep", "Store");
+				}, false, 0, true);
 			}
 			else
 			{
@@ -243,7 +248,7 @@
 				_bigbillBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
 				
 				_bigbillBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_MOUSE_OVER_EVT, function(a_evt:Event):void {
-					_reusableTip.show(_bigbillBtnImg, "Big Bill", "$1500");
+					generateToolTip(_bigbillBtnImg).show(_bigbillBtnImg, "Big Bill", "$1500");
 				}, false, 0, true);
 			}
 			else
@@ -259,6 +264,26 @@
 			return descendantsDict;
 			
 		}//end buildFrom()
+		
+		private function generateToolTip(a_sprite:Sprite):ToolTip
+		{
+			var toolTip:ToolTip = _toolTipDict[a_sprite] as ToolTip;
+			
+			if (!toolTip) {
+				toolTip = new ToolTip();
+				toolTip.colors = [ 0xFFFFFF, 0xFFFFCD6 ];
+				toolTip.tipHeight = 75
+				toolTip.cornerRadius = 20;
+				toolTip.align = "center";
+				toolTip.border = 0x000000;
+				toolTip.borderSize = 1;
+				toolTip.titleFormat = _titleFont;
+				toolTip.contentFormat = _consoleFont;
+				_toolTipDict[a_sprite] = toolTip;
+			}
+			
+			return toolTip;
+		}//end generateToolTip()
 		
 		private function addedToStage(a_evt:Event = null):void
 		{
@@ -292,6 +317,8 @@
 		
 		private function onOpponentClicked(a_evt:ButtonEvent):void
 		{						
+			DartsGlobals.instance.enemyProfile = null;
+			
 			if(_ireneBtn)
 			{
 				if (a_evt.mightyButton == _ireneBtn) {
@@ -303,6 +330,10 @@
 			
 			if(_oldmanBtn)
 			{
+				if (a_evt.mightyButton == _oldmanBtn) {
+					DartsGlobals.instance.enemyProfile = new OldManProfile();
+				}
+				
 				_oldmanBtn.pause(true);
 			}
 			
@@ -353,6 +384,11 @@
 			
 			if(_barkeepBtn)
 			{
+				if (a_evt.mightyButton == _barkeepBtn) {
+					this.dispatchEvent(new Event(SHOW_STORE_EVT));
+					return;
+				}
+				
 				_barkeepBtn.pause(true);
 			}
 			
@@ -365,7 +401,10 @@
 				_bigbillBtn.pause(true);
 			}
 			
-			this.dispatchEvent(new Event(OPPONENT_CHOSEN_EVT));
+			if (DartsGlobals.instance.enemyProfile) 
+			{
+				this.dispatchEvent(new Event(OPPONENT_CHOSEN_EVT));
+			}
 			
 			Tweener.addTween(this, { alpha:0, onComplete:destroy, time:0.4 } );
 			

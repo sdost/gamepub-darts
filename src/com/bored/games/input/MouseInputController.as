@@ -2,10 +2,13 @@
 {
 	import com.bored.games.input.InputController;
 	import com.bored.games.events.InputStateEvent;
+	import com.tadSrc.tadsClasses.DOMExEvent;
+	import com.tadSrc.tadsClasses.DOMExEventDispatcher;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.ui.Mouse;
 	
 	/**
 	 * ...
@@ -14,11 +17,17 @@
 	public class MouseInputController extends InputController
 	{
 		private var _listener:DisplayObjectContainer;
+		private var _mouseMoveHandler:DOMExEventDispatcher;
+		private var _mouseDownHandler:DOMExEventDispatcher;
+		private var _mouseUpHandler:DOMExEventDispatcher;
 		
 		public function MouseInputController(listener:DisplayObjectContainer) 
 		{
 			super();	
 			_listener = listener;
+			_mouseMoveHandler = new DOMExEventDispatcher("document.onmousemove", ["clientX", "clientY"]);
+			_mouseDownHandler = new DOMExEventDispatcher("document.onmousedown", ["clientX", "clientY", "button"]);
+			_mouseUpHandler = new DOMExEventDispatcher("document.onmouseup", ["clientX", "clientY", "button"]);
 		}//end constructor()
 		
 		override public function set pause(a_pause:Boolean):void
@@ -35,54 +44,55 @@
 		private function setupListeners():void
 		{
 			//trace("Adding mouse listeners...");
-			_listener.addEventListener(Event.MOUSE_LEAVE, handleMouseLeave, true, 399, true);
-			_listener.addEventListener(MouseEvent.MOUSE_MOVE, handleMouseMove, true, 400, true);
-			_listener.addEventListener(MouseEvent.MOUSE_DOWN, handleMouseButtons, true, 401, true);
-			_listener.addEventListener(MouseEvent.MOUSE_UP, handleMouseButtons, true, 402, true);
+			_listener.stage.addEventListener(MouseEvent.MOUSE_MOVE, handleMousePositionUpdate, true, 400, true);
+			_listener.stage.addEventListener(MouseEvent.MOUSE_DOWN, handleMouseDown, true, 401, true);
+			_listener.stage.addEventListener(MouseEvent.MOUSE_UP, handleMouseUp, true, 402, true);
+			_mouseMoveHandler.addEventListener(DOMExEvent.DOMEX_EVENT, handleMousePositionUpdate, false, 0, true);
+			_mouseDownHandler.addEventListener(DOMExEvent.DOMEX_EVENT, handleMouseDown, false, 0, true);
+			_mouseUpHandler.addEventListener(DOMExEvent.DOMEX_EVENT, handleMouseUp, false, 0, true);
 		}//end setupListeners()
 		
 		private function removeListeners():void
 		{
 			//trace("Removing mouse listeners...");
-			_listener.removeEventListener(Event.MOUSE_LEAVE, handleMouseLeave, true);
-			_listener.removeEventListener(MouseEvent.MOUSE_MOVE, handleMouseMove, true);
-			_listener.removeEventListener(MouseEvent.MOUSE_DOWN, handleMouseButtons, true);
-			_listener.removeEventListener(MouseEvent.MOUSE_UP, handleMouseButtons, true);
+			_listener.stage.removeEventListener(MouseEvent.MOUSE_MOVE, handleMousePositionUpdate, true);
+			_listener.stage.removeEventListener(MouseEvent.MOUSE_DOWN, handleMouseDown, true);
+			_listener.stage.removeEventListener(MouseEvent.MOUSE_UP, handleMouseUp, true);
+			_mouseMoveHandler.removeEventListener(DOMExEvent.DOMEX_EVENT, handleMousePositionUpdate);
+			_mouseDownHandler.removeEventListener(DOMExEvent.DOMEX_EVENT, handleMouseDown);
+			_mouseUpHandler.removeEventListener(DOMExEvent.DOMEX_EVENT, handleMouseUp);
 		}//end removeListeners()
-		
-		private function handleMouseLeave(evt:Event):void
+				
+		private function handleMousePositionUpdate(evt:* = null):void
 		{
-			var x:Number = (evt.target as Stage).mouseX;
-			var y:Number = (evt.target as Stage).mouseY;
-			var but:Boolean = false;
+			var x:Number = (evt as MouseEvent != null) ? evt.stageX : evt.eventPropertiesArray[0];
+			var y:Number = (evt as MouseEvent != null) ? evt.stageY : evt.eventPropertiesArray[1];
 			
-			var dispatched:Boolean = this.dispatchEvent(new InputStateEvent(InputStateEvent.UPDATE, x, y, but));
+			var dispatched:Boolean = this.dispatchEvent(new InputStateEvent(InputStateEvent.UPDATE, x, y));
 			
 			//if( dispatched )
 				//trace("dispatching InputStateEvent??");
 		
 		}//end handleMouseMove()
 		
-		private function handleMouseMove(evt:MouseEvent):void
+		private function handleMouseDown(evt:* = null):void
 		{
-			var x:Number = evt.stageX;
-			var y:Number = evt.stageY;
-			var but:Boolean = evt.buttonDown;
+			var x:Number = (evt as MouseEvent != null) ? evt.stageX : evt.eventPropertiesArray[0];
+			var y:Number = (evt as MouseEvent != null) ? evt.stageY : evt.eventPropertiesArray[1];
 			
-			var dispatched:Boolean = this.dispatchEvent(new InputStateEvent(InputStateEvent.UPDATE, x, y, but));
+			var dispatched:Boolean = this.dispatchEvent(new InputStateEvent(InputStateEvent.UPDATE, x, y, InputStateEvent.DOWN));
 			
 			//if( dispatched )
 				//trace("dispatching InputStateEvent??");
-		
-		}//end handleMouseMove()
-		
-		private function handleMouseButtons(evt:MouseEvent):void
-		{
-			var x:Number = evt.stageX;
-			var y:Number = evt.stageY;
-			var but:Boolean = evt.buttonDown;
 			
-			var dispatched:Boolean = this.dispatchEvent(new InputStateEvent(InputStateEvent.UPDATE, x, y, but));
+		}//end handleMouseButtons()
+		
+		private function handleMouseUp(evt:* = null):void
+		{
+			var x:Number = (evt as MouseEvent != null) ? evt.stageX : evt.eventPropertiesArray[0];
+			var y:Number = (evt as MouseEvent != null) ? evt.stageY : evt.eventPropertiesArray[1];
+			
+			var dispatched:Boolean = this.dispatchEvent(new InputStateEvent(InputStateEvent.UPDATE, x, y, InputStateEvent.UP));
 			
 			//if( dispatched )
 				//trace("dispatching InputStateEvent??");

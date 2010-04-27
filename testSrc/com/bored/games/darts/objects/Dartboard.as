@@ -101,8 +101,9 @@
 		{
 			_boardMaterial = new MovieMaterial(_sprite);
 			_boardMaterial.smooth = true;
+			_boardMaterial.rect = new Rectangle( -175, -175, 350, 350 );
 			
-			_boardSprite = new Sprite3D(_boardMaterial, 130);
+			_boardSprite = new Sprite3D(_boardMaterial, 190);
 			_boardSprite.alignmentType = AlignmentType.VIEWPOINT;
 			
 			this.activateAction(_shieldAction.actionName);
@@ -146,10 +147,13 @@
 					
 					DartsGlobals.instance.gameManager.scoreManager.submitThrow(DartsGlobals.instance.gameManager.currentPlayer, Number(arr[1]), Number(arr[2]));
 					
-					var text:AnimatedText = new AnimatedText(Number(arr[1]) + " x " + Number(arr[2]), new CooperStd(), TweenMax.fromTo(null, 0.75, { x: p.x, y: p.y, alpha: 1 }, { x: p.x, y: p.y - 15, alpha: 0 } ));
-					text.alpha = 0;
-					_sprite.addChild(text);
-					text.animate();					
+					if (Number(arr[1]) > 0) 
+					{
+						var text:AnimatedText = new AnimatedText(Number(arr[1]) + " x " + Number(arr[2]), new CooperStd(), TweenMax.fromTo(null, 0.75, { x: p.x, y: p.y, alpha: 1 }, { x: p.x, y: p.y - 15, alpha: 0 } ));
+						text.alpha = 0;
+						_sprite.addChild(text);
+						text.animate();					
+					}
 					
 					DartsGlobals.instance.gameManager.players[DartsGlobals.instance.gameManager.currentPlayer-1].processShotResult(Number(arr[1]), Number(arr[2]));
 					

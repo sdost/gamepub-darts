@@ -5,6 +5,7 @@
 	import com.bored.games.darts.ui.buttons.ToggleButton;
 	import com.bored.games.darts.ui.modals.AchievementsModal;
 	import com.bored.games.darts.ui.modals.HelpModal;
+	import com.bored.games.darts.ui.modals.QuitModal;
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
@@ -13,6 +14,7 @@
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.text.TextField;
 	import flash.ui.Mouse;
 	import flash.utils.Dictionary;
 	
@@ -22,6 +24,8 @@
 	 */
 	public class ControlPanel extends ContentHolder
 	{
+		private var _gameCash:TextField;
+		
 		private var _soundBtn:ToggleButton;
 		private var _soundBtnImg:MovieClip;
 		
@@ -60,11 +64,22 @@
 		{
 			var descendantsDict:Dictionary = super.buildFrom(a_img, a_buildFromAllDescendants);
 			
+			_gameCash = descendantsDict["gameCash_text"] as TextField;
 			_soundBtnImg = descendantsDict["soundBtn_mc"] as MovieClip;
 			_musicBtnImg = descendantsDict["musicBtn_mc"] as MovieClip;
 			_helpBtnImg = descendantsDict["helpBtn_mc"] as MovieClip;
 			_trophyBtnImg = descendantsDict["trophyBtn_mc"] as MovieClip;
 			_quitBtnImg = descendantsDict["quitBtn_mc"] as MovieClip;
+			
+			if (_gameCash)
+			{
+				_gameCash.text = "$" + DartsGlobals.instance.externalServices.getData("gameCash");
+				this.addEventListener(Event.ENTER_FRAME, update, false, 0, true);
+			}
+			else
+			{
+				throw new Error("ControlPanel::buildFrom(): _gameCash=" + _gameCash);
+			}
 			
 			if (_soundBtnImg)
 			{
@@ -149,6 +164,11 @@
 			_soundManager = a_soundMgr;
 		}//end registerSoundManager()
 		
+		private function update(a_evt:Event):void
+		{
+			_gameCash.text = "$" + DartsGlobals.instance.externalServices.getData("gameCash");
+		}//end update()
+		
 		private function onMouseOver(a_evt:MouseEvent):void
 		{
 			Mouse.show();
@@ -195,7 +215,11 @@
 		
 		private function onQuitButtonClick(a_evt:Event):void
 		{
-			//TODO: handle quit button
+			DartsGlobals.instance.gameManager.pause(true);
+			
+			DartsGlobals.instance.showModalPopup(QuitModal);
+			
+			Mouse.show();
 		}//end onQuitButtonClick()
 		
 		override public function destroy(...args):void

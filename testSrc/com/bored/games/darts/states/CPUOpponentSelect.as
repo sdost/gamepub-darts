@@ -10,6 +10,7 @@
 	import com.bored.games.darts.assets.icons.Simon_Portrait_BMP;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.logic.CricketGameLogic;
+	import com.bored.games.darts.logic.DartsGameLogic;
 	import com.bored.games.darts.player.ComputerPlayer;
 	import com.bored.games.darts.player.LocalPlayer;
 	import com.bored.games.darts.states.statemachines.GameFSM;
@@ -60,6 +61,7 @@
 				opponentSelectScreenImg = new OpponentSelectScreen_MC();
 				_opponentSelectScreen = new OpponentSelectScreen(opponentSelectScreenImg, false, true);
 				_opponentSelectScreen.addEventListener(OpponentSelectScreen.OPPONENT_CHOSEN_EVT, onOpponentChosen, false, 0, true);
+				_opponentSelectScreen.addEventListener(OpponentSelectScreen.SHOW_STORE_EVT, onShowStoreChosen, false, 0, true);
 				DartsGlobals.instance.screenSpace.addChild(_opponentSelectScreen);
 			}
 			catch (e:Error)
@@ -73,16 +75,17 @@
 		{
 			_opponentSelectScreen.removeEventListener(OpponentSelectScreen.OPPONENT_CHOSEN_EVT, onOpponentChosen);
 			
-			DartsGlobals.instance.localPlayer = new LocalPlayer(DartsGlobals.instance.playerProfile);
-			DartsGlobals.instance.localPlayer.setPortrait(new Protagonist_Portrait_BMP(150, 150));
-			DartsGlobals.instance.localPlayer.setAbilities(new BeeLineAbility(3), new ShieldAbility(3), new DoOverAbility(3));
-			
 			DartsGlobals.instance.cpuPlayer = new ComputerPlayer(DartsGlobals.instance.enemyProfile);
 			DartsGlobals.instance.cpuPlayer.setPortrait(DartsGlobals.instance.enemyProfile.portrait);
 			DartsGlobals.instance.cpuPlayer.setAbilities(new BeeLineAbility(3), new ShieldAbility(3), new DoOverAbility(3));
 			DartsGlobals.instance.cpuPlayer.setSkin(DartsGlobals.instance.enemyProfile.dartSkin);
 			
 			this.finished();
+		}//end pickOpponent()
+		
+		public function onShowStoreChosen(a_evt:Event):void
+		{
+			(this.stateMachine as GameFSM).transitionToStateNamed("GameStore");
 		}//end pickOpponent()
 		
 		private function finished(...args):void
@@ -96,8 +99,12 @@
 		 */
 		override public function onExit():void
 		{
+			_opponentSelectScreen.removeEventListener(OpponentSelectScreen.OPPONENT_CHOSEN_EVT, onOpponentChosen);
+			_opponentSelectScreen.removeEventListener(OpponentSelectScreen.SHOW_STORE_EVT, onShowStoreChosen);
 			
+			_opponentSelectScreen.destroy();
 			
+			_opponentSelectScreen = null;
 		}//end onExit()
 		
 	}//end class Initialization

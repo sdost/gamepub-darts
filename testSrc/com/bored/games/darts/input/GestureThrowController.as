@@ -52,6 +52,9 @@
 							_lean,
 							AppSettings.instance.simulationStepScale
 						);
+						
+						_thrust = 0;
+						_lean = 0;
 					} 
 					else
 					{

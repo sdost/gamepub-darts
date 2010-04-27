@@ -515,9 +515,9 @@ package mochi.as3 {
 
         //
         //
-        public static function send (methodName:String, args:Object = null, callbackObject:Object = null, callbackMethod:Object = null):void {
+        public static function send (methodName:String, args:Object = null, callbackObject:Object = null, callbackMethod:Object = null):void {			
             if (_connected) {
-                _mochiLocalConnection.send(_sendChannelName, "onReceive", {methodName: methodName, args: args, callbackID: _nextCallbackID});
+				_mochiLocalConnection.send(_sendChannelName, "onReceive", {methodName: methodName, args: args, callbackID: _nextCallbackID});
             } else if (_clip == null || !_connecting) {
                 trace( "Error: MochiServices not connected.   Please call MochiServices.connect().  Function: " + methodName);
                 handleError(args, callbackObject, callbackMethod);

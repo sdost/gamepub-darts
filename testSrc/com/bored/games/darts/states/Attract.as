@@ -14,6 +14,7 @@
 	import flash.net.URLVariables;
 	import flash.system.ApplicationDomain;
 	import flash.system.LoaderContext;
+	import flash.ui.Mouse;
 	import flash.utils.Dictionary;
 	
 	/**
@@ -34,7 +35,7 @@
 		 * Handler for entering (and executing) this state.
 		 */
 		override public function onEnter():void
-		{
+		{			
 			var titleScreenImg:MovieClip;
 			
 			try
@@ -54,12 +55,14 @@
 		
 		private function onEasyGameClicked(e_evt:Event):void
 		{
+			DartsGlobals.instance.gameMode = DartsGlobals.EASY;
 			(this.stateMachine as GameFSM).transitionToNextState();
 			
 		}//end onNewGameClicked();
 		
 		private function onHardGameClicked(e_evt:Event):void
 		{
+			DartsGlobals.instance.gameMode = DartsGlobals.HARD;
 			(this.stateMachine as GameFSM).transitionToNextState();
 		}//end onResumeGameClicked();
 		
@@ -70,6 +73,10 @@
 		{			
 			_titleScreen.removeEventListener(TitleScreen.EASY_GAME_CLICKED_EVT, onEasyGameClicked);
 			_titleScreen.removeEventListener(TitleScreen.HARD_GAME_CLICKED_EVT, onHardGameClicked);	
+			
+			_titleScreen.destroy();
+			
+			_titleScreen = null;
 		}//end onExit()
 		
 	}//end class Attract

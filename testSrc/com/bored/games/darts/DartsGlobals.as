@@ -1,8 +1,11 @@
 ﻿package com.bored.games.darts
 {
+	import com.bored.games.darts.states.statemachines.GameFSM;
+	import com.inassets.statemachines.interfaces.IStateMachine;
 	import com.jac.soundManager.SoundController;
 	import com.sven.utils.AppSettings;
 	import flash.media.SoundChannel;
+	import flash.sampler.NewObjectSample;
 	import flash.utils.getDefinitionByName;
 	import com.bored.games.darts.logic.DartsGameLogic;
 	import com.bored.games.darts.player.DartsPlayer;
@@ -26,6 +29,9 @@
 	 */
 	public class DartsGlobals extends EventDispatcher
 	{
+		public static const EASY:int = 0;
+		public static const HARD:int = 1;
+		
 		// protected var _optionsInterface:Sprite;  ??
 		
 		protected var _flashVars:Object;
@@ -74,6 +80,10 @@
 		
 		private var _controlPanel:ControlPanel;
 		
+		private var _stateMachine:IStateMachine;
+		
+		private var _gameMode:int;
+		
 		public function DartsGlobals(a_singletonEnforcer:DartsGlobals_SingletonEnforcer) 
 		{
 			super();
@@ -113,6 +123,16 @@
 			_constructed = true;
 			
 		}//end construct()
+		
+		public function set stateMachine(a_fsm:IStateMachine):void
+		{
+			_stateMachine = a_fsm;
+		}//end set stateMachine()
+		
+		public function get stateMachine():IStateMachine
+		{
+			return _stateMachine;
+		}//end get stateMachine()	
 		
 		public function set stage(a_stage:Stage):void
 		{
@@ -162,6 +182,16 @@
 			return _stage;
 			
 		}//end set stage()
+		
+		public function set gameMode(a_mode:int):void
+		{
+			_gameMode = a_mode;
+		}//end set gameMode()
+		
+		public function get gameMode():int
+		{
+			return _gameMode;
+		}//end set gameMode()
 		
 		public function get screenSpace():Sprite
 		{
@@ -222,12 +252,29 @@
 		public function set externalServices(a_ext:AbstractExternalService):void
 		{
 			_externalService = a_ext;
+			_externalService.addEventListener(AbstractExternalService.USER_INVENTORY_UPDATE, onInventoryUpdate, false, 0, true);
 		}//end set externalServices()
 		
 		public function get externalServices():AbstractExternalService
 		{
 			return _externalService;
 		}//end get externalServices()
+		
+		private function onInventoryUpdate(evt:Event):void
+		{
+			for each( var obj:Object in _externalService.getData("ownedItems") ) 
+			{
+				for ( var key:String in obj.properties ) 
+				{
+					trace("obj[" + key + "]: " + obj.properties[key]);
+				}				
+				
+				if (obj.properties.skinid && obj.properties.flightid) 
+				{
+					_playerProfile.unlockSkin(obj.properties.skinid, obj.properties.flightid);
+				}
+			}
+		}//end onInventoryUpdate()
 		
 		public function set localPlayer(a_player:DartsPlayer):void
 		{
@@ -284,7 +331,20 @@
 			_controlPanel.y = AppSettings.instance.controlPanelPositionY;
 			_controlPanel.registerSoundManager(DartsGlobals.instance.soundManager);
 			_controlPanel.show();
+			
+			_gameManager.addEventListener(DartsGameLogic.QUIT_TO_TITLE, onQuitToTitle, false, 0, true);			
 		}//end setupControlPanel()
+		
+		private function onQuitToTitle(a_evt:Event):void
+		{
+			_gameManager.removeEventListener(DartsGameLogic.QUIT_TO_TITLE, onQuitToTitle);
+			
+			DartsGlobals.instance.gameManager.cleanup();
+			
+			_controlPanel.hide();
+			
+			(this.stateMachine as GameFSM).transitionToStateNamed("Attract");
+		}//end onGameEnd()
 		
 		public function showModalPopup(a_content:Class = null, a_prompt:Object = null):void
 		{
