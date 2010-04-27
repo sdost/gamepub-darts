@@ -240,7 +240,7 @@
 		
 		public function resetBlockedSections():void
 		{
-			_blockedSections = new Object();;
+			_blockedSections = new Object();
 			
 			for ( var i:int = 1; i <= 20; i++ )
 			{

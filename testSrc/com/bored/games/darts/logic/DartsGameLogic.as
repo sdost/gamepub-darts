@@ -173,6 +173,8 @@
 				_players[i].record.recordEndOfGame( _winner == (i + 1) );
 			}
 			
+			_dartboard.resetBlockedSections();
+			
 			if( _inputController && _throwController )
 				_inputController.removeEventListener(InputStateEvent.UPDATE, _throwController.onInputUpdate);
 				
@@ -205,9 +207,10 @@
 				dart.update(a_time);
 			}
 			
-			if ( _currentDart && _currentDart.position.z >=  AppSettings.instance.dartboardPositionZ )
-			{
+			if ( _currentDart && ( _currentDart.position.z >=  AppSettings.instance.dartboardPositionZ || _currentDart.position.y <= -10 ) )
+			{				
 				_currentDart.finishThrow();
+				_throwController.resetThrowParams();
 				
 				if ( !_dartboard.submitDartPosition(_currentDart.position.x, _currentDart.position.y, _currentDart.blockBoard) ) 
 				{
@@ -350,20 +353,28 @@
 			
 			var thrust:Number;
 			var lean:Number;
+			var angle:Number;
 			
-			if ( a_thrust < AppSettings.instance.dartSweetSpotMin ) {
-				thrust = a_thrust * 0.8;
-				lean = a_lean * 1.2
-			} else if ( a_thrust > AppSettings.instance.dartSweetSpotMax ) {
-				thrust = a_thrust * 1.2;
-				lean = a_lean * 1.2;
-			} else {
+			if ( a_thrust < AppSettings.instance.dartSweetSpotMin ) 
+			{
+				thrust = a_thrust;
+				lean = a_lean;
+				angle = 5;
+			}
+			else if ( a_thrust > AppSettings.instance.dartSweetSpotMax ) 
+			{
+				thrust = a_thrust;
+				lean = a_lean * Math.log(a_thrust);
+				angle = 25;
+			}
+			else 
+			{
 				thrust = AppSettings.instance.dartSweetSpotThrust;
 				lean = a_lean;
+				angle = AppSettings.instance.defaultAngle;
 			}
 			
-			
-			_currentDart.initThrowParams(a_x, a_y, a_z, thrust, AppSettings.instance.defaultAngle, AppSettings.instance.defaultGravity, lean, a_stepScale);
+			_currentDart.initThrowParams(a_x, a_y, a_z, thrust, angle, AppSettings.instance.defaultGravity, lean, a_stepScale);
 		}//end playerThrow()
 		
 		public function get cursor():Cursor

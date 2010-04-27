@@ -22,6 +22,12 @@
 			
 		}//end onInputUpdate()
 		
+		public function resetThrowParams():void
+		{
+			_thrust = 0;
+			_lean = 0;
+		}//end resetThrowParams()
+		
 		public function get thrust():Number
 		{
 			return _thrust;

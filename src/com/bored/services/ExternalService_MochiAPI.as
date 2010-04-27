@@ -67,8 +67,6 @@
 		
 		private function onUserInfo( event:Object ):void
 		{
-			trace("Event: " + event);
-			
 			_userDataSO.data.userInfo = event;			
 			_userDataSO.flush();
 			
@@ -148,11 +146,9 @@
 		
 		private function onUserData(arg:Object):void
 		{
-			_userData = arg;
+			_userData = arg.data;
 			for( var key:String in _userData )
 			{	
-				trace("userData[" + key + "] -> " + _userData[key]);
-				
 				_userDataSO.data[key] = _userData[key];
 			}
 			

@@ -267,20 +267,15 @@
 		
 		private function generateToolTip(a_sprite:Sprite):ToolTip
 		{
-			var toolTip:ToolTip = _toolTipDict[a_sprite] as ToolTip;
-			
-			if (!toolTip) {
-				toolTip = new ToolTip();
-				toolTip.colors = [ 0xFFFFFF, 0xFFFFCD6 ];
-				toolTip.tipHeight = 75
-				toolTip.cornerRadius = 20;
-				toolTip.align = "center";
-				toolTip.border = 0x000000;
-				toolTip.borderSize = 1;
-				toolTip.titleFormat = _titleFont;
-				toolTip.contentFormat = _consoleFont;
-				_toolTipDict[a_sprite] = toolTip;
-			}
+			var toolTip:ToolTip = new ToolTip();
+			toolTip.colors = [ 0xFFFFFF, 0xFFFFCD6 ];
+			toolTip.tipHeight = 75
+			toolTip.cornerRadius = 20;
+			toolTip.align = "center";
+			toolTip.border = 0x000000;
+			toolTip.borderSize = 1;
+			toolTip.titleFormat = _titleFont;
+			toolTip.contentFormat = _consoleFont;
 			
 			return toolTip;
 		}//end generateToolTip()

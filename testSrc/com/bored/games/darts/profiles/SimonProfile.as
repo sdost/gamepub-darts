@@ -76,6 +76,9 @@
 			points = 15;
 			while ( points <= 20 ) {
 				die = Math.random();
+				
+				if ( myStats[points] >= 3 ) continue;
+				
 				if ( die < .4 )
 				{
 					addShot( myShotList, points, 1, false, modifier );

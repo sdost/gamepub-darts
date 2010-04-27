@@ -263,12 +263,7 @@
 		private function onInventoryUpdate(evt:Event):void
 		{
 			for each( var obj:Object in _externalService.getData("ownedItems") ) 
-			{
-				for ( var key:String in obj.properties ) 
-				{
-					trace("obj[" + key + "]: " + obj.properties[key]);
-				}				
-				
+			{		
 				if (obj.properties.skinid && obj.properties.flightid) 
 				{
 					_playerProfile.unlockSkin(obj.properties.skinid, obj.properties.flightid);
