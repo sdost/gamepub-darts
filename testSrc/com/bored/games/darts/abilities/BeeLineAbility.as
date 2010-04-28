@@ -34,6 +34,8 @@
 			DartsGlobals.instance.gameManager.cursor.setCursorImage(SpriteFactory.getSpriteByQualifiedName("com.bored.games.darts.assets.hud.BeelineCursor_MC"));
 			DartsGlobals.instance.gameManager.currentDart.setThrowAction(new BeeLineTrajectoryAction(DartsGlobals.instance.gameManager.currentDart));
 			
+			DartsGlobals.instance.gameManager.currentDart.addModifier(this);
+			
 			return super.useAbility();
 		}//end useAbility()
 		

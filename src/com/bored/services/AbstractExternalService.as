@@ -50,6 +50,11 @@
 		{
 		}//end pushUserData()
 		
+		public function checkForAchievement(a_id:String):Boolean
+		{
+			return false;
+		}//end checkForAchievement()
+		
 		public function getData(a_str:String):*
 		{
 			return _userDataSO.data[a_str];

@@ -24,6 +24,8 @@
 		{	
 			DartsGlobals.instance.gameManager.currentDart.blockBoard = true;
 			
+			DartsGlobals.instance.gameManager.currentDart.addModifier(this);
+			
 			return super.useAbility();
 		}//end useAbility()
 		

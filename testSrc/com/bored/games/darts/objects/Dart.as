@@ -4,17 +4,24 @@
 	import away3dlite.core.base.Object3D;
 	import away3dlite.loaders.Collada;
 	import away3dlite.materials.Material;
+	import away3dlite.materials.MovieMaterial;
+	import away3dlite.sprites.AlignmentType;
+	import away3dlite.sprites.Sprite3D;
 	import caurina.transitions.Tweener;
 	import com.bored.games.actions.Action;
+	import com.bored.games.darts.abilities.Ability;
 	import com.bored.games.darts.actions.DartFallingAction;
 	import com.bored.games.darts.actions.DartPullBackAction;
 	import com.bored.games.darts.actions.DartTrajectoryAction;
+	import com.bored.games.darts.hud.AbilityMedallion_MC;
 	import com.bored.games.darts.models.dae_DartFlightHeart;
 	import com.bored.games.darts.models.dae_DartShaft;
 	import com.bored.games.darts.skins.DartSkin;
 	import com.bored.games.objects.GameElement;
 	import com.sven.utils.TrajectoryCalculator;
 	import com.sven.utils.AppSettings;
+	import flash.display.MovieClip;
+	import flash.display.Sprite;
 	
 	/**
 	 * ...
@@ -42,6 +49,11 @@
 		private var _flight:Object3D;
 		
 		private var _blockBoard:Boolean;
+		
+		private var _modifierList:Vector.<Ability>;
+		private var _indicatorSprite:Sprite;
+		private var _indicatorMaterial:MovieMaterial;
+		private var _modifierIndicator:Sprite3D;
 		
 		public function Dart(a_skin:DartSkin, a_radius:int = 1) 
 		{
@@ -72,7 +84,22 @@
 			_flight = colladaFlight.parseGeometry(_dartSkin.flight);
 			_flight.mouseEnabled = false;
 			
+			_indicatorSprite = new Sprite();
+			
+			_indicatorMaterial = new MovieMaterial(_indicatorSprite);
+			_indicatorMaterial.smooth = true;
+			
+			_modifierIndicator = new Sprite3D(_indicatorMaterial, 1);
+			_modifierIndicator.alignmentType = AlignmentType.VIEWPLANE;
+			_modifierIndicator.x = 60;
+			_modifierIndicator.z = -40;
+			_modifierIndicator.y = -120;
+			
+			clearModifiers();
+			
 			_dartModel = new ObjectContainer3D(_shaft, _flight);
+			
+			_dartModel.addSprite(_modifierIndicator);
 		}//end initModels()
 		
 		override public function update(a_time:Number = 0):void
@@ -104,6 +131,30 @@
 			addAction(_fallingAction);
 		}//end initAction()
 		
+		public function addModifier(a_ability:Ability):void
+		{
+			_modifierList.push(a_ability);
+			
+			_indicatorMaterial.movie = new Sprite();
+			
+			for ( var i:int = 0; i < _modifierList.length; i++ )
+			{
+				var mc:MovieClip = new AbilityMedallion_MC();
+				mc.x = i * 60 + 24;
+				mc.y = 60;
+				var cls:Class = Object(_modifierList[i].icon).constructor;
+				(mc.getChildByName("icon_holder") as MovieClip).addChild(new cls());
+				_indicatorMaterial.movie.addChild(mc);
+			}			
+		}//end addModifier()
+		
+		public function clearModifiers():void
+		{
+			_modifierList = new Vector.<Ability>();
+			
+			_indicatorMaterial.movie = new Sprite();
+		}//end clearModifiers()
+		
 		public function setThrowAction(a_action:Action):void
 		{
 			if (!checkForActionNamed(a_action.actionName)) {
@@ -131,6 +182,8 @@
 		public function initThrowParams(releaseX:Number, releaseY:Number, releaseZ:Number, thrust:Number, angle:Number, grav:Number, lean:Number, stepScale:Number):void
 		{
 			deactivateAction(_pullBackAction.actionName);
+			
+			clearModifiers();
 			
 			this.pitch = 90;
 			this.roll = 0;

@@ -142,23 +142,23 @@
 		{
 			var playerScores:Object = _scoreMgr.getPlayerStats(CricketGameLogic.PLAYER_ONE);
 			
-			if(playerScores[20] > 0) (_playerSlots[20] as MovieClip).gotoAndStop(playerScores[20]+1);
-			if(playerScores[19] > 0) (_playerSlots[19] as MovieClip).gotoAndStop(playerScores[19]+1);
-			if(playerScores[18] > 0) (_playerSlots[18] as MovieClip).gotoAndStop(playerScores[18]+1);
-			if(playerScores[17] > 0) (_playerSlots[17] as MovieClip).gotoAndStop(playerScores[17]+1);
-			if(playerScores[16] > 0) (_playerSlots[16] as MovieClip).gotoAndStop(playerScores[16]+1);
-			if(playerScores[15] > 0) (_playerSlots[15] as MovieClip).gotoAndStop(playerScores[15]+1);
-			if(playerScores[25] > 0) (_playerSlots[25] as MovieClip).gotoAndStop(playerScores[25]+1);
+			(_playerSlots[20] as MovieClip).gotoAndStop(playerScores[20]+1);
+			(_playerSlots[19] as MovieClip).gotoAndStop(playerScores[19]+1);
+			(_playerSlots[18] as MovieClip).gotoAndStop(playerScores[18]+1);
+			(_playerSlots[17] as MovieClip).gotoAndStop(playerScores[17]+1);
+			(_playerSlots[16] as MovieClip).gotoAndStop(playerScores[16]+1);
+			(_playerSlots[15] as MovieClip).gotoAndStop(playerScores[15]+1);
+			(_playerSlots[25] as MovieClip).gotoAndStop(playerScores[25]+1);
 				
 			var opponentScores:Object = _scoreMgr.getPlayerStats(CricketGameLogic.PLAYER_TWO);	
 
-			if(opponentScores[20] > 0 ) (_opponentSlots[20] as MovieClip).gotoAndStop(opponentScores[20]+1);
-			if(opponentScores[19] > 0 ) (_opponentSlots[19] as MovieClip).gotoAndStop(opponentScores[19]+1);
-			if(opponentScores[18] > 0 ) (_opponentSlots[18] as MovieClip).gotoAndStop(opponentScores[18]+1);
-			if(opponentScores[17] > 0 ) (_opponentSlots[17] as MovieClip).gotoAndStop(opponentScores[17]+1);
-			if(opponentScores[16] > 0 ) (_opponentSlots[16] as MovieClip).gotoAndStop(opponentScores[16]+1);
-			if(opponentScores[15] > 0 ) (_opponentSlots[15] as MovieClip).gotoAndStop(opponentScores[15]+1);
-			if(opponentScores[25] > 0 ) (_opponentSlots[25] as MovieClip).gotoAndStop(opponentScores[25]+1);				
+			(_opponentSlots[20] as MovieClip).gotoAndStop(opponentScores[20]+1);
+			(_opponentSlots[19] as MovieClip).gotoAndStop(opponentScores[19]+1);
+			(_opponentSlots[18] as MovieClip).gotoAndStop(opponentScores[18]+1);
+			(_opponentSlots[17] as MovieClip).gotoAndStop(opponentScores[17]+1);
+			(_opponentSlots[16] as MovieClip).gotoAndStop(opponentScores[16]+1);
+			(_opponentSlots[15] as MovieClip).gotoAndStop(opponentScores[15]+1);
+			(_opponentSlots[25] as MovieClip).gotoAndStop(opponentScores[25]+1);				
 		}//end update()
 		
 		public function show():void

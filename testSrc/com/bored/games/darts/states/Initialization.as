@@ -67,15 +67,19 @@
 			{
 				DartsGlobals.instance.externalServices.getUserInfo();
 			}
+			else
+			{
+				onUserInfo();
+			}
 		}//end onEnter()
 		
-		private function onUserInfo(a_evt:Event):void
+		private function onUserInfo(a_evt:Event = null):void
 		{
 			DartsGlobals.instance.externalServices.removeEventListener(AbstractExternalService.USER_INFO_AVAILABLE, onUserInfo);
 			
 			var userInfo:Object = DartsGlobals.instance.externalServices.getData("userInfo");
 			
-			DartsGlobals.instance.playerProfile.name = userInfo.name;
+			DartsGlobals.instance.playerProfile.name = userInfo != null ? userInfo.name : "Player";
 			DartsGlobals.instance.playerProfile.unlockSkin("basicplaid", "heart");
 			
 			DartsGlobals.instance.localPlayer = new LocalPlayer();

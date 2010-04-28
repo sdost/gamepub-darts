@@ -389,6 +389,8 @@
 		
 		public function pause(a_bool:Boolean):void
 		{
+			trace("Pausing: " + a_bool);
+			
 			_paused = a_bool;
 		}//end pause()
 		
