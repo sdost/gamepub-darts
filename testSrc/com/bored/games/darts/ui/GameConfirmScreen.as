@@ -11,6 +11,7 @@
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
+	import com.jac.soundManager.SMSound;
 	import com.sven.utils.ImageFactory;
 	import flash.display.Bitmap;
 	import flash.display.MovieClip;
@@ -99,6 +100,8 @@
 			{
 				this.addEventListener(Event.ADDED_TO_STAGE, addedToStage, false, 0, true);
 			}
+			
+			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").addSound( new SMSound("dartselect_sound", "button_dartselect_click_mp3") );
 			
 		}//end GameReadyPopup() constructor.
 		
@@ -361,6 +364,8 @@
 		
 		private function onPickLeftClicked(a_evt:Event):void
 		{
+			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("dartselect_sound");
+			
 			_skinIndex--;
 			if (_skinIndex < 0) {
 				_skinIndex = DartsGlobals.instance.playerProfile.skins.length - 1;
@@ -374,6 +379,8 @@
 		
 		private function onPickRightClicked(a_evt:Event):void
 		{
+			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("dartselect_sound");
+			
 			_skinIndex++;
 			if (_skinIndex >= DartsGlobals.instance.playerProfile.skins.length) {
 				_skinIndex = 0;

@@ -244,6 +244,8 @@
 			if (!_soundManager) 
 			{
 				_soundManager = SoundManager.getInstance();
+				_soundManager.addSoundController(new SoundController("loopsController"));
+				_soundManager.addSoundController(new SoundController("buttonSoundController"));
 			}
 			
 			return _soundManager;

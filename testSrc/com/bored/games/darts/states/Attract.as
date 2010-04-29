@@ -6,6 +6,7 @@
 	import com.bored.games.darts.ui.TitleScreen;
 	import com.inassets.statemachines.Finite.State;
 	import com.inassets.statemachines.interfaces.IStateMachine;
+	import com.jac.soundManager.SMSound;
 	import flash.display.MovieClip;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
@@ -45,6 +46,8 @@
 				_titleScreen.addEventListener(TitleScreen.EASY_GAME_CLICKED_EVT, onEasyGameClicked, false, 0, true);
 				_titleScreen.addEventListener(TitleScreen.HARD_GAME_CLICKED_EVT, onHardGameClicked, false, 0, true);
 				DartsGlobals.instance.screenSpace.addChild(_titleScreen);
+				
+				DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").addSound( new SMSound("title_sound", "button_title_mp3") );
 			}
 			catch (e:Error)
 			{
@@ -55,6 +58,8 @@
 		
 		private function onEasyGameClicked(e_evt:Event):void
 		{
+			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("title_sound");
+			
 			DartsGlobals.instance.gameMode = DartsGlobals.EASY;
 			(this.stateMachine as GameFSM).transitionToNextState();
 			
@@ -62,6 +67,8 @@
 		
 		private function onHardGameClicked(e_evt:Event):void
 		{
+			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("title_sound");
+			
 			DartsGlobals.instance.gameMode = DartsGlobals.HARD;
 			(this.stateMachine as GameFSM).transitionToNextState();
 		}//end onResumeGameClicked();

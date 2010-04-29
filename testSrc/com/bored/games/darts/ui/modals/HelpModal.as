@@ -62,7 +62,7 @@
 		}//end buildFrom()
 		
 		private function onOkayClicked(evt:Event):void
-		{
+		{			
 			DartsGlobals.instance.processModalQueue();
 			
 			DartsGlobals.instance.gameManager.pause(false);

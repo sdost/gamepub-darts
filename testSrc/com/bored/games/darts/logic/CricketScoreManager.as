@@ -1,6 +1,9 @@
 ﻿package com.bored.games.darts.logic 
 {
+	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.logic.AbstractScoreManager;
+	import com.jac.soundManager.SMSound;
+	import com.jac.soundManager.SoundController;
 	import flash.utils.Dictionary;
 	
 	/**
@@ -17,10 +20,16 @@
 		private var _previousScoreboard:Object;
 		private var _scoreboard:Object;
 		
+		private var _soundController:SoundController;
+		
 		public function CricketScoreManager() 
 		{
 			_scoreboard = new Object();
 			_previousScoreboard = new Object();
+			
+			_soundController = new SoundController("scoreboardSounds");
+			_soundController.addSound( new SMSound("closeout_player", "closeout_player_final_mp3") );
+			_soundController.addSound( new SMSound("closeout_opponent", "closeout_opponent_final_mp3") );
 		}//end constructor()
 		
 		override public function initPlayerStats(a_playerNum:int):void
@@ -44,20 +53,38 @@
 			_previousScoreboard[a_playerNum][25] = CricketScoreManager.EMPTY;			
 		}//end initPlayerStats()
 		
-		override public function submitThrow(a_playerNum:int, a_section:uint, a_multiplier:uint = 1):void
+		override public function submitThrow(a_playerNum:int, a_section:uint, a_multiplier:uint = 1):Boolean
 		{
 			copyScoreboard(_scoreboard, _previousScoreboard);
 			
-			if (a_section < 15) return;
+			if (a_section < 15) return false;
 			
 			var score:uint = _scoreboard[a_playerNum][a_section];
 			
 			if ( score < CLOSED_OUT ) 
 			{				
-				if ( (score + a_multiplier) >= 3 ) score += CLOSED_OUT;
+				if ( (score + a_multiplier) >= 3 )
+				{
+					score += CLOSED_OUT;
+					
+					if ( a_playerNum == DartsGlobals.instance.localPlayer.playerNum )
+					{
+						_soundController.play("closeout_player");
+					}
+					else if ( a_playerNum == DartsGlobals.instance.cpuPlayer.playerNum )
+					{
+						_soundController.play("closeout_opponent");
+					}
+				}
 				else score += a_multiplier;
 				
 				_scoreboard[a_playerNum][a_section] = score;
+				
+				return true;
+			}
+			else
+			{
+				return false;
 			}
 		}//end submitThrow()
 		

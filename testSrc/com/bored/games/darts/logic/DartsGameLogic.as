@@ -4,6 +4,7 @@
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.objects.Cursor;
 	import com.bored.games.darts.objects.Dartboard;
+	import com.bored.games.darts.statistics.AchievementTracker;
 	import com.bored.games.darts.statistics.GameRecord;
 	import com.bored.games.darts.ui.modals.ClickContinueModal;
 	import com.bored.games.darts.ui.modals.PostGameBanterModal;
@@ -16,6 +17,8 @@
 	import com.bored.games.events.InputStateEvent;
 	import com.bored.games.GameUtils;
 	import com.greensock.TweenLite;
+	import com.jac.soundManager.SMSound;
+	import com.jac.soundManager.SoundController;
 	import com.sven.utils.SpriteFactory;
 	import flash.display.Bitmap;
 	import flash.display.MovieClip;
@@ -64,6 +67,8 @@
 		
 		protected var _paused:Boolean = false;
 		
+		protected var _soundController:SoundController;
+		
 		public function DartsGameLogic() 
 		{
 			_throwsPerTurn = AppSettings.instance.throwsPerTurn;
@@ -72,6 +77,18 @@
 			
 			_dartboard = new Dartboard(SpriteFactory.getSpriteByQualifiedName("com.bored.games.assets.DartboardColorMap_MC"));
 			_cursor = new Cursor(SpriteFactory.getSpriteByQualifiedName("com.bored.games.darts.assets.hud.Cursor_MC"));
+			
+			_soundController = new SoundController("gameSounds");
+			_soundController.addSound( new SMSound("throw_fast_1", "dartthrow_fast1_mp3") );
+			_soundController.addSound( new SMSound("throw_fast_2", "dartthrow_fast2_mp3") );
+			_soundController.addSound( new SMSound("throw_normal_1", "dartthrow_norm1_mp3") );
+			_soundController.addSound( new SMSound("throw_normal_2", "dartthrow_norm2_mp3") );
+			_soundController.addSound( new SMSound("turn_switch_1", "turnswitch1_mp3") );
+			_soundController.addSound( new SMSound("turn_switch_2", "turnswitch2_mp3") );
+			_soundController.addSound( new SMSound("turn_switch_3", "turnswitch3_mp3") );
+			_soundController.addSound( new SMSound("turn_switch_4", "turnswitch4_mp3") );
+			
+			DartsGlobals.instance.soundManager.getSoundControllerByID("loopsController").addSound( new SMSound("ambient_bar_loop", "loop_ambience_bar_wav", true) );
 		}//end constructor()
 		
 		public function loadGameState(a_state:Object):void
@@ -183,6 +200,8 @@
 		
 		public function cleanup():void
 		{
+			DartsGlobals.instance.soundManager.getSoundControllerByID("loopsController").stop("ambient_bar_loop");
+			
 			_abilityManager.initialize();
 				
 			_darts = null;
@@ -221,7 +240,13 @@
 					
 				if (win) 
 				{
-					_winner = _currentPlayer;						
+					_winner = _currentPlayer;
+					
+					if (_winner == DartsGlobals.instance.localPlayer.playerNum && DartsGlobals.instance.localPlayer.record.throws == 9) 
+					{
+						AchievementTracker.bestowAchievement(AchievementTracker.ACHIEVEMENT_PERFECT_NINER);
+					}
+					
 					endGame();
 					pause(true);
 					DartsGlobals.instance.showModalPopup(PostGameBanterModal);
@@ -233,6 +258,11 @@
 					_abilityManager.processTurn();
 					_currentDart = null;
 					//pause(true);
+					
+					var version:int = Math.ceil(Math.random() * 4);
+					
+					_soundController.play("turn_switch_" + version.toString());
+					
 					DartsGlobals.instance.showModalPopup(ClickContinueModal);
 				} else {
 					nextDart();
@@ -355,20 +385,34 @@
 			var lean:Number;
 			var angle:Number;
 			
+			var version:int;
+			
 			if ( a_thrust < AppSettings.instance.dartSweetSpotMin ) 
 			{
+				version = Math.ceil(2 * Math.random());
+				
+				_soundController.play("throw_normal_" + version.toString());
+				
 				thrust = a_thrust;
 				lean = a_lean;
-				angle = 5;
+				angle = AppSettings.instance.defaultAngle / 2;
 			}
 			else if ( a_thrust > AppSettings.instance.dartSweetSpotMax ) 
 			{
-				thrust = a_thrust;
-				lean = a_lean * Math.log(a_thrust);
-				angle = 25;
+				version = Math.ceil(2 * Math.random());
+				
+				_soundController.play("throw_normal_" + version.toString());
+				
+				thrust = a_thrust;// * (Math.log(a_thrust - AppSettings.instance.dartSweetSpotThrust) / Math.log(AppSettings.instance.overthrowExponent));
+				lean = a_lean * (Math.log(a_thrust - AppSettings.instance.dartSweetSpotThrust) / Math.log(AppSettings.instance.overthrowExponent));
+				angle = AppSettings.instance.defaultAngle * 3;
 			}
 			else 
 			{
+				version = Math.ceil(2 * Math.random());
+				
+				_soundController.play("throw_fast_" + version.toString());
+				
 				thrust = AppSettings.instance.dartSweetSpotThrust;
 				lean = a_lean;
 				angle = AppSettings.instance.defaultAngle;
@@ -390,8 +434,22 @@
 		public function pause(a_bool:Boolean):void
 		{
 			trace("Pausing: " + a_bool);
-			
+						
 			_paused = a_bool;
+			
+			if ( _inputController ) 
+			{
+				_inputController.pause = _paused;
+			}
+			
+			if (_paused) 
+			{
+				DartsGlobals.instance.soundManager.getSoundControllerByID("loopsController").stop("ambient_bar_loop");
+			}
+			else
+			{
+				DartsGlobals.instance.soundManager.getSoundControllerByID("loopsController").play("ambient_bar_loop");
+			}
 		}//end pause()
 		
 	}//end AbstractGameLogic

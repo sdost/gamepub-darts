@@ -70,9 +70,9 @@
 			_throwTween.kill();
 		}//end cancelShot()
 		
-		override public function processShotResult(a_points:int, a_multiplier:int):void
+		override public function processShotResult(a_points:int, a_multiplier:int, a_scoring:Boolean):void
 		{
-			super.processShotResult(a_points, a_multiplier);
+			super.processShotResult(a_points, a_multiplier, a_scoring);
 			_profile.handleShot(a_points, a_multiplier);
 		}//end processShotResults()
 		

@@ -18,6 +18,7 @@
 	import com.bored.services.AbstractExternalService;
 	import com.inassets.statemachines.Finite.State;
 	import com.inassets.statemachines.interfaces.IStateMachine;
+	import com.jac.soundManager.SMSound;
 	import com.sven.utils.AppSettings;
 	import com.sven.utils.ImageFactory;
 	import flash.display.Bitmap;
@@ -63,6 +64,9 @@
 				_opponentSelectScreen.addEventListener(OpponentSelectScreen.OPPONENT_CHOSEN_EVT, onOpponentChosen, false, 0, true);
 				_opponentSelectScreen.addEventListener(OpponentSelectScreen.SHOW_STORE_EVT, onShowStoreChosen, false, 0, true);
 				DartsGlobals.instance.screenSpace.addChild(_opponentSelectScreen);
+				
+				DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").addSound( new SMSound("select_sound", "button_chrclick_mp3") );
+				DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").addSound( new SMSound("store_sound", "button_getdarts_mp3") );
 			}
 			catch (e:Error)
 			{
@@ -73,6 +77,8 @@
 		
 		public function onOpponentChosen(a_evt:Event):void
 		{
+			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("select_sound");
+			
 			_opponentSelectScreen.removeEventListener(OpponentSelectScreen.OPPONENT_CHOSEN_EVT, onOpponentChosen);
 			
 			DartsGlobals.instance.cpuPlayer = new ComputerPlayer(DartsGlobals.instance.enemyProfile);
@@ -85,6 +91,8 @@
 		
 		public function onShowStoreChosen(a_evt:Event):void
 		{
+			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("store_sound");
+			
 			(this.stateMachine as GameFSM).transitionToStateNamed("GameStore");
 		}//end pickOpponent()
 		

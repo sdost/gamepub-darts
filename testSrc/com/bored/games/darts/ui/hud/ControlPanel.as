@@ -9,6 +9,7 @@
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
+	import com.jac.soundManager.SMSound;
 	import com.jac.soundManager.SoundManager;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
@@ -162,6 +163,11 @@
 		public function registerSoundManager(a_soundMgr:SoundManager):void
 		{
 			_soundManager = a_soundMgr;
+			
+			_soundManager.getSoundControllerByID("buttonSoundController").addSound( new SMSound("trophy_sound", "button_achievements_mp3") );
+			_soundManager.getSoundControllerByID("buttonSoundController").addSound( new SMSound("help_sound", "button_help_mp3") );
+			_soundManager.getSoundControllerByID("buttonSoundController").addSound( new SMSound("quit_sound", "button_x_mp3") );
+			
 		}//end registerSoundManager()
 		
 		private function update(a_evt:Event):void
@@ -201,6 +207,8 @@
 			
 			DartsGlobals.instance.showModalPopup(HelpModal);
 			
+			_soundManager.getSoundControllerByID("buttonSoundController").play("help_sound");
+			
 			Mouse.show();
 		}//end onHelpButtonClick()
 		
@@ -210,6 +218,8 @@
 			
 			DartsGlobals.instance.showModalPopup(AchievementsModal);
 			
+			_soundManager.getSoundControllerByID("buttonSoundController").play("trophy_sound");
+			
 			Mouse.show();
 		}//end onTrophyButtonClick()
 		
@@ -218,6 +228,8 @@
 			DartsGlobals.instance.gameManager.pause(true);
 			
 			DartsGlobals.instance.showModalPopup(QuitModal);
+			
+			_soundManager.getSoundControllerByID("buttonSoundController").play("quit_sound");
 			
 			Mouse.show();
 		}//end onQuitButtonClick()

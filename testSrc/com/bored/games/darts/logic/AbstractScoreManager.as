@@ -17,9 +17,9 @@
 			
 		}//end initPlayerStats()
 		
-		public function submitThrow(a_playerNum:int, a_section:uint, a_multiplier:uint = 1):void
+		public function submitThrow(a_playerNum:int, a_section:uint, a_multiplier:uint = 1):Boolean
 		{
-			
+			return false;
 		}//end submitThrowHit()
 		
 		public function revertLastThrow():void

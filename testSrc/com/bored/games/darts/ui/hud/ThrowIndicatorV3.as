@@ -81,7 +81,7 @@
 			
 			if (_harness && _reticle)
 			{
-				_reticle.y = -((AppSettings.instance.dartMaxThrust - AppSettings.instance.dartMinThrust) / 2 + AppSettings.instance.dartMinThrust) * (206 / AppSettings.instance.dartMaxThrust);				
+				_reticle.y = -((AppSettings.instance.dartMaxThrust - AppSettings.instance.dartMinThrust) / 2 + AppSettings.instance.dartMinThrust) * (200 / AppSettings.instance.dartMaxThrust);				
 			}
 			else
 			{

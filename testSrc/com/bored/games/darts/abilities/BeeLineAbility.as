@@ -23,13 +23,14 @@
 			super(NAME, "Darts go straight to where you aim.", icon, a_time);
 			
 			var soundController:SoundController = DartsGlobals.instance.soundManager.getSoundControllerByID("abilitySounds");
-			soundController.addSound( new SMSound("beelineActivate", "dartpower_beelineloop_wav", true) );
+			soundController.addSound( new SMSound("beelineLoop", "dartpower_beelineloop_wav", true) );
+			soundController.addSound( new SMSound("beelineFire", "dartpower_beelinefire_mp3") );
 		}//end constructor()
 		
 		override public function useAbility():int
 		{		
 			var soundController:SoundController = DartsGlobals.instance.soundManager.getSoundControllerByID("abilitySounds");
-			soundController.play("beelineActivate");
+			soundController.play("beelineLoop");
 			
 			DartsGlobals.instance.gameManager.cursor.setCursorImage(SpriteFactory.getSpriteByQualifiedName("com.bored.games.darts.assets.hud.BeelineCursor_MC"));
 			DartsGlobals.instance.gameManager.currentDart.setThrowAction(new BeeLineTrajectoryAction(DartsGlobals.instance.gameManager.currentDart));

@@ -75,7 +75,8 @@
 					
 					DartsGlobals.instance.gameManager.currentDart.pullBack();
 					
-					if ( _mouseTimer == null ) {
+					if ( _mouseTimer == null ) 
+					{
 						_mouseTimer = new Timer(50);
 					}
 					Mouse.show();

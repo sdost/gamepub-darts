@@ -75,6 +75,16 @@
 			_dartboardSoundController.addSound( new SMSound( "opponent_triple_3", "darthit_opponenttriple3_mp3" ) );
 			_dartboardSoundController.addSound( new SMSound( "opponent_triple_4", "darthit_opponenttriple4_mp3" ) );
 			
+			_dartboardSoundController.addSound( new SMSound( "opponent_bullring_1", "darthit_opponentbullring1_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "opponent_bullring_2", "darthit_opponentbullring2_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "opponent_bullring_3", "darthit_opponentbullring3_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "opponent_bullring_4", "darthit_opponentbullring4_mp3" ) );
+			
+			_dartboardSoundController.addSound( new SMSound( "player_bullseye_1", "darthit_playerbullseye1_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "player_bullseye_2", "darthit_playerbullseye2_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "player_bullseye_3", "darthit_playerbullseye3_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "player_bullseye_4", "darthit_playerbullseye4_mp3" ) );
+			
 			_dartboardSoundController.addSound( new SMSound( "player_single_1", "darthit_playersingle1_mp3" ) );
 			_dartboardSoundController.addSound( new SMSound( "player_single_2", "darthit_playersingle2_mp3" ) );
 			_dartboardSoundController.addSound( new SMSound( "player_single_3", "darthit_playersingle3_mp3" ) );
@@ -90,9 +100,75 @@
 			_dartboardSoundController.addSound( new SMSound( "player_triple_3", "darthit_playertriple3_mp3" ) );
 			_dartboardSoundController.addSound( new SMSound( "player_triple_4", "darthit_playertriple4_mp3" ) );
 			
+			_dartboardSoundController.addSound( new SMSound( "player_bullring_1", "darthit_playerbullring1_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "player_bullring_2", "darthit_playerbullring2_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "player_bullring_3", "darthit_playerbullring3_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "player_bullring_4", "darthit_playerbullring4_mp3" ) );
+			
+			_dartboardSoundController.addSound( new SMSound( "player_bullseye_1", "darthit_playerbullseye1_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "player_bullseye_2", "darthit_playerbullseye2_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "player_bullseye_3", "darthit_playerbullseye3_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "player_bullseye_4", "darthit_playerbullseye4_mp3" ) );
+			
+			_dartboardSoundController.addSound( new SMSound( "noscore_critical_1", "darthit_noscore_critical1_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "noscore_critical_2", "darthit_noscore_critical2_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "noscore_critical_3", "darthit_noscore_critical3_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "noscore_critical_4", "darthit_noscore_critical4_mp3" ) );
+			
+			_dartboardSoundController.addSound( new SMSound( "opponent_single_critical_1", "darthit_opponentsingle_critical1_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "opponent_single_critical_2", "darthit_opponentsingle_critical2_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "opponent_single_critical_3", "darthit_opponentsingle_critical3_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "opponent_single_critical_4", "darthit_opponentsingle_critical4_mp3" ) );
+			
+			_dartboardSoundController.addSound( new SMSound( "opponent_double_critical_1", "darthit_opponentdouble_critical1_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "opponent_double_critical_2", "darthit_opponentdouble_critical2_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "opponent_double_critical_3", "darthit_opponentdouble_critical3_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "opponent_double_critical_4", "darthit_opponentdouble_critical4_mp3" ) );
+			
+			_dartboardSoundController.addSound( new SMSound( "opponent_triple_critical_1", "darthit_opponenttriple_critical1_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "opponent_triple_critical_2", "darthit_opponenttriple_critical2_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "opponent_triple_critical_3", "darthit_opponenttriple_critical3_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "opponent_triple_critical_4", "darthit_opponenttriple_critical4_mp3" ) );
+			
+			_dartboardSoundController.addSound( new SMSound( "opponent_bullring_critical_1", "darthit_opponentbullring_critical1_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "opponent_bullring_critical_2", "darthit_opponentbullring_critical2_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "opponent_bullring_critical_3", "darthit_opponentbullring_critical3_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "opponent_bullring_critical_4", "darthit_opponentbullring_critical4_mp3" ) );
+			
+			_dartboardSoundController.addSound( new SMSound( "opponent_bullseye_critical_1", "darthit_opponentbullseye_critical1_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "opponent_bullseye_critical_2", "darthit_opponentbullseye_critical2_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "opponent_bullseye_critical_3", "darthit_opponentbullseye_critical3_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "opponent_bullseye_critical_4", "darthit_opponentbullseye_critical4_mp3" ) );
+			
+			_dartboardSoundController.addSound( new SMSound( "player_single_critical_1", "darthit_playersingle_critical1_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "player_single_critical_2", "darthit_playersingle_critical2_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "player_single_critical_3", "darthit_playersingle_critical3_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "player_single_critical_4", "darthit_playersingle_critical4_mp3" ) );
+			
+			_dartboardSoundController.addSound( new SMSound( "player_double_critical_1", "darthit_playerdouble_critical1_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "player_double_critical_2", "darthit_playerdouble_critical2_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "player_double_critical_3", "darthit_playerdouble_critical3_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "player_double_critical_4", "darthit_playerdouble_critical4_mp3" ) );
+			
+			_dartboardSoundController.addSound( new SMSound( "player_triple_critical_1", "darthit_playertriple_critical1_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "player_triple_critical_2", "darthit_playertriple_critical2_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "player_triple_critical_3", "darthit_playertriple_critical3_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "player_triple_critical_4", "darthit_playertriple_critical4_mp3" ) );
+			
+			_dartboardSoundController.addSound( new SMSound( "player_bullring_critical_1", "darthit_playerbullring_critical1_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "player_bullring_critical_2", "darthit_playerbullring_critical2_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "player_bullring_critical_3", "darthit_playerbullring_critical3_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "player_bullring_critical_4", "darthit_playerbullring_critical4_mp3" ) );
+			
+			_dartboardSoundController.addSound( new SMSound( "player_bullseye_critical_1", "darthit_playerbullseye_critical1_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "player_bullseye_critical_2", "darthit_playerbullseye_critical2_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "player_bullseye_critical_3", "darthit_playerbullseye_critical3_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "player_bullseye_critical_4", "darthit_playerbullseye_critical4_mp3" ) );
+			
 			_dartboardSoundController.addSound( new SMSound( "bounce_wall", "darthit_bouncewall_mp3" ) );
 			_dartboardSoundController.addSound( new SMSound( "bounce_board", "darthit_bounceboard_mp3" ) );
-			_dartboardSoundController.addSound( new SMSound( "shield", "darthit_shield_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "shieldApply", "dartpower_shieldapply_mp3" ) );
+			_dartboardSoundController.addSound( new SMSound( "shieldHit", "dartpower_shieldhit_mp3" ) );
 			
 			DartsGlobals.instance.soundManager.addSoundController(_dartboardSoundController);
 		}//end initSounds()
@@ -138,33 +214,39 @@
 				
 			var objects:Array = _sprite.getObjectsUnderPoint(p);
 			
+			var points:int = 0;
+			var multiplier:int = 0;
+			var scoring:Boolean = false;
+			
 			if (objects.length > 0) {
 				if (_pattern.test(objects[0].parent.name) && !_blockedSections[objects[0].parent.name]) 
 				{
 					var arr:Array = objects[0].parent.name.split("_");
 					
-					playHitSound(DartsGlobals.instance.gameManager.currentPlayer, Number(arr[2]));
+					points = Number(arr[1]);
+					multiplier = Number(arr[2]);
 					
-					DartsGlobals.instance.gameManager.scoreManager.submitThrow(DartsGlobals.instance.gameManager.currentPlayer, Number(arr[1]), Number(arr[2]));
+					playHitSound(DartsGlobals.instance.gameManager.currentPlayer, multiplier);
 					
-					if (Number(arr[1]) > 0) 
+					scoring = DartsGlobals.instance.gameManager.scoreManager.submitThrow(DartsGlobals.instance.gameManager.currentPlayer, points, multiplier);
+					
+					if (points > 0) 
 					{
-						var text:AnimatedText = new AnimatedText(Number(arr[1]) + " x " + Number(arr[2]), new CooperStd(), TweenMax.fromTo(null, 0.75, { x: p.x, y: p.y, alpha: 1 }, { x: p.x, y: p.y - 15, alpha: 0 } ));
+						var text:AnimatedText = new AnimatedText(points + " x " + multiplier, new CooperStd(), TweenMax.fromTo(null, 0.75, { x: p.x, y: p.y, alpha: 1 }, { x: p.x, y: p.y - 15, alpha: 0 } ));
 						text.alpha = 0;
 						_sprite.addChild(text);
 						text.animate();					
 					}
 					
-					DartsGlobals.instance.gameManager.players[DartsGlobals.instance.gameManager.currentPlayer-1].processShotResult(Number(arr[1]), Number(arr[2]));
-					
 					if (a_block)
 					{
-						_shieldAction.startBlocking(arr[1]);						
+						_dartboardSoundController.play("shieldApply");
+						_shieldAction.startBlocking(points.toString());						
 					}
 					
 					return true;
 				} else if ( _blockedSections[objects[0].parent.name] ) {
-					_dartboardSoundController.play("shield");
+					_dartboardSoundController.play("shieldHit");
 				} else {
 					_dartboardSoundController.play("bounce_board");
 				}
@@ -172,7 +254,7 @@
 				_dartboardSoundController.play("bounce_wall");
 			}
 			
-			DartsGlobals.instance.gameManager.players[DartsGlobals.instance.gameManager.currentPlayer-1].processShotResult(0,0);
+			DartsGlobals.instance.gameManager.players[DartsGlobals.instance.gameManager.currentPlayer-1].processShotResult(points, multiplier, scoring);
 			
 			return false;			
 		}//end submitDartPosition()

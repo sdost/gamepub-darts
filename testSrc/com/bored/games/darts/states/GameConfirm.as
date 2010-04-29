@@ -15,6 +15,7 @@
 	import com.bored.services.AbstractExternalService;
 	import com.inassets.statemachines.Finite.State;
 	import com.inassets.statemachines.interfaces.IStateMachine;
+	import com.jac.soundManager.SMSound;
 	import com.sven.utils.AppSettings;
 	import com.sven.utils.ImageFactory;
 	import flash.display.MovieClip;
@@ -59,6 +60,10 @@
 				_gameConfirmScreen.addEventListener(GameConfirmScreen.BACK_CLICKED_EVT, onBack, false, 0, true);
 				_gameConfirmScreen.addEventListener(GameConfirmScreen.LAUNCH_STORE_EVT, onLaunchStore, false, 0, true);
 				DartsGlobals.instance.screenSpace.addChild(_gameConfirmScreen);
+				
+				DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").addSound( new SMSound("store_sound", "button_getdarts_mp3") );
+				DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").addSound( new SMSound("play_sound", "button_play_mp3") );
+				DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").addSound( new SMSound("back_sound", "button_back_mp3") );
 			}
 			catch (e:Error)
 			{
@@ -69,6 +74,8 @@
 		
 		public function onPlay(a_evt:Event):void
 		{
+			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("play_sound");
+			
 			DartsGlobals.instance.gameManager.registerPlayer( DartsGlobals.instance.localPlayer );
 			DartsGlobals.instance.gameManager.registerPlayer( DartsGlobals.instance.cpuPlayer );
 			
@@ -77,11 +84,15 @@
 		
 		public function onBack(a_evt:Event):void
 		{			
+			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("back_sound");
+			
 			(this.stateMachine as GameFSM).transitionToStateNamed("CPUOpponentSelect");
 		}//end onBack()
 		
 		public function onLaunchStore(a_evt:Event):void
 		{
+			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("store_sound");
+			
 			(this.stateMachine as GameFSM).transitionToStateNamed("GameStore");
 		}//end onLaunchStore()
 		

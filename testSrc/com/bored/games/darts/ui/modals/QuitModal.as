@@ -8,6 +8,7 @@
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
+	import com.jac.soundManager.SMSound;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -41,6 +42,9 @@
 		private function addedToStage(a_evt:Event = null):void
 		{
 			Mouse.show();
+			
+			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").addSound( new SMSound("yes_sound", "button_x_yes_mp3") );
+			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").addSound( new SMSound("no_sound", "button_x_no_mp3") );
 		}//end addedToStage()
 		
 		override protected function buildFrom(a_img:Sprite, a_buildFromAllDescendants:Boolean = true):Dictionary
@@ -80,6 +84,8 @@
 		
 		private function onYesClicked(evt:Event):void
 		{
+			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("yes_sound");
+			
 			_yesBtn.removeEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onYesClicked);
 			_noBtn.removeEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onNoClicked);
 
@@ -92,6 +98,8 @@
 		
 		private function onNoClicked(evt:Event):void
 		{
+			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("no_sound");
+			
 			_yesBtn.removeEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onYesClicked);
 			_noBtn.removeEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onNoClicked);
 			

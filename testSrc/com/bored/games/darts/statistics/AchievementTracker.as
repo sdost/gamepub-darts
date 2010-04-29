@@ -17,8 +17,6 @@
 		public static const ACHIEVEMENT_C_9:String = "c_9";
 		public static const ACHIEVEMENT_NINER:String = "niner";
 		public static const ACHIEVEMENT_PERFECT_NINER:String = "perfect_niner";
-		
-		public static var _instance:AchievementTracker = null;
 				
 		public static function bestowAchievement(a_id:String):void
 		{

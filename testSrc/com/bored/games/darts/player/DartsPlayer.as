@@ -122,9 +122,9 @@
 			
 		}//end takeTheShot()
 		
-		public function processShotResult(a_points:int, a_multiplier:int):void
+		public function processShotResult(a_points:int, a_multiplier:int, a_scoring:Boolean):void
 		{
-			_gameRecord.recordThrow(a_points, a_multiplier);			
+			_gameRecord.recordThrow(a_points, a_multiplier, a_scoring);			
 		}//end processShotResult()
 		
 		public function get record():GameRecord

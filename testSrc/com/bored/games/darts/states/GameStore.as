@@ -17,6 +17,7 @@
 	import com.inassets.events.ObjectEvent;
 	import com.inassets.statemachines.Finite.State;
 	import com.inassets.statemachines.interfaces.IStateMachine;
+	import com.jac.soundManager.SMSound;
 	import com.sven.utils.AppSettings;
 	import com.sven.utils.SpriteFactory;
 	import flash.display.Bitmap;
@@ -65,6 +66,8 @@
 				_gameStoreScreen = new GameStoreScreen(gameStoreScreenImg, false, true);
 				_gameStoreScreen.addEventListener(GameStoreScreen.BACK_CLICKED_EVT, onBackClicked, false, 0, true);
 				DartsGlobals.instance.screenSpace.addChild(_gameStoreScreen);
+				
+				DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").addSound( new SMSound("back_sound", "button_back_mp3") );
 			}
 			catch (e:Error)
 			{
@@ -75,6 +78,8 @@
 		
 		private function onBackClicked(evt:Event):void
 		{
+			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("back_sound");
+			
 			(this.stateMachine as GameFSM).transitionToPreviousState();
 		}//end onBackClicked()
 				

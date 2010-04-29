@@ -1,6 +1,7 @@
 ﻿package com.bored.games.darts.states 
 {
 	import com.inassets.ui.buttons.events.ButtonEvent;
+	import com.jac.soundManager.SMSound;
 	import com.sven.utils.AppSettings;
 	import com.bored.games.animations.Cutscene;
 	import com.bored.games.animations.CutsceneManager;
@@ -55,6 +56,8 @@
 			DartsGlobals.instance.screenSpace.addChild(_openingCutscene);
 			DartsGlobals.instance.screenSpace.addChild(_skipButton.buttonContents);
 			
+			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").addSound( new SMSound("skipall_sound", "button_skipall_mp3") );
+			
 			_openingCutscene.startScene();
 			
 			_openingCutscene.addEventListener(MouseEvent.CLICK, onClick, false, 0, true);
@@ -67,6 +70,8 @@
 		
 		private function onSkipClicked(evt:Event):void
 		{
+			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("skipall_sound");
+			
 			(this.stateMachine as GameFSM).transitionToNextState();
 		}//end onSkipClicked()
 		
