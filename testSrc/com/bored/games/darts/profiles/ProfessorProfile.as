@@ -5,7 +5,6 @@
 	import com.bored.games.darts.abilities.DoOverAbility;
 	import com.bored.games.darts.abilities.ShieldAbility;
 	import com.bored.games.darts.DartsGlobals;
-	import com.bored.games.darts.models.dae_DartFlightThin;
 	import com.sven.utils.AppSettings;
 	import com.sven.utils.ImageFactory;
 	import com.bored.games.darts.profiles.EnemyProfile;
@@ -30,11 +29,11 @@
 			this.age = 75;
 			this.height = 100;
 			this.weight = 50;
-			this.bio = "Weird Old Guy.";
+			this.bio = "Impeccable in every way. Highly experienced with darts and powers.";
 			
 			this.portrait = new TheProfessor_Portrait_BMP(150, 150);
 			
-			this.setDartSkin(new DartSkin(ImageFactory.getBitmapDataByQualifiedName("dartuv_theprofessor", AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight), dae_DartShaft.data, dae_DartFlightThin.data));
+			this.setDartSkin(new DartSkin(ImageFactory.getBitmapDataByQualifiedName("dartuv_theprofessor", AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight), dae_DartShaft.data, dae_DartFlightHeart.data));
 			
 			this.accuracy = AppSettings.instance.professorAccuracy;
 			this.stepScale = AppSettings.instance.professorStepScale;

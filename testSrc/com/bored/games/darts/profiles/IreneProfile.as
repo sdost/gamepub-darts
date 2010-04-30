@@ -31,7 +31,7 @@
 			this.age = 26;
 			this.height = 80;
 			this.weight = 30;
-			this.bio = "Femme fatale.";
+			this.bio = "Shrewd and Accurate. Would rather beat you with precision than fancy and flare.";
 			
 			this.portrait = new Irene_Portrait_BMP(150, 150);
 			

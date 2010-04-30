@@ -30,7 +30,7 @@
 			this.age = 32;
 			this.height = 105;
 			this.weight = 90;
-			this.bio = "A big guy with a big ego, and a big temper.";
+			this.bio = "A lucky bastard. Accuracy increases if he hits his lucky number. Wary of shields.";
 			
 			this.firstMatch = "Now you're snookered, you gormless Yank. Time to throw a spanner in the works of your arrows!";
 			

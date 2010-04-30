@@ -28,7 +28,7 @@
 			this.age = 20;
 			this.height = 155;
 			this.weight = 70;
-			this.bio = "Crazy sociopath.";
+			this.bio = "A dartshark that toys with you. Hides his skills and gets better if you target things oddly...";
 			
 			this.firstMatch = "A brosay eegra bitva for you and me! I hope you're dobby, you merzky sod!";
 			this.winMatch = "I hope you'll accept my humble Appypolly loggy for being so baddiwad to a fine chelloveck like yourself.";

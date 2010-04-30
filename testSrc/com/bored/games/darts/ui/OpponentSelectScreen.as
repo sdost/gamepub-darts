@@ -127,7 +127,7 @@
 				_ireneBtn.pause(false);
 				_ireneBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
 				
-				_ireneBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_MOUSE_OVER_EVT, function(a_evt:Event):void {
+				_ireneBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, function(a_evt:Event):void {
 					generateToolTip(_ireneBtnImg).show(_ireneBtnImg, "Irene", "$1000");
 				}, false, 0, true);
 			}
@@ -142,7 +142,7 @@
 				_oldmanBtn.pause(false);
 				_oldmanBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
 				
-				_oldmanBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_MOUSE_OVER_EVT, function(a_evt:Event):void {
+				_oldmanBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, function(a_evt:Event):void {
 					generateToolTip(_oldmanBtnImg).show(_oldmanBtnImg, "Old Man", "Tutorial");
 				}, false, 0, true);
 			}
@@ -157,7 +157,7 @@
 				_mackBtn.pause(false);
 				_mackBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
 				
-				_mackBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_MOUSE_OVER_EVT, function(a_evt:Event):void {
+				_mackBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, function(a_evt:Event):void {
 					generateToolTip(_mackBtnImg).show(_mackBtnImg, "Mack", "$100");
 				}, false, 0, true);
 			}
@@ -172,7 +172,7 @@
 				_anthonyBtn.pause(false);
 				_anthonyBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
 				
-				_anthonyBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_MOUSE_OVER_EVT, function(a_evt:Event):void {
+				_anthonyBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, function(a_evt:Event):void {
 					generateToolTip(_anthonyBtnImg).show(_anthonyBtnImg, "Anthony", "$250");
 				}, false, 0, true);
 			}
@@ -187,7 +187,7 @@
 				_professorBtn.pause(false);
 				_professorBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
 				
-				_professorBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_MOUSE_OVER_EVT, function(a_evt:Event):void {
+				_professorBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, function(a_evt:Event):void {
 					generateToolTip(_professorBtnImg).show(_professorBtnImg, "The Professor", "$2000");
 				}, false, 0, true);
 			}
@@ -202,7 +202,7 @@
 				_sammyBtn.pause(false);
 				_sammyBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
 				
-				_sammyBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_MOUSE_OVER_EVT, function(a_evt:Event):void {
+				_sammyBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, function(a_evt:Event):void {
 					generateToolTip(_sammyBtnImg).show(_sammyBtnImg, "Sammy", "$50");
 				}, false, 0, true);
 			}
@@ -217,7 +217,7 @@
 				_simonBtn.pause(false);
 				_simonBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
 				
-				_simonBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_MOUSE_OVER_EVT, function(a_evt:Event):void {
+				_simonBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, function(a_evt:Event):void {
 					generateToolTip(_simonBtnImg).show(_simonBtnImg, "Simon", "$500");
 				}, false, 0, true);
 			}
@@ -232,7 +232,7 @@
 				_barkeepBtn.pause(false);
 				_barkeepBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
 				
-				_barkeepBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_MOUSE_OVER_EVT, function(a_evt:Event):void {
+				_barkeepBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, function(a_evt:Event):void {
 					generateToolTip(_barkeepBtnImg).show(_barkeepBtnImg, "Barkeep", "Store");
 				}, false, 0, true);
 			}
@@ -247,7 +247,7 @@
 				_bigbillBtn.pause(false);
 				_bigbillBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
 				
-				_bigbillBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_MOUSE_OVER_EVT, function(a_evt:Event):void {
+				_bigbillBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, function(a_evt:Event):void {
 					generateToolTip(_bigbillBtnImg).show(_bigbillBtnImg, "Big Bill", "$1500");
 				}, false, 0, true);
 			}

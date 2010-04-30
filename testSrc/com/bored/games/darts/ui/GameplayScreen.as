@@ -24,6 +24,7 @@
 	import com.bored.games.darts.objects.Dart;
 	import com.bored.games.darts.ui.hud.AbilityDock;
 	import com.bored.games.darts.ui.hud.ControlPanel;
+	import com.bored.games.darts.ui.hud.DartDock;
 	import com.bored.games.darts.ui.hud.ScoreBoard;
 	import com.bored.games.darts.ui.hud.ThrowIndicator;
 	import com.bored.games.darts.ui.hud.ThrowIndicatorV2;
@@ -92,6 +93,7 @@
 		private var _throwIndicator:ThrowIndicatorV3;
 		private var _scoreBoard:ScoreBoard;
 		private var _abilityDock:AbilityDock;
+		private var _dartDock:DartDock;
 		private var _controlPanel:ControlPanel;
 		
 		private var _collada:Collada;
@@ -140,6 +142,13 @@
 			_abilityDock.y = AppSettings.instance.abilityDockPositionY;
 			_abilityDock.registerAbilityManager(DartsGlobals.instance.gameManager.abilityManager);
 			_abilityDock.show();
+			
+			cls = getDefinitionByName(AppSettings.instance.dartDockMovie) as Class;
+			_dartDock = new DartDock(new cls());
+			DartsGlobals.instance.optionsInterfaceSpace.addChild(_dartDock);
+			_dartDock.x = AppSettings.instance.dartDockPositionX;
+			_dartDock.y = AppSettings.instance.dartDockPositionY;
+			_dartDock.show();
 			
 			if (this.stage)
 			{
@@ -230,9 +239,10 @@
 	
 		public function render():void
 		{	
-			if(_scoreBoard) _scoreBoard.update();
-			if(_throwIndicator) _throwIndicator.update();
-			if(_abilityDock) _abilityDock.update();
+			if (_scoreBoard) _scoreBoard.update();
+			if (_throwIndicator) _throwIndicator.update();
+			if (_abilityDock) _abilityDock.update();
+			if (_dartDock) _dartDock.update();
 			
 			if(_view) _view.render();
 		}//end render()
@@ -247,10 +257,12 @@
 			DartsGlobals.instance.optionsInterfaceSpace.removeChild(_throwIndicator);
 			DartsGlobals.instance.optionsInterfaceSpace.removeChild(_scoreBoard);
 			DartsGlobals.instance.optionsInterfaceSpace.removeChild(_abilityDock);
+			DartsGlobals.instance.optionsInterfaceSpace.removeChild(_dartDock);
 			
 			_throwIndicator = null;
 			_scoreBoard = null;
 			_abilityDock = null;
+			_dartDock = null;
 			
 			_view = null;
 			_scene = null;

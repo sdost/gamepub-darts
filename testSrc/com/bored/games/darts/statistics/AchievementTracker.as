@@ -23,6 +23,7 @@
 			if (!DartsGlobals.instance.externalServices.checkForAchievement(a_id))
 			{
 				//DartsGlobals.instance.showModalPopup(AchievementModal);
+				DartsGlobals.instance.localPlayer.record.recordAchievement(a_id);
 			}
 		}//end bestowAchievement()
 		

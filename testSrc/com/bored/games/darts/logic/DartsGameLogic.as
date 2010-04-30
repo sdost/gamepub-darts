@@ -229,7 +229,6 @@
 			if ( _currentDart && ( _currentDart.position.z >=  AppSettings.instance.dartboardPositionZ || _currentDart.position.y <= -10 ) )
 			{				
 				_currentDart.finishThrow();
-				_throwController.resetThrowParams();
 				
 				if ( !_dartboard.submitDartPosition(_currentDart.position.x, _currentDart.position.y, _currentDart.blockBoard) ) 
 				{
@@ -252,6 +251,8 @@
 					DartsGlobals.instance.showModalPopup(PostGameBanterModal);
 					return;
 				}
+				
+				_currentTurn.advanceThrows();
 				
 				if (_currentTurn.throwsRemaining == 0) 
 				{
@@ -293,8 +294,7 @@
 		{			
 			_lastDart = _currentDart;
 			
-			var ind:int = _currentTurn.advanceThrows() - 1;
-			_currentDart = _players[_currentPlayer - 1].darts[ind];
+			_currentDart = _players[_currentPlayer - 1].darts[_currentTurn.throwIndex];
 			_currentDart.reset();
 			
 			_currentDart.position.x = AppSettings.instance.defaultStartPositionX;
@@ -350,6 +350,11 @@
 			return _currentPlayer;
 		}//end get currentPlayer()
 		
+		public function get currentTurn():DartsTurn
+		{
+			return _currentTurn;
+		}//end get currentTurn()
+		
 		public function get darts():Vector.<Dart>
 		{
 			if ( _darts == null ) {
@@ -395,17 +400,23 @@
 				
 				thrust = a_thrust;
 				lean = a_lean;
-				angle = AppSettings.instance.defaultAngle / 2;
+				angle = AppSettings.instance.underthrowAngle;
 			}
 			else if ( a_thrust > AppSettings.instance.dartSweetSpotMax ) 
 			{
 				version = Math.ceil(2 * Math.random());
 				
 				_soundController.play("throw_normal_" + version.toString());
+								
+				var scaler:Number = Math.log( AppSettings.instance.overthrowScale * (a_thrust - AppSettings.instance.dartSweetSpotThrust)
+					/ (AppSettings.instance.dartMaxThrust - AppSettings.instance.dartSweetSpotThrust))
+					/ Math.log(AppSettings.instance.overthrowExponent) + AppSettings.instance.overthrowOffset;
 				
-				thrust = a_thrust;// * (Math.log(a_thrust - AppSettings.instance.dartSweetSpotThrust) / Math.log(AppSettings.instance.overthrowExponent));
-				lean = a_lean * (Math.log(a_thrust - AppSettings.instance.dartSweetSpotThrust) / Math.log(AppSettings.instance.overthrowExponent));
-				angle = AppSettings.instance.defaultAngle * 3;
+				trace("Scale: " + scaler);
+					
+				thrust = a_thrust * scaler;
+				lean = a_lean * scaler;
+				angle = AppSettings.instance.overthrowAngle;
 			}
 			else 
 			{

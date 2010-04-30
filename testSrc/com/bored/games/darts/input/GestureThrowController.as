@@ -64,6 +64,7 @@
 				}
 			} else {
 				if ( a_evt.button ) {
+					resetThrowParams();					
 					_lastMove = 0;
 					_oX = _mousePosition.x;
 					_oY = _mousePosition.y;

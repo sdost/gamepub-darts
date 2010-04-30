@@ -28,7 +28,7 @@
 			this.age = 28;
 			this.height = 105;
 			this.weight = 180;
-			this.bio = "Dirty chav with terrible fashion sense.";
+			this.bio = "A \"chav\" way past his prime. An aggressive risk taker. Known to favor Doubles and Triples.";
 			
 			this.portrait = new Mack_Portrait_BMP(150, 150);
 			

@@ -13,6 +13,8 @@
 		
 		private var _lastScore:Object;
 		
+		private var _achievementsEarned:Vector.<String>;
+		
 		private var _win:Boolean;
 		
 		public function GameRecord() 
@@ -22,6 +24,7 @@
 			_doubles = 0;
 			_triples = 0;
 			_lastScore = { };
+			_achievementsEarned = new Vector.<String>();
 			_win = false;
 		}//end constructor()
 		
@@ -58,6 +61,11 @@
 				AchievementTracker.bestowAchievement(AchievementTracker.ACHIEVEMENT_THREE_TRIPLES);
 			}
 		}//end logThrow()
+		
+		public function recordAchievement( a_id:String ):void
+		{
+			if( _achievementsEarned.indexOf( a_id, 0 ) < 0 ) _achievementsEarned.push(a_id);
+		}//end recordAchievement()
 		
 		public function recordEndOfGame( a_win:Boolean ):void
 		{

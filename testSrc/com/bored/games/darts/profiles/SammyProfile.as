@@ -27,7 +27,7 @@
 			this.age = 32;
 			this.height = 105;
 			this.weight = 90;
-			this.bio = "Crazy drunk!";
+			this.bio = "A local footie fan. Great at drinking. Terrible at darts.";
 			
 			this.firstMatch = "Alright then, mate, time to kick off. Give it your best shot!";
 			this.winMatch = "Surely you moved the goalposts on me!";
