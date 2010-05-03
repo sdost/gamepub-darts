@@ -14,6 +14,8 @@
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
+	import com.jac.soundManager.SMSound;
+	import com.jac.soundManager.SoundController;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -72,6 +74,8 @@
 		private var _titleFont:TextFormat;
 		private var _consoleFont:TextFormat;
 		
+		private var _characterSounds:SoundController;
+		
 		public function OpponentSelectScreen(a_img:Sprite, a_buildFromAllDescendants:Boolean = false, a_bAddContents:Boolean = true, a_buildBackground:Boolean = false) 
 		{
 			super(a_img, a_buildFromAllDescendants, a_bAddContents);
@@ -121,6 +125,8 @@
 			_consoleFont.bold = false;
 			_consoleFont.color = 0x000000;
 			
+			_characterSounds = new SoundController("character_select_sounds");
+			
 			if (_ireneBtnImg)
 			{
 				_ireneBtn = new MightyButton(_ireneBtnImg, false);
@@ -129,7 +135,7 @@
 				
 				_ireneBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, function(a_evt:Event):void {
 					generateToolTip(_ireneBtnImg).show(_ireneBtnImg, "Irene", "$1000");
-				}, false, 0, true);
+				});
 			}
 			else
 			{
@@ -144,7 +150,7 @@
 				
 				_oldmanBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, function(a_evt:Event):void {
 					generateToolTip(_oldmanBtnImg).show(_oldmanBtnImg, "Old Man", "Tutorial");
-				}, false, 0, true);
+				});
 			}
 			else
 			{
@@ -159,7 +165,7 @@
 				
 				_mackBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, function(a_evt:Event):void {
 					generateToolTip(_mackBtnImg).show(_mackBtnImg, "Mack", "$100");
-				}, false, 0, true);
+				});
 			}
 			else
 			{
@@ -174,7 +180,7 @@
 				
 				_anthonyBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, function(a_evt:Event):void {
 					generateToolTip(_anthonyBtnImg).show(_anthonyBtnImg, "Anthony", "$250");
-				}, false, 0, true);
+				});
 			}
 			else
 			{
@@ -189,7 +195,13 @@
 				
 				_professorBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, function(a_evt:Event):void {
 					generateToolTip(_professorBtnImg).show(_professorBtnImg, "The Professor", "$2000");
-				}, false, 0, true);
+				});
+				
+				// Character Select...
+				_characterSounds.addSound( new SMSound("prof_start1", "TheProf_ChrSelLetsPlayDarts_mp3") );
+				_characterSounds.addSound( new SMSound("prof_start2", "TheProf_ChrSelTakeYouOn_mp3") );
+				_characterSounds.addSound( new SMSound("prof_start3", "TheProf_ChrSelChallengeAccepted_mp3") );
+				_characterSounds.addSound( new SMSound("prof_start4", "TheProf_ChrSelTimeForDarts_mp3") );
 			}
 			else
 			{
@@ -204,7 +216,7 @@
 				
 				_sammyBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, function(a_evt:Event):void {
 					generateToolTip(_sammyBtnImg).show(_sammyBtnImg, "Sammy", "$50");
-				}, false, 0, true);
+				});
 			}
 			else
 			{
@@ -219,7 +231,7 @@
 				
 				_simonBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, function(a_evt:Event):void {
 					generateToolTip(_simonBtnImg).show(_simonBtnImg, "Simon", "$500");
-				}, false, 0, true);
+				});
 			}
 			else
 			{
@@ -234,7 +246,7 @@
 				
 				_barkeepBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, function(a_evt:Event):void {
 					generateToolTip(_barkeepBtnImg).show(_barkeepBtnImg, "Barkeep", "Store");
-				}, false, 0, true);
+				});
 			}
 			else
 			{
@@ -249,7 +261,7 @@
 				
 				_bigbillBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, function(a_evt:Event):void {
 					generateToolTip(_bigbillBtnImg).show(_bigbillBtnImg, "Big Bill", "$1500");
-				}, false, 0, true);
+				});
 			}
 			else
 			{
@@ -354,6 +366,10 @@
 			{
 				if (a_evt.mightyButton == _professorBtn) {
 					DartsGlobals.instance.enemyProfile = new ProfessorProfile();
+					
+					var version:int = Math.ceil( Math.random() * 4 );
+					
+					_characterSounds.play("prof_start" + version.toString());
 				}
 				
 				_professorBtn.pause(true);

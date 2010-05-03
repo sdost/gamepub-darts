@@ -104,6 +104,8 @@
 			
 			DartsGlobals.instance.gameManager.pause(false);
 			
+			//DartsGlobals.instance.gameManager.bullOff();
+			
 			DartsGlobals.instance.gameManager.startNewTurn();
 		}//end handleClick()
 		

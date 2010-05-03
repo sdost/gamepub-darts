@@ -31,7 +31,7 @@
 			
 			_gameElement.roll = 0;
 			
-			DartsGlobals.instance.soundManager.getSoundControllerByID("abilitySounds").stop("beelineActivate");
+			DartsGlobals.instance.soundManager.getSoundControllerByID("abilitySounds").stop("beelineLoop");
 			DartsGlobals.instance.soundManager.getSoundControllerByID("abilitySounds").play("beelineFire");
 		}//end startAction()
 		

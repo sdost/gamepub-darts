@@ -119,13 +119,16 @@
 			
 			var cls:Class;
 			
-			cls = getDefinitionByName(AppSettings.instance.throwIndicatorMovie) as Class;
-			_throwIndicator = new ThrowIndicatorV3(new cls());
-			DartsGlobals.instance.optionsInterfaceSpace.addChild(_throwIndicator);
-			_throwIndicator.x = AppSettings.instance.throwIndicatorPositionX;
-			_throwIndicator.y = AppSettings.instance.throwIndicatorPositionY;
-			_throwIndicator.registerThrowController(DartsGlobals.instance.gameManager.throwController);
-			_throwIndicator.show();
+			if ( DartsGlobals.instance.gameMode == DartsGlobals.HARD ) 
+			{
+				cls = getDefinitionByName(AppSettings.instance.throwIndicatorMovie) as Class;
+				_throwIndicator = new ThrowIndicatorV3(new cls());
+				DartsGlobals.instance.optionsInterfaceSpace.addChild(_throwIndicator);
+				_throwIndicator.x = AppSettings.instance.throwIndicatorPositionX;
+				_throwIndicator.y = AppSettings.instance.throwIndicatorPositionY;
+				_throwIndicator.registerThrowController(DartsGlobals.instance.gameManager.throwController);
+				_throwIndicator.show();
+			}
 						
 			cls = getDefinitionByName(AppSettings.instance.scoreboardMovie) as Class;
 			_scoreBoard = new ScoreBoard(new cls());
@@ -135,13 +138,16 @@
 			_scoreBoard.registerScoreManager(DartsGlobals.instance.gameManager.scoreManager);
 			_scoreBoard.show();
 			
-			cls = getDefinitionByName(AppSettings.instance.abilityDockMovie) as Class;
-			_abilityDock = new AbilityDock(new cls());
-			DartsGlobals.instance.optionsInterfaceSpace.addChild(_abilityDock);
-			_abilityDock.x = AppSettings.instance.abilityDockPositionX;
-			_abilityDock.y = AppSettings.instance.abilityDockPositionY;
-			_abilityDock.registerAbilityManager(DartsGlobals.instance.gameManager.abilityManager);
-			_abilityDock.show();
+			if ( DartsGlobals.instance.gameMode == DartsGlobals.HARD ) 
+			{
+				cls = getDefinitionByName(AppSettings.instance.abilityDockMovie) as Class;
+				_abilityDock = new AbilityDock(new cls());
+				DartsGlobals.instance.optionsInterfaceSpace.addChild(_abilityDock);
+				_abilityDock.x = AppSettings.instance.abilityDockPositionX;
+				_abilityDock.y = AppSettings.instance.abilityDockPositionY;
+				_abilityDock.registerAbilityManager(DartsGlobals.instance.gameManager.abilityManager);
+				_abilityDock.show();
+			}
 			
 			cls = getDefinitionByName(AppSettings.instance.dartDockMovie) as Class;
 			_dartDock = new DartDock(new cls());
@@ -149,6 +155,10 @@
 			_dartDock.x = AppSettings.instance.dartDockPositionX;
 			_dartDock.y = AppSettings.instance.dartDockPositionY;
 			_dartDock.show();
+			
+			_stats = new Stats();
+			_stats.y = 50;
+			DartsGlobals.instance.optionsInterfaceSpace.addChild(_stats);
 			
 			if (this.stage)
 			{
@@ -198,7 +208,7 @@
 			_view.scene = _scene;
 			_view.camera = _camera;
 			
-			addChild(_view);            
+			addChild(_view);     
 		}//end initEngine()
 		
 		/**

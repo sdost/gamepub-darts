@@ -9,6 +9,7 @@
 	import com.bored.games.darts.player.ComputerPlayer;
 	import com.bored.games.darts.skins.DartSkin;
 	import com.greensock.TweenMax;
+	import com.jac.soundManager.SoundController;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.events.Event;
@@ -35,9 +36,13 @@
 		public var winMatch:String = "";
 		public var lossMatch:String = "";
 		
+		protected var _voSoundController:SoundController;
+		
 		public function EnemyProfile(a_name:String = "") 
 		{
 			super(a_name);
+			
+			_voSoundController = new SoundController(a_name + "_SoundController");
 		}//end constructor()
 		
 		public function setDartSkin(a_skin:DartSkin):void
@@ -64,6 +69,11 @@
 		{
 			return _abilities;
 		}//end get abilities()
+		
+		public function playSound(a_str:String):void
+		{
+			_voSoundController.play(a_str);
+		}//end playSound()
 		
 		public function useDoOver(evt:Event):void
 		{

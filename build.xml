@@ -214,9 +214,6 @@
 			default-frame-rate="${proj.frame.rate}"
 			target-player="${proj.target.player}"
         >
-			<!--
-			<debug>true</debug>
-			-->
 			
 			<!-- The size of the test swf. -->
 			<default-size width="${proj.width}" height="${proj.height}" />

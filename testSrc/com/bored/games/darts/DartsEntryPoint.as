@@ -31,8 +31,13 @@
 		public function DartsEntryPoint() 
 		{		
 			super();
-			
+				
 		}//end BasicPreloader() constructor.
+		
+		public function init(a_params:Object):void
+		{
+			
+		}
 		
 		override protected function addedToStage(a_evt:Event = null):void
 		{

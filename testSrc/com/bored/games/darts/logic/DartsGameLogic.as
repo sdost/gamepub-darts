@@ -67,6 +67,8 @@
 		
 		protected var _paused:Boolean = false;
 		
+		protected var _bullOff:Boolean = false;
+		
 		protected var _soundController:SoundController;
 		
 		public function DartsGameLogic() 
@@ -89,6 +91,7 @@
 			_soundController.addSound( new SMSound("turn_switch_4", "turnswitch4_mp3") );
 			
 			DartsGlobals.instance.soundManager.getSoundControllerByID("loopsController").addSound( new SMSound("ambient_bar_loop", "loop_ambience_bar_wav", true) );
+			DartsGlobals.instance.soundManager.getSoundControllerByID("loopsController").addSound( new SMSound("theme_loop", "loop_theme1_wav", true) );
 		}//end constructor()
 		
 		public function loadGameState(a_state:Object):void
@@ -201,6 +204,7 @@
 		public function cleanup():void
 		{
 			DartsGlobals.instance.soundManager.getSoundControllerByID("loopsController").stop("ambient_bar_loop");
+			DartsGlobals.instance.soundManager.getSoundControllerByID("loopsController").stop("theme_loop");
 			
 			_abilityManager.initialize();
 				
@@ -226,6 +230,7 @@
 				dart.update(a_time);
 			}
 			
+			/* Regular Game Play */
 			if ( _currentDart && ( _currentDart.position.z >=  AppSettings.instance.dartboardPositionZ || _currentDart.position.y <= -10 ) )
 			{				
 				_currentDart.finishThrow();
@@ -456,10 +461,12 @@
 			if (_paused) 
 			{
 				DartsGlobals.instance.soundManager.getSoundControllerByID("loopsController").stop("ambient_bar_loop");
+				DartsGlobals.instance.soundManager.getSoundControllerByID("loopsController").stop("theme_loop");
 			}
 			else
 			{
 				DartsGlobals.instance.soundManager.getSoundControllerByID("loopsController").play("ambient_bar_loop");
+				DartsGlobals.instance.soundManager.getSoundControllerByID("loopsController").play("theme_loop");
 			}
 		}//end pause()
 		

@@ -5,6 +5,7 @@
 	import com.bored.games.darts.abilities.DoOverAbility;
 	import com.bored.games.darts.abilities.ShieldAbility;
 	import com.bored.games.darts.DartsGlobals;
+	import com.jac.soundManager.SMSound;
 	import com.sven.utils.AppSettings;
 	import com.sven.utils.ImageFactory;
 	import com.bored.games.darts.profiles.EnemyProfile;
@@ -37,6 +38,26 @@
 			
 			this.accuracy = AppSettings.instance.professorAccuracy;
 			this.stepScale = AppSettings.instance.professorStepScale;
+						
+			// Prethrow
+			_voSoundController.addSound( new SMSound("generic_prethrow1", "TheProf_Throw3Alright_mp3") );
+			_voSoundController.addSound( new SMSound("generic_prethrow2", "TheProf_Throw4Hmm_mp3") );			
+			
+			// Throw
+			_voSoundController.addSound( new SMSound("generic_throw1", "TheProf_Throw1Grunt_mp3") );
+			_voSoundController.addSound( new SMSound("generic_throw2", "TheProf_Throw2Grunt_mp3") );
+			
+			// Success
+			_voSoundController.addSound( new SMSound("generic_success1", "TheProf_SuccessBrilliant_mp3") );
+			_voSoundController.addSound( new SMSound("generic_success2", "TheProf_SuccessExpected_mp3") );
+			
+			// Miss
+			_voSoundController.addSound( new SMSound("generic_miss1", "TheProf_MissSigh_mp3") );
+			_voSoundController.addSound( new SMSound("generic_miss2", "TheProf_MissDisgustedGrunt_mp3") );
+			
+			// Special Dart
+			_voSoundController.addSound( new SMSound("generic_special1", "TheProf_SpcDartAskedForIt_mp3") );
+			_voSoundController.addSound( new SMSound("generic_special2", "TheProf_SpcDartHowDoYou_mp3") );
 		}//end constructor()
 		
 		override public function generateShotList(a_gameType:String, a_myStats:Object, a_allStats:Object):Vector.<AIShotCandidate>
@@ -123,6 +144,18 @@
 		
 		override public function handleShot(a_points:int, a_multiplier:int):void
 		{
+			var version:int = Math.ceil( Math.random() * 2 );
+			
+			if ( _shotIntention.points == a_points && _shotIntention.multiplier == a_multiplier ) 
+			{						
+				_voSoundController.play("generic_success" + version.toString());
+			}
+			else 
+			{
+				_voSoundController.play("generic_miss" + version.toString());
+			}
+			
+			
 			if ( _shotIntention.points != a_points && _shotIntention.multiplier == 1 && DartsGlobals.instance.cpuPlayer.hasAbility(DoOverAbility.NAME) ) {
 				for each( var ability:Ability in abilities )
 				{
