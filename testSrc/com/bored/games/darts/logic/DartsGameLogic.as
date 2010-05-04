@@ -229,49 +229,85 @@
 			{
 				dart.update(a_time);
 			}
-			
-			/* Regular Game Play */
+
 			if ( _currentDart && ( _currentDart.position.z >=  AppSettings.instance.dartboardPositionZ || _currentDart.position.y <= -10 ) )
 			{				
-				_currentDart.finishThrow();
+				_currentDart.finishThrow();	
 				
-				if ( !_dartboard.submitDartPosition(_currentDart.position.x, _currentDart.position.y, _currentDart.blockBoard) ) 
+				if ( _bullOff ) 
 				{
-					_currentDart.beginFalling();
-				}
-				
-				var win:Boolean = checkForWin();
+					var dist:Number = _dartboard.getDistanceFromSection(_currentDart.position.x, _currentDart.position.y, 25, 2);
 					
-				if (win) 
-				{
-					_winner = _currentPlayer;
+					trace("distance: " + dist);
 					
-					if (_winner == DartsGlobals.instance.localPlayer.playerNum && DartsGlobals.instance.localPlayer.record.throws == 9) 
+					_currentTurn.advanceThrows();
+					
+					if (_currentTurn.throwsRemaining == 0) 
 					{
-						AchievementTracker.bestowAchievement(AchievementTracker.ACHIEVEMENT_PERFECT_NINER);
+						_currentDart = null;
+						//pause(true);
+						
+						var version:int = Math.ceil(Math.random() * 4);
+						
+						_soundController.play("turn_switch_" + version.toString());
+						
+						resetDarts();
+						endTurn();
+						startNewBullOff();
+					}
+					else
+					{
+						nextDart();
+					}
+				}
+				else 
+				{
+					var obj:Object = _dartboard.submitDartPosition(_currentDart.position.x, _currentDart.position.y, _currentDart.blockBoard)
+					
+					if ( !obj.sticking ) 
+					{
+						_currentDart.beginFalling();
 					}
 					
-					endGame();
-					pause(true);
-					DartsGlobals.instance.showModalPopup(PostGameBanterModal);
-					return;
-				}
-				
-				_currentTurn.advanceThrows();
-				
-				if (_currentTurn.throwsRemaining == 0) 
-				{
-					_abilityManager.processTurn();
-					_currentDart = null;
-					//pause(true);
+					var scoring:Boolean = DartsGlobals.instance.gameManager.scoreManager.submitThrow(DartsGlobals.instance.gameManager.currentPlayer, obj.points, obj.multiplier);
 					
-					var version:int = Math.ceil(Math.random() * 4);
+					players[currentPlayer-1].processShotResult(obj.points, obj.multiplier, scoring);
 					
-					_soundController.play("turn_switch_" + version.toString());
+					var win:Boolean = checkForWin();
+						
+					if (win) 
+					{
+						_winner = _currentPlayer;
+						
+						if (_winner == DartsGlobals.instance.localPlayer.playerNum && DartsGlobals.instance.localPlayer.record.throws <= 9) 
+						{
+							AchievementTracker.bestowAchievement(AchievementTracker.ACHIEVEMENT_PERFECT_NINER);
+						}
+						
+						endGame();
+						pause(true);
+						DartsGlobals.instance.showModalPopup(PostGameBanterModal);
+						return;
+					}
 					
-					DartsGlobals.instance.showModalPopup(ClickContinueModal);
-				} else {
-					nextDart();
+					_currentTurn.advanceThrows();
+					
+					if (_currentTurn.throwsRemaining == 0) 
+					{
+						_abilityManager.processTurn();
+						_currentDart = null;
+						//pause(true);
+						
+						var version:int = Math.ceil(Math.random() * 4);
+						
+						_soundController.play("turn_switch_" + version.toString());
+						
+						DartsGlobals.instance.showModalPopup(ClickContinueModal);
+					}
+					else
+					{
+						nextDart();
+					}
 				}
 			}
 		}//end update();
@@ -284,7 +320,18 @@
 		public function get scoreManager():AbstractScoreManager
 		{
 			return _scoreManager;
-		}// end get scoreManager()
+		}//end get scoreManager()
+		
+		public function startNewBullOff():void
+		{
+			_bullOff = true;
+			
+			_currentTurn = new DartsTurn(this, 1);
+			
+			_lastDart = null;
+			
+			nextDart();		
+		}//end bullOff()
 		
 		public function startNewTurn():void
 		{

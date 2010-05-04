@@ -104,9 +104,9 @@
 			
 			DartsGlobals.instance.gameManager.pause(false);
 			
-			//DartsGlobals.instance.gameManager.bullOff();
+			DartsGlobals.instance.gameManager.startNewBullOff();
 			
-			DartsGlobals.instance.gameManager.startNewTurn();
+			//DartsGlobals.instance.gameManager.startNewTurn();
 		}//end handleClick()
 		
 		private function formatTime(a_ms:int):String
