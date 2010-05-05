@@ -32,7 +32,7 @@
 		
 		public function ComputerPlayer(a_profile:AIProfile) 
 		{
-			super("COMPUTER");
+			super(a_profile.name);
 			
 			_profile = a_profile;
 			

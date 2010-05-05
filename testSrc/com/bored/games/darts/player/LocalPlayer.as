@@ -11,7 +11,7 @@
 	{
 		public function LocalPlayer(a_profile:UserProfile = null) 
 		{
-			super(a_profile ? a_profile.name : "");
+			super(a_profile ? a_profile.name : "Player");
 		}//end construtor()
 		
 		override public function takeTheShot(a_dartsRemaining:int):void

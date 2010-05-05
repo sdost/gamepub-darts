@@ -230,7 +230,7 @@
 			return dist;
 		}
 		
-		public function submitDartPosition(a_x:Number, a_y:Number, a_block:Boolean):Object
+		public function submitDartPosition(a_x:Number, a_y:Number, a_block:Boolean):Boolean
 		{
 			var p:Point = new Point( ( a_x / AppSettings.instance.dartboardScale ) * (_sprite.width/2), ( -a_y / AppSettings.instance.dartboardScale ) * (_sprite.height/2) );
 				
@@ -238,7 +238,7 @@
 			
 			var points:int = 0;
 			var multiplier:int = 0;
-			var stickingShot:Boolean = false;
+			var scoring:Boolean = false;
 			
 			if (objects.length > 0) {
 				if (_pattern.test(objects[0].parent.name) && !_blockedSections[objects[0].parent.name]) 
@@ -249,6 +249,8 @@
 					multiplier = Number(arr[2]);
 					
 					playHitSound(DartsGlobals.instance.gameManager.currentPlayer, multiplier);
+					
+					scoring = DartsGlobals.instance.gameManager.scoreManager.submitThrow(DartsGlobals.instance.gameManager.currentPlayer, points, multiplier);					
 									
 					if (points > 0) 
 					{
@@ -264,7 +266,7 @@
 						_shieldAction.startBlocking(points.toString());						
 					}
 					
-					stickingShot = true;
+					return true;
 				} else if ( _blockedSections[objects[0].parent.name] ) {
 					_dartboardSoundController.play("shieldHit");
 				} else {
@@ -274,7 +276,9 @@
 				_dartboardSoundController.play("bounce_wall");
 			}
 			
-			return { p: points, m: multiplier, sticking: stickingShot };			
+			DartsGlobals.instance.gameManager.players[DartsGlobals.instance.gameManager.currentPlayer-1].processShotResult(points, multiplier, scoring);
+			
+			return false;			
 		}//end submitDartPosition()
 		
 		private function playHitSound(a_player:int, multiplier:int):void

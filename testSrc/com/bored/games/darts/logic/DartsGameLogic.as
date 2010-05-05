@@ -4,8 +4,11 @@
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.objects.Cursor;
 	import com.bored.games.darts.objects.Dartboard;
+	import com.bored.games.darts.profiles.OldManProfile;
 	import com.bored.games.darts.statistics.AchievementTracker;
 	import com.bored.games.darts.statistics.GameRecord;
+	import com.bored.games.darts.ui.modals.BullOffClickContinueModal;
+	import com.bored.games.darts.ui.modals.BullOffWinnerModal;
 	import com.bored.games.darts.ui.modals.ClickContinueModal;
 	import com.bored.games.darts.ui.modals.PostGameBanterModal;
 	import com.bored.games.darts.ui.modals.GameResultsModal;
@@ -68,6 +71,7 @@
 		protected var _paused:Boolean = false;
 		
 		protected var _bullOff:Boolean = false;
+		protected var _bullOffResults:Array;
 		
 		protected var _soundController:SoundController;
 		
@@ -238,7 +242,29 @@
 				{
 					var dist:Number = _dartboard.getDistanceFromSection(_currentDart.position.x, _currentDart.position.y, 25, 2);
 					
-					trace("distance: " + dist);
+					_bullOffResults[_currentPlayer - 1] = dist;
+					
+					if ( _bullOffResults[0] > 0 && _bullOffResults[1] > 0 )
+					{
+						var winner:int;
+						
+						if ( _bullOffResults[0] < _bullOffResults[1] ) 
+						{
+							winner = 0;
+						}
+						else
+						{
+							winner = 1;
+						}
+						
+						resetDarts();
+						_currentPlayer = winner + 1;
+												
+						_bullOff = false;
+						_currentDart = null;
+						DartsGlobals.instance.showModalPopup(BullOffWinnerModal);
+						return;
+					}
 					
 					_currentTurn.advanceThrows();
 					
@@ -246,14 +272,10 @@
 					{
 						_currentDart = null;
 						//pause(true);
+												
+						_soundController.play("turn_switch_" + Math.ceil(Math.random() * 4).toString());
 						
-						var version:int = Math.ceil(Math.random() * 4);
-						
-						_soundController.play("turn_switch_" + version.toString());
-						
-						resetDarts();
-						endTurn();
-						startNewBullOff();
+						DartsGlobals.instance.showModalPopup(BullOffClickContinueModal);
 					}
 					else
 					{
@@ -262,16 +284,10 @@
 				}
 				else 
 				{
-					var obj:Object = _dartboard.submitDartPosition(_currentDart.position.x, _currentDart.position.y, _currentDart.blockBoard)
-					
-					if ( !obj.sticking ) 
+					if ( !_dartboard.submitDartPosition(_currentDart.position.x, _currentDart.position.y, _currentDart.blockBoard) ) 
 					{
 						_currentDart.beginFalling();
 					}
-					
-					var scoring:Boolean = DartsGlobals.instance.gameManager.scoreManager.submitThrow(DartsGlobals.instance.gameManager.currentPlayer, obj.points, obj.multiplier);
-					
-					players[currentPlayer-1].processShotResult(obj.points, obj.multiplier, scoring);
 					
 					var win:Boolean = checkForWin();
 						
@@ -297,10 +313,8 @@
 						_abilityManager.processTurn();
 						_currentDart = null;
 						//pause(true);
-						
-						var version:int = Math.ceil(Math.random() * 4);
-						
-						_soundController.play("turn_switch_" + version.toString());
+											
+						_soundController.play("turn_switch_" + Math.ceil(Math.random() * 4).toString());
 						
 						DartsGlobals.instance.showModalPopup(ClickContinueModal);
 					}
@@ -323,8 +337,14 @@
 		}//end get scoreManager()
 		
 		public function startNewBullOff():void
-		{
+		{			
 			_bullOff = true;
+			
+			if ( !_bullOffResults ) {
+				_bullOffResults = new Array(2);
+				_bullOffResults[0] = -1;
+				_bullOffResults[1] = -1;
+			}
 			
 			_currentTurn = new DartsTurn(this, 1);
 			
@@ -401,6 +421,11 @@
 		{
 			return _currentPlayer;
 		}//end get currentPlayer()
+		
+		public function set currentPlayer(a_num:int):void
+		{
+			_currentPlayer = a_num;
+		}//end set currentPlayer()
 		
 		public function get currentTurn():DartsTurn
 		{
