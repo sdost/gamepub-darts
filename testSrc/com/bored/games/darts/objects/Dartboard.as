@@ -208,6 +208,28 @@
 			return this.boardSprite.getChildByName(name) as Sprite;
 		}//end getDartboardClip()
 		
+		public function getDistanceFromSection(a_x:Number, a_y:Number, a_points:Number, a_multiplier:Number):Number
+		{
+			var dist:Number = Number.POSITIVE_INFINITY;
+			
+			var p:Point = new Point( ( a_x / AppSettings.instance.dartboardScale ) * (_sprite.width / 2), ( -a_y / AppSettings.instance.dartboardScale ) * (_sprite.height / 2) );
+			
+			var clip:Sprite = this.getDartboardClip(a_points, a_multiplier);
+			
+			if ( clip ) 
+			{			
+				var clipScaledX:Number = (clip.x / (DartsGlobals.instance.gameManager.dartboard.boardSprite.width/2)) * AppSettings.instance.dartboardScale;
+				var clipScaledY:Number = (clip.y / (DartsGlobals.instance.gameManager.dartboard.boardSprite.height/2)) * AppSettings.instance.dartboardScale;
+				
+				var dx:Number = p.x - clipScaledX;
+				var dy:Number = p.y - clipScaledY;
+				
+				dist = Math.sqrt( dx * dx + dy * dy );
+			}
+			
+			return dist;
+		}
+		
 		public function submitDartPosition(a_x:Number, a_y:Number, a_block:Boolean):Boolean
 		{
 			var p:Point = new Point( ( a_x / AppSettings.instance.dartboardScale ) * (_sprite.width/2), ( -a_y / AppSettings.instance.dartboardScale ) * (_sprite.height/2) );
@@ -228,8 +250,8 @@
 					
 					playHitSound(DartsGlobals.instance.gameManager.currentPlayer, multiplier);
 					
-					scoring = DartsGlobals.instance.gameManager.scoreManager.submitThrow(DartsGlobals.instance.gameManager.currentPlayer, points, multiplier);
-					
+					scoring = DartsGlobals.instance.gameManager.scoreManager.submitThrow(DartsGlobals.instance.gameManager.currentPlayer, points, multiplier);					
+									
 					if (points > 0) 
 					{
 						var text:AnimatedText = new AnimatedText(points + " x " + multiplier, new CooperStd(), TweenMax.fromTo(null, 0.75, { x: p.x, y: p.y, alpha: 1 }, { x: p.x, y: p.y - 15, alpha: 0 } ));

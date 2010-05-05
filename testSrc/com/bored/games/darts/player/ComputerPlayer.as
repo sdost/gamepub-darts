@@ -32,7 +32,7 @@
 		
 		public function ComputerPlayer(a_profile:AIProfile) 
 		{
-			super("COMPUTER");
+			super(a_profile.name);
 			
 			_profile = a_profile;
 			
@@ -48,6 +48,8 @@
 			var myShotList:Vector.<AIShotCandidate> = _profile.generateShotList(this._game.gameType, myStats, allStats);
 			_finalShot = _profile.pickShot(a_dartsRemaining, myShotList);
 			
+			var version:int;
+			
 			if ( DartsGlobals.instance.gameMode == DartsGlobals.HARD ) 
 			{
 				for each( var ability:Ability in this.abilities )
@@ -55,7 +57,7 @@
 					if ( ability.name == _finalShot.modifier && DartsGlobals.instance.cpuPlayer.hasAbility(ability.name) ) {
 						DartsGlobals.instance.gameManager.abilityManager.activateAbility(ability);
 						
-						var version:int = Math.ceil( Math.random() * 2 );
+						version = Math.ceil( Math.random() * 2 );
 						
 						(_profile as EnemyProfile).playSound("generic_special" + version.toString());
 					}
@@ -65,7 +67,7 @@
 			DartsGlobals.instance.gameManager.currentDart.position.x = _previousPosition.x;
 			DartsGlobals.instance.gameManager.currentDart.position.y = _previousPosition.y;
 			
-			var version:int = Math.ceil( Math.random() * 2 );
+			version = Math.ceil( Math.random() * 2 );
 						
 			(_profile as EnemyProfile).playSound("generic_prethrow" + version.toString());
 			

@@ -3,6 +3,7 @@
 	import com.bored.games.darts.assets.modals.ConversationModal_MC;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.logic.DartsGameLogic;
+	import com.bored.games.darts.profiles.OldManProfile;
 	import com.bored.games.GameUtils;
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
@@ -11,6 +12,7 @@
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.sampler.NewObjectSample;
 	import flash.text.TextField;
 	import flash.utils.Dictionary;
 	/**
@@ -102,11 +104,17 @@
 			
 			DartsGlobals.instance.processModalQueue();
 			
-			DartsGlobals.instance.gameManager.pause(false);
+			trace("DartsGlobals.instance.enemyProfile is OldManProfile: " + (DartsGlobals.instance.enemyProfile is OldManProfile));
 			
-			//DartsGlobals.instance.gameManager.bullOff();
-			
-			DartsGlobals.instance.gameManager.startNewTurn();
+			if ( DartsGlobals.instance.enemyProfile is OldManProfile ) 
+			{
+				DartsGlobals.instance.gameManager.currentPlayer = DartsGlobals.instance.cpuPlayer.playerNum;
+				DartsGlobals.instance.gameManager.startNewTurn();
+			}
+			else 
+			{
+				DartsGlobals.instance.showModalPopup(BullOffAnnounceModal);
+			}
 		}//end handleClick()
 		
 		private function formatTime(a_ms:int):String

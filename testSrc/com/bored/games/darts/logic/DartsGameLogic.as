@@ -4,8 +4,11 @@
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.objects.Cursor;
 	import com.bored.games.darts.objects.Dartboard;
+	import com.bored.games.darts.profiles.OldManProfile;
 	import com.bored.games.darts.statistics.AchievementTracker;
 	import com.bored.games.darts.statistics.GameRecord;
+	import com.bored.games.darts.ui.modals.BullOffClickContinueModal;
+	import com.bored.games.darts.ui.modals.BullOffWinnerModal;
 	import com.bored.games.darts.ui.modals.ClickContinueModal;
 	import com.bored.games.darts.ui.modals.PostGameBanterModal;
 	import com.bored.games.darts.ui.modals.GameResultsModal;
@@ -68,6 +71,7 @@
 		protected var _paused:Boolean = false;
 		
 		protected var _bullOff:Boolean = false;
+		protected var _bullOffResults:Array;
 		
 		protected var _soundController:SoundController;
 		
@@ -229,49 +233,95 @@
 			{
 				dart.update(a_time);
 			}
-			
-			/* Regular Game Play */
+
 			if ( _currentDart && ( _currentDart.position.z >=  AppSettings.instance.dartboardPositionZ || _currentDart.position.y <= -10 ) )
 			{				
-				_currentDart.finishThrow();
+				_currentDart.finishThrow();	
 				
-				if ( !_dartboard.submitDartPosition(_currentDart.position.x, _currentDart.position.y, _currentDart.blockBoard) ) 
+				if ( _bullOff ) 
 				{
-					_currentDart.beginFalling();
-				}
-				
-				var win:Boolean = checkForWin();
+					var dist:Number = _dartboard.getDistanceFromSection(_currentDart.position.x, _currentDart.position.y, 25, 2);
 					
-				if (win) 
-				{
-					_winner = _currentPlayer;
+					_bullOffResults[_currentPlayer - 1] = dist;
 					
-					if (_winner == DartsGlobals.instance.localPlayer.playerNum && DartsGlobals.instance.localPlayer.record.throws == 9) 
+					if ( _bullOffResults[0] > 0 && _bullOffResults[1] > 0 )
 					{
-						AchievementTracker.bestowAchievement(AchievementTracker.ACHIEVEMENT_PERFECT_NINER);
+						var winner:int;
+						
+						if ( _bullOffResults[0] < _bullOffResults[1] ) 
+						{
+							winner = 0;
+						}
+						else
+						{
+							winner = 1;
+						}
+						
+						resetDarts();
+						_currentPlayer = winner + 1;
+												
+						_bullOff = false;
+						_currentDart = null;
+						DartsGlobals.instance.showModalPopup(BullOffWinnerModal);
+						return;
 					}
 					
-					endGame();
-					pause(true);
-					DartsGlobals.instance.showModalPopup(PostGameBanterModal);
-					return;
+					_currentTurn.advanceThrows();
+					
+					if (_currentTurn.throwsRemaining == 0) 
+					{
+						_currentDart = null;
+						//pause(true);
+												
+						_soundController.play("turn_switch_" + Math.ceil(Math.random() * 4).toString());
+						
+						DartsGlobals.instance.showModalPopup(BullOffClickContinueModal);
+					}
+					else
+					{
+						nextDart();
+					}
 				}
-				
-				_currentTurn.advanceThrows();
-				
-				if (_currentTurn.throwsRemaining == 0) 
+				else 
 				{
-					_abilityManager.processTurn();
-					_currentDart = null;
-					//pause(true);
+					if ( !_dartboard.submitDartPosition(_currentDart.position.x, _currentDart.position.y, _currentDart.blockBoard) ) 
+					{
+						_currentDart.beginFalling();
+					}
 					
-					var version:int = Math.ceil(Math.random() * 4);
+					var win:Boolean = checkForWin();
+						
+					if (win) 
+					{
+						_winner = _currentPlayer;
+						
+						if (_winner == DartsGlobals.instance.localPlayer.playerNum && DartsGlobals.instance.localPlayer.record.throws <= 9) 
+						{
+							AchievementTracker.bestowAchievement(AchievementTracker.ACHIEVEMENT_PERFECT_NINER);
+						}
+						
+						endGame();
+						pause(true);
+						DartsGlobals.instance.showModalPopup(PostGameBanterModal);
+						return;
+					}
 					
-					_soundController.play("turn_switch_" + version.toString());
+					_currentTurn.advanceThrows();
 					
-					DartsGlobals.instance.showModalPopup(ClickContinueModal);
-				} else {
-					nextDart();
+					if (_currentTurn.throwsRemaining == 0) 
+					{
+						_abilityManager.processTurn();
+						_currentDart = null;
+						//pause(true);
+											
+						_soundController.play("turn_switch_" + Math.ceil(Math.random() * 4).toString());
+						
+						DartsGlobals.instance.showModalPopup(ClickContinueModal);
+					}
+					else
+					{
+						nextDart();
+					}
 				}
 			}
 		}//end update();
@@ -284,7 +334,24 @@
 		public function get scoreManager():AbstractScoreManager
 		{
 			return _scoreManager;
-		}// end get scoreManager()
+		}//end get scoreManager()
+		
+		public function startNewBullOff():void
+		{			
+			_bullOff = true;
+			
+			if ( !_bullOffResults ) {
+				_bullOffResults = new Array(2);
+				_bullOffResults[0] = -1;
+				_bullOffResults[1] = -1;
+			}
+			
+			_currentTurn = new DartsTurn(this, 1);
+			
+			_lastDart = null;
+			
+			nextDart();		
+		}//end bullOff()
 		
 		public function startNewTurn():void
 		{
@@ -354,6 +421,11 @@
 		{
 			return _currentPlayer;
 		}//end get currentPlayer()
+		
+		public function set currentPlayer(a_num:int):void
+		{
+			_currentPlayer = a_num;
+		}//end set currentPlayer()
 		
 		public function get currentTurn():DartsTurn
 		{
