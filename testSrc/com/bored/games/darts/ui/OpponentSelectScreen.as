@@ -134,7 +134,7 @@
 				_ireneBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
 				
 				_ireneBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, function(a_evt:Event):void {
-					generateToolTip(_ireneBtnImg).show(_ireneBtnImg, "Irene", "$1000");
+					generateToolTip(_ireneBtnImg).show(_ireneBtnImg, "Irene", "Prize: 1000 coins");
 				});
 			}
 			else
@@ -164,7 +164,7 @@
 				_mackBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
 				
 				_mackBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, function(a_evt:Event):void {
-					generateToolTip(_mackBtnImg).show(_mackBtnImg, "Mack", "$100");
+					generateToolTip(_mackBtnImg).show(_mackBtnImg, "Mack", "Prize: 100 coins");
 				});
 			}
 			else
@@ -179,7 +179,7 @@
 				_anthonyBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
 				
 				_anthonyBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, function(a_evt:Event):void {
-					generateToolTip(_anthonyBtnImg).show(_anthonyBtnImg, "Anthony", "$250");
+					generateToolTip(_anthonyBtnImg).show(_anthonyBtnImg, "Anthony", "Prize: 250 coins");
 				});
 			}
 			else
@@ -194,7 +194,7 @@
 				_professorBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
 				
 				_professorBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, function(a_evt:Event):void {
-					generateToolTip(_professorBtnImg).show(_professorBtnImg, "The Professor", "$2000");
+					generateToolTip(_professorBtnImg).show(_professorBtnImg, "The Professor", "Prize: 2000 coins");
 				});
 				
 				// Character Select...
@@ -215,7 +215,7 @@
 				_sammyBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
 				
 				_sammyBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, function(a_evt:Event):void {
-					generateToolTip(_sammyBtnImg).show(_sammyBtnImg, "Sammy", "$50");
+					generateToolTip(_sammyBtnImg).show(_sammyBtnImg, "Sammy", "Prize: 50 coins");
 				});
 			}
 			else
@@ -230,7 +230,7 @@
 				_simonBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
 				
 				_simonBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, function(a_evt:Event):void {
-					generateToolTip(_simonBtnImg).show(_simonBtnImg, "Simon", "$500");
+					generateToolTip(_simonBtnImg).show(_simonBtnImg, "Simon", "Prize: 500 coins");
 				});
 			}
 			else
@@ -260,7 +260,7 @@
 				_bigbillBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
 				
 				_bigbillBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, function(a_evt:Event):void {
-					generateToolTip(_bigbillBtnImg).show(_bigbillBtnImg, "Big Bill", "$1500");
+					generateToolTip(_bigbillBtnImg).show(_bigbillBtnImg, "Big Bill", "Prize: 1500 coins");
 				});
 			}
 			else
@@ -281,7 +281,7 @@
 		{
 			var toolTip:ToolTip = new ToolTip();
 			toolTip.colors = [ 0xFFFFFF, 0xFFFFCD6 ];
-			toolTip.tipHeight = 75
+			toolTip.autoSize = true;
 			toolTip.cornerRadius = 20;
 			toolTip.align = "center";
 			toolTip.border = 0x000000;
