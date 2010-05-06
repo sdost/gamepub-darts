@@ -179,7 +179,7 @@
 			return _throwAction.minimumThrust;
 		}//end get minThrust()
 
-		public function initThrowParams(releaseX:Number, releaseY:Number, releaseZ:Number, thrust:Number, angle:Number, grav:Number, lean:Number, stepScale:Number):void
+		public function initThrowParams(releaseX:Number, releaseY:Number, releaseZ:Number, thrust:Number, angle:Number, grav:Number, lean:Number, finalZ:Number, stepScale:Number):void
 		{
 			deactivateAction(_pullBackAction.actionName);
 			
@@ -197,6 +197,7 @@
 				"theta": Math.PI / 180 * angle,
 				"gravity": grav,
 				"lean": lean,
+				"finalZ": finalZ,
 				"stepScale": stepScale
 			});
 			

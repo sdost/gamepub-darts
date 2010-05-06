@@ -234,8 +234,10 @@
 				dart.update(a_time);
 			}
 
-			if ( _currentDart && ( _currentDart.position.z >=  AppSettings.instance.dartboardPositionZ || _currentDart.position.y <= -10 ) )
-			{				
+			if ( _currentDart && ( _currentDart.position.z >= AppSettings.instance.dartboardPositionZ || _currentDart.position.y <= -10 ) )
+			{	
+				_currentDart.position.z = AppSettings.instance.dartboardPositionZ;
+				
 				_currentDart.finishThrow();	
 				
 				if ( _bullOff ) 
@@ -477,7 +479,7 @@
 				
 				thrust = a_thrust;
 				lean = a_lean;
-				angle = AppSettings.instance.underthrowAngle;
+				angle = AppSettings.instance.defaultAngle;
 			}
 			else if ( a_thrust > AppSettings.instance.dartSweetSpotMax ) 
 			{
@@ -488,12 +490,10 @@
 				var scaler:Number = Math.log( AppSettings.instance.overthrowScale * (a_thrust - AppSettings.instance.dartSweetSpotThrust)
 					/ (AppSettings.instance.dartMaxThrust - AppSettings.instance.dartSweetSpotThrust))
 					/ Math.log(AppSettings.instance.overthrowExponent) + AppSettings.instance.overthrowOffset;
-				
-				trace("Scale: " + scaler);
-					
-				thrust = a_thrust * scaler;
+									
+				thrust = a_thrust / scaler; // AppSettings.instance.dartSweetSpotThrust;
 				lean = a_lean * scaler;
-				angle = AppSettings.instance.overthrowAngle;
+				angle = AppSettings.instance.defaultAngle * scaler;
 			}
 			else 
 			{
@@ -506,7 +506,7 @@
 				angle = AppSettings.instance.defaultAngle;
 			}
 			
-			_currentDart.initThrowParams(a_x, a_y, a_z, thrust, angle, AppSettings.instance.defaultGravity, lean, a_stepScale);
+			_currentDart.initThrowParams(a_x, a_y, a_z, thrust, angle, AppSettings.instance.defaultGravity, lean, AppSettings.instance.dartboardPositionZ, a_stepScale);
 		}//end playerThrow()
 		
 		public function get cursor():Cursor

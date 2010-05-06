@@ -11,6 +11,7 @@
 	import com.bored.games.darts.states.IntroStory;
 	import com.bored.games.darts.states.Initialization;
 	import com.bored.games.darts.states.Attract;
+	import com.bored.services.BoredServices;
 	import com.sven.containers.Panel;
 	import com.sven.utils.AppSettings;
 	import flash.display.Shape;
@@ -37,7 +38,13 @@
 		public function init(a_params:Object):void
 		{
 			
-		}
+		}//end init()
+		
+		public function setBoredServices(a_servicesObj:Object):void
+		{
+			BoredServices.servicesObj = a_servicesObj;
+			
+		}//end setBoredServices()
 		
 		override protected function addedToStage(a_evt:Event = null):void
 		{

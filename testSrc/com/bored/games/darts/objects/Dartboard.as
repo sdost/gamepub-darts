@@ -24,12 +24,11 @@
 	 */
 	public class Dartboard extends GameElement
 	{
+		private var _sprite:Sprite;
 		private var _boardSprite:Sprite3D;
 		private var _boardMaterial:MovieMaterial;
 		
 		private var _blockedSections:Object;
-		
-		private var _sprite:Sprite;
 				
 		private var _pattern:RegExp = /c_[0-9]+_[0-9]+_mc/;
 		
@@ -179,7 +178,7 @@
 			_boardMaterial.smooth = true;
 			_boardMaterial.rect = new Rectangle( -175, -175, 350, 350 );
 			
-			_boardSprite = new Sprite3D(_boardMaterial, 190);
+			_boardSprite = new Sprite3D(_boardMaterial, 192);
 			_boardSprite.alignmentType = AlignmentType.VIEWPOINT;
 			
 			this.activateAction(_shieldAction.actionName);
@@ -205,7 +204,7 @@
 				return null;
 			}
 			
-			return this.boardSprite.getChildByName(name) as Sprite;
+			return this.sprite.getChildByName(name) as Sprite;
 		}//end getDartboardClip()
 		
 		public function getDistanceFromSection(a_x:Number, a_y:Number, a_points:Number, a_multiplier:Number):Number
@@ -231,9 +230,9 @@
 		}
 		
 		public function submitDartPosition(a_x:Number, a_y:Number, a_block:Boolean):Boolean
-		{
+		{				
 			var p:Point = new Point( ( a_x / AppSettings.instance.dartboardScale ) * (_sprite.width/2), ( -a_y / AppSettings.instance.dartboardScale ) * (_sprite.height/2) );
-				
+			
 			var objects:Array = _sprite.getObjectsUnderPoint(p);
 			
 			var points:int = 0;
@@ -241,6 +240,7 @@
 			var scoring:Boolean = false;
 			
 			if (objects.length > 0) {
+		
 				if (_pattern.test(objects[0].parent.name) && !_blockedSections[objects[0].parent.name]) 
 				{
 					var arr:Array = objects[0].parent.name.split("_");
@@ -363,14 +363,14 @@
 			_sprite.getChildByName("c_25_2_shield_mc").visible = false;
 		}//end resetBlockedSections()
 		
-		public function get sprite():Sprite3D
-		{
-			return _boardSprite;
-		}//end get model()
-		
-		public function get boardSprite():Sprite
+		public function get sprite():Sprite
 		{
 			return _sprite;
+		}//end get sprite()
+		
+		public function get boardSprite():Sprite3D
+		{
+			return _boardSprite;
 		}//end get boardSprite()
 		
 	}//end Dartboard

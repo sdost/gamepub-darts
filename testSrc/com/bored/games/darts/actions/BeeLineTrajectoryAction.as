@@ -14,15 +14,17 @@
 		private static const NAME:String = "com.bored.games.darts.actions.BeeLineTrajectoryAction";
 		
 		private var _stepScale:Number = 0;
+		private var _finalZ:Number = 0;
 		
 		public function BeeLineTrajectoryAction(a_gameElement:GameElement, a_params:Object = null) 
 		{
-			super(NAME, a_gameElement, a_params);	
+			super(NAME, a_gameElement, a_params);
 		}//end constructor()
 		
 		override public function initParams(a_params:Object):void
 		{
 			_stepScale = a_params.stepScale;
+			_finalZ = a_params.finalZ;
 		}//end initParams()
 		
 		override public function startAction():void
@@ -45,6 +47,9 @@
 			_gameElement.roll += AppSettings.instance.dartRollSpeed;
 			
 			var z:Number = _gameElement.position.z + AppSettings.instance.beelineSpeed * _stepScale;
+			
+			if ( z > _finalZ ) z = _finalZ;
+			
 			_gameElement.position.z = z;	
 		}//end update()
 		

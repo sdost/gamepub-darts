@@ -232,7 +232,7 @@
 			*/
 			
 			DartsGlobals.instance.gameManager.dartboard.initModels();
-			_scene.addSprite(DartsGlobals.instance.gameManager.dartboard.sprite);
+			_scene.addSprite(DartsGlobals.instance.gameManager.dartboard.boardSprite);
 			DartsGlobals.instance.gameManager.dartboard.position.x = AppSettings.instance.dartboardPositionX * _engineScale;
 			DartsGlobals.instance.gameManager.dartboard.position.y = AppSettings.instance.dartboardPositionY * _engineScale;
 			DartsGlobals.instance.gameManager.dartboard.position.z = AppSettings.instance.dartboardPositionZ * _engineScale;
