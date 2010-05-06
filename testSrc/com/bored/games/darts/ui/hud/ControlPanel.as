@@ -168,6 +168,7 @@
 			_soundManager.getSoundControllerByID("buttonSoundController").addSound( new SMSound("help_sound", "button_help_mp3") );
 			_soundManager.getSoundControllerByID("buttonSoundController").addSound( new SMSound("quit_sound", "button_x_mp3") );
 			
+			_soundBtn.toggleOn = _soundManager.isMuted;			
 		}//end registerSoundManager()
 		
 		private function update(a_evt:Event):void

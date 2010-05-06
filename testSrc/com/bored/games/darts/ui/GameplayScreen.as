@@ -264,10 +264,10 @@
 			
 			removeChild(_view);
 			
-			DartsGlobals.instance.optionsInterfaceSpace.removeChild(_throwIndicator);
-			DartsGlobals.instance.optionsInterfaceSpace.removeChild(_scoreBoard);
-			DartsGlobals.instance.optionsInterfaceSpace.removeChild(_abilityDock);
-			DartsGlobals.instance.optionsInterfaceSpace.removeChild(_dartDock);
+			if (_throwIndicator) DartsGlobals.instance.optionsInterfaceSpace.removeChild(_throwIndicator);
+			if (_scoreBoard) DartsGlobals.instance.optionsInterfaceSpace.removeChild(_scoreBoard);
+			if (_abilityDock) DartsGlobals.instance.optionsInterfaceSpace.removeChild(_abilityDock);
+			if (_dartDock) DartsGlobals.instance.optionsInterfaceSpace.removeChild(_dartDock);
 			
 			_throwIndicator = null;
 			_scoreBoard = null;
