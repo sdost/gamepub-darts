@@ -38,7 +38,9 @@
 			
 			this.accuracy = AppSettings.instance.professorAccuracy;
 			this.stepScale = AppSettings.instance.professorStepScale;
-						
+					
+			DartsGlobals.instance.soundManager.addSoundController(_voSoundController);
+			
 			// Prethrow
 			_voSoundController.addSound( new SMSound("generic_prethrow1", "TheProf_Throw3Alright_mp3") );
 			_voSoundController.addSound( new SMSound("generic_prethrow2", "TheProf_Throw4Hmm_mp3") );			

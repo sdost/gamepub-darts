@@ -33,7 +33,7 @@
 			return BoredServices.isLoggedIn;
 		}//end get loggedIn()
 		
-		override public function init( a_gameId:String, a_parentClip:Object ):void 
+		override public function init( a_params:Object = null ):void 
 		{
 			BoredServices.addEventListener(BoredServices.SAVED_DATA_RECEIVED_EVT, onUserData);
 			BoredServices.addEventListener(BoredServices.LOGGED_IN_EVENT, onLoggedIn);

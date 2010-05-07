@@ -446,6 +446,8 @@
 		{
 			this.dispatchEvent( new Event(TURN_END) );
 			
+			_cursor.hide();
+			
 			_currentDart = null;
 			
 			_currentPlayer++;
@@ -461,7 +463,7 @@
 		
 		public function playerThrow(a_x:Number, a_y:Number, a_z:Number, a_thrust:Number, a_lean:Number, a_stepScale:Number):void
 		{			
-			_cursor.hide();
+			//_cursor.hide();
 			_cursor.resetCursorImage();
 			_inputController.pause = true;
 			

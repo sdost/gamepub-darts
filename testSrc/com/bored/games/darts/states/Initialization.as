@@ -53,19 +53,16 @@
 			
 			var providerCls:Class = getDefinitionByName(AppSettings.instance.externalServicesProvider) as Class;
 			var ext:AbstractExternalService = new providerCls();
-			ext.init(AppSettings.instance.externalServicesGameId, DartsGlobals.instance.optionsInterfaceSpace);
+			ext.init();
 			DartsGlobals.instance.externalServices = ext;
 			
 			_infoLoaded = false;
 			_dataLoaded = false;
 			
-			DartsGlobals.instance.externalServices.showLoginUI();
-			
-			DartsGlobals.instance.externalServices.addEventListener(AbstractExternalService.USER_INFO_AVAILABLE, onUserInfo, false, 0, true);
-			
-			if (DartsGlobals.instance.externalServices.loggedIn) 
+			if (!DartsGlobals.instance.externalServices.loggedIn) 
 			{
-				DartsGlobals.instance.externalServices.getUserInfo();
+				DartsGlobals.instance.externalServices.addEventListener(AbstractExternalService.USER_INFO_AVAILABLE, onUserInfo, false, 0, true);
+				DartsGlobals.instance.externalServices.showLoginUI();			
 			}
 			else
 			{

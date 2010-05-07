@@ -33,7 +33,7 @@
 			return MochiSocial.loggedIn;
 		}//end get loggedIn()
 		
-		override public function init( a_gameId:String, a_parentClip:Object ):void 
+		override public function init( a_params:Object = null ):void
 		{
 			MochiSocial.addEventListener(MochiSocial.USER_INFO, onUserInfo);
 			MochiSocial.addEventListener(MochiSocial.LOGGED_IN, onLoggedIn);
@@ -41,7 +41,7 @@
 			MochiCoins.addEventListener(MochiCoins.ITEM_NEW, newItem);
 			MochiCoins.addEventListener(MochiCoins.STORE_ITEMS, storeItems);
 			
-			MochiServices.connect(a_gameId, a_parentClip);
+			MochiServices.connect(a_params.gameId, a_params.parentClip);
 		}//end init()
 		
 		override public function showLoginUI():void
