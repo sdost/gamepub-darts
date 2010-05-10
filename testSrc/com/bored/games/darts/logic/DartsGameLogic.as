@@ -85,6 +85,7 @@
 			_cursor = new Cursor(SpriteFactory.getSpriteByQualifiedName("com.bored.games.darts.assets.hud.Cursor_MC"));
 			
 			_soundController = new SoundController("gameSounds");
+			DartsGlobals.instance.soundManager.addSoundController(_soundController);
 			_soundController.addSound( new SMSound("throw_fast_1", "dartthrow_fast1_mp3") );
 			_soundController.addSound( new SMSound("throw_fast_2", "dartthrow_fast2_mp3") );
 			_soundController.addSound( new SMSound("throw_normal_1", "dartthrow_norm1_mp3") );

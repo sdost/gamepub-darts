@@ -57,24 +57,8 @@
 		
 		private function onLoggedIn( event:Object ):void
 		{
-			//_userDataSO.data.userInfo = event;			
-			//_userDataSO.flush();
-			
-			this.dispatchEvent(new Event(USER_INFO_AVAILABLE));
+			dispatchEvent(new Event(USER_LOGIN));
 		}//end onLoggedIn()
-		
-		private function onUserInfo( event:Object ):void
-		{
-			_userDataSO.data.userInfo = event;			
-			_userDataSO.flush();
-			
-			this.dispatchEvent(new Event(USER_INFO_AVAILABLE));
-		}//end onUserInfo()
-		
-		override public function getUserInfo():void
-		{
-			// MochiSocial.getUserInfo();
-		}//end getUserInfo()
 		
 		private function registerItem( event:Object ):void
 		{
@@ -146,7 +130,9 @@
 		{
 			_userData = arg.data;
 			for( var key:String in _userData )
-			{	
+			{
+				trace("_userData[" + key + "] -> " + _userData[key]);
+				
 				_userDataSO.data[key] = _userData[key];
 			}
 			

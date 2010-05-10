@@ -3,6 +3,7 @@
 	import com.bored.games.darts.assets.screens.TitleScreen_MC;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.states.statemachines.GameFSM;
+	import com.bored.games.darts.ui.modals.PracticeModeModal;
 	import com.bored.games.darts.ui.TitleScreen;
 	import com.inassets.statemachines.Finite.State;
 	import com.inassets.statemachines.interfaces.IStateMachine;
@@ -43,8 +44,8 @@
 			{
 				titleScreenImg = new TitleScreen_MC();
 				_titleScreen = new TitleScreen(titleScreenImg, false, true);
-				_titleScreen.addEventListener(TitleScreen.EASY_GAME_CLICKED_EVT, onEasyGameClicked, false, 0, true);
-				_titleScreen.addEventListener(TitleScreen.HARD_GAME_CLICKED_EVT, onHardGameClicked, false, 0, true);
+				_titleScreen.addEventListener(TitleScreen.PRACTICE_GAME_CLICKED_EVT, onPracticeGameClicked, false, 0, true);
+				_titleScreen.addEventListener(TitleScreen.STORY_GAME_CLICKED_EVT, onStoryGameClicked, false, 0, true);
 				DartsGlobals.instance.screenSpace.addChild(_titleScreen);
 				
 				DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").addSound( new SMSound("title_sound", "button_title_mp3") );
@@ -56,21 +57,22 @@
 			
 		}//end onEnter()
 		
-		private function onEasyGameClicked(e_evt:Event):void
+		private function onPracticeGameClicked(e_evt:Event):void
 		{
 			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("title_sound");
 			
-			DartsGlobals.instance.gameMode = DartsGlobals.EASY;
-			(this.stateMachine as GameFSM).transitionToNextState();
+			DartsGlobals.instance.gameMode = DartsGlobals.GAME_PRACTICE;
 			
+			DartsGlobals.instance.showModalPopup(PracticeModeModal);
 		}//end onNewGameClicked();
 		
-		private function onHardGameClicked(e_evt:Event):void
+		private function onStoryGameClicked(e_evt:Event):void
 		{
 			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("title_sound");
 			
-			DartsGlobals.instance.gameMode = DartsGlobals.HARD;
-			(this.stateMachine as GameFSM).transitionToNextState();
+			DartsGlobals.instance.gameMode = DartsGlobals.GAME_STORY;
+			
+			(this.stateMachine as GameFSM).transitionToStateNamed("IntroStory");
 		}//end onResumeGameClicked();
 		
 		/**
@@ -78,8 +80,8 @@
 		 */
 		override public function onExit():void
 		{			
-			_titleScreen.removeEventListener(TitleScreen.EASY_GAME_CLICKED_EVT, onEasyGameClicked);
-			_titleScreen.removeEventListener(TitleScreen.HARD_GAME_CLICKED_EVT, onHardGameClicked);	
+			_titleScreen.removeEventListener(TitleScreen.PRACTICE_GAME_CLICKED_EVT, onPracticeGameClicked);
+			_titleScreen.removeEventListener(TitleScreen.STORY_GAME_CLICKED_EVT, onStoryGameClicked);	
 			
 			_titleScreen.destroy();
 			

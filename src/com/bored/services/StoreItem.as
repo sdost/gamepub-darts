@@ -1,5 +1,6 @@
 ﻿package com.bored.services 
 {
+	import flash.display.Sprite;
 	/**
 	 * ...
 	 * @author sam
@@ -63,6 +64,11 @@
 		{
 			return _itemStoreIcon;
 		}//end get iconURL()
+		
+		public function render(a_sprite:Sprite):void
+		{
+			
+		}//end render()
 		
 		public function toString():String
 		{

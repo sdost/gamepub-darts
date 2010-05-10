@@ -119,7 +119,7 @@
 			
 			var cls:Class;
 			
-			if ( DartsGlobals.instance.gameMode == DartsGlobals.HARD ) 
+			if ( DartsGlobals.instance.practiceMode == DartsGlobals.PRACTICE_EXPERT ) 
 			{
 				cls = getDefinitionByName(AppSettings.instance.throwIndicatorMovie) as Class;
 				_throwIndicator = new ThrowIndicatorV3(new cls());
@@ -138,7 +138,7 @@
 			_scoreBoard.registerScoreManager(DartsGlobals.instance.gameManager.scoreManager);
 			_scoreBoard.show();
 			
-			if ( DartsGlobals.instance.gameMode == DartsGlobals.HARD ) 
+			if ( DartsGlobals.instance.gameMode == DartsGlobals.GAME_STORY ) 
 			{
 				cls = getDefinitionByName(AppSettings.instance.abilityDockMovie) as Class;
 				_abilityDock = new AbilityDock(new cls());

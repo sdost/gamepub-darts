@@ -1,5 +1,8 @@
 ﻿package com.bored.games.darts
 {
+	import com.bored.games.darts.abilities.BeeLineAbility;
+	import com.bored.games.darts.abilities.DoOverAbility;
+	import com.bored.games.darts.abilities.ShieldAbility;
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.inassets.statemachines.interfaces.IStateMachine;
 	import com.jac.soundManager.SoundController;
@@ -29,8 +32,11 @@
 	 */
 	public class DartsGlobals extends EventDispatcher
 	{
-		public static const EASY:int = 0;
-		public static const HARD:int = 1;
+		public static const GAME_STORY:int = 0;
+		public static const GAME_PRACTICE:int = 1;
+		
+		public static const PRACTICE_BEGINNER:int = 0;
+		public static const PRACTICE_EXPERT:int = 1;
 		
 		// protected var _optionsInterface:Sprite;  ??
 		
@@ -83,6 +89,8 @@
 		private var _stateMachine:IStateMachine;
 		
 		private var _gameMode:int;
+		
+		private var _practiceMode:int;
 		
 		public function DartsGlobals(a_singletonEnforcer:DartsGlobals_SingletonEnforcer) 
 		{
@@ -193,6 +201,16 @@
 			return _gameMode;
 		}//end set gameMode()
 		
+		public function set practiceMode(a_mode:int):void
+		{
+			_practiceMode = a_mode;
+		}//end set gameMode()
+		
+		public function get practiceMode():int
+		{
+			return _practiceMode;
+		}//end set gameMode()
+		
 		public function get screenSpace():Sprite
 		{
 			return _screenSpace;
@@ -254,6 +272,8 @@
 		public function set externalServices(a_ext:AbstractExternalService):void
 		{
 			_externalService = a_ext;
+			_externalService.addEventListener(AbstractExternalService.USER_LOGIN, onLogin, false, 0, true);
+			_externalService.addEventListener(AbstractExternalService.USER_DATA_AVAILABLE, onUserData, false, 0, true);
 			_externalService.addEventListener(AbstractExternalService.USER_INVENTORY_UPDATE, onInventoryUpdate, false, 0, true);
 		}//end set externalServices()
 		
@@ -261,6 +281,56 @@
 		{
 			return _externalService;
 		}//end get externalServices()
+		
+		private function onLogin(evt:Event):void
+		{
+			_externalService.pullUserData();
+		}//end onInventoryUpdate()
+		
+		private function onUserData(evt:Event):void
+		{
+			var gameCash:int = _externalService.getData("gameCash");
+			
+			trace("Game Cash: " + gameCash);
+			
+			if (gameCash <= 0) 
+			{
+				gameCash = 100000;
+				_externalService.setData("gameCash", gameCash);
+			}
+				
+			var shieldLvl:int = _externalService.getData("shieldLevel");
+			
+			trace("Shield Level: " + shieldLvl);
+			
+			if (shieldLvl <= 0) 
+			{
+				_externalService.setData("shieldLevel", 10);
+				shieldLvl = 10;
+			}
+			
+			var beelineLvl:int = _externalService.getData("beelineLevel");
+			
+			trace("Beeline Level: " + beelineLvl);
+			
+			if (beelineLvl <= 0)
+			{
+				_externalService.setData("beelineLevel", 10);
+				beelineLvl = 10;
+			}
+				
+			var dooverLvl:int = _externalService.getData("dooverLevel");
+			
+			trace("Do-Over Level: " + dooverLvl);
+			
+			if (dooverLvl <= 0)
+			{
+				_externalService.setData("dooverLevel", 10);
+				dooverLvl = 10;
+			}
+			
+			_localPlayer.setAbilities(new ShieldAbility(shieldLvl), new BeeLineAbility(beelineLvl), new DoOverAbility(dooverLvl));
+		}//end onInventoryUpdate()
 		
 		private function onInventoryUpdate(evt:Event):void
 		{

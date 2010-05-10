@@ -2,7 +2,9 @@
 {
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.input.ThrowController;
+	import com.bored.games.darts.ui.modals.ThrowTutorialModal;
 	import com.bored.games.events.InputStateEvent;
+	import com.bored.games.input.InputController;
 	import com.sven.utils.AppSettings;
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
@@ -30,6 +32,17 @@
 		private var _cumAvgSpeed:Number;
 		
 		private var _mouseTimer:Timer;
+		
+		override public function startThrow(a_inputController:InputController):void
+		{
+			a_inputController.pause = false;
+			
+			if ( !DartsGlobals.instance.externalServices.getData("seenThrowTutorial") )
+			{
+				DartsGlobals.instance.showModalPopup(ThrowTutorialModal);
+				DartsGlobals.instance.gameManager.pause(true);
+			}
+		}//end startThrow()
 		
 		override public function onInputUpdate(a_evt:InputStateEvent):void
 		{

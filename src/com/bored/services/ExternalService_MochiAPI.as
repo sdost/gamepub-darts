@@ -35,7 +35,6 @@
 		
 		override public function init( a_params:Object = null ):void
 		{
-			MochiSocial.addEventListener(MochiSocial.USER_INFO, onUserInfo);
 			MochiSocial.addEventListener(MochiSocial.LOGGED_IN, onLoggedIn);
 			MochiCoins.addEventListener(MochiCoins.ITEM_OWNED, registerItem);
 			MochiCoins.addEventListener(MochiCoins.ITEM_NEW, newItem);
@@ -62,21 +61,8 @@
 			_userDataSO.data.userInfo = event;			
 			_userDataSO.flush();
 			
-			this.dispatchEvent(new Event(USER_INFO_AVAILABLE));
+			this.dispatchEvent(new Event(USER_LOGIN));
 		}//end onLoggedIn()
-		
-		private function onUserInfo( event:Object ):void
-		{
-			_userDataSO.data.userInfo = event;			
-			_userDataSO.flush();
-			
-			this.dispatchEvent(new Event(USER_INFO_AVAILABLE));
-		}//end onUserInfo()
-		
-		override public function getUserInfo():void
-		{
-			MochiSocial.getUserInfo();
-		}//end getUserInfo()
 		
 		private function registerItem( event:Object ):void
 		{

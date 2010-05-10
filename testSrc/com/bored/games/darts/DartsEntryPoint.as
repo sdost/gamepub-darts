@@ -2,6 +2,7 @@
 {
 	import com.bored.games.darts.profiles.UserProfile;
 	import com.bored.games.darts.states.LogoSplash;
+	import com.bored.games.darts.states.Practice;
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.bored.games.animations.CutsceneManager;
 	import com.bored.games.darts.states.GameConfirm;
@@ -90,6 +91,7 @@
 			_myStateMachine.addState(new Gameplay("Gameplay", _myStateMachine));
 			
 			_myStateMachine.addState(new GameStore("GameStore", _myStateMachine));
+			_myStateMachine.addState(new Practice("Practice", _myStateMachine));
 		}//end addStates()
 		
 	}//end class DartsEntryPoint

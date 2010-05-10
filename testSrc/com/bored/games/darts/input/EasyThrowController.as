@@ -36,10 +36,7 @@
 		private var _direction:int;
 		
 		override public function startThrow(a_inputController:InputController):void
-		{
-			_timer = new Timer(33);
-			_timer.addEventListener(TimerEvent.TIMER, updateCursorPosition, false, 0, true);
-			
+		{			
 			_buttonDown = false;
 			_state = CIRCLE_STATE;
 			
@@ -47,6 +44,8 @@
 			_radius = 95;
 			_direction = -1;
 			
+			_timer = new Timer(AppSettings.instance.easyThrowUpdate);
+			_timer.addEventListener(TimerEvent.TIMER, updateCursorPosition, false, 0, true);			
 			_timer.start();
 			
 			a_inputController.pause = false;
@@ -54,32 +53,9 @@
 		
 		override public function onInputUpdate(a_evt:InputStateEvent):void
 		{
-			if (a_evt.button) {
+			if (!a_evt.button) {
 				if (_buttonDown) {
-					// Do Nothing.
-				} else {
 					_state++;
-					
-					if (_state == THROW_STATE) {
-						DartsGlobals.instance.screenSpace.removeEventListener(Event.ENTER_FRAME, updateCursorPosition);
-						
-						DartsGlobals.instance.gameManager.playerThrow(
-							DartsGlobals.instance.gameManager.currentDart.position.x,
-							DartsGlobals.instance.gameManager.currentDart.position.y,
-							0,
-							AppSettings.instance.dartSweetSpotThrust,
-							0,
-							AppSettings.instance.simulationStepScale
-						);
-						
-						_timer.stop();
-					}
-				}
-			} else {
-				if (_buttonDown) {
-					// Nothing to do.
-				} else {
-					// Nothing to do??				
 				}
 			}
 			
@@ -88,21 +64,41 @@
 		
 		private function updateCursorPosition(evt:Event):void
 		{
-			if(_state == CIRCLE_STATE) {
-				_angle += 9;
-				if (_angle == 360) _angle = 0;				
-			} else if (_state == RADIAL_STATE) {
-				_radius += 10 * _direction;
-				
-				if ( _radius < 0 ) {
-					_radius = 0;
-					_direction = 1;
-				} else if ( _radius > 95 ) {
-					_radius = 95;
-					_direction = -1;
-				}
-			}
+			trace("_state: " + _state);
 			
+			switch(_state) {
+				case CIRCLE_STATE:
+					_angle += 18;
+					if (_angle == 360) _angle = 0;				
+				break;
+				case RADIAL_STATE:
+					_radius += 10 * _direction;
+				
+					if ( _radius < 0 ) {
+						_radius = 0;
+						_direction = 1;
+					} else if ( _radius > 95 ) {
+						_radius = 95;
+						_direction = -1;
+					}
+				break;
+				case THROW_STATE:
+					_timer.removeEventListener(TimerEvent.TIMER, updateCursorPosition);
+					_timer.stop();
+						
+					DartsGlobals.instance.gameManager.playerThrow(
+						DartsGlobals.instance.gameManager.currentDart.position.x,
+						DartsGlobals.instance.gameManager.currentDart.position.y,
+						0,
+						AppSettings.instance.dartSweetSpotThrust,
+						0,
+						AppSettings.instance.simulationStepScale
+					);
+				break;
+				default:
+				break;
+			}
+						
 			var x:Number = _radius * Math.cos(_angle * Math.PI / 180);
 			var y:Number = _radius * Math.sin(_angle * Math.PI / 180);
 			

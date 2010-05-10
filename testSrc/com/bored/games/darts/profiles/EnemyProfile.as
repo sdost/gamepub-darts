@@ -50,6 +50,11 @@
 			_dartSkin = a_skin;
 		}//end set dartSkin()
 		
+		public function set dartSkin(a_skin:DartSkin):void
+		{
+			_dartSkin = a_skin;
+		}//end set dartSkin()
+		
 		public function get dartSkin():DartSkin
 		{
 			return _dartSkin;

@@ -77,9 +77,19 @@
 		{									
 			_inputController = new MouseInputController(DartsGlobals.instance.stage);
 		
-			if( DartsGlobals.instance.gameMode == DartsGlobals.EASY ) {
-				_throwController = new EasyThrowController();
-			} else if ( DartsGlobals.instance.gameMode == DartsGlobals.HARD ) {
+			if ( DartsGlobals.instance.gameMode == DartsGlobals.GAME_PRACTICE ) 
+			{
+				if ( DartsGlobals.instance.practiceMode == DartsGlobals.PRACTICE_BEGINNER ) 
+				{
+					_throwController = new EasyThrowController();
+				}
+				else if ( DartsGlobals.instance.practiceMode == DartsGlobals.PRACTICE_EXPERT ) 
+				{
+					_throwController = new GestureThrowController();
+				}
+			}
+			else
+			{
 				_throwController = new GestureThrowController();
 			}
 			

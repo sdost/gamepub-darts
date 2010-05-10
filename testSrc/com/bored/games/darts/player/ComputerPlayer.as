@@ -50,7 +50,7 @@
 			
 			var version:int;
 			
-			if ( DartsGlobals.instance.gameMode == DartsGlobals.HARD ) 
+			if ( DartsGlobals.instance.gameMode == DartsGlobals.GAME_STORY ) 
 			{
 				for each( var ability:Ability in this.abilities )
 				{

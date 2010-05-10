@@ -78,10 +78,6 @@
 		
 		private function handleMouseRollOut(evt:* = null):void
 		{
-			trace("Leaving: " + evt.currentTarget);
-			trace("Entering: " + evt.relatedObject);
-			trace("Target: " + evt.target);
-			
 			var x:Number = evt.stageX;
 			var y:Number = evt.stageY;
 			

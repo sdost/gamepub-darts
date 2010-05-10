@@ -23,18 +23,18 @@
 	 */
 	public class TitleScreen extends ContentHolder
 	{
-		public static const EASY_GAME_CLICKED_EVT:String = "EasyGameClickedEvent";
-		public static const HARD_GAME_CLICKED_EVT:String = "HardGameClickedEvent";
+		public static const PRACTICE_GAME_CLICKED_EVT:String = "PracticeGameClickedEvent";
+		public static const STORY_GAME_CLICKED_EVT:String = "StoryGameClickedEvent";
 		public static const MULTIPLAYER_GAME_CLICKED_EVT:String = "MutliplayerGameClickedEvent";
 		
 		private var _background:Sprite;
 		private var _buildBackground:Boolean = false;
 		
-		private var _easyGameBtn:MightyButton;
-		private var _easyGameBtnImg:MovieClip;
+		private var _practiceGameBtn:MightyButton;
+		private var _practiceGameBtnImg:MovieClip;
 		
-		private var _hardGameBtn:MightyButton;
-		private var _hardGameBtnImg:MovieClip;
+		private var _storyGameBtn:MightyButton;
+		private var _storyGameBtnImg:MovieClip;
 		
 		private var _multiplayerGameBtn:MightyButton;
 		private var _multiplayerGameBtnImg:MovieClip;
@@ -62,30 +62,30 @@
 			
 			// now build ourselves from the descendantsDict.
 			
-			_easyGameBtnImg = descendantsDict["easyButton_mc"] as MovieClip;
-			_hardGameBtnImg = descendantsDict["hardButton_mc"] as MovieClip;
+			_practiceGameBtnImg = descendantsDict["practiceButton_mc"] as MovieClip;
+			_storyGameBtnImg = descendantsDict["storyButton_mc"] as MovieClip;
 			_multiplayerGameBtnImg = descendantsDict["multiplayerButton_mc"] as MovieClip;
 			
-			if (_easyGameBtnImg)
+			if (_practiceGameBtnImg)
 			{
-				_easyGameBtn = new MightyButton(_easyGameBtnImg, false);
-				_easyGameBtn.pause(false);
-				_easyGameBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onEasyGameClicked, false, 0, true);
+				_practiceGameBtn = new MightyButton(_practiceGameBtnImg, false);
+				_practiceGameBtn.pause(false);
+				_practiceGameBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onPracticeGameClicked, false, 0, true);
 			}
 			else
 			{
-				throw new Error("TitleScreen::buildFrom(): _easyGameBtnImg=" + _easyGameBtnImg);
+				throw new Error("TitleScreen::buildFrom(): _practiceGameBtnImg=" + _practiceGameBtnImg);
 			}
 			
-			if (_hardGameBtnImg)
+			if (_storyGameBtnImg)
 			{
-				_hardGameBtn = new MightyButton(_hardGameBtnImg, false);
-				_hardGameBtn.pause(false);
-				_hardGameBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onHardGameClicked, false, 0, true);
+				_storyGameBtn = new MightyButton(_storyGameBtnImg, false);
+				_storyGameBtn.pause(false);
+				_storyGameBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onStoryGameClicked, false, 0, true);
 			}
 			else
 			{
-				throw new Error("TitleScreen::buildFrom(): _hardGameBtnImg=" + _hardGameBtnImg);
+				throw new Error("TitleScreen::buildFrom(): _storyGameBtnImg=" + _storyGameBtnImg);
 			}
 			
 			if (_multiplayerGameBtnImg)
@@ -138,18 +138,18 @@
 			
 		}//end addedToStage()
 		
-		private function onEasyGameClicked(a_evt:Event):void
+		private function onPracticeGameClicked(a_evt:Event):void
 		{
-			this.dispatchEvent(new Event(EASY_GAME_CLICKED_EVT));
+			this.dispatchEvent(new Event(PRACTICE_GAME_CLICKED_EVT));
 			
-			if (_easyGameBtn)
+			if (_practiceGameBtn)
 			{
-				_easyGameBtn.pause(true);
+				_practiceGameBtn.pause(true);
 			}
 			
-			if (_hardGameBtn)
+			if (_storyGameBtn)
 			{
-				_hardGameBtn.pause(true);
+				_storyGameBtn.pause(true);
 			}
 			
 			if (_multiplayerGameBtn)
@@ -157,22 +157,22 @@
 				_multiplayerGameBtn.pause(true);
 			}
 			
-			Tweener.addTween(this, { alpha:0, onComplete:destroy, time:0.4 } );
+			//Tweener.addTween(this, { alpha:0, onComplete:destroy, time:0.4 } );
 			
-		}//end onEasyGameClicked()
+		}//end onPracticeGameClicked()
 		
-		private function onHardGameClicked(a_evt:Event):void
+		private function onStoryGameClicked(a_evt:Event):void
 		{
-			this.dispatchEvent(new Event(HARD_GAME_CLICKED_EVT));
+			this.dispatchEvent(new Event(STORY_GAME_CLICKED_EVT));
 			
-			if (_easyGameBtn)
+			if (_practiceGameBtn)
 			{
-				_easyGameBtn.pause(true);
+				_practiceGameBtn.pause(true);
 			}
 			
-			if (_hardGameBtn)
+			if (_storyGameBtn)
 			{
-				_hardGameBtn.pause(true);
+				_storyGameBtn.pause(true);
 			}
 			
 			if (_multiplayerGameBtn)
@@ -183,20 +183,20 @@
 			// simply hide ourselves and remove ourselves from the display list.
 			Tweener.addTween(this, {alpha:0, onComplete:destroy, time:0.4 } );
 			
-		}//end onHardGameClicked()
+		}//end onStoryGameClicked()
 		
 		private function onMultiplayerGameClicked(a_evt:Event):void
 		{
 			this.dispatchEvent(new Event(MULTIPLAYER_GAME_CLICKED_EVT));
 			
-			if (_easyGameBtn)
+			if (_practiceGameBtn)
 			{
-				_easyGameBtn.pause(true);
+				_practiceGameBtn.pause(true);
 			}
 			
-			if (_hardGameBtn)
+			if (_storyGameBtn)
 			{
-				_hardGameBtn.pause(true);
+				_storyGameBtn.pause(true);
 			}
 			
 			if (_multiplayerGameBtn)
@@ -213,14 +213,14 @@
 		{
 			super.destroy();
 			
-			if(_easyGameBtn)
+			if(_practiceGameBtn)
 			{
-				_easyGameBtn.removeEventListener(MouseEvent.CLICK, onEasyGameClicked);
+				_practiceGameBtn.removeEventListener(MouseEvent.CLICK, onPracticeGameClicked);
 			}
 			
-			if (_hardGameBtn)
+			if (_storyGameBtn)
 			{
-				_hardGameBtn.removeEventListener(MouseEvent.CLICK, onHardGameClicked);
+				_storyGameBtn.removeEventListener(MouseEvent.CLICK, onStoryGameClicked);
 			}
 			
 			if (_multiplayerGameBtn)
@@ -231,8 +231,8 @@
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			this.removeEventListener(Event.REMOVED_FROM_STAGE, destroy);
 			
-			_easyGameBtn = null;
-			_hardGameBtn = null;
+			_practiceGameBtn = null;
+			_storyGameBtn = null;
 			_multiplayerGameBtn = null;
 			
 			_background = null;
