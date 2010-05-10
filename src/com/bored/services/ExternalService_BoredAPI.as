@@ -88,34 +88,6 @@
 			this.dispatchEvent(new Event(USER_INVENTORY_UPDATE))
 		}//end newItem()
 		
-		override public function initializeStore():void
-		{
-			// MochiCoins.getStoreItems();
-		}//end initializeStore()
-		
-		private function storeItems(arg:Object):void 
-		{
-			var items:Vector.<StoreItem> = new Vector.<StoreItem>();
-			
-			_storeItems = arg;
-			for each( var storeItem:Object in _storeItems )
-			{				
-				var item:StoreItem = new StoreItem();
-				item.name = storeItem.name;
-				item.id = storeItem.id;
-				item.description = storeItem.desc;
-				item.price = int(storeItem.cost);
-				item.storeIcon = storeItem.properties["skinid"];
-				items.push(item);
-			}
-			this.dispatchEvent(new ObjectEvent(STORE_ITEMS_AVAILABLE, items));
-        }//end storeItems()
-		
-		override public function initiatePurchase(a_itemID:String):void
-		{
-			// MochiCoins.showItem({ x:150, y: 150, item: a_itemID });
-		}//end initiatePurchase()
-		
 		override public function pullUserData():void
 		{
 			BoredServices.getData("user_data");

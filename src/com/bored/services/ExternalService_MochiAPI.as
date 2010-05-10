@@ -109,7 +109,7 @@
 				item.id = storeItem.id;
 				item.description = storeItem.desc;
 				item.price = int(storeItem.cost);
-				item.storeIcon = storeItem.properties["skinid"];
+				//item.storeIcon = storeItem.properties["skinid"];
 				items.push(item);
 			}
 			this.dispatchEvent(new ObjectEvent(STORE_ITEMS_AVAILABLE, items));

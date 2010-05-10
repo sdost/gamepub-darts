@@ -11,7 +11,7 @@
 		private var _itemID:String;
 		private var _itemDescription:String;
 		private var _itemPrice:int;
-		private var _itemStoreIcon:String;
+		private var _itemStoreIcon:Sprite;
 		
 		public function StoreItem() { }
 		
@@ -34,12 +34,7 @@
 		{
 			_itemPrice = a_int;
 		}//end set price()
-		
-		public function set storeIcon(a_str:String):void
-		{
-			_itemStoreIcon = "storeskin_" + a_str;
-		}//end set iconURL()
-		
+	
 		public function get name():String
 		{
 			return _itemName;
@@ -60,19 +55,14 @@
 			return _itemPrice;
 		}//end get price()
 		
-		public function get storeIcon():String
+		public function get storeIcon():Sprite
 		{
 			return _itemStoreIcon;
-		}//end get iconURL()
-		
-		public function render(a_sprite:Sprite):void
-		{
-			
-		}//end render()
+		}//end get storeIcon()
 		
 		public function toString():String
 		{
-			return new String( "[" + _itemName + "] -> " + _itemDescription + ", " + _itemPrice + ", " + _itemStoreIcon );
+			return new String( "[" + _itemName + "] -> " + _itemDescription + ", " + _itemPrice );
 		}//end toString()
 		
 	}//end StoreItem
