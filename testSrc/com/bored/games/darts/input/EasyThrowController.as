@@ -31,10 +31,15 @@
 		private var _radius:Number;
 		private var _angle:Number;
 		
+		private var _timer:Timer;
+		
 		private var _direction:int;
 		
 		override public function startThrow(a_inputController:InputController):void
 		{
+			_timer = new Timer(33);
+			_timer.addEventListener(TimerEvent.TIMER, updateCursorPosition, false, 0, true);
+			
 			_buttonDown = false;
 			_state = CIRCLE_STATE;
 			
@@ -42,7 +47,7 @@
 			_radius = 95;
 			_direction = -1;
 			
-			DartsGlobals.instance.screenSpace.addEventListener(Event.ENTER_FRAME, updateCursorPosition, false, 0, true);
+			_timer.start();
 			
 			a_inputController.pause = false;
 		}//end startThrow()
@@ -66,6 +71,8 @@
 							0,
 							AppSettings.instance.simulationStepScale
 						);
+						
+						_timer.stop();
 					}
 				}
 			} else {

@@ -26,7 +26,7 @@
 			return false;
 		}//end loggedIn()
 		
-		public function init( a_gameId:String, a_parentClip:Object ):void
+		public function init( a_params:Object = null ):void
 		{
 		}//end init()
 		

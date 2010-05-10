@@ -75,7 +75,7 @@
 		 */
 		override public function onEnter():void
 		{									
-			_inputController = new MouseInputController(DartsGlobals.instance.screenSpace);
+			_inputController = new MouseInputController(DartsGlobals.instance.stage);
 		
 			if( DartsGlobals.instance.gameMode == DartsGlobals.EASY ) {
 				_throwController = new EasyThrowController();

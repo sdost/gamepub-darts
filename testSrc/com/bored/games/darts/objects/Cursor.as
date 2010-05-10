@@ -25,6 +25,7 @@
 		private var _cursor:Sprite;
 		private var _cursorSprite:Sprite3D;
 		private var _cursorMaterial:MovieMaterial;
+		private var _hidden:Boolean;
 		
 		public function Cursor(a_img:Sprite) 
 		{
@@ -56,6 +57,10 @@
 		public function setCursorImage(a_spr:Sprite):void
 		{
 			_cursorMaterial.movie = a_spr;
+			
+			if ( _hidden ) 
+				_cursor.alpha = 0;
+			
 		}//end setCursorImage()
 		
 		public function resetCursorImage():void
@@ -65,11 +70,13 @@
 		
 		public function show():void
 		{
+			_hidden = false;
 			_cursor.alpha = 1;
 		}//end show()
 		
 		public function hide():void
 		{
+			_hidden = true;
 			_cursor.alpha = 0;
 		}//end hide()
 		

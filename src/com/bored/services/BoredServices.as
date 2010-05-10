@@ -84,11 +84,12 @@
 				_servicesObj.addEventListener(BoredServices.SAVED_DATA_RECEIVED_EVT, onGetDataComplete, false, 0, true);
 				_servicesObj.getData(a_key);
 			}
-			
 		}//end getData()
 		
 		private static function onGetDataComplete(objEvt:*):void
 		{
+			trace("onGetDataComplete");
+			
 			var recdObj:Object = objEvt.obj;
 			var keyRequest:String = recdObj ? recdObj.key : null;
 			var dataAcquired:* = recdObj ? recdObj.data : null;
