@@ -21,6 +21,8 @@
 		private var _finalZ:Number = 0;
 		private var _stepScale:Number = 0;
 		
+		private var _lastUpdate:int = -1;
+		
 		public function DartTrajectoryAction(a_gameElement:GameElement, a_params:Object = null) 
 		{
 			super(NAME, a_gameElement, a_params);
@@ -50,6 +52,8 @@
 			
 			_gameElement.pitch = 90;
 			_gameElement.roll = 0;
+			
+			_lastUpdate = -1;
 		}//end startAction()
 		
 		public function get minimumThrust():int
@@ -59,7 +63,22 @@
 	
 		override public function update(a_time:Number):void
 		{
-			var z:Number = _gameElement.position.z + _calc.thrustVector.x * _stepScale;
+			var adjust:Number = 0;
+			
+			if ( _lastUpdate < 0 ) 
+			{
+				_lastUpdate = a_time;
+			}
+			else
+			{				
+				var diff:int = a_time - _lastUpdate;
+				
+				_lastUpdate = a_time;
+				
+				adjust = Number( diff / 33 );
+			}
+			
+			var z:Number = _gameElement.position.z + _calc.thrustVector.x * _stepScale * adjust;
 			
 			if ( z > this._finalZ ) z = this._finalZ;
 			
