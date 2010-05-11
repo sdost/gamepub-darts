@@ -70,6 +70,11 @@
 			if(!skip) _unlockedSkins.push( skin );
 		}//end unlockSkin()
 		
+		public function clearUnlockedSkins():void
+		{
+			_unlockedSkins = new Vector.<DartSkin>();
+		}//end clearUnlockedSkins()
+		
 		public function get skins():Vector.<DartSkin>
 		{
 			return _unlockedSkins;

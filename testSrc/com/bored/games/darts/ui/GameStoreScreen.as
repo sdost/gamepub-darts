@@ -6,6 +6,7 @@
 	import com.bored.games.darts.assets.icons.DoOverIcon_MC;
 	import com.bored.games.darts.assets.icons.ShieldIcon_MC;
 	import com.bored.games.darts.DartsGlobals;
+	import com.bored.games.darts.ui.store.StoreManager;
 	import com.bored.services.AbstractExternalService;
 	import com.bored.services.StoreItem;
 	import com.greensock.TweenLite;
@@ -15,6 +16,7 @@
 	import com.inassets.ui.contentholders.ContentHolder;
 	import com.sven.utils.ImageFactory;
 	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	import flash.display.Loader;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
@@ -65,8 +67,6 @@
 		private var _beelineSlot:MovieClip;
 		private var _dooverSlot:MovieClip;
 		
-		private var _powerItems:Vector.<StoreItem>;
-		
 		private var _slotPriceOne:TextField;
 		private var _slotPriceTwo:TextField;
 		private var _slotPriceThree:TextField;
@@ -113,7 +113,7 @@
 			var descendantsDict:Dictionary = super.buildFrom(a_img, a_buildFromAllDescendants);
 			
 			// now build ourselves from the descendantsDict.
-			//_dartFilterBtnImg = descendantsDict["dartsFilterBtn_mc"] as MovieClip;
+			_dartFilterBtnImg = descendantsDict["dartsFilterBtn_mc"] as MovieClip;
 			_powersFilterBtnImg = descendantsDict["powersFilterBtn_mc"] as MovieClip;
 			//_premiumFilterBtnImg = descendantsDict["premiumFilterBtn_mc"] as MovieClip;
 						
@@ -143,19 +143,17 @@
 			_pageSelectLeftBtnImg = descendantsDict["pageSelectLeftBtn_mc"] as MovieClip;
 			_pageSelectRightBtnImg = descendantsDict["pageSelectRightBtn_mc"] as MovieClip;
 			
-			/*
 			if (_dartFilterBtnImg)
 			{
 				_dartFilterBtn = new MightyButton(_dartFilterBtnImg, false);
 				_dartFilterBtn.pause(false);
-				//_dartFilterBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onDartFilterClicked, false, 0, true);
+				_dartFilterBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onDartsClicked, false, 0, true);
 			}
 			else
 			{
 				throw new Error("GameConfirmScreen::buildFrom(): _dartFilterBtnImg=" + _dartFilterBtnImg);
 			}
-			*/
-			
+						
 			if (_powersFilterBtnImg)
 			{
 				_powersFilterBtn = new MightyButton(_powersFilterBtnImg, false);
@@ -287,21 +285,18 @@
 			
 		}//end addedToStage()
 		
+		private function onDartsClicked(evt:Event):void
+		{
+			StoreManager.generateDartList();
+			
+			processStoreItems(StoreManager.storeContents);
+		}//end onPowersClicked()
+		
 		private function onPowersClicked(evt:Event):void
 		{
-			/*
-			if(_storeSlotOne.contains(_slotBitmapOne)) _storeSlotOne.removeChild(_slotBitmapOne);
-			if(_storeSlotTwo.contains(_slotBitmapTwo)) _storeSlotTwo.removeChild(_slotBitmapTwo);
-			if(_storeSlotThree.contains(_slotBitmapThree)) _storeSlotThree.removeChild(_slotBitmapThree);
+			StoreManager.generatePowerList();
 			
-			_storeSlotOne.addChild(_shieldSlot);
-			_storeSlotTwo.addChild(_beelineSlot);
-			_storeSlotThree.addChild(_dooverSlot);
-			
-			refreshPowerGauge();
-			
-			processStoreItems(_powerItems);
-			*/
+			processStoreItems(StoreManager.storeContents);
 		}//end onPowersClicked()
 		
 		/*
@@ -327,7 +322,7 @@
 			if (_itemInd < 0) _itemInd = Math.floor((_items.length - 1)/ 3) * 3;
 			
 			refreshStoreList();
-		}
+		}//end onPageLeftClicked()
 		
 		private function onPageRightClicked(evt:Event):void
 		{
@@ -336,67 +331,36 @@
 			if (_itemInd >= _items.length) _itemInd = 0;
 			
 			refreshStoreList();
-		}
+		}//end onPageRightClicked()
 		
 		private function onAddSlotOneClicked(evt:Event):void
 		{
-			/*
-			if ( _items[_itemInd].id == "shield") {
-				var gameCash:int = DartsGlobals.instance.externalServices.getData("gameCash");
-				
-				if (gameCash >= _items[_itemInd].price) 
-				{
-					gameCash -= _items[_itemInd].price;
-					DartsGlobals.instance.localPlayer.abilities[0].refreshTime--;
-					DartsGlobals.instance.externalServices.setData("shieldLevel", DartsGlobals.instance.localPlayer.abilities[0].refreshTime);
-					DartsGlobals.instance.externalServices.setData("gameCash", gameCash);
-					refreshPowerGauge();
-				}
-				
-			} else {
-				DartsGlobals.instance.externalServices.initiatePurchase(_items[_itemInd].id);
+			if ( checkCanAfford(_items[_itemInd].price) ) 
+			{
+				if( _items[_itemInd].doPurchase() )
+					processPurchase(_items[_itemInd].price);
 			}
-			*/
+			refreshStoreList();
 		}//end onAddSlotOneClicked()
 		
 		private function onAddSlotTwoClicked(evt:Event):void
 		{
-			/*
-			if ( _items[_itemInd+1].id == "beeline") {
-				var gameCash:int = DartsGlobals.instance.externalServices.getData("gameCash");
-				
-				if (gameCash >= _items[_itemInd+1].price) 
-				{
-					gameCash -= _items[_itemInd+1].price;
-					DartsGlobals.instance.localPlayer.abilities[1].refreshTime--;
-					DartsGlobals.instance.externalServices.setData("beelineLevel", DartsGlobals.instance.localPlayer.abilities[1].refreshTime);
-					DartsGlobals.instance.externalServices.setData("gameCash", gameCash);
-					refreshPowerGauge();
-				}
-			} else {
-				DartsGlobals.instance.externalServices.initiatePurchase(_items[_itemInd+1].id);
+			if ( checkCanAfford(_items[_itemInd + 1].price) ) 
+			{
+				if( _items[_itemInd + 1].doPurchase() )
+					processPurchase(_items[_itemInd + 1].price);
 			}
-			*/
+			refreshStoreList();
 		}//end onAddSlotTwoClicked()
 		
 		private function onAddSlotThreeClicked(evt:Event):void
 		{
-			/*
-			if ( _items[_itemInd+2].id == "doover") {
-				var gameCash:int = DartsGlobals.instance.externalServices.getData("gameCash");
-				
-				if (gameCash >= _items[_itemInd+2].price) 
-				{
-					gameCash -= _items[_itemInd+2].price;
-					DartsGlobals.instance.localPlayer.abilities[2].refreshTime--;
-					DartsGlobals.instance.externalServices.setData("dooverLevel", DartsGlobals.instance.localPlayer.abilities[2].refreshTime);
-					DartsGlobals.instance.externalServices.setData("gameCash", gameCash);
-					refreshPowerGauge();
-				}
-			} else {
-				DartsGlobals.instance.externalServices.initiatePurchase(_items[_itemInd+2].id);
+			if ( checkCanAfford(_items[_itemInd + 2].price) ) 
+			{
+				if( _items[_itemInd + 2].doPurchase() )
+					processPurchase(_items[_itemInd + 2].price);
 			}
-			*/
+			refreshStoreList();
 		}//end onAddSlotThreeClicked()
 		
 		private function onStoreItemsAvailable(a_evt:ObjectEvent):void
@@ -413,17 +377,21 @@
 		
 		private function refreshStoreList():void
 		{
-			trace("itemInd: " + _itemInd);
-			
 			if ( _items.length > _itemInd ) 
 			{
+				if ( checkIfOwned(_items[_itemInd].id) ) {
+					_slotAddBtnOne.pause(true);
+				} else {
+					_slotAddBtnOne.pause(false);
+				}
+				
 				_slotBitmapOne.visible = true;
-				//_slotBitmapOne.bitmapData = ImageFactory.getBitmapDataByQualifiedName(_items[_itemInd].storeIcon, 270, 103);
+				_slotBitmapOne.bitmapData = new BitmapData(_items[_itemInd].storeIcon.width, _items[_itemInd].storeIcon.height, true, 0x00000000);
+				_slotBitmapOne.bitmapData.draw(_items[_itemInd].storeIcon);
 				_slotBitmapOne.smoothing = true;
 				
 				_slotPriceOne.text = "$" + _items[_itemInd].price.toString();
 				
-				_slotAddBtnOne.pause(false);
 				_slotAddBtnOne.buttonContents.visible = true;
 			} else {
 				_slotBitmapOne.visible = false;
@@ -436,13 +404,19 @@
 			
 			if ( _items.length > _itemInd+1 ) 
 			{
+				if ( checkIfOwned(_items[_itemInd+1].id) ) {
+					_slotAddBtnTwo.pause(true);
+				} else {
+					_slotAddBtnTwo.pause(false);
+				}
+				
 				_slotBitmapTwo.visible = true;
-				//_slotBitmapTwo.bitmapData = ImageFactory.getBitmapDataByQualifiedName(_items[_itemInd+1].storeIcon, 270, 103);
+				_slotBitmapTwo.bitmapData = new BitmapData(_items[_itemInd+1].storeIcon.width, _items[_itemInd+1].storeIcon.height, true, 0x00000000);
+				_slotBitmapTwo.bitmapData.draw(_items[_itemInd+1].storeIcon);
 				_slotBitmapTwo.smoothing = true;
 				
-				_slotPriceTwo.text = "$" + _items[_itemInd + 1].price.toString();	
+				_slotPriceTwo.text = "$" + _items[_itemInd+1].price.toString();	
 				
-				_slotAddBtnTwo.pause(false);
 				_slotAddBtnTwo.buttonContents.visible = true;
 			} else {
 				_slotBitmapTwo.visible = false;
@@ -455,13 +429,19 @@
 			
 			if ( _items.length > _itemInd+2 ) 
 			{
+				if ( checkIfOwned(_items[_itemInd+2].id) ) {
+					_slotAddBtnThree.pause(true);
+				} else {
+					_slotAddBtnThree.pause(false);
+				}
+				
 				_slotBitmapThree.visible = true;
-				//_slotBitmapThree.bitmapData = ImageFactory.getBitmapDataByQualifiedName(_items[_itemInd+2].storeIcon, 270, 103);
+				_slotBitmapThree.bitmapData = new BitmapData(_items[_itemInd+2].storeIcon.width, _items[_itemInd+2].storeIcon.height, true, 0x00000000);
+				_slotBitmapThree.bitmapData.draw(_items[_itemInd+2].storeIcon);
 				_slotBitmapThree.smoothing = true;
 				
-				_slotPriceThree.text = "$" + _items[_itemInd + 2].price.toString();
+				_slotPriceThree.text = "$" + _items[_itemInd+2].price.toString();
 				
-				_slotAddBtnThree.pause(false);
 				_slotAddBtnThree.buttonContents.visible = true;
 			} else {
 				_slotBitmapThree.visible = false;
@@ -473,6 +453,30 @@
 			}
 		}//end refreshStoreList()
 		
+		private function checkIfOwned(a_id:String):Boolean
+		{
+			var arr:Array = DartsGlobals.instance.externalServices.getData("ownedSkins");
+			for each( var obj:Object in arr )
+			{
+				if ( obj.skinid.toLowerCase() == a_id.toLowerCase() ) return true;
+			}
+			return false;
+		}//end checkIfOwned()
+		
+		private function checkCanAfford(a_price:int):Boolean
+		{
+			var cash:int = DartsGlobals.instance.externalServices.getData("gameCash");
+			if ( cash >= a_price ) return true;	
+			return false;
+		}//end checkIfOwned()
+		
+		private function processPurchase(a_price:int):void
+		{
+			var cash:int = DartsGlobals.instance.externalServices.getData("gameCash");
+			cash -= a_price;
+			DartsGlobals.instance.externalServices.setData("gameCash", cash);
+		}//end checkIfOwned()
+		
 		private function onBackClicked(evt:Event):void
 		{
 			DartsGlobals.instance.externalServices.pushUserData();
@@ -480,7 +484,7 @@
 			this.dispatchEvent(new Event(BACK_CLICKED_EVT));
 			
 			TweenLite.to(this, 0.4, { alpha:0, onComplete:destroy } );
-		}
+		}//end onBackClicked()
 		
 		override public function destroy(...args):void
 		{

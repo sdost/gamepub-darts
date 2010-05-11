@@ -76,6 +76,14 @@
 		{
 			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("play_sound");
 			
+			DartsGlobals.instance.localPlayer.setAbilitiesSlot(0, 0);
+			DartsGlobals.instance.localPlayer.setAbilitiesSlot(1, 1);
+			DartsGlobals.instance.localPlayer.setAbilitiesSlot(2, 2);
+			
+			DartsGlobals.instance.cpuPlayer.setAbilitiesSlot(0, 0);
+			DartsGlobals.instance.cpuPlayer.setAbilitiesSlot(1, 1);
+			DartsGlobals.instance.cpuPlayer.setAbilitiesSlot(2, 2);
+			
 			DartsGlobals.instance.gameManager.registerPlayer( DartsGlobals.instance.localPlayer );
 			DartsGlobals.instance.gameManager.registerPlayer( DartsGlobals.instance.cpuPlayer );
 			

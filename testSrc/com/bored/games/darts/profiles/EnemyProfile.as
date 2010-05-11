@@ -60,21 +60,6 @@
 			return _dartSkin;
 		}//end get dartSkin()
 		
-		public function addAbility(a_ability:Ability):void
-		{
-			_abilities.push(a_ability);
-		}//end addAbility()
-		
-		public function clearAbilities():void
-		{
-			_abilities = new Vector.<Ability>();
-		}//end clearAbilities()
-		
-		public function get abilities():Vector.<Ability>
-		{
-			return _abilities;
-		}//end get abilities()
-		
 		public function playSound(a_str:String):void
 		{
 			_voSoundController.play(a_str);
@@ -86,15 +71,7 @@
 			
 			(DartsGlobals.instance.cpuPlayer as ComputerPlayer).cancelShot();
 			
-			//TweenMax.killAll();
-			
-			for each( var ability:Ability in DartsGlobals.instance.cpuPlayer.abilities )
-			{
-				if ( ability.name == DoOverAbility.NAME ) 
-				{
-					DartsGlobals.instance.gameManager.abilityManager.activateAbility(ability);
-				}
-			}
+			DartsGlobals.instance.gameManager.abilityManager.activateAbility(DartsGlobals.instance.cpuPlayer.getAbilityByName(DoOverAbility.NAME));
 		}//end performDoOver()
 		
 	}//end EnemyProfile

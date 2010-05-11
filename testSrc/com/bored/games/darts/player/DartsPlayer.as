@@ -27,10 +27,13 @@
 		protected var _portrait:Bitmap;
 		
 		private var _abilityStock:Vector.<Ability>;
+		private var _activeAbilities:Array;
 		
 		public function DartsPlayer(a_name:String = "") 
 		{
 			_name = a_name;
+			_abilityStock = new Vector.<Ability>();
+			_activeAbilities = new Array(3);
 		}//end constructor()
 		
 		public function set dartGame(a_game:DartsGameLogic):void
@@ -79,17 +82,15 @@
 			_skin = a_skin;
 		}//end setSkin()
 		
-		public function setAbilities(...args):void
+		public function addAbilities(a_ability:Ability):void
 		{
-			_abilityStock = new Vector.<Ability>(args.length);
-			
-			var i:int = 0;
-			
-			for each( var ability:Ability in args )
-			{
-				ability.owner = this;
-				_abilityStock[i++] = ability;
-			}
+			a_ability.owner = this;
+			_abilityStock.push(a_ability);
+		}//end addAbilities()
+		
+		public function setAbilitiesSlot(a_slot:int, a_abilityInd:int):void
+		{
+			_activeAbilities[a_slot] = _abilityStock[a_abilityInd];
 		}//end setAbility()
 		
 		public function get abilities():Vector.<Ability>
@@ -97,11 +98,25 @@
 			return _abilityStock;
 		}//end get abilities()
 		
+		public function getAbilityByName(a_name:String):Ability
+		{
+			for ( var i:int = 0; i < _abilityStock.length; i++ )
+			{
+				if ( _abilityStock[i].name == a_name ) return _abilityStock[i];
+			}
+			return null;
+		}//end get abilities()
+		
+		public function get activeAbilities():Array
+		{
+			return _activeAbilities;
+		}//end get activeAbilities()
+	
 		public function hasAbility(a_name:String):Boolean
 		{
 			var hasAbility:Boolean = false;
 			
-			for each( var ability:Ability in _abilityStock )
+			for each( var ability:Ability in _activeAbilities )
 			{
 				if ( a_name == ability.name && ability.ready ) 
 				{

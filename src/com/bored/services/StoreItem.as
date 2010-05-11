@@ -1,17 +1,17 @@
 ﻿package com.bored.services 
 {
-	import flash.display.Sprite;
+	import flash.display.DisplayObject;
 	/**
 	 * ...
 	 * @author sam
 	 */
 	public class StoreItem
 	{
-		private var _itemName:String;
-		private var _itemID:String;
-		private var _itemDescription:String;
-		private var _itemPrice:int;
-		private var _itemStoreIcon:Sprite;
+		protected var _itemName:String;
+		protected var _itemID:String;
+		protected var _itemDescription:String;
+		protected var _itemPrice:int;
+		protected var _itemStoreIcon:DisplayObject;
 		
 		public function StoreItem() { }
 		
@@ -55,10 +55,15 @@
 			return _itemPrice;
 		}//end get price()
 		
-		public function get storeIcon():Sprite
+		public function get storeIcon():DisplayObject
 		{
 			return _itemStoreIcon;
 		}//end get storeIcon()
+		
+		public function doPurchase():Boolean
+		{
+			return false;
+		}//end doPurchase()
 		
 		public function toString():String
 		{

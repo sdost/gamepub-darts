@@ -159,12 +159,7 @@
 			
 			
 			if ( _shotIntention.points != a_points && _shotIntention.multiplier == 1 && DartsGlobals.instance.cpuPlayer.hasAbility(DoOverAbility.NAME) ) {
-				for each( var ability:Ability in abilities )
-				{
-					if ( ability.name == DoOverAbility.NAME ) {
-						DartsGlobals.instance.gameManager.abilityManager.activateAbility(ability);
-					}
-				}
+				DartsGlobals.instance.gameManager.abilityManager.activateAbility(DartsGlobals.instance.cpuPlayer.getAbilityByName(DoOverAbility.NAME));
 			}
 		}//end handleShot()
 		

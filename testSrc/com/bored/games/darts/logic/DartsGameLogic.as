@@ -151,7 +151,7 @@
 			a_player.dartGame = this;
 			a_player.playerNum = _players.length + 1;
 			
-			for each( var ability:Ability in a_player.abilities )
+			for each( var ability:Ability in a_player.activeAbilities )
 			{
 				_abilityManager.registerAbility(ability);
 			}

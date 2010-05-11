@@ -90,12 +90,19 @@
 		
 		override public function pullUserData():void
 		{
-			BoredServices.getData("user_data");
+			if( BoredServices.isLoggedIn )
+				BoredServices.getData("user_data");
 		}//end pullUserData()
 		
 		override public function pushUserData():void
 		{
-			BoredServices.setData("user_data", _userDataSO.data);
+			for( var key:String in _userDataSO )
+			{
+				trace("_userData[" + key + "] -> " + _userDataSO[key]);
+			}
+			
+			if( BoredServices.isLoggedIn )
+				BoredServices.setData("user_data", _userDataSO.data);
 		}//end pushUserData()
 		
 		private function onUserData(arg:Object):void
@@ -104,6 +111,11 @@
 			for( var key:String in _userData )
 			{
 				trace("_userData[" + key + "] -> " + _userData[key]);
+				
+				for ( var key2:String in _userData[key] )
+				{
+					trace("_userData[" + key + "][" + key2 + "] -> " + _userData[key][key2]);
+				}
 				
 				_userDataSO.data[key] = _userData[key];
 			}

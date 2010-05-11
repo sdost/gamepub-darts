@@ -64,6 +64,11 @@
 		{
 			_userDataSO.data[a_str] = a_data;
 			_userDataSO.flush();
+			
+			for ( var key:String in _userDataSO.data )
+			{
+				trace("userData.data[" + key + "] -> " + _userDataSO.data[key]);
+			}
 		}//end getData()
 		
 		public function initializeStore():void

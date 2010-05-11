@@ -83,7 +83,9 @@
 			
 			DartsGlobals.instance.cpuPlayer = new ComputerPlayer(DartsGlobals.instance.enemyProfile);
 			DartsGlobals.instance.cpuPlayer.setPortrait(DartsGlobals.instance.enemyProfile.portrait);
-			DartsGlobals.instance.cpuPlayer.setAbilities(new BeeLineAbility(3), new ShieldAbility(3), new DoOverAbility(3));
+			DartsGlobals.instance.cpuPlayer.addAbilities(new BeeLineAbility(10));
+			DartsGlobals.instance.cpuPlayer.addAbilities(new ShieldAbility(10));
+			DartsGlobals.instance.cpuPlayer.addAbilities(new DoOverAbility(10));
 			DartsGlobals.instance.cpuPlayer.setSkin(DartsGlobals.instance.enemyProfile.dartSkin);
 			
 			this.finished();

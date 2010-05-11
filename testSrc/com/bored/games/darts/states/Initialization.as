@@ -57,12 +57,18 @@
 			DartsGlobals.instance.localPlayer = new LocalPlayer();
 			DartsGlobals.instance.localPlayer.setPortrait(new Protagonist_Portrait_BMP(150, 150));
 			
-			DartsGlobals.instance.localPlayer.setAbilities(new ShieldAbility(10), new BeeLineAbility(10), new DoOverAbility(10));
-			
+			DartsGlobals.instance.localPlayer.addAbilities(new ShieldAbility(10))
+			DartsGlobals.instance.localPlayer.addAbilities(new BeeLineAbility(10))
+			DartsGlobals.instance.localPlayer.addAbilities(new DoOverAbility(10));
+						
 			var providerCls:Class = getDefinitionByName(AppSettings.instance.externalServicesProvider) as Class;
 			var ext:AbstractExternalService = new providerCls();
 			ext.init();
 			DartsGlobals.instance.externalServices = ext;
+			
+			DartsGlobals.instance.externalServices.setData("gameCash", 10000);
+			DartsGlobals.instance.externalServices.setData("powerLevels", new Object());
+			DartsGlobals.instance.externalServices.setData("ownedSkins", new Array());
 			
 			_infoLoaded = false;
 			_dataLoaded = false;

@@ -1,5 +1,6 @@
 ﻿package com.bored.games.darts
 {
+	import com.bored.games.darts.abilities.Ability;
 	import com.bored.games.darts.abilities.BeeLineAbility;
 	import com.bored.games.darts.abilities.DoOverAbility;
 	import com.bored.games.darts.abilities.ShieldAbility;
@@ -25,6 +26,7 @@
 	import flash.events.TimerEvent;
 	import flash.net.URLRequest;
 	import flash.utils.Timer;
+	import flash.utils.getDefinitionByName;
 	
 	/**
 	 * ...
@@ -274,7 +276,6 @@
 			_externalService = a_ext;
 			_externalService.addEventListener(AbstractExternalService.USER_LOGIN, onLogin, false, 0, true);
 			_externalService.addEventListener(AbstractExternalService.USER_DATA_AVAILABLE, onUserData, false, 0, true);
-			_externalService.addEventListener(AbstractExternalService.USER_INVENTORY_UPDATE, onInventoryUpdate, false, 0, true);
 		}//end set externalServices()
 		
 		public function get externalServices():AbstractExternalService
@@ -295,46 +296,20 @@
 			
 			if (gameCash <= 0) 
 			{
-				gameCash = 100000;
+				gameCash = 0;
 				_externalService.setData("gameCash", gameCash);
 			}
-				
-			var shieldLvl:int = _externalService.getData("shieldLevel");
 			
-			trace("Shield Level: " + shieldLvl);
+			var powerLevels:Object = _externalService.getData("powerLevels");
 			
-			if (shieldLvl <= 0) 
+			for ( var key:String in powerLevels )
 			{
-				_externalService.setData("shieldLevel", 10);
-				shieldLvl = 10;
+				_localPlayer.getAbilityByName(powerLevels[key].name).refreshTime = powerLevels[key].refreshTime;
 			}
 			
-			var beelineLvl:int = _externalService.getData("beelineLevel");
+			_playerProfile.clearUnlockedSkins();
 			
-			trace("Beeline Level: " + beelineLvl);
-			
-			if (beelineLvl <= 0)
-			{
-				_externalService.setData("beelineLevel", 10);
-				beelineLvl = 10;
-			}
-				
-			var dooverLvl:int = _externalService.getData("dooverLevel");
-			
-			trace("Do-Over Level: " + dooverLvl);
-			
-			if (dooverLvl <= 0)
-			{
-				_externalService.setData("dooverLevel", 10);
-				dooverLvl = 10;
-			}
-			
-			_localPlayer.setAbilities(new ShieldAbility(shieldLvl), new BeeLineAbility(beelineLvl), new DoOverAbility(dooverLvl));
-		}//end onInventoryUpdate()
-		
-		private function onInventoryUpdate(evt:Event):void
-		{
-			for each( var obj:Object in _externalService.getData("ownedItems") ) 
+			for each( var obj:Object in _externalService.getData("ownedSkins") ) 
 			{		
 				if (obj.properties.skinid && obj.properties.flightid) 
 				{
