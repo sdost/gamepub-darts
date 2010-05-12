@@ -12,6 +12,7 @@
 		
 		public static const STORE_HIDDEN:String = "storeHidden";
 		public static const STORE_ITEMS_AVAILABLE:String = "storeItemsAvailable";
+		public static const ACHIEVEMENT_EARNED:String = "achievementEarned";
 		public static const USER_LOGIN:String = "userLogin";
 		public static const USER_DATA_AVAILABLE:String = "userDataAvailable";
 		public static const USER_INVENTORY_UPDATE:String = "userInventoryUpdate";
@@ -50,10 +51,9 @@
 		{
 		}//end pushUserData()
 		
-		public function checkForAchievement(a_id:String):Boolean
+		public function bestowAchievement(a_id:String):void
 		{
-			return false;
-		}//end checkForAchievement()
+		}//end bestowAchievement()
 		
 		public function getData(a_str:String):*
 		{

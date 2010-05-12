@@ -249,7 +249,11 @@
 				_background = new Sprite();
 			}
 			
-			refreshStoreList();
+			StoreManager.generateDartList();
+			
+			processStoreItems(StoreManager.storeContents);
+			
+			_dartFilterBtn.pause(true);
 			
 			return descendantsDict;
 			
@@ -290,6 +294,9 @@
 			StoreManager.generateDartList();
 			
 			processStoreItems(StoreManager.storeContents);
+			
+			_dartFilterBtn.pause(true);
+			_powersFilterBtn.pause(false);
 		}//end onPowersClicked()
 		
 		private function onPowersClicked(evt:Event):void
@@ -297,6 +304,9 @@
 			StoreManager.generatePowerList();
 			
 			processStoreItems(StoreManager.storeContents);
+			
+			_dartFilterBtn.pause(false);
+			_powersFilterBtn.pause(true);
 		}//end onPowersClicked()
 		
 		/*

@@ -1,6 +1,8 @@
 ﻿package com.bored.games.darts.statistics 
 {
 	import com.bored.games.darts.DartsGlobals;
+	import com.bored.services.AbstractExternalService;
+	import com.bored.services.events.ObjectEvent;
 	/**
 	 * ...
 	 * @author sam
@@ -20,12 +22,22 @@
 				
 		public static function bestowAchievement(a_id:String):void
 		{
-			if (!DartsGlobals.instance.externalServices.checkForAchievement(a_id))
-			{
-				//DartsGlobals.instance.showModalPopup(AchievementModal);
-				DartsGlobals.instance.localPlayer.record.recordAchievement(a_id);
-			}
+			DartsGlobals.instance.externalServices.bestowAchievement(a_id);
+			DartsGlobals.instance.externalServices.addEventListener(AbstractExternalService.ACHIEVEMENT_EARNED, onAchievementEarned, false, 0, true);
 		}//end bestowAchievement()
+		
+		private static function onAchievementEarned(a_evt:ObjectEvent):void
+		{
+			DartsGlobals.instance.externalServices.removeEventListener(AbstractExternalService.ACHIEVEMENT_EARNED, onAchievementEarned);
+			
+			for ( var obj:Object in a_evt.obj ) 
+			{
+				if ( obj.earned ) 
+				{
+					DartsGlobals.instance.localPlayer.record.recordAchievement( obj );
+				}
+			}
+		}//end onAchievementEarned()
 		
 	}//end AchievementTracker
 

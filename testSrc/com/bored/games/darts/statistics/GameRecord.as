@@ -13,7 +13,7 @@
 		
 		private var _lastScore:Object;
 		
-		private var _achievementsEarned:Vector.<String>;
+		private var _achievementsEarned:Vector.<Object>;
 		
 		private var _win:Boolean;
 		
@@ -24,7 +24,7 @@
 			_doubles = 0;
 			_triples = 0;
 			_lastScore = { };
-			_achievementsEarned = new Vector.<String>();
+			_achievementsEarned = new Vector.<Object>();
 			_win = false;
 		}//end constructor()
 		
@@ -62,9 +62,9 @@
 			}
 		}//end logThrow()
 		
-		public function recordAchievement( a_id:String ):void
+		public function recordAchievement( a_achievementObj:Object ):void
 		{
-			if( _achievementsEarned.indexOf( a_id, 0 ) < 0 ) _achievementsEarned.push(a_id);
+			_achievementsEarned.push(a_achievementObj);
 		}//end recordAchievement()
 		
 		public function recordEndOfGame( a_win:Boolean ):void

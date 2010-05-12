@@ -35,6 +35,8 @@
 		
 		override public function init( a_params:Object = null ):void 
 		{
+			BoredServices.setRootContainer( a_params.rootContainer );
+			
 			BoredServices.addEventListener(BoredServices.SAVED_DATA_RECEIVED_EVT, onUserData);
 			BoredServices.addEventListener(BoredServices.LOGGED_IN_EVENT, onLoggedIn);
 			//MochiCoins.addEventListener(MochiCoins.ITEM_OWNED, registerItem);
@@ -124,6 +126,18 @@
 			
 			this.dispatchEvent(new Event(USER_DATA_AVAILABLE));
 		}//end onUserData()
+		
+		override public function bestowAchievement(a_id:String):void
+		{
+			BoredServices.submitAchievementAcquired(a_id, false);
+			BoredServices.addEventListener(BoredServices.SCORE_SUBMISSION_COMPLETE_EVT, onAchievementEarned, false, 0, true);
+		}//end bestowAchievement()
+		
+		private function onAchievementEarned(evt:*):void
+		{			
+			var achievementsArr:Array = (evt as Object).obj;
+			this.dispatchEvent(new ObjectEvent(ACHIEVEMENT_EARNED, achievementsArr));
+		}//end onAchievementEarned()
 		
 		override public function showStore():void
 		{
