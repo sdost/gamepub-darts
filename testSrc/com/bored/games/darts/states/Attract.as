@@ -46,6 +46,7 @@
 				_titleScreen = new TitleScreen(titleScreenImg, false, true);
 				_titleScreen.addEventListener(TitleScreen.PRACTICE_GAME_CLICKED_EVT, onPracticeGameClicked, false, 0, true);
 				_titleScreen.addEventListener(TitleScreen.STORY_GAME_CLICKED_EVT, onStoryGameClicked, false, 0, true);
+				_titleScreen.addEventListener(TitleScreen.MULTIPLAYER_GAME_CLICKED_EVT, onMultiplayerGameClicked, false, 0, true);
 				DartsGlobals.instance.screenSpace.addChild(_titleScreen);
 				
 				DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").addSound( new SMSound("title_sound", "button_title_mp3") );
@@ -73,6 +74,15 @@
 			DartsGlobals.instance.gameMode = DartsGlobals.GAME_STORY;
 			
 			(this.stateMachine as GameFSM).transitionToStateNamed("IntroStory");
+		}//end onResumeGameClicked();
+		
+		private function onMultiplayerGameClicked(e_evt:Event):void
+		{
+			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("title_sound");
+			
+			DartsGlobals.instance.gameMode = DartsGlobals.GAME_MULTIPLAYER;
+			
+			(this.stateMachine as GameFSM).transitionToStateNamed("Multiplayer");
 		}//end onResumeGameClicked();
 		
 		/**

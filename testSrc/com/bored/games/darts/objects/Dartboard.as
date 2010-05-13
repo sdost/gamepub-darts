@@ -238,6 +238,7 @@
 			var points:int = 0;
 			var multiplier:int = 0;
 			var scoring:Boolean = false;
+			var sticking:Boolean = false;
 			
 			if (objects.length > 0) {
 		
@@ -266,7 +267,7 @@
 						_shieldAction.startBlocking(points.toString());						
 					}
 					
-					return true;
+					sticking = true;
 				} else if ( _blockedSections[objects[0].parent.name] ) {
 					_dartboardSoundController.play("shieldHit");
 				} else {
@@ -278,7 +279,7 @@
 			
 			DartsGlobals.instance.gameManager.players[DartsGlobals.instance.gameManager.currentPlayer-1].processShotResult(points, multiplier, scoring);
 			
-			return false;			
+			return sticking;			
 		}//end submitDartPosition()
 		
 		private function playHitSound(a_player:int, multiplier:int):void

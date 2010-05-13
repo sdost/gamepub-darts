@@ -86,6 +86,14 @@
 			return 0;
 		}//end turnsLeft()
 		
+		public function resetAbilties():void
+		{
+			for ( var i:int = 0; i < _abilities.length; i++ )
+			{
+				_abilities[i].armAbility();
+			}
+		}//end resetAbilities()
+		
 		public function get abilities():Vector.<Ability>
 		{
 			return _abilities;

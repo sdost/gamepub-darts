@@ -5,6 +5,9 @@
 	import com.bored.games.darts.abilities.DoOverAbility;
 	import com.bored.games.darts.abilities.ShieldAbility;
 	import com.bored.games.darts.states.statemachines.GameFSM;
+	import com.bored.gs.game.GameClient;
+	import com.bored.gs.game.IGameClient;
+	import com.bored.gs.game.TurnBasedGameClient;
 	import com.inassets.statemachines.interfaces.IStateMachine;
 	import com.jac.soundManager.SoundController;
 	import com.sven.utils.AppSettings;
@@ -36,6 +39,7 @@
 	{
 		public static const GAME_STORY:int = 0;
 		public static const GAME_PRACTICE:int = 1;
+		public static const GAME_MULTIPLAYER:int = 2;
 		
 		public static const PRACTICE_BEGINNER:int = 0;
 		public static const PRACTICE_EXPERT:int = 1;
@@ -93,6 +97,8 @@
 		private var _gameMode:int;
 		
 		private var _practiceMode:int;
+		
+		private var _multiplayerGameClient:IGameClient;
 		
 		public function DartsGlobals(a_singletonEnforcer:DartsGlobals_SingletonEnforcer) 
 		{
@@ -357,6 +363,16 @@
 		{
 			return _cpuPlayer;
 		}//end get cpuPlayer()
+		
+		public function set multiplayerClient(a_client:IGameClient):void
+		{
+			_multiplayerGameClient = a_client;
+		}//end set multiplayerClient()
+		
+		public function get multiplayerClient():IGameClient
+		{
+			return _multiplayerGameClient;
+		}//end get multiplayerClient()	
 		
 		public function get isDebugBuild():Boolean
 		{

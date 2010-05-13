@@ -181,6 +181,7 @@
 				_players[i].initGameRecord();
 			}
 			
+			_abilityManager.resetAbilties();
 			_scoreManager.clearScoreBoard();
 			
 			_currentPlayer = 1;

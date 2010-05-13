@@ -139,6 +139,8 @@
 		
 		public function processShotResult(a_points:int, a_multiplier:int, a_scoring:Boolean):void
 		{
+			trace("processShotResults(" + a_points + ", " + a_multiplier + ", " + a_scoring + ")");
+			
 			_gameRecord.recordThrow(a_points, a_multiplier, a_scoring);			
 		}//end processShotResult()
 		

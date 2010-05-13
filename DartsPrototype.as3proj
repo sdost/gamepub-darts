@@ -65,6 +65,7 @@
     <element path="swfLibs_includeAll\GamestoreScreen.swc" />
     <element path="swfLibs_includeAll\Sounds.swc" />
     <element path="swfLibs_includeAll\Achievements.swc" />
+    <element path="swfLibs_includeAll\gsclient.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>
