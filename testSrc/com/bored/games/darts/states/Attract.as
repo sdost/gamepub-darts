@@ -72,6 +72,7 @@
 			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("title_sound");
 			
 			DartsGlobals.instance.gameMode = DartsGlobals.GAME_STORY;
+			DartsGlobals.instance.throwMode = DartsGlobals.THROW_EXPERT;
 			
 			(this.stateMachine as GameFSM).transitionToStateNamed("IntroStory");
 		}//end onResumeGameClicked();
@@ -81,6 +82,7 @@
 			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("title_sound");
 			
 			DartsGlobals.instance.gameMode = DartsGlobals.GAME_MULTIPLAYER;
+			DartsGlobals.instance.throwMode = DartsGlobals.THROW_BEGINNER;
 			
 			(this.stateMachine as GameFSM).transitionToStateNamed("Multiplayer");
 		}//end onResumeGameClicked();

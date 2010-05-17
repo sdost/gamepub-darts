@@ -51,7 +51,7 @@
 			
 			var sectionCount:int = 0;
 			
-			var lastCPUScore:Object = DartsGlobals.instance.cpuPlayer.record.lastScore;
+			var lastCPUScore:Object = DartsGlobals.instance.opponentPlayer.record.lastScore;
 			
 			if (_gameType == "CRICKET") {				
 				var points:int = 15;
@@ -93,8 +93,8 @@
 		
 		override public function handleShot(a_points:int, a_multiplier:int):void
 		{
-			if ( _shotIntention.points != a_points && _shotIntention.multiplier == 1 && DartsGlobals.instance.cpuPlayer.hasAbility(DoOverAbility.NAME) ) {
-				DartsGlobals.instance.gameManager.abilityManager.activateAbility(DartsGlobals.instance.cpuPlayer.getAbilityByName(DoOverAbility.NAME));
+			if ( _shotIntention.points != a_points && _shotIntention.multiplier == 1 && DartsGlobals.instance.opponentPlayer.hasAbility(DoOverAbility.NAME) ) {
+				DartsGlobals.instance.gameManager.abilityManager.activateAbility(DartsGlobals.instance.opponentPlayer.getAbilityByName(DoOverAbility.NAME));
 			}
 		}//end handleShot()
 		

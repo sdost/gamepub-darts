@@ -14,26 +14,15 @@
 	 * ...
 	 * @author sam
 	 */
-	public class UserProfile
+	public class UserProfile extends Profile
 	{
-		private var _name:String;
 		private var _unlockedSkins:Vector.<DartSkin>;
 		
 		public function UserProfile() 
 		{
-			_name = "";
+			super();
 			_unlockedSkins = new Vector.<DartSkin>();
 		}//end constructor()
-		
-		public function get name():String
-		{
-			return _name;
-		}//end get name()
-		
-		public function set name(a_name:String):void
-		{
-			_name = a_name;
-		}//end set name()
 		
 		public function unlockSkin(a_skinid:String, a_flightid:String):void
 		{

@@ -26,7 +26,7 @@
 			_abilities = new Vector.<Ability>();
 			_timers = new Array();
 			
-			_abilitySoundController = new SoundController("abilitySounds");
+			_abilitySoundController = DartsGlobals.instance.soundManager.getSoundControllerByID("abilitySounds");
 			_abilitySoundController.addSound( new SMSound("player_activate", "dartpower_playeractivate_mp3") );
 			_abilitySoundController.addSound( new SMSound("opponent_activate", "dartpower_opponentactivate_mp3") );
 			

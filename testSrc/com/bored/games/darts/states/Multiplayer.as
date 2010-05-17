@@ -11,29 +11,37 @@
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.logic.CricketGameLogic;
 	import com.bored.games.darts.logic.DartsGameLogic;
+	import com.bored.games.darts.logic.RemoteCricketGameLogic;
 	import com.bored.games.darts.models.dae_DartFlightModHex;
 	import com.bored.games.darts.models.dae_DartShaft;
 	import com.bored.games.darts.player.ComputerPlayer;
 	import com.bored.games.darts.player.LocalPlayer;
+	import com.bored.games.darts.player.RemotePlayer;
 	import com.bored.games.darts.profiles.EnemyProfile;
+	import com.bored.games.darts.profiles.UserProfile;
 	import com.bored.games.darts.skins.DartSkin;
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.bored.games.darts.ui.OpponentSelectScreen;
 	import com.bored.gs.chat.ChatClient;
 	import com.bored.gs.chat.IChatClient;
+	import com.bored.gs.chat.IPlayRequest;
 	import com.bored.gs.game.GameClient;
+	import com.bored.gs.game.IGameClient;
 	import com.bored.gs.game.TurnBasedGameClient;
 	import com.bored.gs.GameServices;
 	import com.bored.services.AbstractExternalService;
+	import com.inassets.FileLoader;
 	import com.inassets.statemachines.Finite.State;
 	import com.inassets.statemachines.interfaces.IStateMachine;
 	import com.jac.soundManager.SMSound;
 	import com.sven.utils.AppSettings;
 	import com.sven.utils.ImageFactory;
 	import flash.display.Bitmap;
+	import flash.display.LoaderInfo;
 	import flash.display.MovieClip;
 	import flash.events.ErrorEvent;
 	import flash.events.Event;
+	import flash.events.IEventDispatcher;
 	import flash.events.IOErrorEvent;
 	import flash.events.MouseEvent;
 	import flash.net.URLLoader;
@@ -50,7 +58,10 @@
 	 */
 	public class Multiplayer extends State
 	{		
+		private var _igs:IPlayRequest;
 		//private var _multiplayerScreen:MultiplayerScreen;
+		private var _fl:FileLoader;
+		private var _fsm:Object;
 		
 		public function Multiplayer(a_name:String, a_stateMachine:IStateMachine)
 		{
@@ -64,201 +75,83 @@
 		{			
 			trace("Multiplayer::onEnter()");
 			
-			DartsGlobals.instance.setupControlPanel();
+			_igs = new TurnBasedGameClient();
 			
-			DartsGlobals.instance.multiplayerClient = new TurnBasedGameClient();
-			DartsGlobals.instance.multiplayerClient.addEventListener(GameServices.CONNECTED, onEvent);
-			DartsGlobals.instance.multiplayerClient.addEventListener(GameServices.DISCONNECTED, onEvent);
-			DartsGlobals.instance.multiplayerClient.addEventListener(GameServices.LOGOUT, onEvent);
-			DartsGlobals.instance.multiplayerClient.addEventListener(GameServices.ERROR, onError);
-			DartsGlobals.instance.multiplayerClient.addEventListener(GameServices.USER_ACCT, onAcct);
-			
-			DartsGlobals.instance.multiplayerClient.addEventListener(ChatClient.LOBBY_ROOM, onLobbyRoomJoin);
-			DartsGlobals.instance.multiplayerClient.addEventListener(ChatClient.USER_IN, onUserIn);
-			DartsGlobals.instance.multiplayerClient.addEventListener(ChatClient.USER_OUT, onUserOut);
-			
-			DartsGlobals.instance.multiplayerClient.addEventListener(GameClient.GAME_ROOM, onGameRoomJoin);
-			DartsGlobals.instance.multiplayerClient.addEventListener(GameClient.GAME_START, onGameStart);
-			DartsGlobals.instance.multiplayerClient.addEventListener(GameClient.GAME_WAIT, onGameWait);
-			DartsGlobals.instance.multiplayerClient.addEventListener(GameClient.GAME_END, onGameEnd);
-			DartsGlobals.instance.multiplayerClient.addEventListener(GameClient.GAME_RESULTS, onGameResults);
-			
-			// Turn Based Events
-			DartsGlobals.instance.multiplayerClient.addEventListener(TurnBasedGameClient.ROUND_START, onRoundStart);
-			DartsGlobals.instance.multiplayerClient.addEventListener(TurnBasedGameClient.ROUND_END, onRoundEnd);
-			DartsGlobals.instance.multiplayerClient.addEventListener(TurnBasedGameClient.ROUND_RESULTS, onRoundResults);
-			
-			DartsGlobals.instance.multiplayerClient.addEventListener(TurnBasedGameClient.TURN_START, onTurnStart);
-			DartsGlobals.instance.multiplayerClient.addEventListener(TurnBasedGameClient.TURN_WAIT, onTurnWait);
-			DartsGlobals.instance.multiplayerClient.addEventListener(TurnBasedGameClient.TURN_UPDATE, onTurnUpdate);
-			DartsGlobals.instance.multiplayerClient.addEventListener(TurnBasedGameClient.TURN_END, onTurnEnd);
-			DartsGlobals.instance.multiplayerClient.addEventListener(TurnBasedGameClient.TURN_RESULTS, onTurnResults);
-			
-			DartsGlobals.instance.multiplayerClient.login();
+			_fl = new FileLoader();
+			_fl.request("views.xml", "views", null, 0, onViewComplete);
 		}//end onEnter()
 		
-		private function onEvent(a_evt:Event):void
+		private function onViewComplete(k:String):void
 		{
-			trace("Multiplayer::onEvent " + a_evt.type);
+			trace("Multiplayer::onViewComplete " + k);
 			
-			switch(a_evt.type)
-			{
-				case GameServices.CONNECTED:
-				{
-					DartsGlobals.instance.multiplayerClient.login("", "");
-					trace("Connected and logging in!\n");
-				}
-				break;
-				
-				case GameServices.DISCONNECTED:
-				{
-					trace("Disconnected :-(\nClick to reconnect and login.\n");
-				}
-				break;
-				
-				case GameServices.LOGOUT:
-				{
-					trace("Logged out\nClick to login.\n");
-				}
-				break;
-			}
-		}//end onEvent()
-		
-		private function onError(a_evt:ErrorEvent):void
-		{
-			trace("Multiplayer::onError " + a_evt.text);
-		}//end onError()
-		
-		private function onAcct(a_evt:Event):void
-		{
-			walkObj(DartsGlobals.instance.multiplayerClient.account);
-			
-			DartsGlobals.instance.stage.doubleClickEnabled = true;
-			DartsGlobals.instance.stage.addEventListener(MouseEvent.DOUBLE_CLICK, onRGM);
-		}//end onAcct()
-		
-		private function onRGM(e:Event):void
-		{
-			DartsGlobals.instance.stage.doubleClickEnabled = false;
-			DartsGlobals.instance.stage.removeEventListener(MouseEvent.DOUBLE_CLICK, onRGM);
-			
-			trace("Requesting Rooms");
-			
-			DartsGlobals.instance.multiplayerClient.requestGameRooms(1);
+			_fl.request("PlayRequest.swf", "pr", null, 0, onPRComplete);
 		}
 		
-		private function onLobbyRoomJoin(a_evt:Event):void
+		private function onPRComplete(k:String):void
 		{
-			trace("In Lobby Room!");
+			trace("Multiplayer::onPRComplete " + k);
 			
-			DartsGlobals.instance.stage.doubleClickEnabled = true;
-			DartsGlobals.instance.stage.addEventListener(MouseEvent.DOUBLE_CLICK, onRGM);
-		}//end onLobbyRoomJoin()
-		
-		private function onUserIn(a_evt:Event):void
-		{
-			trace("New player(s) in Room!");
-			walkObj(IChatClient(DartsGlobals.instance.multiplayerClient).users);
-		}//end onUserIn()
-		
-		private function onUserOut(a_evt:Event):void
-		{
-			trace("Player left the Room!");
-			walkObj(IChatClient(DartsGlobals.instance.multiplayerClient).lastOut);
+			var ied:IEventDispatcher = _fl.getIED(k);
+			var li:LoaderInfo = ied as LoaderInfo;
 			
-			trace("Remaining users:");
-			walkObj(IChatClient(DartsGlobals.instance.multiplayerClient).users);
-		}//end onUserOut()
-		
-		private function onGameRoomJoin(a_evt:Event):void
-		{
-			trace("In Game Room!");
-			trace("Checking for other player(s)!");
+			var fsmCls:Class = li.applicationDomain.getDefinition("chat.ChatFSM") as Class;
+			_fl.cleanUp(k);
 			
-			if(IChatClient(DartsGlobals.instance.multiplayerClient).users.length > 1)
+			_fsm = new fsmCls(new XML(_fl.getData("views")), _igs, 2, DartsGlobals.instance.stage);
+			_fsm.addEventListener("t_r", onFSMReady);
+			
+			_fl.cleanUp("views");
+		}
+		
+		private function onFSMReady(e:Event = null):void
+		{
+			trace("Multiplayer::onFSMReady " + e);
+			
+			_fsm.removeEventListener("t_r", onFSMReady);
+			
+			_fsm.addEventListener("m_p", onMPGameReady);
+			_fsm.start();
+		}
+		
+		private function onMPGameReady(e:Event):void
+		{
+			trace("Multiplayer::onMPGameReady");
+			_fsm.removeEventListener("m_p", onMPGameReady);
+			
+			DartsGlobals.instance.multiplayerClient = _igs as IGameClient;
+			
+			DartsGlobals.instance.gameManager = new RemoteCricketGameLogic();
+			
+			_fsm.hide();
+			
+			this.finished();
+		}
+		
+		private function finished():void
+		{
+			trace("Multiplayer::finished()");
+			
+			for each( var user:Object in (DartsGlobals.instance.multiplayerClient as IChatClient).users )
 			{
-				onUserIn(a_evt);
-			}
-		}//end onGameRoomJoin()
-		
-		private function onGameStart(a_evt:Event):void
-		{
-			
-		}//end onGameStart()
-		
-		private function onGameWait(a_evt:Event):void
-		{
-			
-		}//end onGameWait()
-		
-		private function onGameEnd(a_evt:Event):void
-		{
-			
-		}//end onGameEnd()
-		
-		private function onGameResults(a_evt:Event):void
-		{
-			
-		}//end onGameResults()
-		
-		private function onRoundStart(a_evt:Event):void
-		{
-			
-		}//end onRoundStart()
-		
-		private function onRoundEnd(a_evt:Event):void
-		{
-			
-		}//end onRoundEnd()
-		
-		private function onRoundResults(a_evt:Event):void
-		{
-			
-		}//end onRoundResults()
-		
-		private function onTurnStart(a_evt:Event):void
-		{
-			
-		}//end onTurnStart()
-		
-		private function onTurnWait(a_evt:Event):void
-		{
-			
-		}//end onTurnWait()
-		
-		private function onTurnUpdate(a_evt:Event):void
-		{
-			
-		}//end onTurnUpdate()
-		
-		private function onTurnEnd(a_evt:Event):void
-		{
-			
-		}//end onTurnEnd()
-		
-		private function onTurnResults(a_evt:Event):void
-		{
-			
-		}//end onTurnResults()
-		
-		protected function walkObj(a_obj:Object, a_spacer:String = "--"):void
-		{
-			for(var str:String in a_obj)
-			{
-				var output:String = a_spacer + " " + str + " = " + a_obj[str];
-				trace(output);
-				
-				if(a_obj[str] is Object)
+				if ( (DartsGlobals.instance.multiplayerClient as IChatClient).account.id != user.id )
 				{
-					walkObj(a_obj[str], a_spacer + "--");
+					DartsGlobals.instance.opponentProfile = new UserProfile();
+					DartsGlobals.instance.opponentProfile.name = user.name;
+					DartsGlobals.instance.opponentProfile.unlockSkin("basicplaid", "heart");
+			
+					DartsGlobals.instance.opponentPlayer = new RemotePlayer(DartsGlobals.instance.opponentProfile);
+					DartsGlobals.instance.opponentPlayer.setPortrait(new Protagonist_Portrait_BMP(150, 150));
+					DartsGlobals.instance.opponentPlayer.setSkin(DartsGlobals.instance.opponentProfile.skins[0]);
+			
+					DartsGlobals.instance.opponentPlayer.addAbilities(new ShieldAbility(10))
+					DartsGlobals.instance.opponentPlayer.addAbilities(new BeeLineAbility(10))
+					DartsGlobals.instance.opponentPlayer.addAbilities(new DoOverAbility(10));
 				}
 			}
-		}//end walkObj()
-				
-		private function finished(...args):void
-		{
-			(this.stateMachine as GameFSM).transitionToStateNamed("GameConfirm");			
-		}//end finished()
+			
+			(this.stateMachine as GameFSM).transitionToStateNamed("GameConfirm");
+		}
 		
 		/**
 		 * Handler for exiting this state.

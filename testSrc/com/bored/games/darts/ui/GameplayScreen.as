@@ -119,7 +119,7 @@
 			
 			var cls:Class;
 			
-			if ( DartsGlobals.instance.gameMode == DartsGlobals.GAME_STORY || DartsGlobals.instance.practiceMode == DartsGlobals.PRACTICE_EXPERT ) 
+			if ( DartsGlobals.instance.throwMode == DartsGlobals.THROW_EXPERT ) 
 			{
 				cls = getDefinitionByName(AppSettings.instance.throwIndicatorMovie) as Class;
 				_throwIndicator = new ThrowIndicatorV3(new cls());

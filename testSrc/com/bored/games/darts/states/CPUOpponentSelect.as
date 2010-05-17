@@ -53,6 +53,8 @@
 		{			
 			trace("GameSelect::onEnter()");
 			
+			DartsGlobals.instance.gameManager = new CricketGameLogic();
+			
 			DartsGlobals.instance.setupControlPanel();
 					
 			var opponentSelectScreenImg:MovieClip;
@@ -81,12 +83,12 @@
 			
 			_opponentSelectScreen.removeEventListener(OpponentSelectScreen.OPPONENT_CHOSEN_EVT, onOpponentChosen);
 			
-			DartsGlobals.instance.cpuPlayer = new ComputerPlayer(DartsGlobals.instance.enemyProfile);
-			DartsGlobals.instance.cpuPlayer.setPortrait(DartsGlobals.instance.enemyProfile.portrait);
-			DartsGlobals.instance.cpuPlayer.addAbilities(new BeeLineAbility(10));
-			DartsGlobals.instance.cpuPlayer.addAbilities(new ShieldAbility(10));
-			DartsGlobals.instance.cpuPlayer.addAbilities(new DoOverAbility(10));
-			DartsGlobals.instance.cpuPlayer.setSkin(DartsGlobals.instance.enemyProfile.dartSkin);
+			DartsGlobals.instance.opponentPlayer = new ComputerPlayer(DartsGlobals.instance.opponentProfile);
+			DartsGlobals.instance.opponentPlayer.setPortrait(DartsGlobals.instance.opponentProfile.portrait);
+			DartsGlobals.instance.opponentPlayer.addAbilities(new BeeLineAbility(10));
+			DartsGlobals.instance.opponentPlayer.addAbilities(new ShieldAbility(10));
+			DartsGlobals.instance.opponentPlayer.addAbilities(new DoOverAbility(10));
+			DartsGlobals.instance.opponentPlayer.setSkin(DartsGlobals.instance.opponentProfile.dartSkin);
 			
 			this.finished();
 		}//end pickOpponent()
@@ -100,8 +102,7 @@
 		
 		private function finished(...args):void
 		{
-			(this.stateMachine as GameFSM).transitionToNextState();
-			
+			(this.stateMachine as GameFSM).transitionToNextState();			
 		}//end finished()
 		
 		/**

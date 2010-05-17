@@ -47,7 +47,7 @@
 		{		
 			trace("Initialization::onEnter()");
 			
-			DartsGlobals.instance.gameManager = new CricketGameLogic();
+			//DartsGlobals.instance.gameManager = new CricketGameLogic();
 			
 			trace("GameManager: " + DartsGlobals.instance.gameManager);
 			

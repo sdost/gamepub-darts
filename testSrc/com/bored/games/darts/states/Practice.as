@@ -61,18 +61,18 @@
 			
 			DartsGlobals.instance.localPlayer.setSkin(DartsGlobals.instance.playerProfile.skins[0]);
 			
-			DartsGlobals.instance.enemyProfile = new EnemyProfile("Computer");
-			DartsGlobals.instance.enemyProfile.accuracy = 0.7;
-			DartsGlobals.instance.enemyProfile.stepScale = 0.05;
-			DartsGlobals.instance.enemyProfile.dartSkin = new DartSkin( ImageFactory.getBitmapDataByQualifiedName("dartuv_techno", 512, 512), dae_DartShaft.data, dae_DartFlightModHex.data );
+			DartsGlobals.instance.opponentProfile = new EnemyProfile("Computer");
+			DartsGlobals.instance.opponentProfile.accuracy = 0.7;
+			DartsGlobals.instance.opponentProfile.stepScale = 0.05;
+			DartsGlobals.instance.opponentProfile.dartSkin = new DartSkin( ImageFactory.getBitmapDataByQualifiedName("dartuv_techno", 512, 512), dae_DartShaft.data, dae_DartFlightModHex.data );
 					
-			DartsGlobals.instance.cpuPlayer = new ComputerPlayer(DartsGlobals.instance.enemyProfile);
-			DartsGlobals.instance.cpuPlayer.setPortrait(DartsGlobals.instance.enemyProfile.portrait);
-			//DartsGlobals.instance.cpuPlayer.setAbilities(new BeeLineAbility(5), new ShieldAbility(5), new DoOverAbility(5));			
-			DartsGlobals.instance.cpuPlayer.setSkin(DartsGlobals.instance.enemyProfile.dartSkin);
+			DartsGlobals.instance.opponentPlayer = new ComputerPlayer(DartsGlobals.instance.opponentProfile);
+			DartsGlobals.instance.opponentPlayer.setPortrait(DartsGlobals.instance.opponentProfile.portrait);
+			//DartsGlobals.instance.opponentPlayer.setAbilities(new BeeLineAbility(5), new ShieldAbility(5), new DoOverAbility(5));			
+			DartsGlobals.instance.opponentPlayer.setSkin(DartsGlobals.instance.opponentProfile.dartSkin);
 			
 			DartsGlobals.instance.gameManager.registerPlayer( DartsGlobals.instance.localPlayer );
-			DartsGlobals.instance.gameManager.registerPlayer( DartsGlobals.instance.cpuPlayer );
+			DartsGlobals.instance.gameManager.registerPlayer( DartsGlobals.instance.opponentPlayer );
 			
 			finished();	
 		}//end onEnter()

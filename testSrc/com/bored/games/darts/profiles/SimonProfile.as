@@ -115,7 +115,7 @@
 						
 			var lastPlayerScore:Object = DartsGlobals.instance.localPlayer.record.lastScore;
 			
-			if ( a_allStats[DartsGlobals.instance.localPlayer.playerNum][lastPlayerScore.points] < 3 && DartsGlobals.instance.cpuPlayer.hasAbility(ShieldAbility.NAME) )
+			if ( a_allStats[DartsGlobals.instance.localPlayer.playerNum][lastPlayerScore.points] < 3 && DartsGlobals.instance.opponentPlayer.hasAbility(ShieldAbility.NAME) )
 			{
 				addShot(myShotList, lastPlayerScore.points, lastPlayerScore.multiplier, false, ShieldAbility.NAME);
 			}

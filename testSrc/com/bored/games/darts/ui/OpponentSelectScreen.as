@@ -324,12 +324,12 @@
 		
 		private function onOpponentClicked(a_evt:ButtonEvent):void
 		{						
-			DartsGlobals.instance.enemyProfile = null;
+			DartsGlobals.instance.opponentProfile = null;
 			
 			if(_ireneBtn)
 			{
 				if (a_evt.mightyButton == _ireneBtn) {
-					DartsGlobals.instance.enemyProfile = new IreneProfile();
+					DartsGlobals.instance.opponentProfile = new IreneProfile();
 				}
 				
 				_ireneBtn.pause(true);
@@ -338,7 +338,7 @@
 			if(_oldmanBtn)
 			{
 				if (a_evt.mightyButton == _oldmanBtn) {
-					DartsGlobals.instance.enemyProfile = new OldManProfile();
+					DartsGlobals.instance.opponentProfile = new OldManProfile();
 				}
 				
 				_oldmanBtn.pause(true);
@@ -347,7 +347,7 @@
 			if(_mackBtn)
 			{
 				if (a_evt.mightyButton == _mackBtn) {
-					DartsGlobals.instance.enemyProfile = new MackProfile();
+					DartsGlobals.instance.opponentProfile = new MackProfile();
 				}
 				
 				_mackBtn.pause(true);
@@ -356,7 +356,7 @@
 			if(_anthonyBtn)
 			{
 				if (a_evt.mightyButton == _anthonyBtn) {
-					DartsGlobals.instance.enemyProfile = new AnthonyProfile();
+					DartsGlobals.instance.opponentProfile = new AnthonyProfile();
 				}
 				
 				_anthonyBtn.pause(true);
@@ -365,7 +365,7 @@
 			if(_professorBtn)
 			{
 				if (a_evt.mightyButton == _professorBtn) {
-					DartsGlobals.instance.enemyProfile = new ProfessorProfile();
+					DartsGlobals.instance.opponentProfile = new ProfessorProfile();
 					
 					var version:int = Math.ceil( Math.random() * 4 );
 					
@@ -378,7 +378,7 @@
 			if(_sammyBtn)
 			{
 				if (a_evt.mightyButton == _sammyBtn) {
-					DartsGlobals.instance.enemyProfile = new SammyProfile();
+					DartsGlobals.instance.opponentProfile = new SammyProfile();
 				}
 				
 				_sammyBtn.pause(true);
@@ -387,7 +387,7 @@
 			if(_simonBtn)
 			{
 				if (a_evt.mightyButton == _simonBtn) {
-					DartsGlobals.instance.enemyProfile = new SimonProfile();
+					DartsGlobals.instance.opponentProfile = new SimonProfile();
 				}
 				
 				_simonBtn.pause(true);
@@ -406,13 +406,13 @@
 			if(_bigbillBtn)
 			{
 				if (a_evt.mightyButton == _bigbillBtn) {
-					DartsGlobals.instance.enemyProfile = new BigBillProfile();
+					DartsGlobals.instance.opponentProfile = new BigBillProfile();
 				}
 				
 				_bigbillBtn.pause(true);
 			}
 			
-			if (DartsGlobals.instance.enemyProfile) 
+			if (DartsGlobals.instance.opponentProfile) 
 			{
 				this.dispatchEvent(new Event(OPPONENT_CHOSEN_EVT));
 			}

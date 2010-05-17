@@ -1,6 +1,7 @@
 ﻿package com.bored.games.darts.states 
 {
 	import com.bored.games.darts.input.EasyThrowController;
+	import com.bored.games.darts.ui.modals.BullOffAnnounceModal;
 	import com.bored.games.darts.ui.modals.PreGameBanterModal;
 	import com.bored.games.input.InputController;
 	import com.bored.games.input.MouseInputController;
@@ -77,18 +78,11 @@
 		{									
 			_inputController = new MouseInputController(DartsGlobals.instance.stage);
 		
-			if ( DartsGlobals.instance.gameMode == DartsGlobals.GAME_PRACTICE ) 
+			if ( DartsGlobals.instance.throwMode == DartsGlobals.THROW_BEGINNER ) 
 			{
-				if ( DartsGlobals.instance.practiceMode == DartsGlobals.PRACTICE_BEGINNER ) 
-				{
-					_throwController = new EasyThrowController();
-				}
-				else if ( DartsGlobals.instance.practiceMode == DartsGlobals.PRACTICE_EXPERT ) 
-				{
-					_throwController = new GestureThrowController();
-				}
+				_throwController = new EasyThrowController();
 			}
-			else
+			else if ( DartsGlobals.instance.throwMode == DartsGlobals.THROW_EXPERT ) 
 			{
 				_throwController = new GestureThrowController();
 			}
@@ -106,8 +100,15 @@
 				
 				DartsGlobals.instance.stage.addEventListener(Event.ENTER_FRAME, update, false, 0, true);
 				
-				ModalDisplayManager.overlayAlpha = .30;
-				DartsGlobals.instance.showModalPopup(PreGameBanterModal);
+				if ( DartsGlobals.instance.gameMode == DartsGlobals.GAME_STORY )
+				{
+					ModalDisplayManager.overlayAlpha = .30;
+					DartsGlobals.instance.showModalPopup(PreGameBanterModal);
+				}
+				else if ( DartsGlobals.instance.gameMode == DartsGlobals.GAME_PRACTICE )
+				{
+					DartsGlobals.instance.showModalPopup(BullOffAnnounceModal);
+				}
 			}
 			catch (e:Error)
 			{

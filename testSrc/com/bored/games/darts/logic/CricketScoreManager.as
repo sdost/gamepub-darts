@@ -71,7 +71,7 @@
 					{
 						_soundController.play("closeout_player");
 					}
-					else if ( a_playerNum == DartsGlobals.instance.cpuPlayer.playerNum )
+					else if ( a_playerNum == DartsGlobals.instance.opponentPlayer.playerNum )
 					{
 						_soundController.play("closeout_opponent");
 					}

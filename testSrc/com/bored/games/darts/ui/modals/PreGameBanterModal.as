@@ -78,7 +78,7 @@
 			
 			if (_playerOneBanter) 
 			{
-				_playerOneBanter.text = "Blah blah...";
+				//_playerOneBanter.text = "Blah blah...";
 			}
 			else
 			{
@@ -87,7 +87,7 @@
 			
 			if (_playerTwoBanter) 
 			{
-				_playerTwoBanter.text = DartsGlobals.instance.enemyProfile.firstMatch;
+				//_playerTwoBanter.text = DartsGlobals.instance.opponentProfile.firstMatch;
 			}
 			else
 			{
@@ -104,11 +104,11 @@
 			
 			DartsGlobals.instance.processModalQueue();
 			
-			trace("DartsGlobals.instance.enemyProfile is OldManProfile: " + (DartsGlobals.instance.enemyProfile is OldManProfile));
+			trace("DartsGlobals.instance.opponentProfile is OldManProfile: " + (DartsGlobals.instance.opponentProfile is OldManProfile));
 			
-			if ( DartsGlobals.instance.enemyProfile is OldManProfile ) 
+			if ( DartsGlobals.instance.opponentProfile is OldManProfile ) 
 			{
-				DartsGlobals.instance.gameManager.currentPlayer = DartsGlobals.instance.cpuPlayer.playerNum;
+				DartsGlobals.instance.gameManager.currentPlayer = DartsGlobals.instance.opponentPlayer.playerNum;
 				DartsGlobals.instance.gameManager.startNewTurn();
 			}
 			else 

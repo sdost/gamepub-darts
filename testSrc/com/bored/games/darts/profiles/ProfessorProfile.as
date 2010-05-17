@@ -117,7 +117,7 @@
 			
 			var lastPlayerScore:Object = DartsGlobals.instance.localPlayer.record.lastScore;
 			
-			if ( a_allStats[DartsGlobals.instance.localPlayer.playerNum][lastPlayerScore.points] < 3 && DartsGlobals.instance.cpuPlayer.hasAbility(ShieldAbility.NAME) )
+			if ( a_allStats[DartsGlobals.instance.localPlayer.playerNum][lastPlayerScore.points] < 3 && DartsGlobals.instance.opponentPlayer.hasAbility(ShieldAbility.NAME) )
 			{
 				addShot(myShotList, lastPlayerScore.points, lastPlayerScore.multiplier, true, ShieldAbility.NAME);
 			}
@@ -158,8 +158,8 @@
 			}
 			
 			
-			if ( _shotIntention.points != a_points && _shotIntention.multiplier == 1 && DartsGlobals.instance.cpuPlayer.hasAbility(DoOverAbility.NAME) ) {
-				DartsGlobals.instance.gameManager.abilityManager.activateAbility(DartsGlobals.instance.cpuPlayer.getAbilityByName(DoOverAbility.NAME));
+			if ( _shotIntention.points != a_points && _shotIntention.multiplier == 1 && DartsGlobals.instance.opponentPlayer.hasAbility(DoOverAbility.NAME) ) {
+				DartsGlobals.instance.gameManager.abilityManager.activateAbility(DartsGlobals.instance.opponentPlayer.getAbilityByName(DoOverAbility.NAME));
 			}
 		}//end handleShot()
 		

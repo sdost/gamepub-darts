@@ -1,7 +1,7 @@
 ﻿package com.bored.games.darts.player 
 {
 	import com.bored.games.darts.player.DartsPlayer;
-	import com.bored.games.darts.profiles.UserProfile;
+	import com.bored.games.darts.profiles.Profile;
 	
 	/**
 	 * ...
@@ -9,7 +9,7 @@
 	 */
 	public class LocalPlayer extends DartsPlayer
 	{
-		public function LocalPlayer(a_profile:UserProfile = null) 
+		public function LocalPlayer(a_profile:Profile = null) 
 		{
 			super(a_profile ? a_profile.name : "Player");
 		}//end construtor()

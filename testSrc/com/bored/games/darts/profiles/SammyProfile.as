@@ -43,7 +43,7 @@
 				
 		override public function handleShot(a_points:int, a_multiplier:int):void
 		{
-			var stats:Object = DartsGlobals.instance.gameManager.scoreManager.getPlayerStats(DartsGlobals.instance.cpuPlayer.playerNum);
+			var stats:Object = DartsGlobals.instance.gameManager.scoreManager.getPlayerStats(DartsGlobals.instance.opponentPlayer.playerNum);
 			
 			var sectionCount:int = 0;
 			
@@ -59,7 +59,7 @@
 				sectionCount++;
 			}
 			
-			if ( _shotIntention.points != a_points /*&& sectionCount < 4*/ && DartsGlobals.instance.cpuPlayer.hasAbility(DoOverAbility.NAME) ) 
+			if ( _shotIntention.points != a_points /*&& sectionCount < 4*/ && DartsGlobals.instance.opponentPlayer.hasAbility(DoOverAbility.NAME) ) 
 			{
 				DartsGlobals.instance.gameManager.addEventListener(DartsGameLogic.THROW_END, useDoOver, false, 0, true);
 			}

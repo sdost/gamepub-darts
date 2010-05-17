@@ -214,10 +214,10 @@
 			
 			if (_opponentDetails)
 			{
-				_opponentDetails.text = "Name: " + DartsGlobals.instance.enemyProfile.name + "\n";
-				_opponentDetails.appendText("Age: " + DartsGlobals.instance.enemyProfile.age + "\n");
-				_opponentDetails.appendText("Height: " + DartsGlobals.instance.enemyProfile.height + " cm\n");
-				_opponentDetails.appendText("Weight: " + DartsGlobals.instance.enemyProfile.weight + " kg");
+				_opponentDetails.text = "Name: " + DartsGlobals.instance.opponentProfile.name + "\n";
+				//_opponentDetails.appendText("Age: " + DartsGlobals.instance.opponentProfile.age + "\n");
+				//_opponentDetails.appendText("Height: " + DartsGlobals.instance.opponentProfile.height + " cm\n");
+				//_opponentDetails.appendText("Weight: " + DartsGlobals.instance.opponentProfile.weight + " kg");
 			}
 			else
 			{
@@ -226,7 +226,7 @@
 			
 			if (_opponentBio)
 			{
-				_opponentBio.text = DartsGlobals.instance.enemyProfile.bio;
+				//_opponentBio.text = DartsGlobals.instance.opponentProfile.bio;
 			}
 			else
 			{
@@ -235,12 +235,12 @@
 			
 			if (_opponentPortrait)
 			{
-				var portrait:Bitmap = new Bitmap(DartsGlobals.instance.enemyProfile.portrait);
-				portrait.smoothing = true;
-				portrait.width = 75;
-				portrait.height = 75;
+				//var portrait:Bitmap = new Bitmap(DartsGlobals.instance.opponentProfile.portrait);
+				//portrait.smoothing = true;
+				//portrait.width = 75;
+				//portrait.height = 75;
 				
-				_opponentPortrait.addChild(portrait);
+				//_opponentPortrait.addChild(portrait);
 			}
 			else
 			{
@@ -282,10 +282,10 @@
 			
 			if (_opponentAbilityIconOne && _opponentAbilityOnePowerGauge)
 			{
-				_opponentAbilityIconOne.addChild(DartsGlobals.instance.cpuPlayer.abilities[0].icon);
-				DartsGlobals.instance.cpuPlayer.abilities[0].icon.width = 15;
-				DartsGlobals.instance.cpuPlayer.abilities[0].icon.height = 15;
-				_opponentAbilityOnePowerGauge.gotoAndStop(10 - DartsGlobals.instance.cpuPlayer.abilities[0].refreshTime + 1);
+				_opponentAbilityIconOne.addChild(DartsGlobals.instance.opponentPlayer.abilities[0].icon);
+				DartsGlobals.instance.opponentPlayer.abilities[0].icon.width = 15;
+				DartsGlobals.instance.opponentPlayer.abilities[0].icon.height = 15;
+				_opponentAbilityOnePowerGauge.gotoAndStop(10 - DartsGlobals.instance.opponentPlayer.abilities[0].refreshTime + 1);
 			}
 			else
 			{
@@ -294,10 +294,10 @@
 			
 			if (_opponentAbilityIconTwo && _opponentAbilityTwoPowerGauge)
 			{
-				_opponentAbilityIconTwo.addChild(DartsGlobals.instance.cpuPlayer.abilities[1].icon);
-				DartsGlobals.instance.cpuPlayer.abilities[1].icon.width = 15;
-				DartsGlobals.instance.cpuPlayer.abilities[1].icon.height = 15;
-				_opponentAbilityTwoPowerGauge.gotoAndStop(10 - DartsGlobals.instance.cpuPlayer.abilities[1].refreshTime + 1);
+				_opponentAbilityIconTwo.addChild(DartsGlobals.instance.opponentPlayer.abilities[1].icon);
+				DartsGlobals.instance.opponentPlayer.abilities[1].icon.width = 15;
+				DartsGlobals.instance.opponentPlayer.abilities[1].icon.height = 15;
+				_opponentAbilityTwoPowerGauge.gotoAndStop(10 - DartsGlobals.instance.opponentPlayer.abilities[1].refreshTime + 1);
 			}
 			else
 			{
@@ -306,10 +306,10 @@
 			
 			if (_opponentAbilityIconThree && _opponentAbilityThreePowerGauge)
 			{
-				_opponentAbilityIconThree.addChild(DartsGlobals.instance.cpuPlayer.abilities[2].icon);
-				DartsGlobals.instance.cpuPlayer.abilities[2].icon.width = 15;
-				DartsGlobals.instance.cpuPlayer.abilities[2].icon.height = 15;
-				_opponentAbilityThreePowerGauge.gotoAndStop(10 - DartsGlobals.instance.cpuPlayer.abilities[2].refreshTime + 1);
+				_opponentAbilityIconThree.addChild(DartsGlobals.instance.opponentPlayer.abilities[2].icon);
+				DartsGlobals.instance.opponentPlayer.abilities[2].icon.width = 15;
+				DartsGlobals.instance.opponentPlayer.abilities[2].icon.height = 15;
+				_opponentAbilityThreePowerGauge.gotoAndStop(10 - DartsGlobals.instance.opponentPlayer.abilities[2].refreshTime + 1);
 			}
 			else
 			{

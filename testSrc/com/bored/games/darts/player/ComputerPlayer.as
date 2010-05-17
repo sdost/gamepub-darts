@@ -3,12 +3,12 @@
 	import caurina.transitions.Tweener;
 	import com.bored.games.darts.abilities.Ability;
 	import com.bored.games.darts.DartsGlobals;
-	import com.bored.games.darts.logic.AIProfile;
 	import com.bored.games.darts.logic.AIShotCandidate;
 	import com.bored.games.darts.logic.CricketGameLogic;
 	import com.bored.games.darts.logic.DartsGameLogic;
 	import com.bored.games.darts.player.DartsPlayer;
 	import com.bored.games.darts.profiles.EnemyProfile;
+	import com.bored.games.darts.profiles.Profile;
 	import com.greensock.TweenMax;
 	import com.sven.utils.AppSettings;
 	import flash.display.Sprite;
@@ -21,7 +21,7 @@
 	 */
 	public class ComputerPlayer extends DartsPlayer
 	{
-		private var _profile:AIProfile;
+		private var _profile:Profile;
 		
 		private var _previousPosition:Object;
 		private var _currentPosition:Object;
@@ -30,7 +30,7 @@
 		
 		private var _throwTween:TweenMax;
 		
-		public function ComputerPlayer(a_profile:AIProfile) 
+		public function ComputerPlayer(a_profile:Profile) 
 		{
 			super(a_profile.name);
 			
@@ -54,7 +54,7 @@
 			{
 				for each( var ability:Ability in this.abilities )
 				{
-					if ( ability.name == _finalShot.modifier && DartsGlobals.instance.cpuPlayer.hasAbility(ability.name) ) {
+					if ( ability.name == _finalShot.modifier && DartsGlobals.instance.opponentPlayer.hasAbility(ability.name) ) {
 						DartsGlobals.instance.gameManager.abilityManager.activateAbility(ability);
 						
 						version = Math.ceil( Math.random() * 2 );

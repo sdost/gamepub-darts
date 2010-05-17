@@ -91,7 +91,7 @@
 
 			DartsGlobals.instance.processModalQueue();
 			
-			DartsGlobals.instance.practiceMode = DartsGlobals.PRACTICE_BEGINNER;
+			DartsGlobals.instance.throwMode = DartsGlobals.THROW_BEGINNER;
 			
 			finish();
 		}//end onYesClicked()
@@ -105,7 +105,7 @@
 			
 			DartsGlobals.instance.processModalQueue();
 			
-			DartsGlobals.instance.practiceMode = DartsGlobals.PRACTICE_EXPERT;
+			DartsGlobals.instance.throwMode = DartsGlobals.THROW_EXPERT;
 			
 			finish();
 		}//end onYesClicked()

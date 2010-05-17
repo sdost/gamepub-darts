@@ -66,6 +66,7 @@
     <element path="swfLibs_includeAll\Sounds.swc" />
     <element path="swfLibs_includeAll\Achievements.swc" />
     <element path="swfLibs_includeAll\gsclient.swc" />
+    <element path="swfLibs_includeAll\FileLoader.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>

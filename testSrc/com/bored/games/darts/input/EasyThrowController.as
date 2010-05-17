@@ -64,8 +64,6 @@
 		
 		private function updateCursorPosition(evt:Event):void
 		{
-			trace("_state: " + _state);
-			
 			switch(_state) {
 				case CIRCLE_STATE:
 					_angle += 18;

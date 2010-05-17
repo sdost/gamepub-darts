@@ -40,7 +40,9 @@
 		
 		public function EnemyProfile(a_name:String = "") 
 		{
-			super(a_name);
+			super();
+			
+			this.name = a_name;
 			
 			_voSoundController = new SoundController(a_name + "_SoundController");
 		}//end constructor()
@@ -69,9 +71,9 @@
 		{
 			DartsGlobals.instance.gameManager.removeEventListener(DartsGameLogic.THROW_END, useDoOver);
 			
-			(DartsGlobals.instance.cpuPlayer as ComputerPlayer).cancelShot();
+			(DartsGlobals.instance.opponentPlayer as ComputerPlayer).cancelShot();
 			
-			DartsGlobals.instance.gameManager.abilityManager.activateAbility(DartsGlobals.instance.cpuPlayer.getAbilityByName(DoOverAbility.NAME));
+			DartsGlobals.instance.gameManager.abilityManager.activateAbility(DartsGlobals.instance.opponentPlayer.getAbilityByName(DoOverAbility.NAME));
 		}//end performDoOver()
 		
 	}//end EnemyProfile

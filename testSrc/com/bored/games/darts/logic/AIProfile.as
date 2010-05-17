@@ -1,5 +1,6 @@
 ﻿package com.bored.games.darts.logic 
 {
+	import com.bored.games.darts.profiles.Profile;
 	import flash.display.BitmapData;
 	import flash.filters.BitmapFilter;
 	import flash.filters.ColorMatrixFilter;
@@ -13,17 +14,15 @@
 	 * ...
 	 * @author sam
 	 */
-	public class AIProfile
+	public class AIProfile extends Profile
 	{		
-		protected var _name:String;
 		public var accuracy:Number;
 		public var stepScale:Number;
 		
 		protected var _shotIntention:AIShotCandidate;
 		
-		public function AIProfile(a_name:String = "") 
+		public function AIProfile() 
 		{
-			_name = a_name;
 			accuracy = 0.5;
 			stepScale = AppSettings.instance.simulationStepScale;
 		}//end constructor()
@@ -81,11 +80,6 @@
 		{
 			// TODO: allow the AI to react to the results of the shot.
 		}//end handleShot()
-		
-		public function get name():String
-		{
-			return _name;
-		}//end get name()
 		
 	}//end AIProfile
 

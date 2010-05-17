@@ -76,7 +76,7 @@
 			
 			if (_playerOneBanter) 
 			{
-				_playerOneBanter.text = "Blah blah...";
+				//_playerOneBanter.text = "Blah blah...";
 			}
 			else
 			{
@@ -86,9 +86,9 @@
 			if (_playerTwoBanter) 
 			{
 				if( DartsGlobals.instance.localPlayer.record.wonGame() ) {
-					_playerTwoBanter.text = DartsGlobals.instance.enemyProfile.winMatch;
+					//_playerTwoBanter.text = DartsGlobals.instance.opponentProfile.winMatch;
 				} else {
-					_playerTwoBanter.text = DartsGlobals.instance.enemyProfile.lossMatch;
+					//_playerTwoBanter.text = DartsGlobals.instance.opponentProfile.lossMatch;
 				}
 			}
 			else

@@ -10,8 +10,12 @@
 	import com.bored.games.darts.logic.CricketGameLogic;
 	import com.bored.games.darts.player.ComputerPlayer;
 	import com.bored.games.darts.player.LocalPlayer;
+	import com.bored.games.darts.profiles.UserProfile;
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.bored.games.darts.ui.GameConfirmScreen;
+	import com.bored.gs.chat.ChatClient;
+	import com.bored.gs.game.GameClient;
+	import com.bored.gs.game.TurnBasedGameClient;
 	import com.bored.services.AbstractExternalService;
 	import com.inassets.statemachines.Finite.State;
 	import com.inassets.statemachines.interfaces.IStateMachine;
@@ -80,24 +84,38 @@
 			DartsGlobals.instance.localPlayer.setAbilitiesSlot(1, 1);
 			DartsGlobals.instance.localPlayer.setAbilitiesSlot(2, 2);
 			
-			DartsGlobals.instance.cpuPlayer.setAbilitiesSlot(0, 0);
-			DartsGlobals.instance.cpuPlayer.setAbilitiesSlot(1, 1);
-			DartsGlobals.instance.cpuPlayer.setAbilitiesSlot(2, 2);
+			DartsGlobals.instance.opponentPlayer.setAbilitiesSlot(0, 0);
+			DartsGlobals.instance.opponentPlayer.setAbilitiesSlot(1, 1);
+			DartsGlobals.instance.opponentPlayer.setAbilitiesSlot(2, 2);
 			
 			DartsGlobals.instance.gameManager.registerPlayer( DartsGlobals.instance.localPlayer );
-			DartsGlobals.instance.gameManager.registerPlayer( DartsGlobals.instance.cpuPlayer );
+			DartsGlobals.instance.gameManager.registerPlayer( DartsGlobals.instance.opponentPlayer );
 			
-			(this.stateMachine as GameFSM).transitionToNextState();
+			
+			if ( DartsGlobals.instance.multiplayerClient )
+			{
+				DartsGlobals.instance.multiplayerClient.addEventListener(GameClient.GAME_START, onReady);
+				DartsGlobals.instance.multiplayerClient.sendReady();
+			}
+			else
+			{
+				onReady();
+			}
 		}//end onPlay()
 		
-		public function onBack(a_evt:Event):void
+		private function onReady(a_evt:Event = null):void
+		{
+			(this.stateMachine as GameFSM).transitionToNextState();
+		}//end onReady()
+		
+		private function onBack(a_evt:Event):void
 		{			
 			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("back_sound");
 			
-			(this.stateMachine as GameFSM).transitionToStateNamed("CPUOpponentSelect");
+			(this.stateMachine as GameFSM).transitionToPreviousState();
 		}//end onBack()
 		
-		public function onLaunchStore(a_evt:Event):void
+		private function onLaunchStore(a_evt:Event):void
 		{
 			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("store_sound");
 			

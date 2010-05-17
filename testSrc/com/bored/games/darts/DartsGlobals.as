@@ -4,6 +4,7 @@
 	import com.bored.games.darts.abilities.BeeLineAbility;
 	import com.bored.games.darts.abilities.DoOverAbility;
 	import com.bored.games.darts.abilities.ShieldAbility;
+	import com.bored.games.darts.profiles.Profile;
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.bored.gs.game.GameClient;
 	import com.bored.gs.game.IGameClient;
@@ -41,8 +42,8 @@
 		public static const GAME_PRACTICE:int = 1;
 		public static const GAME_MULTIPLAYER:int = 2;
 		
-		public static const PRACTICE_BEGINNER:int = 0;
-		public static const PRACTICE_EXPERT:int = 1;
+		public static const THROW_BEGINNER:int = 0;
+		public static const THROW_EXPERT:int = 1;
 		
 		// protected var _optionsInterface:Sprite;  ??
 		
@@ -80,13 +81,13 @@
 		
 		private var _modalDisplayManager:ModalDisplayManager;
 		
-		private var _playerProfile:UserProfile;
+		private var _playerProfile:Profile;
 		
 		private var _localPlayer:DartsPlayer;
 		
-		private var _enemyProfile:EnemyProfile;
+		private var _opponentProfile:Profile;
 		
-		private var _cpuPlayer:DartsPlayer;
+		private var _opponentPlayer:DartsPlayer;
 		
 		private var _soundManager:SoundManager;
 		
@@ -96,7 +97,7 @@
 		
 		private var _gameMode:int;
 		
-		private var _practiceMode:int;
+		private var _throwMode:int;
 		
 		private var _multiplayerGameClient:IGameClient;
 		
@@ -209,14 +210,14 @@
 			return _gameMode;
 		}//end set gameMode()
 		
-		public function set practiceMode(a_mode:int):void
+		public function set throwMode(a_mode:int):void
 		{
-			_practiceMode = a_mode;
+			_throwMode = a_mode;
 		}//end set gameMode()
 		
-		public function get practiceMode():int
+		public function get throwMode():int
 		{
-			return _practiceMode;
+			return _throwMode;
 		}//end set gameMode()
 		
 		public function get screenSpace():Sprite
@@ -271,6 +272,7 @@
 			{
 				_soundManager = SoundManager.getInstance();
 				_soundManager.addSoundController(new SoundController("loopsController"));
+				_soundManager.addSoundController(new SoundController("abilitySounds"));
 				_soundManager.addSoundController(new SoundController("buttonSoundController"));
 			}
 			
@@ -334,34 +336,34 @@
 			return _localPlayer;
 		}//end get localPlayer()
 		
-		public function set playerProfile(a_profile:UserProfile):void
+		public function set playerProfile(a_profile:Profile):void
 		{
 			_playerProfile = a_profile;
 		}//end set playerProfile()
 		
-		public function get playerProfile():UserProfile
+		public function get playerProfile():Profile
 		{
 			return _playerProfile;
 		}//end get playerProfile()
 		
-		public function set enemyProfile(a_profile:EnemyProfile):void
+		public function set opponentProfile(a_profile:Profile):void
 		{
-			_enemyProfile = a_profile;
-		}//end set enemyProfile()
+			_opponentProfile = a_profile;
+		}//end set opponentProfile()
 		
-		public function get enemyProfile():EnemyProfile
+		public function get opponentProfile():Profile
 		{
-			return _enemyProfile;
+			return _opponentProfile;
 		}//end get enemyProfile()
 		
-		public function set cpuPlayer(a_player:DartsPlayer):void
+		public function set opponentPlayer(a_player:DartsPlayer):void
 		{
-			_cpuPlayer = a_player;
+			_opponentPlayer = a_player;
 		}//end set cpuPlayer()
 		
-		public function get cpuPlayer():DartsPlayer
+		public function get opponentPlayer():DartsPlayer
 		{
-			return _cpuPlayer;
+			return _opponentPlayer;
 		}//end get cpuPlayer()
 		
 		public function set multiplayerClient(a_client:IGameClient):void
