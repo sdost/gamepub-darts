@@ -10,8 +10,8 @@
 	public class CricketGameLogic extends DartsGameLogic
 	{	
 		
-		public static const PLAYER_ONE:int = 1;
-		public static const PLAYER_TWO:int = 2;	
+		public static const HUMAN_PLAYER:int = 1;
+		public static const CPU_PLAYER:int = 2;	
 		
 		public function CricketGameLogic() 
 		{
@@ -22,6 +22,13 @@
 		{
 			return "CRICKET";
 		}//end get gameType()
+		
+		override public function nextPlayer():void
+		{
+			_currentPlayer++;
+			
+			if (_currentPlayer > _players.length) _currentPlayer = 1;
+		}//end nextPlayer()
 		
 		override protected function checkForWin():Boolean
 		{

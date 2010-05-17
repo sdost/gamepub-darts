@@ -69,7 +69,6 @@
 			switch(e.type)
 			{
 				case TurnBasedGameClient.ROUND_START:
-					
 					startNewTurn();
 					break;
 				case TurnBasedGameClient.ROUND_END:

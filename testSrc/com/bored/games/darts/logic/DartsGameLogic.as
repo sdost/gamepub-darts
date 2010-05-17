@@ -56,7 +56,7 @@
 		protected var _inputController:InputController;
 		protected var _throwController:ThrowController;
 		
-		protected var _players:Vector.<DartsPlayer>;
+		protected var _players:Object;
 		
 		protected var _abilityManager:AbilityManager;
 		
@@ -145,11 +145,9 @@
 			if ( _players == null ) {
 				_players = new Vector.<DartsPlayer>();
 				_darts = new Vector.<Dart>();
-				_currentPlayer = 1;
 			}
-			
 			a_player.dartGame = this;
-			a_player.playerNum = _players.length + 1;
+			
 			
 			for each( var ability:Ability in a_player.activeAbilities )
 			{
@@ -163,11 +161,11 @@
 				_darts.push(dart);
 			}
 			
-			_players.push(a_player);
+			_players[a_player.playerNum] = a_player;
 			_scoreManager.initPlayerStats(_players.length);
 		}//end registerPlayer()
 		
-		public function get players():Vector.<DartsPlayer>
+		public function get players():Object
 		{
 			return _players;
 		}//end get players()
@@ -176,9 +174,9 @@
 		{			
 			GameUtils.newGame();
 			
-			for ( var i:int = 0; i < _players.length; i++ )
+			for each( var player:DartsPlayer in _players )
 			{
-				_players[i].initGameRecord();
+				player.initGameRecord();
 			}
 			
 			_abilityManager.resetAbilties();
@@ -194,9 +192,9 @@
 		{
 			GameUtils.endGame();
 			
-			for ( var i:int = 0; i < _players.length; i++ )
+			for each( var player:DartsPlayer in _players )
 			{
-				_players[i].record.recordEndOfGame( _winner == (i + 1) );
+				player.record.recordEndOfGame( _winner == player.playerNum );
 			}
 			
 			_dartboard.resetBlockedSections();
@@ -370,7 +368,7 @@
 		{			
 			_lastDart = _currentDart;
 			
-			_currentDart = _players[_currentPlayer - 1].darts[_currentTurn.throwIndex];
+			_currentDart = _players[_currentPlayer].darts[_currentTurn.throwIndex];
 			_currentDart.reset();
 			
 			_currentDart.position.x = AppSettings.instance.defaultStartPositionX;
@@ -379,7 +377,7 @@
 			
 			dispatchEvent(new Event(THROW_END));
 			
-			_players[_currentPlayer-1].takeTheShot(_currentTurn.throwsRemaining);
+			_players[_currentPlayer].takeTheShot(_currentTurn.throwsRemaining);
 		}//end nextDart()
 		
 		public function get lastDart():Dart
@@ -408,7 +406,7 @@
 		
 		public function resetDarts():void
 		{
-			for each( var dart:Dart in _players[_currentPlayer - 1].darts )
+			for each( var dart:Dart in _players[_currentPlayer].darts )
 			{
 				dart.position.x = AppSettings.instance.defaultStartPositionX;
 				dart.position.y = AppSettings.instance.defaultStartPositionY;
@@ -452,10 +450,13 @@
 			
 			_currentDart = null;
 			
-			_currentPlayer++;
-			
-			if (_currentPlayer > _players.length) _currentPlayer = 1;
+			nextPlayer();
 		}//end endTurn()
+		
+		public function nextPlayer():void
+		{
+			
+		}//end nextPlayer()
 				
 		public function playerAim():void
 		{

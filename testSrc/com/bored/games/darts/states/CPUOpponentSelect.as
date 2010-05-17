@@ -83,7 +83,10 @@
 			
 			_opponentSelectScreen.removeEventListener(OpponentSelectScreen.OPPONENT_CHOSEN_EVT, onOpponentChosen);
 			
+			DartsGlobals.instance.localPlayer.playerNum = CricketGameLogic.HUMAN_PLAYER;
+			
 			DartsGlobals.instance.opponentPlayer = new ComputerPlayer(DartsGlobals.instance.opponentProfile);
+			DartsGlobals.instance.opponentPlayer.playerNum = CricketGameLogic.CPU_PLAYER;
 			DartsGlobals.instance.opponentPlayer.setPortrait(DartsGlobals.instance.opponentProfile.portrait);
 			DartsGlobals.instance.opponentPlayer.addAbilities(new BeeLineAbility(10));
 			DartsGlobals.instance.opponentPlayer.addAbilities(new ShieldAbility(10));

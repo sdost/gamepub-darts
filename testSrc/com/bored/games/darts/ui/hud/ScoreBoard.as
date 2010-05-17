@@ -140,7 +140,7 @@
 		
 		public function update():void
 		{
-			var playerScores:Object = _scoreMgr.getPlayerStats(CricketGameLogic.PLAYER_ONE);
+			var playerScores:Object = _scoreMgr.getPlayerStats(DartsGlobals.instance.localPlayer.playerNum);
 			
 			(_playerSlots[20] as MovieClip).gotoAndStop(playerScores[20]+1);
 			(_playerSlots[19] as MovieClip).gotoAndStop(playerScores[19]+1);
@@ -150,7 +150,7 @@
 			(_playerSlots[15] as MovieClip).gotoAndStop(playerScores[15]+1);
 			(_playerSlots[25] as MovieClip).gotoAndStop(playerScores[25]+1);
 				
-			var opponentScores:Object = _scoreMgr.getPlayerStats(CricketGameLogic.PLAYER_TWO);	
+			var opponentScores:Object = _scoreMgr.getPlayerStats(DartsGlobals.instance.opponentPlayer.playerNum);	
 
 			(_opponentSlots[20] as MovieClip).gotoAndStop(opponentScores[20]+1);
 			(_opponentSlots[19] as MovieClip).gotoAndStop(opponentScores[19]+1);
