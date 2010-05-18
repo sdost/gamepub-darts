@@ -116,7 +116,7 @@
 			_scoreMgr = a_mgr;
 			
 			if (_playerOnePortrait) {
-				var portraitOne:Bitmap = new Bitmap(DartsGlobals.instance.gameManager.players[0].portrait.bitmapData);
+				var portraitOne:Bitmap = new Bitmap(DartsGlobals.instance.gameManager.players[DartsGlobals.instance.localPlayer.playerNum].portrait.bitmapData);
 				portraitOne.smoothing = true;
 				portraitOne.width = 40;
 				portraitOne.height = 40;
@@ -127,7 +127,7 @@
 			}
 			
 			if (_playerTwoPortrait) {
-				var portraitTwo:Bitmap = new Bitmap(DartsGlobals.instance.gameManager.players[1].portrait.bitmapData);
+				var portraitTwo:Bitmap = new Bitmap(DartsGlobals.instance.gameManager.players[DartsGlobals.instance.opponentPlayer.playerNum].portrait.bitmapData);
 				portraitTwo.smoothing = true;
 				portraitTwo.width = 40;
 				portraitTwo.height = 40;

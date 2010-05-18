@@ -1,6 +1,7 @@
 ﻿package com.bored.games.darts.states 
 {
 	import away3dlite.materials.BitmapMaterial;
+	import com.bored.games.darts.assets.icons.Protagonist_Portrait_BMP;
 	import com.bored.games.darts.assets.screen.ConfirmScreen_MC;
 	import com.bored.games.darts.abilities.Ability;
 	import com.bored.games.darts.abilities.BeeLineAbility;
@@ -10,10 +11,12 @@
 	import com.bored.games.darts.logic.CricketGameLogic;
 	import com.bored.games.darts.player.ComputerPlayer;
 	import com.bored.games.darts.player.LocalPlayer;
+	import com.bored.games.darts.player.RemotePlayer;
 	import com.bored.games.darts.profiles.UserProfile;
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.bored.games.darts.ui.GameConfirmScreen;
 	import com.bored.gs.chat.ChatClient;
+	import com.bored.gs.chat.IChatClient;
 	import com.bored.gs.game.GameClient;
 	import com.bored.gs.game.TurnBasedGameClient;
 	import com.bored.services.AbstractExternalService;
@@ -53,7 +56,7 @@
 		override public function onEnter():void
 		{			
 			trace("GameConfirm::onEnter()");
-			
+						
 			var gameConfirmScreenImg:MovieClip;
 			
 			try
@@ -78,6 +81,8 @@
 		
 		public function onPlay(a_evt:Event):void
 		{
+			trace("GameConfirm::onPlay");
+			
 			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("play_sound");
 			
 			DartsGlobals.instance.localPlayer.setAbilitiesSlot(0, 0);

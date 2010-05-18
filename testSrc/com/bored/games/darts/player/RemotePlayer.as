@@ -16,7 +16,7 @@
 		
 		override public function takeTheShot(a_dartsRemaining:int):void
 		{
-			this._game.playerAim();
+			//this._game.playerAim();
 		}//end takeTheShot()
 		
 	}//end RemotePlayer

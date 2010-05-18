@@ -277,7 +277,7 @@
 				_dartboardSoundController.play("bounce_wall");
 			}
 			
-			DartsGlobals.instance.gameManager.players[DartsGlobals.instance.gameManager.currentPlayer-1].processShotResult(points, multiplier, scoring);
+			DartsGlobals.instance.gameManager.players[DartsGlobals.instance.gameManager.currentPlayer].processShotResult(points, multiplier, scoring);
 			
 			return sticking;			
 		}//end submitDartPosition()

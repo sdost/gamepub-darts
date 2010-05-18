@@ -98,7 +98,7 @@
 			var fsmCls:Class = li.applicationDomain.getDefinition("chat.ChatFSM") as Class;
 			_fl.cleanUp(k);
 			
-			_fsm = new fsmCls(new XML(_fl.getData("views")), _igs, 2, DartsGlobals.instance.stage);
+			_fsm = new fsmCls(new XML(_fl.getData("views")), _igs, 1, DartsGlobals.instance.stage);
 			_fsm.addEventListener("t_r", onFSMReady);
 			
 			_fl.cleanUp("views");
@@ -125,12 +125,46 @@
 			
 			_fsm.hide();
 			
-			this.finished();
+			DartsGlobals.instance.multiplayerClient.addEventListener(ChatClient.ROOM_JOIN, onRoomJoin);
+			DartsGlobals.instance.multiplayerClient.addEventListener(ChatClient.USER_IN, onUserIn);
 		}
 		
-		private function finished():void
+		private function onRoomJoin(e:Event):void
 		{
-			trace("Multiplayer::finished()");
+			DartsGlobals.instance.multiplayerClient.removeEventListener(ChatClient.ROOM_JOIN, onRoomJoin);
+					
+			for each( var user:Object in (DartsGlobals.instance.multiplayerClient as IChatClient).users )
+			{
+				if ( (DartsGlobals.instance.multiplayerClient as IChatClient).account.id == user.id )
+				{
+					DartsGlobals.instance.localPlayer.playerNum = user.pid;
+				}
+				else
+				{
+					DartsGlobals.instance.opponentProfile = new UserProfile();
+					DartsGlobals.instance.opponentProfile.name = user.name;
+					DartsGlobals.instance.opponentProfile.unlockSkin("basicplaid", "heart");
+			
+					DartsGlobals.instance.opponentPlayer = new RemotePlayer(DartsGlobals.instance.opponentProfile);
+					DartsGlobals.instance.opponentPlayer.setPortrait(new Protagonist_Portrait_BMP(150, 150));
+					DartsGlobals.instance.opponentPlayer.setSkin(DartsGlobals.instance.opponentProfile.skins[0]);
+					DartsGlobals.instance.opponentPlayer.playerNum = user.pid;
+			
+					DartsGlobals.instance.opponentPlayer.addAbilities(new ShieldAbility(10))
+					DartsGlobals.instance.opponentPlayer.addAbilities(new BeeLineAbility(10))
+					DartsGlobals.instance.opponentPlayer.addAbilities(new DoOverAbility(10));
+				}
+			}
+			
+			if ( DartsGlobals.instance.opponentPlayer ) 
+			{
+				this.finished();
+			}
+		}//end onRoomJoin()
+		
+		private function onUserIn(e:Event):void
+		{
+			DartsGlobals.instance.multiplayerClient.removeEventListener(ChatClient.USER_IN, onUserIn);
 			
 			for each( var user:Object in (DartsGlobals.instance.multiplayerClient as IChatClient).users )
 			{
@@ -143,12 +177,20 @@
 					DartsGlobals.instance.opponentPlayer = new RemotePlayer(DartsGlobals.instance.opponentProfile);
 					DartsGlobals.instance.opponentPlayer.setPortrait(new Protagonist_Portrait_BMP(150, 150));
 					DartsGlobals.instance.opponentPlayer.setSkin(DartsGlobals.instance.opponentProfile.skins[0]);
+					DartsGlobals.instance.opponentPlayer.playerNum = user.pid;
 			
 					DartsGlobals.instance.opponentPlayer.addAbilities(new ShieldAbility(10))
 					DartsGlobals.instance.opponentPlayer.addAbilities(new BeeLineAbility(10))
 					DartsGlobals.instance.opponentPlayer.addAbilities(new DoOverAbility(10));
 				}
 			}
+			
+			this.finished();
+		}//end onUserIn()
+		
+		private function finished():void
+		{
+			trace("Multiplayer::finished()");
 			
 			(this.stateMachine as GameFSM).transitionToStateNamed("GameConfirm");
 		}

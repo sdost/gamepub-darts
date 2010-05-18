@@ -143,12 +143,11 @@
 		public function registerPlayer(a_player:DartsPlayer):void
 		{
 			if ( _players == null ) {
-				_players = new Vector.<DartsPlayer>();
+				_players = new Object();
 				_darts = new Vector.<Dart>();
 			}
 			a_player.dartGame = this;
-			
-			
+						
 			for each( var ability:Ability in a_player.activeAbilities )
 			{
 				_abilityManager.registerAbility(ability);
@@ -162,7 +161,7 @@
 			}
 			
 			_players[a_player.playerNum] = a_player;
-			_scoreManager.initPlayerStats(_players.length);
+			_scoreManager.initPlayerStats(a_player.playerNum);
 		}//end registerPlayer()
 		
 		public function get players():Object
@@ -365,11 +364,13 @@
 		}//end startNewRound()
 		
 		public function nextDart():void
-		{			
+		{	
 			_lastDart = _currentDart;
 			
 			_currentDart = _players[_currentPlayer].darts[_currentTurn.throwIndex];
 			_currentDart.reset();
+			
+			trace("Current Dart: " + _currentDart);
 			
 			_currentDart.position.x = AppSettings.instance.defaultStartPositionX;
 			_currentDart.position.y = AppSettings.instance.defaultStartPositionY;
