@@ -18,6 +18,8 @@
 	 */
 	public class RemoteCricketGameLogic extends DartsGameLogic
 	{
+		private var _serverResults:Object = null;
+		
 		public function RemoteCricketGameLogic()
 		{
 			_scoreManager = new CricketScoreManager();
@@ -42,7 +44,50 @@
 		
 		override public function playerThrow(a_x:Number, a_y:Number, a_z:Number, a_thrust:Number, a_lean:Number, a_stepScale:Number):void
 		{			
-			super.playerThrow(a_x, a_y, a_z, a_thrust, a_lean, a_stepScale);
+			//_cursor.hide();
+			_cursor.resetCursorImage();
+			_inputController.pause = true;
+			
+			var thrust:Number;
+			var lean:Number;
+			var angle:Number;
+			
+			var version:int;
+			
+			if ( a_thrust < AppSettings.instance.dartSweetSpotMin ) 
+			{
+				version = Math.ceil(2 * Math.random());
+				
+				_soundController.play("throw_normal_" + version.toString());
+				
+				thrust = a_thrust;
+				lean = a_lean;
+				angle = AppSettings.instance.defaultAngle;
+			}
+			else if ( a_thrust > AppSettings.instance.dartSweetSpotMax ) 
+			{
+				version = Math.ceil(2 * Math.random());
+				
+				_soundController.play("throw_normal_" + version.toString());
+								
+				var scaler:Number = Math.log( AppSettings.instance.overthrowScale * (a_thrust - AppSettings.instance.dartSweetSpotThrust)
+					/ (AppSettings.instance.dartMaxThrust - AppSettings.instance.dartSweetSpotThrust))
+					/ Math.log(AppSettings.instance.overthrowExponent) + AppSettings.instance.overthrowOffset;
+									
+				thrust = a_thrust / scaler; // AppSettings.instance.dartSweetSpotThrust;
+				lean = a_lean * scaler;
+				angle = AppSettings.instance.defaultAngle * scaler;
+			}
+			else 
+			{
+				version = Math.ceil(2 * Math.random());
+				
+				_soundController.play("throw_fast_" + version.toString());
+				
+				thrust = AppSettings.instance.dartSweetSpotThrust;
+				lean = a_lean;
+				angle = AppSettings.instance.defaultAngle;
+			}
 			
 			(DartsGlobals.instance.multiplayerClient as ITurnBased).sendTurnUpdate(
 				{
@@ -51,10 +96,15 @@
 					y: a_y,
 					z: a_z,
 					thr: a_thrust,
+					a: angle,
+					g: AppSettings.instance.defaultGravity,
 					lean: a_lean,
+					zf: AppSettings.instance.dartboardPositionZ,
 					step: a_stepScale
 				} 
 			);
+			
+			_currentDart.initThrowParams(a_x, a_y, a_z, thrust, angle, AppSettings.instance.defaultGravity, lean, AppSettings.instance.dartboardPositionZ, a_stepScale);
 		}//end playerThrow()
 		
 		private function handleStateChange(e:Event):void
@@ -86,7 +136,11 @@
 					obj = (DartsGlobals.instance.multiplayerClient as ITurnBased).getData(TurnBasedGameClient.TURN_UPDATE);
 					if ( obj.action == "p_t" && obj.pid != DartsGlobals.instance.localPlayer.playerNum)
 					{
-						super.playerThrow(obj.x, obj.y, obj.z, obj.thr, obj.lean, obj.step);						
+						if( _currentDart ) _currentDart.initThrowParams(obj.x, obj.y, obj.z, obj.thr, obj.a, obj.g, obj.lean, obj.zf, obj.step);						
+					} 
+					else if ( obj.action == "p_r" ) 
+					{
+						_serverResults = obj;
 					}
 					break;
 				case TurnBasedGameClient.TURN_END:
@@ -146,26 +200,12 @@
 				
 				_currentDart.finishThrow();	
 				
-				if ( !_dartboard.submitDartPosition(_currentDart.position.x, _currentDart.position.y, _currentDart.blockBoard) ) 
+				if ( !_dartboard.submitDartPositionUnscored(_currentDart.position.x, _currentDart.position.y, _currentDart.blockBoard, _serverResults) ) 
 				{
 					_currentDart.beginFalling();
 				}
 				
-				var win:Boolean = checkForWin();
-					
-				if (win) 
-				{
-					_winner = _currentPlayer;
-					
-					if (_winner == DartsGlobals.instance.localPlayer.playerNum && DartsGlobals.instance.localPlayer.record.throws <= 9) 
-					{
-						//AchievementTracker.bestowAchievement(AchievementTracker.ACHIEVEMENT_PERFECT_NINER);
-					}
-					
-					endGame();
-					pause(true);
-					return;
-				}
+				_serverResults = null;
 				
 				_currentTurn.advanceThrows();
 				

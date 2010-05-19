@@ -229,6 +229,59 @@
 			return dist;
 		}
 		
+		public function submitDartPositionUnscored(a_x:Number, a_y:Number, a_block:Boolean, a_results:Object):Boolean
+		{				
+			var p:Point = new Point( ( a_x / AppSettings.instance.dartboardScale ) * (_sprite.width/2), ( -a_y / AppSettings.instance.dartboardScale ) * (_sprite.height/2) );
+			
+			var objects:Array = _sprite.getObjectsUnderPoint(p);
+			
+			var points:int = 0;
+			var multiplier:int = 0;
+			var scoring:Boolean = false;
+			var sticking:Boolean = false;
+			
+			if (objects.length > 0) {
+		
+				if (_pattern.test(objects[0].parent.name) && !_blockedSections[objects[0].parent.name]) 
+				{
+					var arr:Array = objects[0].parent.name.split("_");
+					
+					points = a_results.p;
+					multiplier = a_results.m;
+					
+					playHitSound(DartsGlobals.instance.gameManager.currentPlayer, multiplier);
+					
+					scoring = DartsGlobals.instance.gameManager.scoreManager.submitThrow(DartsGlobals.instance.gameManager.currentPlayer, points, multiplier);
+									
+					if (points > 0) 
+					{
+						var text:AnimatedText = new AnimatedText(points + " x " + multiplier, new CooperStd(), TweenMax.fromTo(null, 0.75, { x: p.x, y: p.y, alpha: 1 }, { x: p.x, y: p.y - 15, alpha: 0 } ));
+						text.alpha = 0;
+						_sprite.addChild(text);
+						text.animate();					
+					}
+					
+					if (a_block)
+					{
+						_dartboardSoundController.play("shieldApply");
+						_shieldAction.startBlocking(points.toString());						
+					}
+					
+					sticking = true;
+				} else if ( _blockedSections[objects[0].parent.name] ) {
+					_dartboardSoundController.play("shieldHit");
+				} else {
+					_dartboardSoundController.play("bounce_board");
+				}
+			} else {
+				_dartboardSoundController.play("bounce_wall");
+			}
+			
+			DartsGlobals.instance.gameManager.players[DartsGlobals.instance.gameManager.currentPlayer].processShotResult(points, multiplier, scoring);
+			
+			return sticking;			
+		}//end submitDartPositionUnscored()
+		
 		public function submitDartPosition(a_x:Number, a_y:Number, a_block:Boolean):Boolean
 		{				
 			var p:Point = new Point( ( a_x / AppSettings.instance.dartboardScale ) * (_sprite.width/2), ( -a_y / AppSettings.instance.dartboardScale ) * (_sprite.height/2) );

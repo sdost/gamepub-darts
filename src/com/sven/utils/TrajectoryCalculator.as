@@ -55,8 +55,13 @@
 			var rotX:Number = unit.x * Math.cos(_theta) - unit.y * Math.sin(_theta);
 			var rotY:Number = unit.x * Math.sin(_theta) + unit.y * Math.cos(_theta);
 			
+			trace("ROTATION X: " + rotX);
+			trace("ROTATION Y: " + rotY);
+			
 			_thrustVector.x = rotX * _thrustForce;
 			_thrustVector.y = rotY * _thrustForce;
+			
+			trace("thrustVector: " + _thrustVector);
 		}//end recalculateThrustVector()
 		
 		public function get thrustVector():Vector3D

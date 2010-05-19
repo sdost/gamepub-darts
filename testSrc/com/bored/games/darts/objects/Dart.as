@@ -231,6 +231,9 @@
 		public function finishThrow():void
 		{
 			deactivateAction(_throwAction.actionName);
+			
+			trace("Final Position: " + this.position.toString());
+			
 			resetThrowAction();
 		}//end finishThrow()
 		

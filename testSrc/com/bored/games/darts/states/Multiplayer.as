@@ -98,7 +98,7 @@
 			var fsmCls:Class = li.applicationDomain.getDefinition("chat.ChatFSM") as Class;
 			_fl.cleanUp(k);
 			
-			_fsm = new fsmCls(new XML(_fl.getData("views")), _igs, 1, DartsGlobals.instance.stage);
+			_fsm = new fsmCls(new XML(_fl.getData("views")), _igs, 3, DartsGlobals.instance.stage);
 			_fsm.addEventListener("t_r", onFSMReady);
 			
 			_fl.cleanUp("views");
