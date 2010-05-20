@@ -27,7 +27,7 @@
 		{
 			_currentPlayer++;
 			
-			if (_currentPlayer > _players.length) _currentPlayer = 1;
+			if (_currentPlayer > CPU_PLAYER) _currentPlayer = HUMAN_PLAYER;
 		}//end nextPlayer()
 		
 		override protected function checkForWin():Boolean

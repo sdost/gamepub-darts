@@ -32,6 +32,8 @@
 		private var _maskBar:MovieClip;
 		private var _reticle:MovieClip;
 		private var _harness:MovieClip;
+		private var _trueThrust:MovieClip;
+		private var _trueAngle:TextField;
 		
 		private var _throwController:ThrowController;
 		
@@ -60,6 +62,8 @@
 			_maskBar = descendantsDict["maskBar_mc"] as MovieClip;
 			_reticle = descendantsDict["reticle_mc"] as MovieClip;
 			_harness = descendantsDict["harness_mc"] as MovieClip;
+			_trueThrust = descendantsDict["trueThrust_mc"] as MovieClip;
+			_trueAngle = descendantsDict["angle_text"] as TextField;
 			
 			if (_terminus)
 			{
@@ -86,6 +90,24 @@
 			else
 			{
 				throw new Error("ThrowIndicatorV3::buildFrom(): _reticle=" + _reticle);
+			}
+			
+			if (_trueThrust)
+			{
+				_trueThrust.height = 0;
+			}
+			else
+			{
+				throw new Error("ThrowIndicatorV3::buildFrom(): _trueThrust=" + _trueThrust);
+			}
+			
+			if (_trueAngle)
+			{
+				_trueAngle.text = "";
+			}
+			else
+			{
+				throw new Error("ThrowIndicatorV3::buildFrom(): _trueAngle=" + _trueAngle);
 			}
 			
 			return descendantsDict;
@@ -123,6 +145,10 @@
 			_maskBar.height = -_terminus.y;
 			//trace("rotation: " + Math.atan2( -_terminus.y, _terminus.x ));
 			_maskBar.rotation = 180 / Math.PI * Math.atan2( _terminus.y, _terminus.x ) + 90;
+			
+			_trueThrust.height = 200 * (_throwController.trueThrust / AppSettings.instance.dartMaxThrust);
+			
+			_trueAngle.text = (Math.floor(_throwController.trueAngle * 100) / 100) + " degs";
 		}//end update()		
 		
 		public function show():void

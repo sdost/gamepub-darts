@@ -12,6 +12,9 @@
 		protected var _thrust:Number = 0;
 		protected var _lean:Number = 0;
 		
+		protected var _trueThrust:Number = 0;
+		protected var _trueAngle:Number = 0;
+		
 		public function startThrow(a_inputController:InputController):void
 		{
 			a_inputController.pause = false;
@@ -37,6 +40,16 @@
 		{
 			return _lean;
 		}//end get lean()
+		
+		public function get trueThrust():Number
+		{
+			return _trueThrust;
+		}//end get trueThrust()
+		
+		public function get trueAngle():Number
+		{
+			return _trueAngle;
+		}//end get trueAngle()
 		
 	}//end ThrowController
 

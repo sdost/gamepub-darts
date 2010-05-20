@@ -42,7 +42,7 @@
 			// TODO: handle game ending...
 		}//end onGameEnd()
 		
-		override public function playerThrow(a_x:Number, a_y:Number, a_z:Number, a_thrust:Number, a_lean:Number, a_stepScale:Number):void
+		override public function playerThrow(a_x:Number, a_y:Number, a_z:Number, a_thrust:Number, a_lean:Number, a_stepScale:Number):Object
 		{			
 			//_cursor.hide();
 			_cursor.resetCursorImage();
@@ -95,16 +95,18 @@
 					x: a_x,
 					y: a_y,
 					z: a_z,
-					thr: a_thrust,
+					thr: thrust,
 					a: angle,
 					g: AppSettings.instance.defaultGravity,
-					lean: a_lean,
+					lean: lean,
 					zf: AppSettings.instance.dartboardPositionZ,
 					step: a_stepScale
 				} 
 			);
 			
 			_currentDart.initThrowParams(a_x, a_y, a_z, thrust, angle, AppSettings.instance.defaultGravity, lean, AppSettings.instance.dartboardPositionZ, a_stepScale);
+			
+			return { t: thrust, ang: angle };
 		}//end playerThrow()
 		
 		private function handleStateChange(e:Event):void

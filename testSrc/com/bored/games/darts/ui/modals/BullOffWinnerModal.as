@@ -50,7 +50,7 @@
 			
 			if (_playerNameText)
 			{
-				_playerNameText.text = DartsGlobals.instance.gameManager.players[DartsGlobals.instance.gameManager.currentPlayer-1].playerName;
+				_playerNameText.text = DartsGlobals.instance.gameManager.players[DartsGlobals.instance.gameManager.currentPlayer].playerName;
 			}
 			else
 			{
@@ -59,7 +59,7 @@
 			
 			if (_playerImage)
 			{
-				_playerImage.addChild(DartsGlobals.instance.gameManager.players[DartsGlobals.instance.gameManager.currentPlayer-1].portrait);
+				_playerImage.addChild(DartsGlobals.instance.gameManager.players[DartsGlobals.instance.gameManager.currentPlayer].portrait);
 			}
 			else
 			{

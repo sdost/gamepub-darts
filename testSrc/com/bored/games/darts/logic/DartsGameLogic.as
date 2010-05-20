@@ -465,7 +465,7 @@
 			_throwController.startThrow(_inputController);
 		}//end playerAim()
 		
-		public function playerThrow(a_x:Number, a_y:Number, a_z:Number, a_thrust:Number, a_lean:Number, a_stepScale:Number):void
+		public function playerThrow(a_x:Number, a_y:Number, a_z:Number, a_thrust:Number, a_lean:Number, a_stepScale:Number):Object
 		{			
 			//_cursor.hide();
 			_cursor.resetCursorImage();
@@ -513,6 +513,8 @@
 			}
 			
 			_currentDart.initThrowParams(a_x, a_y, a_z, thrust, angle, AppSettings.instance.defaultGravity, lean, AppSettings.instance.dartboardPositionZ, a_stepScale);
+			
+			return { t: thrust, ang: angle };
 		}//end playerThrow()
 		
 		public function get cursor():Cursor

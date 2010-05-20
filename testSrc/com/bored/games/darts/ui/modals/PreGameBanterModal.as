@@ -59,7 +59,7 @@
 			
 			if (_playerOnePortrait)
 			{
-				_playerOnePortrait.addChild(DartsGlobals.instance.gameManager.players[0].portrait);
+				_playerOnePortrait.addChild(DartsGlobals.instance.gameManager.players[DartsGlobals.instance.localPlayer.playerNum].portrait);
 			}
 			else
 			{
@@ -68,7 +68,7 @@
 			
 			if (_playerTwoPortrait)
 			{
-				_playerTwoPortrait.addChild(DartsGlobals.instance.gameManager.players[1].portrait);
+				_playerTwoPortrait.addChild(DartsGlobals.instance.gameManager.players[DartsGlobals.instance.opponentPlayer.playerNum].portrait);
 			}
 			else
 			{

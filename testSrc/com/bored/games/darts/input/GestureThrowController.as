@@ -57,7 +57,7 @@
 				if ( !a_evt.button ) {
 					if ( _thrust >= DartsGlobals.instance.gameManager.currentDart.minThrust ) 
 					{
-						DartsGlobals.instance.gameManager.playerThrow(
+						var obj:Object = DartsGlobals.instance.gameManager.playerThrow(
 							DartsGlobals.instance.gameManager.currentDart.position.x,
 							DartsGlobals.instance.gameManager.currentDart.position.y,
 							0,
@@ -65,6 +65,9 @@
 							_lean,
 							AppSettings.instance.simulationStepScale
 						);
+						
+						_trueThrust = obj.t;
+						_trueAngle = obj.ang;
 					} 
 					else
 					{
@@ -145,6 +148,13 @@
 				_thrust = clamp((_cumAvgSpeed * AppSettings.instance.dartThrustScale), 0, AppSettings.instance.dartMaxThrust);
 				_lean = _velX * AppSettings.instance.dartLeanScale;
 			}
+			
+			/*
+			 while( horse.dead )
+			 {
+				this.beat(horse);
+			 }
+			 */
 		}//end updateCurrentMouseVelocity()
 		
 		private function clamp(a_num:Number, a_min:Number, a_max:Number):Number
