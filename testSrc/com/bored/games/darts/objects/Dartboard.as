@@ -251,7 +251,7 @@
 					
 					playHitSound(DartsGlobals.instance.gameManager.currentPlayer, multiplier);
 					
-					scoring = DartsGlobals.instance.gameManager.scoreManager.submitThrow(DartsGlobals.instance.gameManager.currentPlayer, points, multiplier);
+					//scoring = DartsGlobals.instance.gameManager.scoreManager.submitThrow(DartsGlobals.instance.gameManager.currentPlayer, points, multiplier);
 									
 					if (points > 0) 
 					{
@@ -277,7 +277,7 @@
 				_dartboardSoundController.play("bounce_wall");
 			}
 			
-			DartsGlobals.instance.gameManager.players[DartsGlobals.instance.gameManager.currentPlayer].processShotResult(points, multiplier, scoring);
+			//DartsGlobals.instance.gameManager.players[DartsGlobals.instance.gameManager.currentPlayer].processShotResult(points, multiplier, scoring);
 			
 			return sticking;			
 		}//end submitDartPositionUnscored()

@@ -42,6 +42,10 @@
 			return 0;
 		}//end getPlayerScore()
 		
+		public function setScores(a_scores:Object):void
+		{
+		}//end setScores()
+		
 		public function clearScoreBoard():void
 		{
 			

@@ -1,15 +1,19 @@
 ﻿package com.bored.games.darts.logic 
 {
+	import com.adobe.serialization.json.JSON;
 	import com.bored.games.darts.abilities.Ability;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.logic.DartsGameLogic
 	import com.bored.games.darts.objects.Dart;
 	import com.bored.games.darts.player.DartsPlayer;
+	import com.bored.games.darts.ui.modals.GameResultsModal;
 	import com.bored.gs.game.GameClient;
+	import com.bored.gs.game.IGameClient;
 	import com.bored.gs.game.ITurnBased;
 	import com.bored.gs.game.TurnBasedGameClient;
 	import com.sven.utils.AppSettings;
 	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.utils.Dictionary;
 	
 	/**
@@ -18,13 +22,17 @@
 	 */
 	public class RemoteCricketGameLogic extends DartsGameLogic
 	{
+		public static const RESULTS_READY:String = "resultsReady";
+		
 		private var _serverResults:Object = null;
+		private var _dispatcher:EventDispatcher;
 		
 		public function RemoteCricketGameLogic()
 		{
 			_scoreManager = new CricketScoreManager();
+			_dispatcher = new EventDispatcher();
 			
-			DartsGlobals.instance.multiplayerClient.addEventListener(GameClient.GAME_END, onGameEnd);
+			DartsGlobals.instance.multiplayerClient.addEventListener(GameClient.GAME_RESULTS, onGameEnd);
 			
 			DartsGlobals.instance.multiplayerClient.addEventListener(TurnBasedGameClient.ROUND_START, handleStateChange);
 			DartsGlobals.instance.multiplayerClient.addEventListener(TurnBasedGameClient.ROUND_END, handleStateChange);
@@ -39,7 +47,8 @@
 		
 		private function onGameEnd(e:Event):void
 		{
-			// TODO: handle game ending...
+			var obj:Object = (DartsGlobals.instance.multiplayerClient as IGameClient).getData(GameClient.GAME_RESULTS);
+			_winner = obj.winner;
 		}//end onGameEnd()
 		
 		override public function playerThrow(a_x:Number, a_y:Number, a_z:Number, a_thrust:Number, a_lean:Number, a_stepScale:Number):Object
@@ -136,13 +145,17 @@
 					break;
 				case TurnBasedGameClient.TURN_UPDATE:
 					obj = (DartsGlobals.instance.multiplayerClient as ITurnBased).getData(TurnBasedGameClient.TURN_UPDATE);
-					if ( obj.action == "p_t" && obj.pid != DartsGlobals.instance.localPlayer.playerNum)
+					
+					trace( "Is this me? -- " + obj.pid + " == " + DartsGlobals.instance.localPlayer.playerNum + " -> " + (obj.pid == DartsGlobals.instance.localPlayer.playerNum) );
+					
+					if ( obj.action == "p_t" && _currentPlayer != DartsGlobals.instance.localPlayer.playerNum)
 					{
 						if( _currentDart ) _currentDart.initThrowParams(obj.x, obj.y, obj.z, obj.thr, obj.a, obj.g, obj.lean, obj.zf, obj.step);						
 					} 
 					else if ( obj.action == "p_r" ) 
 					{
 						_serverResults = obj;
+						_dispatcher.dispatchEvent( new Event(RESULTS_READY) );
 					}
 					break;
 				case TurnBasedGameClient.TURN_END:
@@ -200,34 +213,63 @@
 			{	
 				_currentDart.position.z = AppSettings.instance.dartboardPositionZ;
 				
-				_currentDart.finishThrow();	
+				_currentDart.finishThrow();
 				
-				if ( !_dartboard.submitDartPositionUnscored(_currentDart.position.x, _currentDart.position.y, _currentDart.blockBoard, _serverResults) ) 
+				if (_serverResults) 
 				{
-					_currentDart.beginFalling();
-				}
-				
-				_serverResults = null;
-				
-				_currentTurn.advanceThrows();
-				
-				if (_currentTurn.throwsRemaining == 0) 
-				{
-					_abilityManager.processTurn();
-					_currentDart = null;
-					//pause(true);
-										
-					_soundController.play("turn_switch_" + Math.ceil(Math.random() * 4).toString());
-					
-					DartsGlobals.instance.gameManager.resetDarts();
-					DartsGlobals.instance.gameManager.endTurn();
+					finishThrowResults();					
 				}
 				else
 				{
-					nextDart();
-				}
+					_dispatcher.addEventListener(RESULTS_READY, finishThrowResults);
+				}				
 			}
 		}//end update();
+		
+		private function finishThrowResults(e:Event = null):void
+		{
+			_dispatcher.removeEventListener(RESULTS_READY, finishThrowResults);
+			
+			for ( var key:String in _serverResults )
+			{
+				trace("_serverResults[" + key + "]: " + _serverResults[key]);
+			}
+			
+			if ( !_dartboard.submitDartPositionUnscored(_currentDart.position.x, _currentDart.position.y, _currentDart.blockBoard, _serverResults) ) 
+			{
+				_currentDart.beginFalling();
+			}
+			
+			_scoreManager.setScores(JSON.decode(_serverResults.scores));
+			
+			_serverResults = null;
+			
+			_currentTurn.advanceThrows();
+			
+			if ( _winner > 0 )
+			{
+				endGame();
+				pause(true);
+				DartsGlobals.instance.showModalPopup(GameResultsModal);
+				return;
+			}
+				
+			if (_currentTurn.throwsRemaining == 0) 
+			{
+				_abilityManager.processTurn();
+				_currentDart = null;
+				//pause(true);
+									
+				_soundController.play("turn_switch_" + Math.ceil(Math.random() * 4).toString());
+				
+				DartsGlobals.instance.gameManager.resetDarts();
+				DartsGlobals.instance.gameManager.endTurn();
+			}
+			else
+			{
+				nextDart();
+			}
+		}
 		
 	}//end RemoteCricketGameLogic
 

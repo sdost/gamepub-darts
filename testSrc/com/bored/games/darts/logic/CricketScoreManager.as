@@ -126,6 +126,19 @@
 			return score;
 		}//end getPlayerScore()
 		
+		override public function setScores(a_scores:Object):void
+		{			
+			for ( var player:String in a_scores ) 
+			{				
+				for ( var score:String in a_scores[player] ) 
+				{
+					trace("scoreboard[" + player + "][" + score + "]: " + a_scores[player][score]);
+					
+					_scoreboard[player][score] = a_scores[player][score];
+				}
+			}
+		}
+		
 		override public function clearScoreBoard():void
 		{
 			var player:String = null;

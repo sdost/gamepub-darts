@@ -34,7 +34,7 @@
 			{
 				if ( obj.earned ) 
 				{
-					DartsGlobals.instance.localPlayer.record.recordAchievement( obj );
+					//DartsGlobals.instance.localPlayer.record.recordAchievement( obj );
 				}
 			}
 		}//end onAchievementEarned()
