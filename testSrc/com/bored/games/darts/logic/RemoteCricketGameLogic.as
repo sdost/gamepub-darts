@@ -6,6 +6,8 @@
 	import com.bored.games.darts.logic.DartsGameLogic
 	import com.bored.games.darts.objects.Dart;
 	import com.bored.games.darts.player.DartsPlayer;
+	import com.bored.games.darts.ui.modals.BullOffClickContinueModal;
+	import com.bored.games.darts.ui.modals.BullOffWinnerModal;
 	import com.bored.games.darts.ui.modals.GameResultsModal;
 	import com.bored.gs.game.GameClient;
 	import com.bored.gs.game.IGameClient;
@@ -127,26 +129,41 @@
 			switch(e.type)
 			{
 				case TurnBasedGameClient.ROUND_START:
+					obj = (DartsGlobals.instance.multiplayerClient as ITurnBased).getData(TurnBasedGameClient.ROUND_START);
+					_bullOff = obj.bulloff;
 					break;
 				case TurnBasedGameClient.ROUND_END:
 					break;
 				case TurnBasedGameClient.ROUND_RESULTS:
+					obj = (DartsGlobals.instance.multiplayerClient as ITurnBased).getData(TurnBasedGameClient.ROUND_RESULTS);
+					if (_bullOff)
+					{
+						_winner = obj.winner;
+					}
 					break;
 					
 				case TurnBasedGameClient.TURN_START:
 					obj = (DartsGlobals.instance.multiplayerClient as ITurnBased).getData(TurnBasedGameClient.TURN_START);
+					trace("Current Player: " + obj.pid);
 					_currentPlayer = obj.pid;
-					startNewTurn();
+					if ( _bullOff ) {
+						startNewBullOff();
+					} else {
+						startNewTurn();
+					}
 					break;
 				case TurnBasedGameClient.TURN_WAIT:
 					obj = (DartsGlobals.instance.multiplayerClient as ITurnBased).getData(TurnBasedGameClient.TURN_WAIT);
+					trace("Current Player: " + obj.pid);
 					_currentPlayer = obj.pid;
-					startNewTurn();
+					if ( _bullOff ) {
+						startNewBullOff();
+					} else {
+						startNewTurn();
+					}
 					break;
 				case TurnBasedGameClient.TURN_UPDATE:
 					obj = (DartsGlobals.instance.multiplayerClient as ITurnBased).getData(TurnBasedGameClient.TURN_UPDATE);
-					
-					trace( "Is this me? -- " + obj.pid + " == " + DartsGlobals.instance.localPlayer.playerNum + " -> " + (obj.pid == DartsGlobals.instance.localPlayer.playerNum) );
 					
 					if ( obj.action == "p_t" && _currentPlayer != DartsGlobals.instance.localPlayer.playerNum)
 					{
@@ -167,6 +184,21 @@
 					break;
 			}
 		}//end handleStateChange()
+		
+		override public function startNewBullOff():void
+		{						
+			if ( !_bullOffResults ) {
+				_bullOffResults = new Array(2);
+				_bullOffResults[0] = -1;
+				_bullOffResults[1] = -1;
+			}
+			
+			_currentTurn = new DartsTurn(this, 1);
+			
+			_lastDart = null;
+			
+			nextDart();		
+		}//end bullOff()
 		
 		override public function endTurn():void
 		{
@@ -230,44 +262,94 @@
 		{
 			_dispatcher.removeEventListener(RESULTS_READY, finishThrowResults);
 			
-			for ( var key:String in _serverResults )
+			if ( _bullOff ) 
 			{
-				trace("_serverResults[" + key + "]: " + _serverResults[key]);
-			}
-			
-			if ( !_dartboard.submitDartPositionUnscored(_currentDart.position.x, _currentDart.position.y, _currentDart.blockBoard, _serverResults) ) 
-			{
-				_currentDart.beginFalling();
-			}
-			
-			_scoreManager.setScores(JSON.decode(_serverResults.scores));
-			
-			_serverResults = null;
-			
-			_currentTurn.advanceThrows();
-			
-			if ( _winner > 0 )
-			{
-				endGame();
-				pause(true);
-				DartsGlobals.instance.showModalPopup(GameResultsModal);
-				return;
-			}
+				var dist:Number = _dartboard.getDistanceFromSection(_currentDart.position.x, _currentDart.position.y, 25, 2);
 				
-			if (_currentTurn.throwsRemaining == 0) 
-			{
-				_abilityManager.processTurn();
-				_currentDart = null;
-				//pause(true);
-									
-				_soundController.play("turn_switch_" + Math.ceil(Math.random() * 4).toString());
+				_bullOffResults[_currentPlayer] = dist;
 				
-				DartsGlobals.instance.gameManager.resetDarts();
-				DartsGlobals.instance.gameManager.endTurn();
+				if ( _bullOffResults[DartsGlobals.instance.localPlayer.playerNum] > 0 && _bullOffResults[DartsGlobals.instance.opponentPlayer.playerNum] > 0 )
+				{
+					var winner:int;
+					
+					if ( _bullOffResults[DartsGlobals.instance.localPlayer.playerNum] < _bullOffResults[DartsGlobals.instance.opponentPlayer.playerNum] ) 
+					{
+						winner = DartsGlobals.instance.opponentPlayer.playerNum;
+					}
+					else
+					{
+						winner = DartsGlobals.instance.localPlayer.playerNum;
+					}
+					
+					resetDarts();
+					_currentPlayer = winner;
+											
+					_bullOff = false;
+					_currentDart = null;
+					//DartsGlobals.instance.showModalPopup(BullOffWinnerModal);
+					//return;
+				}
+				
+				_serverResults = null;
+				
+				_currentTurn.advanceThrows();
+				
+				if (_currentTurn.throwsRemaining == 0) 
+				{
+					_currentDart = null;
+					//pause(true);
+											
+					_soundController.play("turn_switch_" + Math.ceil(Math.random() * 4).toString());
+					
+					resetDarts();
+					endTurn();
+				}
+				else
+				{
+					nextDart();
+				}
 			}
 			else
 			{
-				nextDart();
+				for ( var key:String in _serverResults )
+				{
+					trace("_serverResults[" + key + "]: " + _serverResults[key]);
+				}
+				
+				if ( !_dartboard.submitDartPositionUnscored(_currentDart.position.x, _currentDart.position.y, _currentDart.blockBoard, _serverResults) ) 
+				{
+					_currentDart.beginFalling();
+				}
+				
+				_scoreManager.setScores(JSON.decode(_serverResults.scores));
+				
+				_serverResults = null;
+				
+				_currentTurn.advanceThrows();
+				
+				if ( _winner > 0 )
+				{
+					endGame();
+					pause(true);
+					DartsGlobals.instance.showModalPopup(GameResultsModal);
+					return;
+				}
+					
+				if (_currentTurn.throwsRemaining == 0) 
+				{
+					_abilityManager.processTurn();
+					_currentDart = null;
+					//pause(true);
+										
+					_soundController.play("turn_switch_" + Math.ceil(Math.random() * 4).toString());
+					
+					resetDarts();
+					endTurn();
+				}
+				else
+				{
+					nextDart();
+				}
 			}
 		}
 		

@@ -57,8 +57,11 @@
 		{			
 			trace("Practice::onEnter()");
 			
+			DartsGlobals.instance.gameManager = new CricketGameLogic();
+			
 			DartsGlobals.instance.setupControlPanel();
 			
+			DartsGlobals.instance.localPlayer.playerNum = CricketGameLogic.HUMAN_PLAYER;
 			DartsGlobals.instance.localPlayer.setSkin(DartsGlobals.instance.playerProfile.skins[0]);
 			
 			DartsGlobals.instance.opponentProfile = new EnemyProfile("Computer");
@@ -67,6 +70,7 @@
 			DartsGlobals.instance.opponentProfile.dartSkin = new DartSkin( ImageFactory.getBitmapDataByQualifiedName("dartuv_techno", 512, 512), dae_DartShaft.data, dae_DartFlightModHex.data );
 					
 			DartsGlobals.instance.opponentPlayer = new ComputerPlayer(DartsGlobals.instance.opponentProfile);
+			DartsGlobals.instance.opponentPlayer.playerNum = CricketGameLogic.CPU_PLAYER;
 			DartsGlobals.instance.opponentPlayer.setPortrait(DartsGlobals.instance.opponentProfile.portrait);
 			//DartsGlobals.instance.opponentPlayer.setAbilities(new BeeLineAbility(5), new ShieldAbility(5), new DoOverAbility(5));			
 			DartsGlobals.instance.opponentPlayer.setSkin(DartsGlobals.instance.opponentProfile.dartSkin);

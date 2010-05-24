@@ -1,6 +1,7 @@
 ﻿package com.bored.games.darts.states 
 {
 	import com.bored.games.darts.input.EasyThrowController;
+	import com.bored.games.darts.profiles.OldManProfile;
 	import com.bored.games.darts.ui.modals.BullOffAnnounceModal;
 	import com.bored.games.darts.ui.modals.PreGameBanterModal;
 	import com.bored.games.input.InputController;
@@ -30,6 +31,7 @@
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Vector3D;
+	import flash.sampler.NewObjectSample;
 	import flash.system.ApplicationDomain;
 	import flash.text.TextField;
 	import com.bored.games.darts.DartsGlobals;
@@ -103,7 +105,15 @@
 				if ( DartsGlobals.instance.gameMode == DartsGlobals.GAME_STORY )
 				{
 					ModalDisplayManager.overlayAlpha = .30;
-					DartsGlobals.instance.showModalPopup(PreGameBanterModal);
+					if ( DartsGlobals.instance.opponentProfile is OldManProfile ) 
+					{
+						DartsGlobals.instance.gameManager.currentPlayer = DartsGlobals.instance.opponentPlayer.playerNum;
+						DartsGlobals.instance.gameManager.startNewTurn();
+					}
+					else 
+					{
+						DartsGlobals.instance.showModalPopup(BullOffAnnounceModal);
+					}
 				}
 				else if ( DartsGlobals.instance.gameMode == DartsGlobals.GAME_PRACTICE )
 				{

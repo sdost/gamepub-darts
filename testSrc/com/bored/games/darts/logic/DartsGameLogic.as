@@ -303,7 +303,7 @@
 						
 						endGame();
 						pause(true);
-						DartsGlobals.instance.showModalPopup(PostGameBanterModal);
+						DartsGlobals.instance.showModalPopup(GameResultsModal);
 						return;
 					}
 					
