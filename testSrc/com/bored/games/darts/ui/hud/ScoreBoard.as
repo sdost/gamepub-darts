@@ -27,14 +27,11 @@
 	 * @author Samuel Dost
 	 */
 	public class ScoreBoard extends ContentHolder
-	{
-		private var _playerSlots:Object;
-		private var _opponentSlots:Object;
+	{		
+		protected var _playerOnePortrait:MovieClip;
+		protected var _playerTwoPortrait:MovieClip;
 		
-		private var _playerOnePortrait:MovieClip;
-		private var _playerTwoPortrait:MovieClip;
-		
-		private var _scoreMgr:AbstractScoreManager;
+		protected var _scoreMgr:AbstractScoreManager;
 		
 		public function ScoreBoard(a_img:Sprite, a_buildFromAllDescendants:Boolean = false, a_bAddContents:Boolean = true) 
 		{
@@ -53,46 +50,8 @@
 		
 		override protected function buildFrom(a_img:Sprite, a_buildFromAllDescendants:Boolean = true):Dictionary
 		{
-			var slot:Object;
-			
 			var descendantsDict:Dictionary = super.buildFrom(a_img, a_buildFromAllDescendants);
-			
-			_playerSlots = { };
-			
-			_playerSlots[20] = descendantsDict["player_twenty"] as MovieClip;
-			_playerSlots[19] = descendantsDict["player_nineteen"] as MovieClip;
-			_playerSlots[18] = descendantsDict["player_eighteen"] as MovieClip;
-			_playerSlots[17] = descendantsDict["player_seventeen"] as MovieClip;
-			_playerSlots[16] = descendantsDict["player_sixteen"] as MovieClip;
-			_playerSlots[15] = descendantsDict["player_fifteen"] as MovieClip;
-			_playerSlots[25] = descendantsDict["player_bull"] as MovieClip;
-			
-			for each( slot in _playerSlots )
-			{
-				if ( slot )
-				{
-					(slot as MovieClip).gotoAndStop(1);
-				}
-			}
-			
-			_opponentSlots = { };
-			
-			_opponentSlots[20] = descendantsDict["opponent_twenty"] as MovieClip;
-			_opponentSlots[19] = descendantsDict["opponent_nineteen"] as MovieClip;
-			_opponentSlots[18] = descendantsDict["opponent_eighteen"] as MovieClip;
-			_opponentSlots[17] = descendantsDict["opponent_seventeen"] as MovieClip;
-			_opponentSlots[16] = descendantsDict["opponent_sixteen"] as MovieClip;
-			_opponentSlots[15] = descendantsDict["opponent_fifteen"] as MovieClip;
-			_opponentSlots[25] = descendantsDict["opponent_bull"] as MovieClip;
-			
-			for each( slot in _opponentSlots )
-			{
-				if ( slot )
-				{
-					(slot as MovieClip).gotoAndStop(1);
-				}
-			}
-			
+						
 			_playerOnePortrait = descendantsDict["playerOnePortrait_mc"] as MovieClip;
 			_playerTwoPortrait = descendantsDict["playerTwoPortrait_mc"] as MovieClip;
 			
@@ -139,26 +98,7 @@
 		}//end registerScoreManager()
 		
 		public function update():void
-		{
-			var playerScores:Object = _scoreMgr.getPlayerStats(DartsGlobals.instance.localPlayer.playerNum);
-			
-			(_playerSlots[20] as MovieClip).gotoAndStop(playerScores[20]+1);
-			(_playerSlots[19] as MovieClip).gotoAndStop(playerScores[19]+1);
-			(_playerSlots[18] as MovieClip).gotoAndStop(playerScores[18]+1);
-			(_playerSlots[17] as MovieClip).gotoAndStop(playerScores[17]+1);
-			(_playerSlots[16] as MovieClip).gotoAndStop(playerScores[16]+1);
-			(_playerSlots[15] as MovieClip).gotoAndStop(playerScores[15]+1);
-			(_playerSlots[25] as MovieClip).gotoAndStop(playerScores[25]+1);
-				
-			var opponentScores:Object = _scoreMgr.getPlayerStats(DartsGlobals.instance.opponentPlayer.playerNum);	
-
-			(_opponentSlots[20] as MovieClip).gotoAndStop(opponentScores[20]+1);
-			(_opponentSlots[19] as MovieClip).gotoAndStop(opponentScores[19]+1);
-			(_opponentSlots[18] as MovieClip).gotoAndStop(opponentScores[18]+1);
-			(_opponentSlots[17] as MovieClip).gotoAndStop(opponentScores[17]+1);
-			(_opponentSlots[16] as MovieClip).gotoAndStop(opponentScores[16]+1);
-			(_opponentSlots[15] as MovieClip).gotoAndStop(opponentScores[15]+1);
-			(_opponentSlots[25] as MovieClip).gotoAndStop(opponentScores[25]+1);				
+		{			
 		}//end update()
 		
 		public function show():void
@@ -176,10 +116,7 @@
 			super.destroy();
 			
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
-			this.removeEventListener(Event.REMOVED_FROM_STAGE, destroy);
-			
-			_playerSlots = null;
-			_opponentSlots = null;			
+			this.removeEventListener(Event.REMOVED_FROM_STAGE, destroy);		
 		}//end destroy()
 		
 	}//end class AttractScreen

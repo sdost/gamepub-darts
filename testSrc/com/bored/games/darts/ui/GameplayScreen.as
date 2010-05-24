@@ -24,7 +24,9 @@
 	import com.bored.games.darts.objects.Dart;
 	import com.bored.games.darts.ui.hud.AbilityDock;
 	import com.bored.games.darts.ui.hud.ControlPanel;
+	import com.bored.games.darts.ui.hud.CricketScoreBoard;
 	import com.bored.games.darts.ui.hud.DartDock;
+	import com.bored.games.darts.ui.hud.FiveOhOneScoreBoard;
 	import com.bored.games.darts.ui.hud.ScoreBoard;
 	import com.bored.games.darts.ui.hud.ThrowIndicator;
 	import com.bored.games.darts.ui.hud.ThrowIndicatorV2;
@@ -131,7 +133,7 @@
 			}
 						
 			cls = getDefinitionByName(AppSettings.instance.scoreboardMovie) as Class;
-			_scoreBoard = new ScoreBoard(new cls());
+			_scoreBoard = new FiveOhOneScoreBoard(new cls());//CricketScoreBoard(new cls());
 			DartsGlobals.instance.optionsInterfaceSpace.addChild(_scoreBoard);
 			_scoreBoard.x = AppSettings.instance.scoreboardPositionX;
 			_scoreBoard.y = AppSettings.instance.scoreboardPositionY;

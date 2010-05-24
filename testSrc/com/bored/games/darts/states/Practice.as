@@ -11,6 +11,7 @@
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.logic.CricketGameLogic;
 	import com.bored.games.darts.logic.DartsGameLogic;
+	import com.bored.games.darts.logic.FiveOhOneGameLogic;
 	import com.bored.games.darts.models.dae_DartFlightModHex;
 	import com.bored.games.darts.models.dae_DartShaft;
 	import com.bored.games.darts.player.ComputerPlayer;
@@ -57,7 +58,7 @@
 		{			
 			trace("Practice::onEnter()");
 			
-			DartsGlobals.instance.gameManager = new CricketGameLogic();
+			DartsGlobals.instance.gameManager = new FiveOhOneGameLogic(); //CricketGameLogic();
 			
 			DartsGlobals.instance.setupControlPanel();
 			
