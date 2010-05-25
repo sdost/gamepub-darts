@@ -12,6 +12,7 @@
 	import com.bored.games.darts.logic.CricketGameLogic;
 	import com.bored.games.darts.logic.DartsGameLogic;
 	import com.bored.games.darts.logic.RemoteCricketGameLogic;
+	import com.bored.games.darts.logic.RemoteFiveOhOneGameLogic;
 	import com.bored.games.darts.models.dae_DartFlightModHex;
 	import com.bored.games.darts.models.dae_DartShaft;
 	import com.bored.games.darts.player.ComputerPlayer;
@@ -121,7 +122,8 @@
 			
 			DartsGlobals.instance.multiplayerClient = _igs as IGameClient;
 			
-			DartsGlobals.instance.gameManager = new RemoteCricketGameLogic();
+			//DartsGlobals.instance.gameManager = new RemoteCricketGameLogic();
+			DartsGlobals.instance.gameManager = new RemoteFiveOhOneGameLogic();
 			
 			_fsm.hide();
 			

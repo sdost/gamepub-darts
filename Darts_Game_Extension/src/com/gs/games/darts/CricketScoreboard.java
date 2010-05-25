@@ -5,7 +5,8 @@ import java.util.HashMap;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class CricketScoreboard {
+
+public class CricketScoreboard extends Scoreboard {
 	
 	public static int EMPTY 		= 0;
 	public static int STROKE_LEFT 	= 1;
@@ -33,37 +34,55 @@ public class CricketScoreboard {
 		_scoreMap.put(pid, playerScores);
 	}
 	
-	public boolean submitThrow(int player, int points, int multiplier) {
+	public boolean checkForWin(int player) {
+		HashMap<Integer, Integer> stats = _scoreMap.get(player);
+	
+		boolean win = true;
+	
+		for ( int i = 15; i <= 20; i++ ) {
+			if ( stats.get(i) < 3 ) win = false;
+		}
+		if ( stats.get(25) < 3 ) win = false;
+	
+		return win;
+	}
+		
+	public boolean submitThrow(int player, int points, int multiplier, int turn) {
 		System.out.println("CricketScoreboard::submitThrow(" + player + ", " + points + ", " + multiplier + ")");
 		
 		System.out.println("scoreMap["+player+"] -> " + _scoreMap.get(player));
 		
-		int score = _scoreMap.get(player).get(points);
+		HashMap<Integer, Integer> map = _scoreMap.get(player);
 		
-		if( score < CLOSED_OUT ) 
+		if( map != null && ( (points >= 15 && points <= 20) || points == 25 ))
 		{
-			if ( (score + multiplier) >= 3 ) 
+			int score = map.get(points);
+			
+			if( score < CLOSED_OUT ) 
 			{
-				score += CLOSED_OUT;
+				if ( (score + multiplier) >= 3 ) 
+				{
+					score += CLOSED_OUT;
+				}
+				else score += multiplier;
+				
+				_scoreMap.get(player).put(points, score);
+				
+				return true;
 			}
-			else score += multiplier;
-			
-			_scoreMap.get(player).put(points, score);
-			
-			return true;
+			else
+			{
+				return false;
+			}
 		}
-		else
-		{
-			return false;
-		}
+		else return false;
 	}
 	
-	public void getJSONObject(JSONObject jso) {
-		try {
-			jso.putOpt("scores", _scoreMap);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void getJSONObject(JSONObject jso) throws JSONException {
+		
+		net.sf.json.JSONObject map = new net.sf.json.JSONObject();
+		map.putAll(_scoreMap);
+		
+		jso.put("scores", map.toString());
 	}
 }
