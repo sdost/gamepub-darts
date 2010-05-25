@@ -133,7 +133,7 @@
 			}
 						
 			cls = getDefinitionByName(AppSettings.instance.scoreboardMovie) as Class;
-			_scoreBoard = new FiveOhOneScoreBoard(new cls());//CricketScoreBoard(new cls());
+			_scoreBoard = new CricketScoreBoard(new cls()); //new FiveOhOneScoreBoard(new cls());
 			DartsGlobals.instance.optionsInterfaceSpace.addChild(_scoreBoard);
 			_scoreBoard.x = AppSettings.instance.scoreboardPositionX;
 			_scoreBoard.y = AppSettings.instance.scoreboardPositionY;
@@ -217,22 +217,7 @@
 		 * Initialise the scene objects
 		 */
 		private function initObjects():void
-		{
-			/*
-			_boardBillboard = new Plane();
-			_boardBillboard.x = AppSettings.instance.dartboardPositionX * _engineScale;
-			_boardBillboard.y = AppSettings.instance.dartboardPositionY * _engineScale;
-			_boardBillboard.z = AppSettings.instance.dartboardPositionZ * _engineScale;
-			_boardBillboard.material = _dartboardTexture;
-			_boardBillboard.width = AppSettings.instance.boardTextureWidth;
-			_boardBillboard.height = AppSettings.instance.boardTextureHeight;
-			_boardBillboard.yUp = false;
-			_boardBillboard.bothsides = true;
-			_boardBillboard.mouseEnabled = false;
-			_boardBillboard.lookAt(_camera.position, new Vector3D(0, 1, 0));
-			_scene.addChild(_boardBillboard);
-			*/
-			
+		{			
 			DartsGlobals.instance.gameManager.dartboard.initModels();
 			_scene.addSprite(DartsGlobals.instance.gameManager.dartboard.boardSprite);
 			DartsGlobals.instance.gameManager.dartboard.position.x = AppSettings.instance.dartboardPositionX * _engineScale;

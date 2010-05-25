@@ -58,7 +58,7 @@
 		{			
 			trace("Practice::onEnter()");
 			
-			DartsGlobals.instance.gameManager = new FiveOhOneGameLogic(); //CricketGameLogic();
+			DartsGlobals.instance.gameManager = new CricketGameLogic(); //new FiveOhOneGameLogic();
 			
 			DartsGlobals.instance.setupControlPanel();
 			

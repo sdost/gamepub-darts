@@ -60,7 +60,6 @@
 	public class Multiplayer extends State
 	{		
 		private var _igs:IPlayRequest;
-		//private var _multiplayerScreen:MultiplayerScreen;
 		private var _fl:FileLoader;
 		private var _fsm:Object;
 		
@@ -122,8 +121,8 @@
 			
 			DartsGlobals.instance.multiplayerClient = _igs as IGameClient;
 			
-			//DartsGlobals.instance.gameManager = new RemoteCricketGameLogic();
-			DartsGlobals.instance.gameManager = new RemoteFiveOhOneGameLogic();
+			DartsGlobals.instance.gameManager = new RemoteCricketGameLogic();
+			//DartsGlobals.instance.gameManager = new RemoteFiveOhOneGameLogic();
 			
 			_fsm.hide();
 			
