@@ -32,8 +32,6 @@
 			this.weight = 90;
 			this.bio = "A lucky bastard. Accuracy increases if he hits his lucky number. Wary of shields.";
 			
-			this.firstMatch = "Now you're snookered, you gormless Yank. Time to throw a spanner in the works of your arrows!";
-			
 			this.portrait = new BigBill_Portrait_BMP(150, 150);
 			
 			this.setDartSkin(new DartSkin(ImageFactory.getBitmapDataByQualifiedName("dartuv_bigbill", AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight), dae_DartShaft.data, dae_DartFlightPincer.data));

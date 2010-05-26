@@ -158,9 +158,11 @@
 			_dartDock.y = AppSettings.instance.dartDockPositionY;
 			_dartDock.show();
 			
+			/*
 			_stats = new Stats();
 			_stats.y = 50;
 			DartsGlobals.instance.optionsInterfaceSpace.addChild(_stats);
+			*/
 			
 			if (this.stage)
 			{

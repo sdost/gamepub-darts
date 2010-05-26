@@ -10,6 +10,7 @@
 	import com.bored.games.darts.ui.modals.BullOffWinnerModal;
 	import com.bored.games.darts.ui.modals.GameResultsModal;
 	import com.bored.games.darts.ui.modals.TurnAnnounceModal;
+	import com.bored.games.events.InputStateEvent;
 	import com.bored.gs.game.GameClient;
 	import com.bored.gs.game.IGameClient;
 	import com.bored.gs.game.ITurnBased;
@@ -17,6 +18,7 @@
 	import com.sven.utils.AppSettings;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.ui.Mouse;
 	import flash.utils.Dictionary;
 	
 	/**
@@ -51,6 +53,10 @@
 		private function onGameEnd(e:Event):void
 		{
 			var obj:Object = (DartsGlobals.instance.multiplayerClient as IGameClient).getData(GameClient.GAME_RESULTS);
+			DartsGlobals.instance.localPlayer.record.gameTime = obj.gameTime;
+			DartsGlobals.instance.localPlayer.record.doubles = obj["doubles_" + DartsGlobals.instance.localPlayer.playerNum];
+			DartsGlobals.instance.localPlayer.record.triples = obj["triples_" + DartsGlobals.instance.localPlayer.playerNum];
+			DartsGlobals.instance.localPlayer.record.throws = obj["throws_" + DartsGlobals.instance.localPlayer.playerNum];
 			_winner = obj.winner;
 		}//end onGameEnd()
 		
@@ -171,11 +177,20 @@
 					break;
 				case TurnBasedGameClient.TURN_RESULTS:
 					break;
-					
 				default:
 					break;
 			}
 		}//end handleStateChange()
+		
+		override public function endGame():void
+		{
+			_dartboard.resetBlockedSections();
+			
+			if( _inputController && _throwController )
+				_inputController.removeEventListener(InputStateEvent.UPDATE, _throwController.onInputUpdate);
+				
+			Mouse.show();				
+		}//end endGame()
 		
 		override public function endTurn():void
 		{

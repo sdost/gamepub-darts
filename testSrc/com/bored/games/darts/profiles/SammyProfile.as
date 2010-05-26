@@ -29,9 +29,6 @@
 			this.weight = 90;
 			this.bio = "A local footie fan. Great at drinking. Terrible at darts.";
 			
-			this.firstMatch = "Alright then, mate, time to kick off. Give it your best shot!";
-			this.winMatch = "Surely you moved the goalposts on me!";
-			
 			this.portrait = new Sammy_Portrait_BMP(150, 150);
 			
 			this.setDartSkin(new DartSkin(ImageFactory.getBitmapDataByQualifiedName("dartuv_sammy", AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight), dae_DartShaft.data, dae_DartFlightHexagon.data));

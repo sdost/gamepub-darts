@@ -15,10 +15,13 @@
 		
 		private var _achievementsEarned:Vector.<Object>;
 		
+		private var _gameTime:int;
+		
 		private var _win:Boolean;
 		
 		public function GameRecord() 
 		{
+			_gameTime = 0;
 			_throws = 0;
 			_scoringThrows = 0;
 			_doubles = 0;
@@ -72,10 +75,25 @@
 			_win = a_win;
 		}//end recordEndOfGame()
 		
+		public function get gameTime():int
+		{
+			return _gameTime;
+		}//end get gameTime()
+		
+		public function set gameTime(a_time:int):void
+		{
+			_gameTime = a_time;
+		}//end get gameTime()
+		
 		public function get throws():int
 		{
 			return _throws;
 		}//end get throws()
+		
+		public function set throws(a_throws:int):void
+		{
+			_throws = a_throws;
+		}//end set doubles()
 		
 		public function get scoringThrows():int
 		{
@@ -87,10 +105,20 @@
 			return _doubles;
 		}//end get doubles()
 		
+		public function set doubles(a_doubles:int):void
+		{
+			_doubles = a_doubles;
+		}//end set doubles()
+		
 		public function get triples():int
 		{
 			return _triples;
 		}//end get triples()
+		
+		public function set triples(a_triples:int):void
+		{
+			_triples = a_triples;
+		}//end set doubles()
 		
 		public function get lastScore():Object
 		{

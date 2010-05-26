@@ -43,12 +43,7 @@
 			this.setDartSkin(new DartSkin(ImageFactory.getBitmapDataByQualifiedName("dartuv_oldman", AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight), dae_DartShaft.data, dae_DartFlightHeart.data));
 			
 			this.accuracy = 0.7;
-			
-			this.firstMatch = "The game's cricket!";
-			
-			this.winMatch = "Alright, you seem ready! Go get 'em!";
-			this.lossMatch = "Hm. Well, good enough. Go get 'em!";
-			
+		
 			_throwList = new Vector.<AIShotCandidate>();
 			
 			buildTutorialThrows(_throwList);			

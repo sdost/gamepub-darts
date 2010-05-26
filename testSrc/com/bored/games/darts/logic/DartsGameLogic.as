@@ -202,10 +202,11 @@
 		public function endGame():void
 		{
 			GameUtils.endGame();
-			
+						
 			for each( var player:DartsPlayer in _players )
 			{
 				player.record.recordEndOfGame( _winner == player.playerNum );
+				player.record.gameTime = GameUtils.playTime;
 			}
 			
 			_dartboard.resetBlockedSections();
