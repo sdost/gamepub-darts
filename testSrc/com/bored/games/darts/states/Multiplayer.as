@@ -144,7 +144,7 @@
 				{
 					DartsGlobals.instance.opponentProfile = new UserProfile();
 					DartsGlobals.instance.opponentProfile.name = user.name;
-					DartsGlobals.instance.opponentProfile.unlockSkin("basicplaid", "heart");
+					DartsGlobals.instance.opponentProfile.unlockSkin("basicplaid", "heart");					
 			
 					DartsGlobals.instance.opponentPlayer = new RemotePlayer(DartsGlobals.instance.opponentProfile);
 					DartsGlobals.instance.opponentPlayer.setPortrait(new Protagonist_Portrait_BMP(150, 150));

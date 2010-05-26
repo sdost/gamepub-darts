@@ -106,6 +106,11 @@
 			}
 		}//end update()
 		
+		public function get active():Boolean
+		{
+			return _actionsActive.length > 0;
+		}//end get active()
+		
 		public function get position():Vector3D
 		{
 			return _position;

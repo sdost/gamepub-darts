@@ -34,10 +34,10 @@
 			this.removeEventListener(MouseEvent.CLICK, handleClick);
 			
 			DartsGlobals.instance.processModalQueue();
+						
+			DartsGlobals.instance.gameManager.bullOff = true;
 			
-			DartsGlobals.instance.gameManager.pause(false);
-			
-			DartsGlobals.instance.gameManager.startNewBullOff();
+			DartsGlobals.instance.showModalPopup(TurnAnnounceModal);
 		}//end handleClick()
 		
 	}//end BullOffAnnounceModal

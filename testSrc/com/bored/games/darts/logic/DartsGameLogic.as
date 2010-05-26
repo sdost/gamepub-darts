@@ -1,5 +1,6 @@
 ﻿package com.bored.games.darts.logic 
 {
+	import adobe.utils.ProductManager;
 	import com.bored.games.darts.abilities.Ability;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.objects.Cursor;
@@ -13,6 +14,7 @@
 	import com.bored.games.darts.ui.modals.PostGameBanterModal;
 	import com.bored.games.darts.ui.modals.GameResultsModal;
 	import com.bored.games.darts.ui.modals.PreGameBanterModal;
+	import com.bored.games.darts.ui.modals.TurnAnnounceModal;
 	import com.bored.games.input.InputController;
 	import com.bored.games.darts.input.ThrowController;
 	import com.bored.games.darts.objects.Dart;
@@ -139,6 +141,16 @@
 		{
 			return "";
 		}//end get gameType()
+		
+		public function set bullOff(a_bool:Boolean):void
+		{
+			_bullOff = a_bool;
+		}//end set bullOff
+		
+		public function get bullOff():Boolean
+		{
+			return _bullOff;
+		}//end get bullOff()
 		
 		public function registerPlayer(a_player:DartsPlayer):void
 		{
@@ -276,7 +288,9 @@
 												
 						_soundController.play("turn_switch_" + Math.ceil(Math.random() * 4).toString());
 						
-						DartsGlobals.instance.showModalPopup(BullOffClickContinueModal);
+						endTurn();
+						
+						DartsGlobals.instance.showModalPopup(TurnAnnounceModal);
 					}
 					else
 					{
@@ -317,7 +331,9 @@
 											
 						_soundController.play("turn_switch_" + Math.ceil(Math.random() * 4).toString());
 						
-						DartsGlobals.instance.showModalPopup(ClickContinueModal);
+						endTurn();
+						
+						DartsGlobals.instance.showModalPopup(TurnAnnounceModal);
 					}
 					else
 					{
@@ -341,22 +357,25 @@
 		{			
 			_bullOff = true;
 			
-			if ( !_bullOffResults ) {
-				_bullOffResults = new Array(2);
-				_bullOffResults[0] = -1;
-				_bullOffResults[1] = -1;
-			}
-			
-			_currentTurn = new DartsTurn(this, 1);
-			
-			_lastDart = null;
-			
-			nextDart();		
+			startNewTurn();
 		}//end bullOff()
 		
 		public function startNewTurn():void
-		{
-			_currentTurn = new DartsTurn(this, _throwsPerTurn);
+		{			
+			if ( _bullOff )
+			{
+				if ( !_bullOffResults ) {
+					_bullOffResults = new Array(2);
+					_bullOffResults[0] = -1;
+					_bullOffResults[1] = -1;
+				}
+				
+				_currentTurn = new DartsTurn(this, 1);
+			}
+			else
+			{
+				_currentTurn = new DartsTurn(this, _throwsPerTurn);
+			}
 			
 			_lastDart = null;
 			
@@ -445,6 +464,8 @@
 		
 		public function endTurn():void
 		{
+			resetDarts();
+			
 			this.dispatchEvent( new Event(TURN_END) );
 			
 			_cursor.hide();

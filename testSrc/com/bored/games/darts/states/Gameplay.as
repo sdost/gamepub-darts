@@ -4,6 +4,7 @@
 	import com.bored.games.darts.profiles.OldManProfile;
 	import com.bored.games.darts.ui.modals.BullOffAnnounceModal;
 	import com.bored.games.darts.ui.modals.PreGameBanterModal;
+	import com.bored.games.darts.ui.modals.TurnAnnounceModal;
 	import com.bored.games.input.InputController;
 	import com.bored.games.input.MouseInputController;
 	import com.bored.games.darts.input.GestureThrowController;
@@ -108,16 +109,18 @@
 					if ( DartsGlobals.instance.opponentProfile is OldManProfile ) 
 					{
 						DartsGlobals.instance.gameManager.currentPlayer = DartsGlobals.instance.opponentPlayer.playerNum;
-						DartsGlobals.instance.gameManager.startNewTurn();
+						DartsGlobals.instance.showModalPopup(TurnAnnounceModal);
 					}
 					else 
 					{
-						DartsGlobals.instance.showModalPopup(BullOffAnnounceModal);
+						DartsGlobals.instance.gameManager.bullOff = true;
+						DartsGlobals.instance.showModalPopup(TurnAnnounceModal);
 					}
 				}
 				else if ( DartsGlobals.instance.gameMode == DartsGlobals.GAME_PRACTICE )
 				{
-					DartsGlobals.instance.showModalPopup(BullOffAnnounceModal);
+					DartsGlobals.instance.gameManager.bullOff = true;
+					DartsGlobals.instance.showModalPopup(TurnAnnounceModal);
 				}
 			}
 			catch (e:Error)

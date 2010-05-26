@@ -9,6 +9,7 @@
 	import com.bored.games.darts.ui.modals.BullOffClickContinueModal;
 	import com.bored.games.darts.ui.modals.BullOffWinnerModal;
 	import com.bored.games.darts.ui.modals.GameResultsModal;
+	import com.bored.games.darts.ui.modals.TurnAnnounceModal;
 	import com.bored.gs.game.GameClient;
 	import com.bored.gs.game.IGameClient;
 	import com.bored.gs.game.ITurnBased;
@@ -141,26 +142,17 @@
 						_winner = obj.winner;
 					}
 					break;
-					
 				case TurnBasedGameClient.TURN_START:
 					obj = (DartsGlobals.instance.multiplayerClient as ITurnBased).getData(TurnBasedGameClient.TURN_START);
 					trace("Current Player: " + obj.pid);
 					_currentPlayer = obj.pid;
-					if ( _bullOff ) {
-						startNewBullOff();
-					} else {
-						startNewTurn();
-					}
+					DartsGlobals.instance.showModalPopup(TurnAnnounceModal);
 					break;
 				case TurnBasedGameClient.TURN_WAIT:
 					obj = (DartsGlobals.instance.multiplayerClient as ITurnBased).getData(TurnBasedGameClient.TURN_WAIT);
 					trace("Current Player: " + obj.pid);
 					_currentPlayer = obj.pid;
-					if ( _bullOff ) {
-						startNewBullOff();
-					} else {
-						startNewTurn();
-					}
+					DartsGlobals.instance.showModalPopup(TurnAnnounceModal);
 					break;
 				case TurnBasedGameClient.TURN_UPDATE:
 					obj = (DartsGlobals.instance.multiplayerClient as ITurnBased).getData(TurnBasedGameClient.TURN_UPDATE);
@@ -185,28 +177,11 @@
 			}
 		}//end handleStateChange()
 		
-		override public function startNewBullOff():void
-		{						
-			if ( !_bullOffResults ) {
-				_bullOffResults = new Array(2);
-				_bullOffResults[0] = -1;
-				_bullOffResults[1] = -1;
-			}
-			
-			_currentTurn = new DartsTurn(this, 1);
-			
-			_lastDart = null;
-			
-			nextDart();		
-		}//end bullOff()
-		
 		override public function endTurn():void
 		{
 			(DartsGlobals.instance.multiplayerClient as ITurnBased).sendTurnEnd();
 			
-			_cursor.hide();
-			
-			_currentDart = null;
+			super.endTurn();
 		}//end endTurn()
 		
 		override public function get gameType():String

@@ -8,7 +8,9 @@
 	import com.bored.games.darts.player.DartsPlayer;
 	import com.bored.games.darts.ui.modals.BullOffClickContinueModal;
 	import com.bored.games.darts.ui.modals.BullOffWinnerModal;
+	import com.bored.games.darts.ui.modals.ClickContinueModal;
 	import com.bored.games.darts.ui.modals.GameResultsModal;
+	import com.bored.games.darts.ui.modals.TurnAnnounceModal;
 	import com.bored.gs.game.GameClient;
 	import com.bored.gs.game.IGameClient;
 	import com.bored.gs.game.ITurnBased;
@@ -129,6 +131,7 @@
 			switch(e.type)
 			{
 				case TurnBasedGameClient.ROUND_START:
+					//DartsGlobals.instance.showModalPopup(ClickContinueModal);
 					obj = (DartsGlobals.instance.multiplayerClient as ITurnBased).getData(TurnBasedGameClient.ROUND_START);
 					_bullOff = obj.bulloff;
 					break;
@@ -144,23 +147,13 @@
 					
 				case TurnBasedGameClient.TURN_START:
 					obj = (DartsGlobals.instance.multiplayerClient as ITurnBased).getData(TurnBasedGameClient.TURN_START);
-					trace("Current Player: " + obj.pid);
 					_currentPlayer = obj.pid;
-					if ( _bullOff ) {
-						startNewBullOff();
-					} else {
-						startNewTurn();
-					}
+					DartsGlobals.instance.showModalPopup(TurnAnnounceModal);
 					break;
 				case TurnBasedGameClient.TURN_WAIT:
 					obj = (DartsGlobals.instance.multiplayerClient as ITurnBased).getData(TurnBasedGameClient.TURN_WAIT);
-					trace("Current Player: " + obj.pid);
 					_currentPlayer = obj.pid;
-					if ( _bullOff ) {
-						startNewBullOff();
-					} else {
-						startNewTurn();
-					}
+					DartsGlobals.instance.showModalPopup(TurnAnnounceModal);
 					break;
 				case TurnBasedGameClient.TURN_UPDATE:
 					obj = (DartsGlobals.instance.multiplayerClient as ITurnBased).getData(TurnBasedGameClient.TURN_UPDATE);
@@ -204,9 +197,7 @@
 		{
 			(DartsGlobals.instance.multiplayerClient as ITurnBased).sendTurnEnd();
 			
-			_cursor.hide();
-			
-			_currentDart = null;
+			super.endTurn();
 		}//end endTurn()
 		
 		override public function get gameType():String

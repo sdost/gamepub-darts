@@ -82,6 +82,11 @@
 			_skin = a_skin;
 		}//end setSkin()
 		
+		public function get skin():DartSkin
+		{
+			return _skin;
+		}//end get skin()
+		
 		public function addAbilities(a_ability:Ability):void
 		{
 			a_ability.owner = this;

@@ -2,7 +2,9 @@
 {
 	import com.bored.games.darts.assets.modal.BullOffWinnerModal_MC;
 	import com.bored.games.darts.assets.modal.ContinueClick_MC;
+	import com.bored.games.darts.assets.modal.TurnAnnounceModal_MC;
 	import com.bored.games.darts.DartsGlobals;
+	import com.greensock.TweenMax;
 	import com.inassets.ui.contentholders.ContentHolder;
 	import com.sven.containers.Panel;
 	import flash.display.MovieClip;
@@ -16,14 +18,14 @@
 	 * ...
 	 * @author sam
 	 */
-	public class BullOffWinnerModal extends ContentHolder
+	public class TurnAnnounceModal extends ContentHolder
 	{
 		private var _playerNameText:TextField;
 		private var _playerImage:MovieClip;
 		
-		public function BullOffWinnerModal() 
+		public function TurnAnnounceModal() 
 		{
-			super(new BullOffWinnerModal_MC(), false, true);
+			super(new TurnAnnounceModal_MC(), false, true);
 			
 			if (this.stage) {
 				addedToStage();
@@ -36,7 +38,7 @@
 		{
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			
-			DartsGlobals.instance.stage.addEventListener(MouseEvent.CLICK, handleClick, false, 0, true);
+			TweenMax.delayedCall(5, dismissPopup);
 		}//end addedToStage()
 		
 		override protected function buildFrom(a_img:Sprite, a_buildFromAllDescendants:Boolean = true):Dictionary
@@ -50,11 +52,18 @@
 			
 			if (_playerNameText)
 			{
-				_playerNameText.text = DartsGlobals.instance.gameManager.players[DartsGlobals.instance.gameManager.currentPlayer].playerName;
+				if ( DartsGlobals.instance.gameManager.currentPlayer == DartsGlobals.instance.localPlayer.playerNum ) 
+				{
+					_playerNameText.text = "Your Turn";
+				}
+				else
+				{
+					_playerNameText.text = DartsGlobals.instance.gameManager.players[DartsGlobals.instance.gameManager.currentPlayer].playerName + "'s Turn";
+				}
 			}
 			else
 			{
-				throw new Error("BullOffWinnerModal::buildFrom(): _playerNameText=" + _playerNameText);
+				throw new Error("TurnAnnounceModal::buildFrom(): _playerNameText=" + _playerNameText);
 			}
 			
 			if (_playerImage)
@@ -63,22 +72,24 @@
 			}
 			else
 			{
-				throw new Error("BullOffWinnerModal::buildFrom(): _playerImage=" + _playerImage);
+				throw new Error("TurnAnnounceModal::buildFrom(): _playerImage=" + _playerImage);
 			}
 					
 			return descendantsDict;
 			
 		}//end buildFrom()
 		
-		private function handleClick(a_evt:MouseEvent):void
+		private function dismissPopup():void
 		{
-			DartsGlobals.instance.stage.removeEventListener(MouseEvent.CLICK, handleClick);
-			
 			DartsGlobals.instance.processModalQueue();
-						
-			DartsGlobals.instance.showModalPopup(TurnAnnounceModal);
+			
+			if ( DartsGlobals.instance.gameManager.currentPlayer == DartsGlobals.instance.localPlayer.playerNum ) 
+			{
+				DartsGlobals.instance.gameManager.pause(false);
+			}
+			
+			DartsGlobals.instance.gameManager.startNewTurn();
 		}//end handleClick()
-		
-	}//end BullOffWinnerModal
+	}//end TurnAnnounceModal
 
 }//end com.bored.games.darts.ui.modals

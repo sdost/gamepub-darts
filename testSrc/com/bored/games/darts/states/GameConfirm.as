@@ -9,10 +9,18 @@
 	import com.bored.games.darts.abilities.ShieldAbility;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.logic.CricketGameLogic;
+	import com.bored.games.darts.models.dae_DartFlightHeart;
+	import com.bored.games.darts.models.dae_DartFlightHexagon;
+	import com.bored.games.darts.models.dae_DartFlightModHex;
+	import com.bored.games.darts.models.dae_DartFlightOval;
+	import com.bored.games.darts.models.dae_DartFlightPincer;
+	import com.bored.games.darts.models.dae_DartFlightThin;
+	import com.bored.games.darts.models.dae_DartShaft;
 	import com.bored.games.darts.player.ComputerPlayer;
 	import com.bored.games.darts.player.LocalPlayer;
 	import com.bored.games.darts.player.RemotePlayer;
 	import com.bored.games.darts.profiles.UserProfile;
+	import com.bored.games.darts.skins.DartSkin;
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.bored.games.darts.ui.GameConfirmScreen;
 	import com.bored.gs.chat.ChatClient;
@@ -93,14 +101,12 @@
 			DartsGlobals.instance.opponentPlayer.setAbilitiesSlot(1, 1);
 			DartsGlobals.instance.opponentPlayer.setAbilitiesSlot(2, 2);
 			
-			DartsGlobals.instance.gameManager.registerPlayer( DartsGlobals.instance.localPlayer );
-			DartsGlobals.instance.gameManager.registerPlayer( DartsGlobals.instance.opponentPlayer );
-			
+			DartsGlobals.instance.gameManager.registerPlayer( DartsGlobals.instance.localPlayer );			
 			
 			if ( DartsGlobals.instance.multiplayerClient )
 			{
 				DartsGlobals.instance.multiplayerClient.addEventListener(GameClient.GAME_START, onReady);
-				DartsGlobals.instance.multiplayerClient.sendReady();
+				DartsGlobals.instance.multiplayerClient.sendReady({"skinid": DartsGlobals.instance.localPlayer.skin.skinid,"flightid":DartsGlobals.instance.localPlayer.skin.flightid});
 			}
 			else
 			{
@@ -110,6 +116,46 @@
 		
 		private function onReady(a_evt:Event = null):void
 		{
+			
+			if( a_evt ) {
+				var obj:Object = (DartsGlobals.instance.multiplayerClient as GameClient).getData(GameClient.GAME_START);
+				
+				if( obj ) {
+					var flightXML:XML = null;
+					
+					switch( obj["skin_"+DartsGlobals.instance.opponentPlayer.playerNum].flightid )
+					{
+						case "heart":
+							flightXML = dae_DartFlightHeart.data;
+							break;
+						case "hex":
+							flightXML = dae_DartFlightHexagon.data;
+							break;
+						case "modhex":
+							flightXML = dae_DartFlightModHex.data;
+							break;
+						case "oval":
+							flightXML = dae_DartFlightOval.data;
+							break;
+						case "pincer":
+							flightXML = dae_DartFlightPincer.data;
+							break;
+						case "thin":
+							flightXML = dae_DartFlightThin.data;
+							break;
+						default:
+							break;
+					}
+					
+					var skin:DartSkin = new DartSkin(ImageFactory.getBitmapDataByQualifiedName("dartuv_" + obj["skin_"+DartsGlobals.instance.opponentPlayer.playerNum].skinid, AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight), dae_DartShaft.data, flightXML );
+					skin.skinid = obj["skin_"+DartsGlobals.instance.opponentPlayer.playerNum].skinid;
+					skin.flightid = obj["skin_"+DartsGlobals.instance.opponentPlayer.playerNum].flightid;
+					
+					DartsGlobals.instance.opponentPlayer.setSkin(skin);
+				}
+			}
+			
+			DartsGlobals.instance.gameManager.registerPlayer( DartsGlobals.instance.opponentPlayer );			
 			(this.stateMachine as GameFSM).transitionToNextState();
 		}//end onReady()
 		
