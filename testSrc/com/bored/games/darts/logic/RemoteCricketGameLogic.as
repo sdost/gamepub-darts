@@ -55,9 +55,9 @@
 		{
 			var obj:Object = (DartsGlobals.instance.multiplayerClient as IGameClient).getData(GameClient.GAME_RESULTS);
 			DartsGlobals.instance.localPlayer.record.gameTime = obj.gameTime;
-			DartsGlobals.instance.localPlayer.record.doubles = obj.doubles[DartsGlobals.instance.localPlayer.playerNum - 1];
-			DartsGlobals.instance.localPlayer.record.triples = obj.triples[DartsGlobals.instance.localPlayer.playerNum - 1];
-			DartsGlobals.instance.localPlayer.record.throws = obj.throws[DartsGlobals.instance.localPlayer.playerNum - 1];
+			DartsGlobals.instance.localPlayer.record.doubles = obj["doubles_" + DartsGlobals.instance.localPlayer.playerNum];
+			DartsGlobals.instance.localPlayer.record.triples = obj["triples_" + DartsGlobals.instance.localPlayer.playerNum];
+			DartsGlobals.instance.localPlayer.record.throws = obj["throws_" + DartsGlobals.instance.localPlayer.playerNum];
 			_winner = obj.winner;
 		}//end onGameEnd()
 		
