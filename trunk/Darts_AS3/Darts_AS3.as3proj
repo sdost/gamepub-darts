@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project>
+  <!-- Output SWF options -->
+  <output>
+    <movie disabled="True" />
+    <movie input="" />
+    <movie path="" />
+    <movie fps="30" />
+    <movie width="800" />
+    <movie height="600" />
+    <movie version="10" />
+    <movie background="#FFFFFF" />
+  </output>
+  <!-- Other classes to be compiled into your SWF -->
+  <classpaths>
+    <class path="src" />
+    <class path="testSrc" />
+  </classpaths>
+  <!-- Build options -->
+  <build>
+    <option accessible="False" />
+    <option allowSourcePathOverlap="False" />
+    <option benchmark="False" />
+    <option es="False" />
+    <option locale="" />
+    <option loadConfig="" />
+    <option optimize="False" />
+    <option showActionScriptWarnings="True" />
+    <option showBindingWarnings="True" />
+    <option showDeprecationWarnings="True" />
+    <option showUnusedTypeSelectorWarnings="True" />
+    <option strict="True" />
+    <option useNetwork="True" />
+    <option useResourceBundleMetadata="True" />
+    <option warnings="True" />
+    <option verboseStackTraces="False" />
+    <option linkReport="" />
+    <option loadExterns="" />
+    <option staticLinkRSL="True" />
+    <option additional="" />
+    <option compilerConstants="" />
+    <option customSDK="" />
+  </build>
+  <!-- SWC Include Libraries -->
+  <includeLibraries>
+    <!-- example: <element path="..." /> -->
+  </includeLibraries>
+  <!-- SWC Libraries -->
+  <libraryPaths>
+    <element path="swcLibs_includeAll\analytics.swc" />
+    <element path="swcLibs_includeAll\analytics_flash.swc" />
+    <element path="swcLibs_includeAll\AS3_Corelib.swc" />
+    <element path="swcLibs_includeAll\InAssetsUtils.swc" />
+    <element path="swcLibs_includeAll\StateMachines.swc" />
+    <element path="swcLibs_includeAll\Tweener.swc" />
+    <element path="swcLibs_includeAll\UIComponents.swc" />
+    <element path="swfLibs_includeAll\GameplayScreen.swc" />
+    <element path="swfLibs_includeAll\HUDAssets.swc" />
+    <element path="swfLibs_includeAll\StoryAssets.swc" />
+    <element path="swfLibs_includeAll\OpponentSelectScreen.swc" />
+    <element path="swfLibs_includeAll\Icons.swc" />
+    <element path="swfLibs_includeAll\Portraits.swc" />
+    <element path="swfLibs_includeAll\TitleScreen.swc" />
+    <element path="swfLibs_includeAll\DartUVs.swc" />
+    <element path="swfLibs_includeAll\Confirm_Screen.swc" />
+    <element path="swcLibs_includeAll\greensock.swc" />
+    <element path="swfLibs_includeAll\MonsterproofLogo.swc" />
+    <element path="swfLibs_includeAll\GamestoreScreen.swc" />
+    <element path="swfLibs_includeAll\Sounds.swc" />
+    <element path="swfLibs_includeAll\Achievements.swc" />
+    <element path="swfLibs_includeAll\gsclient.swc" />
+    <element path="swfLibs_includeAll\FileLoader.swc" />
+  </libraryPaths>
+  <!-- External Libraries -->
+  <externalLibraryPaths>
+    <!-- example: <element path="..." /> -->
+  </externalLibraryPaths>
+  <!-- Runtime Shared Libraries -->
+  <rslPaths>
+    <!-- example: <element path="..." /> -->
+  </rslPaths>
+  <!-- Intrinsic Libraries -->
+  <intrinsics>
+    <element path="Library\AS3\frameworks\Flex3" />
+  </intrinsics>
+  <!-- Assets to embed into the output SWF -->
+  <library>
+    <!-- example: <asset path="..." id="..." update="..." glyphs="..." mode="..." place="..." sharepoint="..." /> -->
+  </library>
+  <!-- Class files to compile (other referenced classes will automatically be included) -->
+  <compileTargets>
+    <!-- example: <compile path="..." /> -->
+  </compileTargets>
+  <!-- Paths to exclude from the Project Explorer tree -->
+  <hiddenPaths>
+    <!-- example: <hidden path="..." /> -->
+  </hiddenPaths>
+  <!-- Executed before build -->
+  <preBuildCommand>ant.bat</preBuildCommand>
+  <!-- Executed after build -->
+  <postBuildCommand alwaysRun="False" />
+  <!-- Other project options -->
+  <options>
+    <option showHiddenPaths="False" />
+    <option testMovie="ExternalPlayer" />
+  </options>
+</project>
