@@ -15,34 +15,119 @@ import com.gs.games.TurnBasedExtension;
 import com.gs.tasks.NextRoundTask;
 
 public class Darts extends TurnBasedExtension {
-		
+			
 	private int[] _boardArrangement = {6,13,4,18,1,20,5,12,9,14,1,8,16,7,19,3,17,2,15,10};
 	private Scoreboard _scoreboard;
 	private boolean _bullOff = false;
 	private HashMap<Integer, Double> _bullOffResults;
 	private int _bullOffWinner = -1;
+	private DartSkin[] _playerSkins;
+	
+	private long _startTime;
+	private long _endTime;
+	
+	private int[] _doublesCount;
+	private int[] _triplesCount;
+	
+	private int[] _throwsCount;
 	
 	public Darts() 
 	{
 		super();
 	
-		//_scoreboard = new CricketScoreboard();
-		_scoreboard = new FiveOhOneScoreboard();
+		_scoreboard = new CricketScoreboard();
+		//_scoreboard = new FiveOhOneScoreboard();
 		_bullOffResults = new HashMap<Integer, Double>();
+		_playerSkins = new DartSkin[super._maxPlayers];
+		
+		_doublesCount = new int[super._maxPlayers];
+		_triplesCount = new int[super._maxPlayers];
+		
+		_throwsCount = new int[super._maxPlayers];
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean handleReady(JSONObject jso, User u, int fromRoom)
 	{
 		_scoreboard.registerPlayer(u.getPlayerIndex());
 		
 		_bullOffResults.put(u.getPlayerIndex(), -1.0);
+		
+		DartSkin skin = new DartSkin();
+		skin.skinid = jso.optString("skinid");
+		skin.flightid = jso.optString("flightid");
+		
+		_playerSkins[u.getPlayerIndex()-1] = skin;
 				
-		// Do we have all players?
-		// Meaning GAME_START sent
-		if(super.handleReady(jso, u, fromRoom))
+		if(_bGameStart)
+		{
+			super.trace("Game already started for user " + u.getName() + ".\n");
+			return false;
+		}
+
+		if(_readyPlayersSet.contains(u))
+		{
+			super.trace("User " + u.getName() + " already sent a ready message.\n");
+			return _bGameStart;
+		}
+
+		super.trace("::handleReady adding client " + u.getName()
+				+ " to ready set.\n");
+
+		_readyPlayersSet.add(u);
+
+		super.trace("::handleReady Ready Set contains " + _readyPlayersSet.size()
+				+ " users.\n");
+
+		Room rm = super.getRoom(fromRoom);
+
+		/**
+		 * We are assuming that game rooms are created
+		 * with max number of players as there are
+		 * currently sending READY messages
+		 */
+
+		// Find state and channel list
+		LinkedList<SocketChannel> ll;
+		String state;
+		// Are all players ready?
+		if(_readyPlayersSet.size() == rm.getMaxUsers())
+		{
+			state = GAME_START;
+			ll = rm.getChannellList();
+			_bGameStart = true;
+			jso = new JSONObject();
+			try {
+				for( int i = 0; i < _playerSkins.length; i++ ) {
+					jso.put("skin_" + (i+1), _playerSkins[i].getJSONObject());
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else
+		// Wait for other players to be ready
+		{
+			state = GAME_WAIT;
+			ll = new LinkedList<SocketChannel>();
+			ll.add(u.getChannel());
+			jso = new JSONObject();
+		}
+
+		super.trace("::handleReady Sending " + state + " to client " + u.getName());
+		
+		// Create JSON object and send decided state
+		JSONObject js = getJSONStateObject(state, jso);
+		super.trace("JSON object " + js + ".\n");
+		super.sendResponse(js, fromRoom, SERVER, ll);
+
+		if(_bGameStart)
 		{
 			_curRound = 0;
+			
+			_startTime = System.currentTimeMillis();
 			
 			_bullOff = true;
 
@@ -55,11 +140,9 @@ public class Darts extends TurnBasedExtension {
 			
 			// Send ROUND_START to all users
 			nextRound(fromRoom, null, jso);
-
-			return true;
 		}
 
-		return false;
+		return _bGameStart;
 	} // End handleReady
 	
 	/**
@@ -169,7 +252,19 @@ public class Darts extends TurnBasedExtension {
 					
 					_bullOff = false;
 				}
-			} else {				
+			} else {
+				
+				if( board_Multiplier == 2 )
+				{
+					_doublesCount[super._curPlayer.getPlayerIndex()-1]++;
+				}
+				else if( board_Multiplier == 3 )
+				{
+					_triplesCount[super._curPlayer.getPlayerIndex()-1]++;
+				}
+				
+				_throwsCount[super._curPlayer.getPlayerIndex()-1]++;
+				
 				_scoreboard.submitThrow(super._curPlayer.getPlayerIndex(), board_Section, board_Multiplier, super._curTurn);
 				
 				jso = this.getJSONTurnUpdateObject(null);
@@ -184,6 +279,8 @@ public class Darts extends TurnBasedExtension {
 					
 					if( _scoreboard.checkForWin(super._curPlayer.getPlayerIndex()) )
 					{
+						_endTime = System.currentTimeMillis();
+						
 						finishGame(fromRoom, ll, super._curPlayer.getPlayerIndex());
 					}
 				} catch( Exception e ) {}
@@ -255,6 +352,10 @@ public class Darts extends TurnBasedExtension {
 	
 	private void finishGame(int fromRoom, LinkedList<SocketChannel> ll, int winner) throws JSONException
 	{
+		Room rm = super.getRoom(fromRoom);
+		
+		User[] users = rm.getAllPlayers();
+		
 		handleRoundEnd(fromRoom, ll);
 
 		// GAME_END message
@@ -263,14 +364,21 @@ public class Darts extends TurnBasedExtension {
 
 		// GAME_RESULTS message
 		JSONObject jso = getJSONGameResultObject(null);
+		jso.put("gameTime", (_endTime - _startTime));
+		for( int i = 0; i < users.length; i++ ) {
+			jso.put("doubles_" + users[i].getPlayerIndex(), _doublesCount[i]);
+			jso.put("triples_" + users[i].getPlayerIndex(), _triplesCount[i]);
+			jso.put("throws_" + users[i].getPlayerIndex(), _throwsCount[i]);
+		}
 		jso.put("winner", winner);
-		
 		super.sendResponse(jso, fromRoom, SERVER, ll);
 
 		// Kick out all users for now
+		/*
 		Room rm = super.getRoom(fromRoom);
 		User[] users = rm.getAllUsers();
 		super.redirectUsers(users, fromRoom);
 		super.destroyRoom(rm);
+		*/
 	}
 }
