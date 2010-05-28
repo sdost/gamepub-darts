@@ -1,4 +1,4 @@
-http://cloc.sourceforge.net v 1.09  T=1.0 s (102.0 files/s, 14053.0 lines/s)
+http://cloc.sourceforge.net v 1.09  T=0.5 s (204.0 files/s, 28106.0 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
