@@ -21,28 +21,20 @@ public class Darts extends TurnBasedExtension {
 	private boolean _bullOff = false;
 	private HashMap<Integer, Double> _bullOffResults;
 	private int _bullOffWinner = -1;
-	private DartSkin[] _playerSkins;
 	
 	private long _startTime;
 	private long _endTime;
 	
-	private int[] _doublesCount;
-	private int[] _triplesCount;
-	
-	private int[] _throwsCount;
-	
+	private HashMap<Integer, DartsPlayer> _players;
+		
 	public Darts() 
 	{
 		super();
 	
 		_scoreboard = new CricketScoreboard();
 		_bullOffResults = new HashMap<Integer, Double>();
-		_playerSkins = new DartSkin[super._maxPlayers];
 		
-		_doublesCount = new int[super._maxPlayers];
-		_triplesCount = new int[super._maxPlayers];
-		
-		_throwsCount = new int[super._maxPlayers];
+		_players = new HashMap<Integer, DartsPlayer>();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -50,14 +42,11 @@ public class Darts extends TurnBasedExtension {
 	public boolean handleReady(JSONObject jso, User u, int fromRoom)
 	{
 		_scoreboard.registerPlayer(u.getPlayerIndex());
-		
-		_bullOffResults.put(u.getPlayerIndex(), -1.0);
-		
-		DartSkin skin = new DartSkin();
-		skin.skinid = jso.optString("skinid");
-		skin.flightid = jso.optString("flightid");
-		
-		_playerSkins[u.getPlayerIndex()-1] = skin;
+				
+		DartsPlayer d = new DartsPlayer(u.getPlayerIndex());
+		d.setSkinId(jso.optString("skinid"));
+		d.setFlightId(jso.optString("flightid"));
+		_players.put(u.getPlayerIndex(), d);
 				
 		if(_bGameStart)
 		{
@@ -97,13 +86,9 @@ public class Darts extends TurnBasedExtension {
 			ll = rm.getChannellList();
 			_bGameStart = true;
 			jso = new JSONObject();
-			try {
-				for( int i = 0; i < _playerSkins.length; i++ ) {
-					jso.put("skin_" + (i+1), _playerSkins[i].getJSONObject());
-				}
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			
+			for( DartsPlayer player : _players.values() ) {
+				player.addSkinJSON(jso);
 			}
 		}
 		else
@@ -253,18 +238,27 @@ public class Darts extends TurnBasedExtension {
 				}
 			} else {
 				
+				DartsPlayer p = _players.get(super._curPlayer.getPlayerIndex());
+				
 				if( board_Multiplier == 2 )
 				{
-					_doublesCount[super._curPlayer.getPlayerIndex()-1]++;
+					p.addDoubleScore();
 				}
 				else if( board_Multiplier == 3 )
 				{
-					_triplesCount[super._curPlayer.getPlayerIndex()-1]++;
+					p.addTripleScore();
 				}
 				
-				_throwsCount[super._curPlayer.getPlayerIndex()-1]++;
+				p.addThrow();
 				
-				_scoreboard.submitThrow(super._curPlayer.getPlayerIndex(), board_Section, board_Multiplier, super._curTurn);
+				if( _scoreboard.submitThrow(super._curPlayer.getPlayerIndex(), board_Section, board_Multiplier, super._curTurn) )
+				{
+					p.addScoringThrow();
+				}
+				else
+				{
+					p.resetScoringThrows();
+				}
 				
 				jso = this.getJSONTurnUpdateObject(null);
 				super.setJSONArg(jso, "action", "p_r");
@@ -351,10 +345,6 @@ public class Darts extends TurnBasedExtension {
 	
 	private void finishGame(int fromRoom, LinkedList<SocketChannel> ll, int winner) throws JSONException
 	{
-		Room rm = super.getRoom(fromRoom);
-		
-		User[] users = rm.getAllPlayers();
-		
 		handleRoundEnd(fromRoom, ll);
 
 		// GAME_END message
@@ -364,10 +354,8 @@ public class Darts extends TurnBasedExtension {
 		// GAME_RESULTS message
 		JSONObject jso = getJSONGameResultObject(null);
 		jso.put("gameTime", (_endTime - _startTime));
-		for( int i = 0; i < users.length; i++ ) {
-			jso.put("doubles_" + users[i].getPlayerIndex(), _doublesCount[i]);
-			jso.put("triples_" + users[i].getPlayerIndex(), _triplesCount[i]);
-			jso.put("throws_" + users[i].getPlayerIndex(), _throwsCount[i]);
+		for( DartsPlayer player : _players.values() ) {
+			player.addStatsJSON(jso);
 		}
 		jso.put("winner", winner);
 		super.sendResponse(jso, fromRoom, SERVER, ll);
