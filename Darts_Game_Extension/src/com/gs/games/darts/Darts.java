@@ -17,7 +17,7 @@ import com.gs.tasks.NextRoundTask;
 public class Darts extends TurnBasedExtension {
 			
 	private int[] _boardArrangement = {6,13,4,18,1,20,5,12,9,14,1,8,16,7,19,3,17,2,15,10};
-	private Scoreboard _scoreboard;
+	protected Scoreboard _scoreboard;
 	private boolean _bullOff = false;
 	private HashMap<Integer, Double> _bullOffResults;
 	private int _bullOffWinner = -1;
@@ -36,7 +36,6 @@ public class Darts extends TurnBasedExtension {
 		super();
 	
 		_scoreboard = new CricketScoreboard();
-		//_scoreboard = new FiveOhOneScoreboard();
 		_bullOffResults = new HashMap<Integer, Double>();
 		_playerSkins = new DartSkin[super._maxPlayers];
 		
