@@ -6,6 +6,7 @@
 	import com.bored.games.darts.abilities.ShieldAbility;
 	import com.bored.games.darts.profiles.Profile;
 	import com.bored.games.darts.states.statemachines.GameFSM;
+	import com.bored.games.darts.ui.hud.CashPanel;
 	import com.bored.gs.game.GameClient;
 	import com.bored.gs.game.IGameClient;
 	import com.bored.gs.game.TurnBasedGameClient;
@@ -92,6 +93,8 @@
 		private var _soundManager:SoundManager;
 		
 		private var _controlPanel:ControlPanel;
+		
+		private var _cashPanel:CashPanel;
 		
 		private var _stateMachine:IStateMachine;
 		
@@ -391,6 +394,13 @@
 			_controlPanel.y = AppSettings.instance.controlPanelPositionY;
 			_controlPanel.registerSoundManager(DartsGlobals.instance.soundManager);
 			_controlPanel.show();
+			
+			cls = getDefinitionByName(AppSettings.instance.cashPanelMovie) as Class;
+			_cashPanel = new CashPanel(new cls());
+			DartsGlobals.instance.optionsInterfaceSpace.addChild(_cashPanel);
+			_cashPanel.x = AppSettings.instance.cashPanelPositionX;
+			_cashPanel.y = AppSettings.instance.cashPanelPositionY;
+			_cashPanel.show();
 			
 			_gameManager.addEventListener(DartsGameLogic.QUIT_TO_TITLE, onQuitToTitle, false, 0, true);			
 		}//end setupControlPanel()

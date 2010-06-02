@@ -1,6 +1,8 @@
 ﻿package com.bored.games.darts.logic 
 {
+	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.logic.DartsGameLogic
+	import com.bored.games.darts.ui.modals.TurnAnnounceModal;
 	import flash.utils.Dictionary;
 	
 	/**
@@ -28,6 +30,8 @@
 			_currentPlayer++;
 			
 			if (_currentPlayer > CPU_PLAYER) _currentPlayer = HUMAN_PLAYER;
+			
+			DartsGlobals.instance.showModalPopup(TurnAnnounceModal);
 		}//end nextPlayer()
 		
 		override protected function checkForWin():Boolean

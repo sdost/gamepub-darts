@@ -192,13 +192,13 @@
 			Mouse.show();				
 		}//end endGame()
 		
-		override public function endTurn():void
-		{
-			(DartsGlobals.instance.multiplayerClient as ITurnBased).sendTurnEnd();
+		override protected function endCurrentTurn(e:Event = null):void
+		{			
+			super.endCurrentTurn(e);
 			
-			super.endTurn();
+			(DartsGlobals.instance.multiplayerClient as ITurnBased).sendTurnEnd();
 		}//end endTurn()
-		
+				
 		override public function get gameType():String
 		{
 			return "CRICKET";
@@ -221,18 +221,8 @@
 					
 		}//end checkForWin()
 		
-		override public function update(a_time:Number = 0):void
-		{	
-			if (_paused) return;
-			
-			_dartboard.update(a_time);
-			_cursor.update(a_time);
-			
-			for each ( var dart:Dart in _darts )
-			{
-				dart.update(a_time);
-			}
-
+		override protected function handleGameLogic():void
+		{
 			if ( _currentDart && ( _currentDart.position.z >= AppSettings.instance.dartboardPositionZ || _currentDart.position.y <= -10 ) )
 			{	
 				_currentDart.position.z = AppSettings.instance.dartboardPositionZ;
@@ -248,7 +238,7 @@
 					_dispatcher.addEventListener(RESULTS_READY, finishThrowResults);
 				}				
 			}
-		}//end update();
+		}//end handleGameLogic()
 		
 		private function finishThrowResults(e:Event = null):void
 		{
@@ -258,7 +248,7 @@
 			{
 				if ( _winner > 0 )
 				{										
-					resetDarts();
+					//resetDarts();
 					_currentPlayer = _winner;
 					_winner = -1;
 											
@@ -277,7 +267,6 @@
 											
 					_soundController.play("turn_switch_" + Math.ceil(Math.random() * 4).toString());
 					
-					resetDarts();
 					endTurn();
 				}
 				else
@@ -305,7 +294,7 @@
 				
 				if ( _winner > 0 )
 				{
-					endGame();
+					endTurn();
 					pause(true);
 					DartsGlobals.instance.showModalPopup(GameResultsModal);
 					return;
@@ -319,7 +308,6 @@
 										
 					_soundController.play("turn_switch_" + Math.ceil(Math.random() * 4).toString());
 					
-					resetDarts();
 					endTurn();
 				}
 				else

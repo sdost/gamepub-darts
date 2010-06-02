@@ -46,6 +46,8 @@
 		public static const TURN_END:String = "turnEnd";
 		public static const THROW_END:String = "throwEnd";
 		
+		public static const AT_REST:String = "atRest";
+		
 		protected var _scoreManager:AbstractScoreManager;
 		
 		protected var _currentTurn:DartsTurn;
@@ -74,6 +76,8 @@
 		
 		protected var _bullOff:Boolean = false;
 		protected var _bullOffResults:Array;
+		
+		protected var _resting:Boolean = false;
 		
 		protected var _soundController:SoundController;
 		
@@ -241,11 +245,26 @@
 			_dartboard.update(a_time);
 			_cursor.update(a_time);
 			
+			var resting:Boolean = true;
 			for each ( var dart:Dart in _darts )
 			{
 				dart.update(a_time);
+				
+				resting = ((!dart.active) && resting);
 			}
-
+			
+			_resting = resting;
+			
+			if (_resting) 
+			{
+				this.dispatchEvent(new Event(AT_REST));
+			}
+			
+			handleGameLogic();
+		}//end update();
+		
+		protected function handleGameLogic():void
+		{				
 			if ( _currentDart && ( _currentDart.position.z >= AppSettings.instance.dartboardPositionZ || _currentDart.position.y <= -10 ) )
 			{	
 				_currentDart.position.z = AppSettings.instance.dartboardPositionZ;
@@ -271,7 +290,7 @@
 							winner = 1;
 						}
 						
-						resetDarts();
+						//resetDarts();
 						_currentPlayer = winner + 1;
 												
 						_bullOff = false;
@@ -290,8 +309,6 @@
 						_soundController.play("turn_switch_" + Math.ceil(Math.random() * 4).toString());
 						
 						endTurn();
-						
-						DartsGlobals.instance.showModalPopup(TurnAnnounceModal);
 					}
 					else
 					{
@@ -333,8 +350,6 @@
 						_soundController.play("turn_switch_" + Math.ceil(Math.random() * 4).toString());
 						
 						endTurn();
-						
-						DartsGlobals.instance.showModalPopup(TurnAnnounceModal);
 					}
 					else
 					{
@@ -362,7 +377,9 @@
 		}//end bullOff()
 		
 		public function startNewTurn():void
-		{			
+		{
+			resetDarts();
+			
 			if ( _bullOff )
 			{
 				if ( !_bullOffResults ) {
@@ -427,7 +444,7 @@
 		
 		public function resetDarts():void
 		{
-			for each( var dart:Dart in _players[_currentPlayer].darts )
+			for each( var dart:Dart in _darts )
 			{
 				dart.position.x = AppSettings.instance.defaultStartPositionX;
 				dart.position.y = AppSettings.instance.defaultStartPositionY;
@@ -465,20 +482,38 @@
 		
 		public function endTurn():void
 		{
-			resetDarts();
-			
-			this.dispatchEvent( new Event(TURN_END) );
+			trace("DartsGameLogic::endTurn()");
 			
 			_cursor.hide();
 			
 			_currentDart = null;
+						
+			trace("DartsGameLogic::endTurn() -- _resting == " + _resting);
 			
-			nextPlayer();
+			if ( _resting ) {
+				endCurrentTurn();
+			} else {
+				this.addEventListener(AT_REST, endCurrentTurn, false, 0, true);
+			}
 		}//end endTurn()
+		
+		protected function endCurrentTurn(e:Event = null):void
+		{
+			trace("DartsGameLogic::endCurrentTurn()");
+			
+			_resting = false;
+			
+			this.removeEventListener(AT_REST, endCurrentTurn);
+			
+			this.dispatchEvent( new Event(TURN_END) );
+			
+			//resetDarts();
+			nextPlayer();
+		}//end endCurrentTurn()
 		
 		public function nextPlayer():void
 		{
-			
+			DartsGlobals.instance.gameManager.startNewTurn();
 		}//end nextPlayer()
 				
 		public function playerAim():void

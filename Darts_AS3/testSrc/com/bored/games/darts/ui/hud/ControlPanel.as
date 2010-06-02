@@ -25,8 +25,6 @@
 	 */
 	public class ControlPanel extends ContentHolder
 	{
-		private var _gameCash:TextField;
-		
 		private var _soundBtn:ToggleButton;
 		private var _soundBtnImg:MovieClip;
 		
@@ -65,22 +63,11 @@
 		{
 			var descendantsDict:Dictionary = super.buildFrom(a_img, a_buildFromAllDescendants);
 			
-			_gameCash = descendantsDict["gameCash_text"] as TextField;
 			_soundBtnImg = descendantsDict["soundBtn_mc"] as MovieClip;
 			_musicBtnImg = descendantsDict["musicBtn_mc"] as MovieClip;
 			_helpBtnImg = descendantsDict["helpBtn_mc"] as MovieClip;
 			_trophyBtnImg = descendantsDict["trophyBtn_mc"] as MovieClip;
 			_quitBtnImg = descendantsDict["quitBtn_mc"] as MovieClip;
-			
-			if (_gameCash)
-			{
-				_gameCash.text = "$" + DartsGlobals.instance.externalServices.getData("gameCash");
-				this.addEventListener(Event.ENTER_FRAME, update, false, 0, true);
-			}
-			else
-			{
-				throw new Error("ControlPanel::buildFrom(): _gameCash=" + _gameCash);
-			}
 			
 			if (_soundBtnImg)
 			{
@@ -170,11 +157,6 @@
 			
 			_soundBtn.toggleOn = _soundManager.isMuted;			
 		}//end registerSoundManager()
-		
-		private function update(a_evt:Event):void
-		{
-			_gameCash.text = "$" + DartsGlobals.instance.externalServices.getData("gameCash");
-		}//end update()
 		
 		private function onMouseOver(a_evt:MouseEvent):void
 		{
