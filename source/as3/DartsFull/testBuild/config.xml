@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<data>
+	<!-- 10.114.97.97 -->
+	<!-- 204.51.113.86 -->
+	<!-- 127.0.0.1 -->
+	<ip>127.0.0.1</ip>
+	<port>9339</port>
+	<zone>gs</zone>
+	<debug>true</debug>
+<!--
+	<blueBoxIpAddress>127.0.0.1</blueBoxIpAddress>
+	<blueBoxPort>9339</blueBoxPort>
+	<smartConnect>true</smartConnect>
+	<httpPort>8080</httpPort>
+	<httpPollSpeed>750</httpPollSpeed>
+	<rawProtocolSeparator>%</rawProtocolSeparator>
+-->
+</data>
