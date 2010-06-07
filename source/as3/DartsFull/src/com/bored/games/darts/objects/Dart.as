@@ -102,6 +102,19 @@
 			_dartModel.addSprite(_modifierIndicator);
 		}//end initModels()
 		
+		public function cleanupModels():void
+		{		
+			_dartModel.removeSprite(_modifierIndicator);
+			_modifierIndicator = null;
+			_indicatorSprite = null;
+			
+			_dartModel = null;
+			_flight = null;
+			_shaft = null;
+			
+			_dartSkin = null;
+		}//end cleanupModels()
+		
 		override public function update(a_time:Number = 0):void
 		{
 			super.update(a_time);

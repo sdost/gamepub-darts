@@ -427,9 +427,8 @@
 		{
 			_gameManager.removeEventListener(DartsGameLogic.QUIT_TO_TITLE, onQuitToTitle);
 			
-			DartsGlobals.instance.gameManager.cleanup();
-			
 			_controlPanel.hide();
+			_cashPanel.hide();
 			
 			(this.stateMachine as GameFSM).transitionToStateNamed("Attract");
 		}//end onGameEnd()

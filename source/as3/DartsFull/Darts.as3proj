@@ -4,7 +4,7 @@
   <output>
     <movie disabled="True" />
     <movie input="" />
-    <movie path="" />
+    <movie path="testBuild\DartsFull.swf" />
     <movie fps="30" />
     <movie width="800" />
     <movie height="600" />

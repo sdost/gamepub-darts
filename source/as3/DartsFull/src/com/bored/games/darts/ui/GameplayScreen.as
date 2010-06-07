@@ -56,6 +56,7 @@
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
 	import flash.system.ApplicationDomain;
+	import flash.system.System;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
@@ -238,7 +239,22 @@
 				_scene.addChild(dart.model);
 			}
 		}//end initObjects()
-	
+		
+		public function cleanupObjects():void
+		{			
+			_scene.removeSprite(DartsGlobals.instance.gameManager.dartboard.boardSprite);
+			DartsGlobals.instance.gameManager.dartboard.cleanupModels();
+			
+			_scene.removeSprite(DartsGlobals.instance.gameManager.cursor.sprite);
+			DartsGlobals.instance.gameManager.cursor.cleanupModels();
+			
+			for each( var dart:Dart in DartsGlobals.instance.gameManager.darts )
+			{
+				_scene.removeChild(dart.model);
+				dart.cleanupModels();
+			}
+		}//end cleanupObjects()
+			
 		public function render():void
 		{	
 			if (_scoreBoard) _scoreBoard.update();
@@ -250,7 +266,7 @@
 		}//end render()
 		
 		public function destroy(...args):void
-		{
+		{			
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			this.removeEventListener(Event.REMOVED_FROM_STAGE, destroy);
 			
@@ -266,6 +282,8 @@
 			_abilityDock = null;
 			_dartDock = null;
 			
+			_view.camera = null;
+			_view.scene = null;
 			_view = null;
 			_scene = null;
 			_camera = null;

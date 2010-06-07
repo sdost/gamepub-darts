@@ -43,6 +43,12 @@
 			_cursorSprite.alignmentType = AlignmentType.VIEWPOINT;
 		}//end initModels()
 		
+		public function cleanupModels():void
+		{
+			_cursorSprite = null;
+			_cursorMaterial = null;
+		}//end initModels()
+		
 		override public function update(a_time:Number = 0):void
 		{
 			super.update(a_time);

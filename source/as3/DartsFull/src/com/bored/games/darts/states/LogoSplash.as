@@ -65,6 +65,7 @@
 				_monsterproofLogo.removeEventListener(Event.ENTER_FRAME, runOnce);
 				(this.stateMachine as GameFSM).transitionToNextState();
 				DartsGlobals.instance.screenSpace.removeChild(_monsterproofLogo);
+				_monsterproofLogo = null;
 			}
 		}//end runOnce()
 		
@@ -72,7 +73,7 @@
 		 * Handler for exiting this state.
 		 */
 		override public function onExit():void
-		{			
+		{		
 		}//end onExit()
 		
 	}//end class LogoSplash

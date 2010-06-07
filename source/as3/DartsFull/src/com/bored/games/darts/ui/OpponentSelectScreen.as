@@ -24,6 +24,7 @@
 	import flash.filters.GlowFilter;
 	import flash.geom.Rectangle;
 	import flash.system.ApplicationDomain;
+	import flash.system.System;
 	import flash.text.Font;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
@@ -280,6 +281,8 @@
 		
 		private function generateToolTip(a_sprite:Sprite):ToolTip
 		{
+			System.gc();
+			
 			var toolTip:ToolTip = new ToolTip();
 			toolTip.colors = [ 0xFFFFFF, 0xFFFFCD6 ];
 			toolTip.autoSize = true;

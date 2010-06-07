@@ -135,12 +135,10 @@
 			_gameplayScreen.render();
 		}//end updateDisplay()
 		
-		private function onGameEnd(a_evt:Event):void
+		private function onGameEnd(a_evt:Event = null):void
 		{
 			DartsGlobals.instance.gameManager.removeEventListener(DartsGameLogic.GAME_END, onGameEnd);
-			
-			DartsGlobals.instance.gameManager.cleanup();
-			
+				
 			(this.stateMachine as GameFSM).transitionToStateNamed("CPUOpponentSelect");
 		}//end onGameEnd()
 		
@@ -152,7 +150,12 @@
 			DartsGlobals.instance.gameManager.removeEventListener(DartsGameLogic.GAME_END, onGameEnd);
 			
 			DartsGlobals.instance.stage.removeEventListener(Event.ENTER_FRAME, update);
+			_gameplayScreen.cleanupObjects();
+			
+			DartsGlobals.instance.gameManager.cleanup();
 			DartsGlobals.instance.screenSpace.removeChild(_gameplayScreen);
+			
+			_gameplayScreen = null;
 		}//end onExit()
 		
 	}//end class Gameplay

@@ -95,7 +95,7 @@
 					
 					if ( _mouseTimer == null ) 
 					{
-						_mouseTimer = new Timer(50);
+						_mouseTimer = new Timer(AppSettings.instance.expertThrowUpdate);
 					}
 					Mouse.show();
 					_mouseTimer.addEventListener( TimerEvent.TIMER, updateCurrentMouseVelocity );
