@@ -60,6 +60,7 @@
 				var cash:int = DartsGlobals.instance.externalServices.getData("gameCash");
 				cash += (DartsGlobals.instance.opponentProfile as EnemyProfile).prize;
 				DartsGlobals.instance.externalServices.setData("gameCash", cash);
+				DartsGlobals.instance.externalServices.pushUserData();
 			}
 		}//end endGame()
 		

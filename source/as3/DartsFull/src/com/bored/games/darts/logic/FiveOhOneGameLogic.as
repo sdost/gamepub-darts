@@ -2,7 +2,9 @@
 {
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.logic.DartsGameLogic
+	import com.bored.games.darts.profiles.EnemyProfile;
 	import com.bored.games.darts.ui.modals.TurnAnnounceModal;
+	import flash.sampler.NewObjectSample;
 	import flash.utils.Dictionary;
 	
 	/**
@@ -53,7 +55,13 @@
 		{
 			super.endGame(a_winner);
 			
-			
+			if ( a_winner == DartsGlobals.instance.localPlayer.playerNum ) 
+			{
+				var cash:int = DartsGlobals.instance.externalServices.getData("gameCash");
+				cash += (DartsGlobals.instance.opponentProfile as EnemyProfile).prize;
+				DartsGlobals.instance.externalServices.setData("gameCash", cash);
+				DartsGlobals.instance.externalServices.pushUserData();
+			}
 		}//end endGame()
 		
 	}//end FiveOhOneGameLogic

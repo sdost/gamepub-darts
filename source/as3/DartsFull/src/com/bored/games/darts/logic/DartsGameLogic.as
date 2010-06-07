@@ -435,7 +435,7 @@
 				_currentDart.position.z = AppSettings.instance.defaultStartPositionZ;
 			}
 						
-			_players[_currentPlayer-1].takeTheShot(_currentTurn.throwsRemaining);
+			_players[_currentPlayer].takeTheShot(_currentTurn.throwsRemaining);
 		}//end resetDart()
 		
 		public function resetDarts():void
