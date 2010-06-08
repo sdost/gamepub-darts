@@ -191,6 +191,8 @@ public class Darts extends TurnBasedExtension {
 				board_Multiplier = 3;
 			} else if ( coord_Radius < 90 && coord_Radius >= 85 ) {
 				board_Multiplier = 2;
+			} else if ( coord_Radius >= 90 ) {
+				board_Multiplier = 0;
 			}
 			
 			if( _bullOff ) {
@@ -205,10 +207,7 @@ public class Darts extends TurnBasedExtension {
 				
 				boolean bullOffComplete = true;
 				
-				for( int i = 0; i < users.length; i++ )
-				{				
-					double result = _bullOffResults.get(users[i].getPlayerIndex());
-					
+				for( Double result : _bullOffResults.values() ) {
 					if( result < 0 )
 					{
 						bullOffComplete = false;

@@ -128,7 +128,7 @@
 				if( obj ) {
 					var flightXML:XML = null;
 					
-					switch( obj["skin_"+DartsGlobals.instance.opponentPlayer.playerNum].flightid )
+					switch( obj["playerSkin"+DartsGlobals.instance.opponentPlayer.playerNum].flightid )
 					{
 						case "heart":
 							flightXML = dae_DartFlightHeart.data;
@@ -152,9 +152,9 @@
 							break;
 					}
 					
-					var skin:DartSkin = new DartSkin(ImageFactory.getBitmapDataByQualifiedName("dartuv_" + obj["skin_"+DartsGlobals.instance.opponentPlayer.playerNum].skinid, AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight), dae_DartShaft.data, flightXML );
-					skin.skinid = obj["skin_"+DartsGlobals.instance.opponentPlayer.playerNum].skinid;
-					skin.flightid = obj["skin_"+DartsGlobals.instance.opponentPlayer.playerNum].flightid;
+					var skin:DartSkin = new DartSkin(ImageFactory.getBitmapDataByQualifiedName("dartuv_" + obj["playerSkin"+DartsGlobals.instance.opponentPlayer.playerNum].skinid, AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight), dae_DartShaft.data, flightXML );
+					skin.skinid = obj["playerSkin"+DartsGlobals.instance.opponentPlayer.playerNum].skinid;
+					skin.flightid = obj["playerSkin"+DartsGlobals.instance.opponentPlayer.playerNum].flightid;
 					
 					DartsGlobals.instance.opponentPlayer.setSkin(skin);
 				}
