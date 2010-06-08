@@ -33,7 +33,19 @@
 		public function GameResultsModal() 
 		{
 			super(SpriteFactory.getSpriteByQualifiedName(AppSettings.instance.resultsModalSprite), false, true);
+			
+			if (this.stage) {
+				addedToStage();
+			} else {
+				this.addEventListener(Event.ADDED_TO_STAGE, addedToStage, false, 0, true);
+			}
 		}//end constructor()
+		
+		private function addedToStage(a_evt:Event = null):void
+		{
+			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
+			this.addEventListener(Event.REMOVED_FROM_STAGE, destroy, false, 0, true);
+		}//end addedToStage()
 		
 		override protected function buildFrom(a_img:Sprite, a_buildFromAllDescendants:Boolean = true):Dictionary
 		{
@@ -151,6 +163,25 @@
 			
 			DartsGlobals.instance.gameManager.dispatchEvent(new Event(DartsGameLogic.GAME_END));
 		}//end onRematchClicked()
+		
+		override public function destroy(...args):void
+		{
+			super.destroy();	
+			
+			_rematchBtnImg = null;
+			_nextMatchBtnImg = null;
+			
+			_matchValue = null;
+			_statField = null;
+			_headerField = null;
+			
+			_nextMatchBtn = null
+			_rematchBtn = null;
+						
+			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
+			this.removeEventListener(Event.REMOVED_FROM_STAGE, destroy);
+			
+		}//end destroy()
 		
 	}//end GameResultsModal
 

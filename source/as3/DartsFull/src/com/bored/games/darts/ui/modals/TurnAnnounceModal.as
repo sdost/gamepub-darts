@@ -38,6 +38,7 @@
 		private function addedToStage(a_evt:Event = null):void
 		{
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
+			this.addEventListener(Event.REMOVED_FROM_STAGE, destroy, false, 0, true);
 			
 			_delayedCall = TweenMax.delayedCall(3, dismissPopup);
 			
@@ -97,6 +98,21 @@
 			
 			DartsGlobals.instance.gameManager.startNewTurn();
 		}//end handleClick()
+		
+		override public function destroy(...args):void
+		{
+			super.destroy();	
+			
+			_playerImage = null;
+			_playerNameText = null;
+			
+			_delayedCall = null;
+						
+			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
+			this.removeEventListener(Event.REMOVED_FROM_STAGE, destroy);
+			
+		}//end destroy()
+		
 	}//end TurnAnnounceModal
 
 }//end com.bored.games.darts.ui.modals

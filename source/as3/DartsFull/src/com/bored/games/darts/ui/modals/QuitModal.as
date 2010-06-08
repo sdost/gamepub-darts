@@ -41,6 +41,9 @@
 		
 		private function addedToStage(a_evt:Event = null):void
 		{
+			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
+			this.addEventListener(Event.REMOVED_FROM_STAGE, destroy, false, 0, true);
+			
 			Mouse.show();
 			
 			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").addSound( new SMSound("yes_sound", "button_x_yes_mp3") );
@@ -107,6 +110,21 @@
 			
 			DartsGlobals.instance.gameManager.pause(false);
 		}//end onYesClicked()
+		
+		override public function destroy(...args):void
+		{
+			super.destroy();	
+			
+			_yesBtnImg = null;
+			_noBtnImg = null;
+			
+			_yesBtn = null;
+			_noBtn = null;
+						
+			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
+			this.removeEventListener(Event.REMOVED_FROM_STAGE, destroy);
+			
+		}//end destroy()
 		
 	}//end QuitModal
 

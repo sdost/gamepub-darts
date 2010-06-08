@@ -19,7 +19,6 @@
 	import away3dlite.materials.BitmapMaterial;
 	import away3dlite.materials.WireframeMaterial;
 	import away3dlite.primitives.Plane;
-	import caurina.transitions.Tweener;
 	import com.bored.games.darts.objects.Dart;
 	import com.bored.games.darts.ui.hud.AbilityDock;
 	import com.bored.games.darts.ui.hud.ControlPanel;
@@ -32,6 +31,7 @@
 	import com.bored.games.darts.ui.hud.ThrowIndicatorV3;
 	import com.bored.games.events.InputStateEvent;
 	import com.bored.games.darts.DartsGlobals;
+	import com.greensock.TweenLite;
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
@@ -77,8 +77,6 @@
 	{
 		private var _wallClip:Bitmap;
 		
-		private static var _dartboardTexture:BitmapMaterial;
-		
 		//engine variables
 		private var _scene:Scene3D;
 		
@@ -86,28 +84,15 @@
 		
 		private var _view:View3D;
 		
-		private var _renderer:FastRenderer;
-		
 		private var _engineScale:Number;
 		
-		private var _stats:Stats;
+		//private var _stats:Stats;
 		
 		private var _throwIndicator:ThrowIndicatorV3;
 		private var _scoreBoard:ScoreBoard;
 		private var _abilityDock:AbilityDock;
 		private var _dartDock:DartDock;
 		private var _controlPanel:ControlPanel;
-		
-		private var _collada:Collada;
-		private var _loader:Loader3D;
-		
-		private var _dartTemplate:Object3D;
-		private var _dartModels:Vector.<Object3D>;
-		
-		private var _boardBillboard:Plane;
-		private var _cursorBillboard:Plane;
-		
-		private var _dartRefs:Vector.<Dart>;
 		
 		public function GameplayScreen() 
 		{
@@ -188,7 +173,7 @@
 			_view.x = (this.stage.stageWidth / 2);
 			_view.y = (this.stage.stageHeight / 2);
 			
-			Tweener.addTween(this, { alpha:1, time:2 } );			
+			TweenLite.to(this, 2, { alpha:1 } );			
 		}//end addedToStage()
 		
 		/**
@@ -287,6 +272,8 @@
 			_view = null;
 			_scene = null;
 			_camera = null;
+			
+			_wallClip = null;
 		}//end destroy()
 		
 	}//end class GameplayScreen

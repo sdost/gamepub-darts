@@ -7,7 +7,6 @@
 	import away3dlite.materials.MovieMaterial;
 	import away3dlite.sprites.AlignmentType;
 	import away3dlite.sprites.Sprite3D;
-	import caurina.transitions.Tweener;
 	import com.bored.games.actions.Action;
 	import com.bored.games.darts.abilities.Ability;
 	import com.bored.games.darts.actions.DartFallingAction;
@@ -106,12 +105,17 @@
 		{		
 			_dartModel.removeSprite(_modifierIndicator);
 			_modifierIndicator = null;
+			
+			//_indicatorMaterial.bitmap.dispose();
+			_indicatorMaterial = null;
+			
 			_indicatorSprite = null;
 			
 			_dartModel = null;
 			_flight = null;
 			_shaft = null;
 			
+			//_dartSkin.material.bitmap.dispose();
 			_dartSkin = null;
 		}//end cleanupModels()
 		

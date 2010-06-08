@@ -1,9 +1,9 @@
 ﻿package com.bored.games.darts.ui.hud 
 {
-	import caurina.transitions.Tweener;
 	import com.bored.games.darts.abilities.Ability;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.logic.AbilityManager;
+	import com.greensock.TweenLite;
 	import com.hybrid.ui.ToolTip;
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
@@ -244,17 +244,24 @@
 		
 		public function show():void
 		{
-			Tweener.addTween(this, {alpha:1, time:2 } );
+			TweenLite.to(this, 2, {alpha:1} );
 		}//end show()
 		
 		public function hide():void
 		{
-			Tweener.addTween(this, {alpha:0, time:2 } );
+			TweenLite.to(this, 2, {alpha:0} );
 		}//end hide()
 		
 		override public function destroy(...args):void
 		{
 			super.destroy();
+			
+			_cmFilter = null;
+			
+			_abilityCountText = null;
+			_abilityGraphic = null;
+			_abilityBox = null;
+			_abilityBurst = null;
 			
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			this.removeEventListener(Event.REMOVED_FROM_STAGE, destroy);

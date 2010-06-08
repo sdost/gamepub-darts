@@ -189,6 +189,8 @@
 		{
 			this.deactivateAction(_shieldAction.actionName);
 			_boardSprite = null;
+			
+			//_boardMaterial.bitmap.dispose();
 			_boardMaterial = null;
 		}//end initModels()
 		

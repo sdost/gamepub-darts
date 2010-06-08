@@ -1,6 +1,5 @@
 ﻿package com.bored.games.darts.ui 
 {
-	import caurina.transitions.Tweener;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.ui.store.StoreManager;
 	import com.bored.services.AbstractExternalService;
@@ -499,6 +498,39 @@
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			this.removeEventListener(Event.REMOVED_FROM_STAGE, destroy);
 			
+			_dartFilterBtnImg = null;
+			_powersFilterBtnImg = null;
+						
+			_backBtnImg = null;
+			
+			_storeSlotOne.removeChild(_slotBitmapOne);
+			_slotBitmapOne = null;
+			_storeSlotTwo.removeChild(_slotBitmapTwo);
+			_slotBitmapTwo = null;
+			_storeSlotThree.removeChild(_slotBitmapThree);
+			_slotBitmapThree = null;
+			
+			_storeSlotOne = null;
+			_storeSlotTwo = null;
+			_storeSlotThree = null;
+			
+			_items = null;
+						
+			_slotPriceOne = null;
+			_slotPriceTwo = null;
+			_slotPriceThree = null;
+			
+			_slotAddBtnImgOne = null;
+			_slotAddBtnImgTwo = null;
+			_slotAddBtnImgThree = null;
+			
+			_pageSelectLeftBtnImg = null;
+			_pageSelectRightBtnImg = null;
+			
+			_dartFilterBtn = null;
+			_powersFilterBtn = null;
+			_premiumFilterBtn = null;
+			_backBtn = null;
 			_background = null;
 			
 			if (this.parent)

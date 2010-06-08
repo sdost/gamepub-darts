@@ -34,6 +34,7 @@
 	import flash.geom.Vector3D;
 	import flash.sampler.NewObjectSample;
 	import flash.system.ApplicationDomain;
+	import flash.system.System;
 	import flash.text.TextField;
 	import com.bored.games.darts.DartsGlobals;
 	import flash.utils.getTimer;
@@ -156,6 +157,8 @@
 			DartsGlobals.instance.screenSpace.removeChild(_gameplayScreen);
 			
 			_gameplayScreen = null;
+			
+			System.gc();
 		}//end onExit()
 		
 	}//end class Gameplay

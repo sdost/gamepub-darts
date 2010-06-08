@@ -37,6 +37,7 @@
 		private function addedToStage(a_evt:Event = null):void
 		{
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
+			this.addEventListener(Event.REMOVED_FROM_STAGE, destroy, false, 0, true);
 			
 			TweenMax.delayedCall(10, dismissPopup);
 		}//end addedToStage()
@@ -66,6 +67,17 @@
 		{
 			DartsGlobals.instance.processModalQueue();
 		}//end handleClick()
+		
+		override public function destroy(...args):void
+		{
+			super.destroy();	
+			
+			_tutorialPopup = null;
+						
+			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
+			this.removeEventListener(Event.REMOVED_FROM_STAGE, destroy);
+			
+		}//end destroy()
 		
 	}//end TutorialTwoModal
 

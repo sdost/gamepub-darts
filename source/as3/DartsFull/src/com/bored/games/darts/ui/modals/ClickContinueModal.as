@@ -23,7 +23,7 @@
 		}//end constructor()
 		
 		override protected function addedToStage(a_evt:Event = null):void
-		{
+		{			
 			super.addedToStage();
 			
 			DartsGlobals.instance.stage.addEventListener(MouseEvent.CLICK, handleClick, false, 0, true);

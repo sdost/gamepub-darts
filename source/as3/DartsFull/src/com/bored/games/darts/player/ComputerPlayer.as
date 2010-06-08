@@ -1,6 +1,5 @@
 ﻿package com.bored.games.darts.player 
 {
-	import caurina.transitions.Tweener;
 	import com.bored.games.darts.abilities.Ability;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.logic.AIShotCandidate;

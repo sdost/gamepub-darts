@@ -1,13 +1,13 @@
 ﻿package com.bored.games.darts.ui 
 {
 	import away3dlite.materials.BitmapMaterial;
-	import caurina.transitions.Tweener;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.models.dae_DartFlightHeart;
 	import com.bored.games.darts.models.dae_DartFlightHexagon;
 	import com.bored.games.darts.models.dae_DartFlightModHex;
 	import com.bored.games.darts.models.dae_DartShaft;
 	import com.bored.games.darts.skins.DartSkin;
+	import com.greensock.TweenLite;
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
@@ -353,7 +353,7 @@
 			this.contentsMC.x = (this.stage.stageWidth / 2) - (this.contentsMC.width / 2);
 			this.contentsMC.y = (this.stage.stageHeight / 2) - (this.contentsMC.height / 2);
 			
-			Tweener.addTween(this, {alpha:1, time:2 } );
+			TweenLite.to(this, 2, {alpha:1} );
 			
 		}//end addedToStage()
 		
@@ -361,7 +361,7 @@
 		{
 			this.dispatchEvent(new Event(LAUNCH_STORE_EVT));
 			
-			Tweener.addTween(this, { alpha:0, onComplete:destroy, time:0.4 } );
+			TweenLite.to(this, 0.4, {alpha:0, onComplete:destroy} );
 		}//end onUpgradeClicked()
 		
 		private function onPickLeftClicked(a_evt:Event):void
@@ -403,7 +403,7 @@
 			
 			this.dispatchEvent(new Event(PLAY_CLICKED_EVT));
 			
-			Tweener.addTween(this, { alpha:0, onComplete:destroy, time:0.4 } );
+			TweenLite.to(this, 0.4, {alpha:0, onComplete:destroy} );
 			
 		}//end onPlayClicked()
 		
@@ -414,7 +414,7 @@
 			
 			this.dispatchEvent(new Event(BACK_CLICKED_EVT));
 			
-			Tweener.addTween(this, { alpha:0, onComplete:destroy, time:0.4 } );
+			TweenLite.to(this, 0.4, {alpha:0, onComplete:destroy} );
 			
 		}//end onBackClicked()
 		
@@ -424,6 +424,46 @@
 						
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			this.removeEventListener(Event.REMOVED_FROM_STAGE, destroy);
+			
+			_backBtnImg = null;
+			_playBtnImg = null;
+			
+			_storeBtnImg = null;
+			
+			_dartSelectLeftBtnImg = null;
+			_dartSelectRightBtnImg = null;
+			
+			_opponentDetails = null;
+			_opponentBio = null;
+			_opponentPortrait = null;
+			
+			_dartIcon = null;
+			
+			_abilityIconOne = null;
+			_abilityIconTwo = null;
+			_abilityIconThree = null;
+			
+			_abilityOnePowerGauge = null;
+			_abilityTwoPowerGauge = null;
+			_abilityThreePowerGauge = null;
+			
+			_abilityNameOne = null;
+			_abilityNameTwo = null;
+			_abilityNameThree = null;
+		
+			_opponentAbilityIconOne = null;
+			_opponentAbilityIconTwo = null;
+			_opponentAbilityIconThree = null;
+			
+			_opponentAbilityOnePowerGauge = null;
+			_opponentAbilityTwoPowerGauge = null;
+			_opponentAbilityThreePowerGauge = null;
+			
+			_backBtn = null;
+			_playBtn = null;
+			_storeBtn = null;
+			_dartSelectLeftBtn = null;
+			_dartSelectRightBtn = null;
 			
 			if (this.parent)
 			{

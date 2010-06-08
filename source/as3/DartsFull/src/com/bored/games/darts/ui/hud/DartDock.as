@@ -1,11 +1,11 @@
 ﻿package com.bored.games.darts.ui.hud 
 {
-	import caurina.transitions.Tweener;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.logic.AbstractScoreManager;
 	import com.bored.games.darts.logic.CricketGameLogic;
 	import com.bored.games.darts.logic.CricketScoreManager;
 	import com.bored.games.darts.logic.DartsGameLogic;
+	import com.greensock.TweenLite;
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
@@ -78,12 +78,12 @@
 		
 		public function show():void
 		{
-			Tweener.addTween(this, {alpha:1, time:2 } );
+			TweenLite.to(this, 2, {alpha:1} );
 		}//end show()
 		
 		public function hide():void
 		{
-			Tweener.addTween(this, {alpha:0, time:2 } );
+			TweenLite.to(this, 2, {alpha:0} );
 		}//end hide()
 		
 		override public function destroy(...args):void

@@ -1,7 +1,7 @@
 ﻿package com.bored.games.darts.ui 
 {
-	import caurina.transitions.Tweener;
 	import com.bored.games.darts.DartsGlobals;
+	import com.greensock.TweenLite;
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
@@ -134,7 +134,7 @@
 			this.contentsMC.x = (this.stage.stageWidth / 2) - (this.contentsMC.width / 2);
 			this.contentsMC.y = (this.stage.stageHeight / 2) - (this.contentsMC.height / 2);
 			
-			Tweener.addTween(this, {alpha:1, time:2 } );
+			TweenLite.to(this, 2, {alpha:1} );
 			
 		}//end addedToStage()
 		
@@ -181,7 +181,7 @@
 			}
 			
 			// simply hide ourselves and remove ourselves from the display list.
-			Tweener.addTween(this, {alpha:0, onComplete:destroy, time:0.4 } );
+			TweenLite.to(this, 0.4, {alpha:0, onComplete:destroy} );
 			
 		}//end onStoryGameClicked()
 		
@@ -205,7 +205,7 @@
 			}
 			
 			// simply hide ourselves and remove ourselves from the display list.
-			Tweener.addTween(this, {alpha:0, onComplete:destroy, time:0.4 } );
+			TweenLite.to(this, 0.4, {alpha:0, onComplete:destroy} );
 			
 		}//end onMultiplayerGameClicked()
 		
@@ -230,6 +230,10 @@
 			
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			this.removeEventListener(Event.REMOVED_FROM_STAGE, destroy);
+			
+			_practiceGameBtnImg = null;
+			_storyGameBtnImg = null;
+			_multiplayerGameBtnImg = null;
 			
 			_practiceGameBtn = null;
 			_storyGameBtn = null;

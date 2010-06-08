@@ -46,6 +46,8 @@
 		public function cleanupModels():void
 		{
 			_cursorSprite = null;
+			
+			//_cursorMaterial.bitmap.dispose();
 			_cursorMaterial = null;
 		}//end initModels()
 		

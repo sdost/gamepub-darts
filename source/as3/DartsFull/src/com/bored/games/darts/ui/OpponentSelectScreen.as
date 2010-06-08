@@ -1,6 +1,5 @@
 ﻿package com.bored.games.darts.ui 
 {
-	import caurina.transitions.Tweener;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.profiles.AnthonyProfile;
 	import com.bored.games.darts.profiles.BigBillProfile;
@@ -10,6 +9,7 @@
 	import com.bored.games.darts.profiles.ProfessorProfile;
 	import com.bored.games.darts.profiles.SammyProfile;
 	import com.bored.games.darts.profiles.SimonProfile;
+	import com.greensock.TweenLite;
 	import com.hybrid.ui.ToolTip;
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
@@ -322,7 +322,7 @@
 			this.contentsMC.x = (this.stage.stageWidth / 2) - (this.contentsMC.width / 2);
 			this.contentsMC.y = (this.stage.stageHeight / 2) - (this.contentsMC.height / 2);
 			
-			Tweener.addTween(this, {alpha:1, time:2 } );
+			TweenLite.to(this, 2, {alpha:1} );
 			
 		}//end addedToStage()
 		
@@ -421,7 +421,7 @@
 				this.dispatchEvent(new Event(OPPONENT_CHOSEN_EVT));
 			}
 			
-			Tweener.addTween(this, { alpha:0, onComplete:destroy, time:0.4 } );
+			TweenLite.to(this, 0.4, {alpha:0, onComplete:destroy} );
 			
 		}//end onPlayNowClicked()
 		
@@ -477,6 +477,16 @@
 						
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			this.removeEventListener(Event.REMOVED_FROM_STAGE, destroy);
+			
+			_ireneBtnImg = null;
+			_oldmanBtnImg = null;
+			_mackBtnImg = null;
+			_anthonyBtnImg = null;
+			_professorBtnImg = null;
+			_sammyBtnImg = null;
+			_simonBtnImg = null;
+			_barkeepBtnImg = null;
+			_bigbillBtnImg = null;
 			
 			_ireneBtn = null;		
 			_oldmanBtn = null;		

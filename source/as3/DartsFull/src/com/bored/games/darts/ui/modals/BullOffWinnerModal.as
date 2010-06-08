@@ -35,6 +35,7 @@
 		private function addedToStage(a_evt:Event = null):void
 		{
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
+			this.addEventListener(Event.REMOVED_FROM_STAGE, destroy, false, 0, true);
 			
 			DartsGlobals.instance.stage.addEventListener(MouseEvent.CLICK, handleClick, false, 0, true);
 		}//end addedToStage()
@@ -78,6 +79,18 @@
 						
 			DartsGlobals.instance.showModalPopup(TurnAnnounceModal);
 		}//end handleClick()
+		
+		override public function destroy(...args):void
+		{
+			super.destroy();	
+			
+			_playerNameText = null;
+			_playerImage = null;
+						
+			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
+			this.removeEventListener(Event.REMOVED_FROM_STAGE, destroy);
+			
+		}//end destroy()
 		
 	}//end BullOffWinnerModal
 

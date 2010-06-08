@@ -1,7 +1,6 @@
 ﻿package com.bored.games.darts.ui.hud 
 {
 	import caurina.transitions.properties.CurveModifiers;
-	import caurina.transitions.Tweener;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.input.ThrowController;
 	import com.greensock.TweenLite;
@@ -153,17 +152,24 @@
 		
 		public function show():void
 		{
-			Tweener.addTween(this, {alpha:1, time:2 } );
+			TweenLite.to(this, 2, {alpha:1} );
 		}//end show()
 		
 		public function hide():void
 		{
-			Tweener.addTween(this, {alpha:0, time:2 } );
+			TweenLite.to(this, 2, {alpha:0} );
 		}//end hide()
 		
 		override public function destroy(...args):void
 		{
 			super.destroy();
+			
+			_terminus = null;
+			_maskBar = null;
+			_reticle = null;
+			_harness = null;
+			_trueThrust = null;
+			_trueAngle = null;
 			
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			this.removeEventListener(Event.REMOVED_FROM_STAGE, destroy);

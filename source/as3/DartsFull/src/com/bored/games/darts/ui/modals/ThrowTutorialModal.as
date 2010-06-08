@@ -21,8 +21,6 @@
 	 */
 	public class ThrowTutorialModal extends ContentHolder
 	{
-		private var _tutorialPopup:TextField;
-		
 		public function ThrowTutorialModal() 
 		{
 			super(SpriteFactory.getSpriteByQualifiedName(AppSettings.instance.throwTutorialModalSprite), false, true);
@@ -37,6 +35,7 @@
 		private function addedToStage(a_evt:Event = null):void
 		{
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
+			this.addEventListener(Event.REMOVED_FROM_STAGE, destroy, false, 0, true);
 			
 			TweenMax.delayedCall(10, dismissPopup);
 		}//end addedToStage()

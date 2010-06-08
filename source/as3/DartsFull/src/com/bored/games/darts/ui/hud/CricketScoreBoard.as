@@ -1,6 +1,5 @@
 ﻿package com.bored.games.darts.ui.hud 
 {
-	import caurina.transitions.Tweener;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.logic.AbstractScoreManager;
 	import com.bored.games.darts.logic.CricketGameLogic;
