@@ -197,9 +197,7 @@
 		
 		private function onTrophyButtonClick(a_evt:Event):void
 		{			
-			DartsGlobals.instance.gameManager.pause(true);
-			
-			DartsGlobals.instance.showModalPopup(AchievementsModal);
+			DartsGlobals.instance.externalServices.showAchievementUI();
 			
 			_soundManager.getSoundControllerByID("buttonSoundController").play("trophy_sound");
 			
