@@ -22,22 +22,11 @@
 				
 		public static function bestowAchievement(a_id:String):void
 		{
-			DartsGlobals.instance.externalServices.bestowAchievement(a_id);
-			DartsGlobals.instance.externalServices.addEventListener(AbstractExternalService.ACHIEVEMENT_EARNED, onAchievementEarned, false, 0, true);
-		}//end bestowAchievement()
-		
-		private static function onAchievementEarned(a_evt:ObjectEvent):void
-		{
-			DartsGlobals.instance.externalServices.removeEventListener(AbstractExternalService.ACHIEVEMENT_EARNED, onAchievementEarned);
-			
-			for ( var obj:Object in a_evt.obj ) 
+			if ( DartsGlobals.instance.externalServices.loggedIn )
 			{
-				if ( obj.earned ) 
-				{
-					//DartsGlobals.instance.localPlayer.record.recordAchievement( obj );
-				}
+				DartsGlobals.instance.externalServices.bestowAchievement(a_id);
 			}
-		}//end onAchievementEarned()
+		}//end bestowAchievement()
 		
 	}//end AchievementTracker
 

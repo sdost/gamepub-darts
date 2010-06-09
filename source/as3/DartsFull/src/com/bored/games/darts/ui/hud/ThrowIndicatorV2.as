@@ -109,7 +109,7 @@
 		
 		public function update():void
 		{	
-			TweenMax.to(
+			TweenLite.to(
 				_terminus,
 				0.05, 
 				{

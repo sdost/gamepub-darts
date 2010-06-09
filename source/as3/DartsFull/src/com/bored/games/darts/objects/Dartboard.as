@@ -10,6 +10,7 @@
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.ui.effects.AnimatedText;
 	import com.bored.games.objects.GameElement;
+	import com.greensock.TweenLite;
 	import com.greensock.TweenMax;
 	import com.jac.soundManager.SMSound;
 	import com.jac.soundManager.SoundController;
@@ -25,6 +26,8 @@
 	 */
 	public class Dartboard extends GameElement
 	{
+		private var _boardArrangement:Array = [6,13,4,18,1,20,5,12,9,14,11,8,16,7,19,3,17,2,15,10];
+		
 		private var _sprite:Sprite;
 		private var _boardSprite:Sprite3D;
 		private var _boardMaterial:MovieMaterial;
@@ -274,52 +277,85 @@
 		}//end submitDartPositionUnscored()
 		
 		public function submitDartPosition(a_x:Number, a_y:Number, a_block:Boolean):Boolean
-		{				
-			var p:Point = new Point( ( a_x / AppSettings.instance.dartboardScale ) * (_sprite.width/2), ( -a_y / AppSettings.instance.dartboardScale ) * (_sprite.height/2) );
+		{			
+			var coord_Theta:Number = Math.atan2(a_y, a_x);
+			var coord_Radius:Number = Math.sqrt( a_x * a_x + a_y * a_y ) * 90;
+						
+			coord_Theta += 2*Math.PI;
+			coord_Theta = coord_Theta % (2*Math.PI);
 			
-			var objects:Array = _sprite.getObjectsUnderPoint(p);
+			var coord_Angle:int = (int) ( coord_Theta * 180 / Math.PI);
+			if( coord_Angle < 0 ) coord_Angle += 360;
 			
-			var points:int = 0;
-			var multiplier:int = 0;
+			var board_SectionIndex:int = int(Math.round(coord_Angle/18.0));
+			if( board_SectionIndex >= 20 ) board_SectionIndex = 0;
+			
+			var board_Section:int = _boardArrangement[board_SectionIndex];
+			
+			var board_Multiplier:int = 1;
+			if( coord_Radius < 3 ) {
+				board_Section = 25;
+				board_Multiplier = 2;
+			} else if ( coord_Radius < 7 ) {
+				board_Section = 25;
+				board_Multiplier = 1;
+			} else if ( coord_Radius < 56 && coord_Radius >= 52 ) {
+				board_Multiplier = 3;
+			} else if ( coord_Radius < 90 && coord_Radius >= 85 ) {
+				board_Multiplier = 2;
+			} else if ( coord_Radius >= 90 ) {
+				board_Section = 0;
+				board_Multiplier = 0;
+			}
+						
+			//var objects:Array = _sprite.getObjectsUnderPoint(p);
+			
+			var points:int = board_Section;
+			var multiplier:int = board_Multiplier;
 			var scoring:Boolean = false;
 			var sticking:Boolean = false;
 			
-			if (objects.length > 0) {
+			//if (objects.length > 0) {
 		
-				if (_pattern.test(objects[0].parent.name) && !_blockedSections[objects[0].parent.name]) 
-				{
-					var arr:Array = objects[0].parent.name.split("_");
+				//if (_pattern.test(objects[0].parent.name) && !_blockedSections[objects[0].parent.name]) 
+				//{
+					//var arr:Array = objects[0].parent.name.split("_");
 					
-					points = Number(arr[1]);
-					multiplier = Number(arr[2]);
+					//points = Number(arr[1]);
+					//multiplier = Number(arr[2]);
 					
-					playHitSound(DartsGlobals.instance.gameManager.currentPlayer, multiplier);
+			if( multiplier > 0 && !_blockedSections["c_" + points + "_" + multiplier + "_mc"]) {
+				playHitSound(DartsGlobals.instance.gameManager.currentPlayer, multiplier);
 					
-					scoring = DartsGlobals.instance.gameManager.scoreManager.submitThrow(DartsGlobals.instance.gameManager.currentPlayer, points, multiplier);					
+				scoring = DartsGlobals.instance.gameManager.scoreManager.submitThrow(DartsGlobals.instance.gameManager.currentPlayer, points, multiplier);					
 									
-					if (points > 0) 
-					{
-						var text:AnimatedText = new AnimatedText(points + " x " + multiplier, FontFactory.getFontByQualifiedName("CooperStd"), TweenMax.fromTo(null, 0.75, { x: p.x, y: p.y, alpha: 1 }, { x: p.x, y: p.y - 15, alpha: 0 } ));
-						text.alpha = 0;
-						_sprite.addChild(text);
-						text.animate();					
-					}
+				if (points > 0) 
+				{
+					var p:Point = new Point( ( a_x / AppSettings.instance.dartboardScale ) * (_sprite.width/2), ( -a_y / AppSettings.instance.dartboardScale ) * (_sprite.height/2) );
 					
-					if (a_block)
-					{
-						_dartboardSoundController.play("shieldApply");
-						_shieldAction.startBlocking(points.toString());						
-					}
-					
-					sticking = true;
-				} else if ( _blockedSections[objects[0].parent.name] ) {
-					_dartboardSoundController.play("shieldHit");
-				} else {
-					_dartboardSoundController.play("bounce_board");
+					var text:AnimatedText = new AnimatedText(points + " x " + multiplier, FontFactory.getFontByQualifiedName("CooperStd"), TweenMax.fromTo(null, 0.75, { x: p.x, y: p.y, alpha: 1 }, { x: p.x, y: p.y - 15, alpha: 0 } ));
+					text.alpha = 0;
+					_sprite.addChild(text);
+					text.animate();					
 				}
+					
+				if (a_block)
+				{
+					_dartboardSoundController.play("shieldApply");
+					_shieldAction.startBlocking(points.toString());						
+				}
+					
+				sticking = true;
+			} else if ( _blockedSections["c_" + points + "_" + multiplier + "_mc"] ) {
+				_dartboardSoundController.play("shieldHit");
 			} else {
 				_dartboardSoundController.play("bounce_wall");
 			}
+			/*
+			} else {
+				_dartboardSoundController.play("bounce_wall");
+			}
+			*/
 			
 			DartsGlobals.instance.gameManager.players[DartsGlobals.instance.gameManager.currentPlayer].processShotResult(points, multiplier, scoring);
 			

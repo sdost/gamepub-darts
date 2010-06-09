@@ -6,6 +6,8 @@
 	import com.bored.games.events.InputStateEvent;
 	import com.bored.games.input.InputController;
 	import com.sven.utils.AppSettings;
+	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
 	import flash.ui.Mouse;
@@ -32,6 +34,7 @@
 		private var _cumAvgSpeed:Number;
 		
 		private var _mouseTimer:Timer;
+		private var _frameTimer:Sprite = new Sprite();
 		
 		override public function startThrow(a_inputController:InputController):void
 		{
@@ -56,9 +59,12 @@
 			if (_buttonDown) {
 				if ( !a_evt.button ) {
 					
+					_frameTimer.removeEventListener( Event.ENTER_FRAME, updateCurrentMouseVelocity );
+					/*
 					_mouseTimer.removeEventListener( TimerEvent.TIMER, updateCurrentMouseVelocity );
 					_mouseTimer.stop();
 					_mouseTimer.reset();
+					*/
 					
 					if ( _thrust >= DartsGlobals.instance.gameManager.currentDart.minThrust ) 
 					{
@@ -93,13 +99,21 @@
 					
 					DartsGlobals.instance.gameManager.currentDart.pullBack();
 					
+					/*
 					if ( _mouseTimer == null ) 
 					{
 						_mouseTimer = new Timer(AppSettings.instance.expertThrowUpdate);
 					}
+					*/
+					
 					Mouse.show();
+					
+					_frameTimer.addEventListener( Event.ENTER_FRAME, updateCurrentMouseVelocity, false, 0, true);
+					
+					/*
 					_mouseTimer.addEventListener( TimerEvent.TIMER, updateCurrentMouseVelocity );
 					_mouseTimer.start();
+					*/
 				} else {
 					Mouse.hide();
 					DartsGlobals.instance.gameManager.cursor.position.x = (((a_evt.x - 350) * AppSettings.instance.cursorPositionZ * Math.tan(57.5 * Math.PI / 180))/ 700);
@@ -115,7 +129,7 @@
 			_buttonDown = a_evt.button;
 		}//end onInputUpdate()
 		
-		private function updateCurrentMouseVelocity(e:TimerEvent):void
+		private function updateCurrentMouseVelocity(e:Event):void
 		{			
 			var nX:Number = _mousePosition.x;
 			var nY:Number = _mousePosition.y;
@@ -127,8 +141,8 @@
     
 			_oX = nX;
 			_oY = nY;
-			_velX = dx * 1000 / _mouseTimer.delay;
-			_velY = dy * 1000 / _mouseTimer.delay;
+			_velX = dx * 1000 / 33; //_mouseTimer.delay;
+			_velY = dy * 1000 / 33; //_mouseTimer.delay;
 			_speed = Math.sqrt( _velX * _velX + _velY * _velY );
 			
 			if ( _velY * oldVelY < 0 ) {

@@ -7,6 +7,7 @@
 	import com.bored.games.darts.objects.Dart;
 	import com.bored.games.darts.skins.DartSkin;
 	import com.bored.games.darts.statistics.GameRecord;
+	import com.bored.games.darts.statistics.TurnRecord;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	/**
@@ -21,6 +22,7 @@
 		protected var _darts:Vector.<Dart>;
 		
 		protected var _gameRecord:GameRecord;
+		protected var _turnRecord:TurnRecord;
 		
 		protected var _skin:DartSkin;
 		
@@ -146,7 +148,8 @@
 		{
 			trace("processShotResults(" + a_points + ", " + a_multiplier + ", " + a_scoring + ")");
 			
-			_gameRecord.recordThrow(a_points, a_multiplier, a_scoring);			
+			_gameRecord.recordThrow(a_points, a_multiplier, a_scoring);	
+			_turnRecord.recordThrow(a_points, a_multiplier);
 		}//end processShotResult()
 		
 		public function get record():GameRecord
@@ -157,7 +160,12 @@
 		public function initGameRecord():void
 		{
 			_gameRecord = new GameRecord();
-		}//end initGameRecord();
+		}//end initGameRecord()
+		
+		public function clearTurnRecord():void
+		{
+			_turnRecord = new TurnRecord();
+		}//end clearTurnRecord()
 		
 	}//end DartsPlayer
 

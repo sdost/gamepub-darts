@@ -192,6 +192,7 @@ public class Darts extends TurnBasedExtension {
 			} else if ( coord_Radius < 90 && coord_Radius >= 85 ) {
 				board_Multiplier = 2;
 			} else if ( coord_Radius >= 90 ) {
+				board_Section = 0;
 				board_Multiplier = 0;
 			}
 			

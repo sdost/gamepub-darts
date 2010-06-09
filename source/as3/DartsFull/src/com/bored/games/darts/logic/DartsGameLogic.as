@@ -19,7 +19,7 @@
 	import com.bored.games.darts.player.DartsPlayer;
 	import com.bored.games.events.InputStateEvent;
 	import com.bored.games.GameUtils;
-	import com.greensock.TweenLite;
+	import com.greensock.TweenMax;
 	import com.jac.soundManager.SMSound;
 	import com.jac.soundManager.SoundController;
 	import com.sven.utils.SpriteFactory;
@@ -392,6 +392,8 @@
 				_currentTurn = new DartsTurn(this, _throwsPerTurn);
 			}
 			
+			(players[_currentPlayer] as DartsPlayer).clearTurnRecord();
+			
 			_lastDart = null;
 			
 			nextDart();
@@ -584,18 +586,20 @@
 			
 			if ( _inputController ) 
 			{
-				_inputController.pause = _paused;
+				_inputController.pause = (_paused || (_currentPlayer != DartsGlobals.instance.localPlayer.playerNum));
 			}
-			
+						
 			if (_paused) 
 			{
 				DartsGlobals.instance.soundManager.getSoundControllerByID("loopsController").stop("ambient_bar_loop");
 				DartsGlobals.instance.soundManager.getSoundControllerByID("loopsController").stop("theme_loop");
+				TweenMax.pauseAll();
 			}
 			else
 			{
 				DartsGlobals.instance.soundManager.getSoundControllerByID("loopsController").play("ambient_bar_loop");
 				DartsGlobals.instance.soundManager.getSoundControllerByID("loopsController").play("theme_loop");
+				TweenMax.resumeAll();
 			}
 		}//end pause()
 		

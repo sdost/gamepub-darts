@@ -4,7 +4,6 @@
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.input.ThrowController;
 	import com.greensock.TweenLite;
-	import com.greensock.TweenMax;
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
@@ -131,7 +130,7 @@
 		
 		public function update():void
 		{	
-			TweenMax.to(
+			TweenLite.to(
 				_terminus,
 				0.05, 
 				{

@@ -8,7 +8,6 @@
 	import com.bored.games.darts.logic.DartsGameLogic;
 	import com.bored.games.darts.player.ComputerPlayer;
 	import com.bored.games.darts.skins.DartSkin;
-	import com.greensock.TweenMax;
 	import com.jac.soundManager.SoundController;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
