@@ -66,6 +66,8 @@
     <element path="swfLibs_includeAll\StoryAssets.swc" />
     <element path="swfLibs_includeAll\Achievements.swc" />
     <element path="swfLibs_includeAll\Fonts.swc" />
+    <element path="swcLibs_includeAll\away3Dlite.swc" />
+    <element path="swcLibs_includeAll\MonsterProofEngine.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>
