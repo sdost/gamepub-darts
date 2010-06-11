@@ -10,7 +10,7 @@
 	import away3dlite.sprites.Sprite3D;
 	import com.sven.utils.AppSettings;
 	import away3dlite.core.base.Object3D;
-	import com.bored.games.objects.GameElement;
+	import com.bored.games.objects.GameElement3D;
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
 	import flash.geom.Matrix;
@@ -20,7 +20,7 @@
 	 * ...
 	 * @author sam
 	 */
-	public class Cursor extends GameElement
+	public class Cursor extends GameElement3D
 	{
 		private var _cursor:Sprite;
 		private var _cursorSprite:Sprite3D;

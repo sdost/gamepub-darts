@@ -9,7 +9,7 @@
 	import com.bored.games.darts.actions.ShieldDartboardAction;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.ui.effects.AnimatedText;
-	import com.bored.games.objects.GameElement;
+	import com.bored.games.objects.GameElement3D;
 	import com.greensock.TweenLite;
 	import com.greensock.TweenMax;
 	import com.jac.soundManager.SMSound;
@@ -24,7 +24,7 @@
 	 * ...
 	 * @author sam
 	 */
-	public class Dartboard extends GameElement
+	public class Dartboard extends GameElement3D
 	{
 		private var _boardArrangement:Array = [6,13,4,18,1,20,5,12,9,14,11,8,16,7,19,3,17,2,15,10];
 		

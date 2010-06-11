@@ -2,6 +2,7 @@
 {
 	import com.bored.games.actions.Action;
 	import com.bored.games.objects.GameElement;
+	import com.bored.games.objects.GameElement3D;
 	import com.sven.utils.TrajectoryCalculator;
 	import com.sven.utils.AppSettings;
 	
@@ -45,13 +46,13 @@
 		{
 			super.startAction();
 			
-			_calc.initialPosition = this._gameElement.position;
+			_calc.initialPosition = (_gameElement as GameElement3D).position;
 			_calc.thrust = _thrust;
 			_calc.theta = _theta;
 			_calc.gravity = _gravity;
 			
-			_gameElement.pitch = 90;
-			_gameElement.roll = 0;
+			(_gameElement as GameElement3D).pitch = 90;
+			(_gameElement as GameElement3D).roll = 0;
 			
 			_lastUpdate = -1;
 		}//end startAction()
@@ -78,22 +79,22 @@
 				adjust = Number( diff / 33 );
 			}
 			
-			var z:Number = _gameElement.position.z + _calc.thrustVector.x * _stepScale * adjust;
+			var z:Number = (_gameElement as GameElement3D).position.z + _calc.thrustVector.x * _stepScale * adjust;
 			
 			if ( z > this._finalZ ) z = this._finalZ;
 			
 			var y:Number = _calc.calculateHeightAtPos(z);
-			var x:Number = _gameElement.position.x + _lean * _stepScale;
+			var x:Number = (_gameElement as GameElement3D).position.x + _lean * _stepScale;
 				
-			var rad:Number = Math.atan2(y - _gameElement.position.y, z - _gameElement.position.z);
+			var rad:Number = Math.atan2(y - (_gameElement as GameElement3D).position.y, z - (_gameElement as GameElement3D).position.z);
 	
-			_gameElement.pitch = rad * 180 / Math.PI + 90;
+			(_gameElement as GameElement3D).pitch = rad * 180 / Math.PI + 90;
 			
-			_gameElement.roll += AppSettings.instance.dartRollSpeed;
+			(_gameElement as GameElement3D).roll += AppSettings.instance.dartRollSpeed;
 					
-			_gameElement.position.x = x;
-			_gameElement.position.y = y;
-			_gameElement.position.z = z;	
+			(_gameElement as GameElement3D).position.x = x;
+			(_gameElement as GameElement3D).position.y = y;
+			(_gameElement as GameElement3D).position.z = z;	
 		}//end update()
 		
 	}//end TrajectoryAction

@@ -2,6 +2,7 @@
 {
 	import com.bored.games.actions.Action;
 	import com.bored.games.objects.GameElement;
+	import com.bored.games.objects.GameElement3D;
 	import flash.utils.getTimer;
 	import com.sven.utils.AppSettings;
 	
@@ -33,11 +34,11 @@
 	
 		override public function update(a_time:Number):void
 		{
-			_gameElement.position.z += (_zPull - _gameElement.position.z) / 8;
+			(_gameElement as GameElement3D).position.z += (_zPull - (_gameElement as GameElement3D).position.z) / 8;
 			
-			if ( (Math.abs(_zPull - _gameElement.position.z) * AppSettings.instance.away3dEngineScale) < 1 )
+			if ( (Math.abs(_zPull - (_gameElement as GameElement3D).position.z) * AppSettings.instance.away3dEngineScale) < 1 )
 			{
-				_gameElement.position.z = _zPull;
+				(_gameElement as GameElement3D).position.z = _zPull;
 				this.finished = true;
 			}
 		}//end update()

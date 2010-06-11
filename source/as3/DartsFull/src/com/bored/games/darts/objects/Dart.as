@@ -15,7 +15,7 @@
 	import com.bored.games.darts.models.dae_DartFlightHeart;
 	import com.bored.games.darts.models.dae_DartShaft;
 	import com.bored.games.darts.skins.DartSkin;
-	import com.bored.games.objects.GameElement;
+	import com.bored.games.objects.GameElement3D;
 	import com.sven.utils.MovieClipFactory;
 	import com.sven.utils.TrajectoryCalculator;
 	import com.sven.utils.AppSettings;
@@ -26,7 +26,7 @@
 	 * ...
 	 * @author sam
 	 */
-	public class Dart extends GameElement
+	public class Dart extends GameElement3D
 	{
 		protected var _trajectoryAction:DartTrajectoryAction;
 		protected var _pullBackAction:DartPullBackAction;
