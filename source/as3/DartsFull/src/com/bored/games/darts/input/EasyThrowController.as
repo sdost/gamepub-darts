@@ -11,7 +11,6 @@
 	import flash.geom.Point;
 	import flash.ui.Mouse;
 	import flash.utils.Timer;
-	import mx.logging.targets.MiniDebugTarget;
 	
 	/**
 	 * ...

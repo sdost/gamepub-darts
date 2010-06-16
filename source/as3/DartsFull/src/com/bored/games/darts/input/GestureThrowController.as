@@ -12,7 +12,6 @@
 	import flash.geom.Point;
 	import flash.ui.Mouse;
 	import flash.utils.Timer;
-	import mx.logging.targets.MiniDebugTarget;
 	
 	/**
 	 * ...
@@ -37,13 +36,15 @@
 		private var _frameTimer:Sprite = new Sprite();
 		
 		override public function startThrow(a_inputController:InputController):void
-		{
-			a_inputController.pause = false;
-			
+		{			
 			if ( !DartsGlobals.instance.externalServices.getData("seenThrowTutorial") )
 			{
 				DartsGlobals.instance.showModalPopup(ThrowTutorialModal);
-				DartsGlobals.instance.gameManager.pause(true);
+				//DartsGlobals.instance.gameManager.pause(true);
+			} 
+			else 
+			{
+				a_inputController.pause = false;
 			}
 		}//end startThrow()
 		
