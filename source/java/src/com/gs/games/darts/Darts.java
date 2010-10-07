@@ -25,6 +25,8 @@ public class Darts extends TurnBasedExtension {
 	private long _startTime;
 	private long _endTime;
 	
+	private long _roundTime = 30;
+	
 	private HashMap<Integer, DartsPlayer> _players;
 		
 	public Darts() 
@@ -47,6 +49,8 @@ public class Darts extends TurnBasedExtension {
 		d.setSkinId(jso.optString("skinid"));
 		d.setFlightId(jso.optString("flightid"));
 		_players.put(u.getPlayerIndex(), d);
+		
+		_bullOffResults.put(u.getPlayerIndex(), -1.0);
 				
 		if(_bGameStart)
 		{
@@ -112,18 +116,11 @@ public class Darts extends TurnBasedExtension {
 			_curRound = 0;
 			
 			_startTime = System.currentTimeMillis();
-			
+						
 			_bullOff = true;
-
-			jso = new JSONObject();
-			try {
-				jso.put("bulloff", _bullOff);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
 			
 			// Send ROUND_START to all users
-			nextRound(fromRoom, null, jso);
+			// nextRound(fromRoom, null, jso);
 		}
 
 		return _bGameStart;
@@ -140,13 +137,13 @@ public class Darts extends TurnBasedExtension {
 		
 		LinkedList<SocketChannel> ll = (LinkedList<SocketChannel>) rm.getChannellList();
 		
-		if(super.handleTurnUpdate(jso, u, fromRoom))
+		if(super.handleTurnUpdate(jso, u, fromRoom) || _bullOff)
 		{
 			double x0 = jso.optDouble("x");
 			double y0 = jso.optDouble("y");
 			double z0 = jso.optDouble("z");
-			int thrust = jso.optInt("thr");
-			int angle = jso.optInt("a");
+			double thrust = jso.optDouble("thr");
+			double angle = jso.optDouble("a");
 			double theta = Math.PI / 180 * angle;
 			double gravity = jso.optDouble("g");
 			double lean = jso.optDouble("lean");
@@ -156,15 +153,24 @@ public class Darts extends TurnBasedExtension {
 			double unitX = 1;
 			double unitY = 0;
 			
+			System.out.println("thrust: " + thrust);
+			System.out.println("theta: " + theta);
+			
 			double rotX = unitX * Math.cos(theta) - unitY * Math.sin(theta);
 			double rotY = unitX * Math.sin(theta) + unitY * Math.cos(theta);
 			
 			double thrustVectorX = rotX * thrust;
 			double thrustVectorY = rotY * thrust;
 			
+			System.out.println("thrustVectorX: " + thrustVectorX);
+			System.out.println("thrustVectorY: " + thrustVectorY);
+			
 			double zDiff = zF - z0;
 			double finalY = y0 + zDiff * (thrustVectorY / thrustVectorX) - .5 * Math.pow(zDiff, 2) * gravity / Math.pow(thrustVectorX, 2);
-			double finalX = x0 + (zDiff / thrustVectorX) * lean * step;
+			double finalX = x0 + zDiff * lean * step;
+			
+			System.out.println("finalX: " + finalX);
+			System.out.println("finalY: " + finalY);
 			
 			double coord_Theta = Math.atan2(finalY, finalX);
 			double coord_Radius = Math.sqrt( finalX * finalX + finalY * finalY ) * 90;
@@ -202,7 +208,7 @@ public class Darts extends TurnBasedExtension {
 				
 				double dist = Math.sqrt( dx * dx + dy * dy );
 				
-				_bullOffResults.put(super._curPlayer.getPlayerIndex(), dist);
+				_bullOffResults.put(u.getPlayerIndex(rm), dist);
 				
 				User[] users = rm.getAllPlayers();
 				
@@ -215,18 +221,15 @@ public class Darts extends TurnBasedExtension {
 					}
 				}
 				
-				jso = this.getJSONTurnUpdateObject(null);
-				super.setJSONArg(jso, "action", "p_r");
-				super.setJSONArg(jso, "p", board_Section);
-				super.setJSONArg(jso, "m", board_Multiplier);
-				
-				super.sendResponse(jso, fromRoom, SERVER, ll);
-				
 				double minDist = Double.MAX_VALUE;
 				if( bullOffComplete )
 				{
 					for(int i = 0; i < users.length ; i++)
 					{
+						System.out.println("_bullOffResults: " + _bullOffResults.toString());
+						System.out.println("user["+i+"]:" + users[i]);
+						System.out.println("Player Index: " + users[i].getPlayerIndex());
+						
 						if( minDist > _bullOffResults.get(users[i].getPlayerIndex()) )
 						{
 							minDist = _bullOffResults.get(users[i].getPlayerIndex());
@@ -235,9 +238,15 @@ public class Darts extends TurnBasedExtension {
 					}
 					
 					_bullOff = false;
+					
+					jso = new JSONObject();
+					try{
+						jso.put("first", _bullOffWinner);
+					} catch( Exception e ) {}
+					
+					nextRound(fromRoom, null, jso);
 				}
-			} else {
-				
+			} else {				
 				DartsPlayer p = _players.get(super._curPlayer.getPlayerIndex());
 				
 				if( board_Multiplier == 2 )
@@ -343,9 +352,42 @@ public class Darts extends TurnBasedExtension {
 		}
 	} // End checkRestrictions
 	
+	/**
+	 * Start timer when a turn starts.
+	 */
+	@Override
+	protected void startTurn(int fromRoom, LinkedList<SocketChannel> ll,
+			User nextPlayer)
+	{
+		super.startTurn(fromRoom, ll, nextPlayer);
+
+		// Create game timer and store into map using the current player as the key
+		super.startSecondsTimer(1L, 1L, _roundTime, nextPlayer, fromRoom);
+	}
+	
+	/**
+	 * Send GAME_TIMER_END and check which user let the game timer end
+	 * to send appropriate message to clients to proceed.
+	 */
+	@Override
+	protected void sendGameTimerEnd(User u, int fromRoom)
+	{
+		super.sendGameTimerEnd(u, fromRoom);
+
+		chooseNextPlayer(fromRoom);
+	}
+	
 	private void finishGame(int fromRoom, LinkedList<SocketChannel> ll, int winner) throws JSONException
 	{
 		handleRoundEnd(fromRoom, ll);
+		
+		Room rm = super.getRoom(fromRoom);
+		
+		User[] users = rm.getAllPlayers();
+		for( int i = 0; i < users.length; i++ )
+		{
+			this.removeGameTimer(users[i]);
+		}
 
 		// GAME_END message
 		super.sendResponse(super.getJSONStateObject(GAME_END, null), fromRoom,

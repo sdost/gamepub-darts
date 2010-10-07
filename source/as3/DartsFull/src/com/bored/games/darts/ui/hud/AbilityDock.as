@@ -8,7 +8,7 @@
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
-	import com.sven.utils.FontFactory;
+	import com.sven.factories.FontFactory;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;

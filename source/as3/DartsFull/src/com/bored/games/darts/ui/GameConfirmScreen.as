@@ -12,7 +12,7 @@
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
 	import com.jac.soundManager.SMSound;
-	import com.sven.utils.ImageFactory;
+	import com.sven.factories.ImageFactory;
 	import flash.display.Bitmap;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
@@ -226,7 +226,7 @@
 			
 			if (_opponentBio)
 			{
-				//_opponentBio.text = DartsGlobals.instance.opponentProfile.bio;
+				_opponentBio.text = DartsGlobals.instance.opponentProfile.bio;
 			}
 			else
 			{
@@ -235,12 +235,12 @@
 			
 			if (_opponentPortrait)
 			{
-				//var portrait:Bitmap = new Bitmap(DartsGlobals.instance.opponentProfile.portrait);
-				//portrait.smoothing = true;
-				//portrait.width = 75;
-				//portrait.height = 75;
+				var portrait:Bitmap = new Bitmap(DartsGlobals.instance.opponentProfile.portrait);
+				portrait.smoothing = true;
+				portrait.width = 75;
+				portrait.height = 75;
 				
-				//_opponentPortrait.addChild(portrait);
+				_opponentPortrait.addChild(portrait);
 			}
 			else
 			{

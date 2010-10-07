@@ -6,7 +6,7 @@
 	import com.jac.soundManager.events.SMSoundCompleteEvent;
 	import com.jac.soundManager.SMSound;
 	import com.jac.soundManager.SoundController;
-	import com.sven.utils.SpriteFactory;
+	import com.sven.factories.SpriteFactory;
 	import flash.display.Sprite;
 	
 	/**

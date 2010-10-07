@@ -63,14 +63,14 @@
 				}
 			}
 			
-			DartsGlobals.instance.gameManager.currentDart.position.x = _previousPosition.x;
-			DartsGlobals.instance.gameManager.currentDart.position.y = _previousPosition.y;
+			DartsGlobals.instance.gameManager.currentDart.x = _previousPosition.x;
+			DartsGlobals.instance.gameManager.currentDart.y = _previousPosition.y;
 			
 			version = Math.ceil( Math.random() * 2 );
 						
 			(_profile as EnemyProfile).playSound("generic_prethrow" + version.toString());
 			
-			_throwTween = TweenMax.to( DartsGlobals.instance.gameManager.currentDart.position, 1, { 
+			_throwTween = TweenMax.to( DartsGlobals.instance.gameManager.currentDart, 1, { 
 				x: _finalShot.point.x, 
 				y: _finalShot.point.y,
 				delay:2,

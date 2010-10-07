@@ -169,7 +169,7 @@
 			<arg line="--skip-win-hidden --no3 --out=${swc.build.dir}\linecount.txt src\com" />
 		</exec>
 		
-		<compc output="${swc.build.dir}/${swc.name}" include-classes="${src.classes}">
+		<compc output="${swc.build.dir}/${swc.name}" include-classes="${src.classes}" debug="${compile.code.debug}">
 			
 			<source-path path-element="${src.dir}"/>
 			
@@ -212,6 +212,7 @@
             actionscript-file-encoding="UTF-8"
 			default-background-color="${proj.bg.color}"
 			default-frame-rate="${proj.frame.rate}"
+			static-rsls="true"
 			target-player="${proj.target.player}"
         >
 			

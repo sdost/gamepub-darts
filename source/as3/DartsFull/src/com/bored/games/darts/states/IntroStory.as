@@ -3,14 +3,14 @@
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.jac.soundManager.SMSound;
 	import com.sven.utils.AppSettings;
-	import com.bored.games.animations.Cutscene;
-	import com.bored.games.animations.CutsceneManager;
+	import com.bored.games.darts.animations.Cutscene;
+	import com.bored.games.darts.animations.CutsceneManager;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.inassets.statemachines.Finite.State;
 	import com.inassets.statemachines.interfaces.IStateMachine;
 	import com.inassets.ui.buttons.MightyButton;
-	import com.sven.utils.SpriteFactory;
+	import com.sven.factories.SpriteFactory;
 	import flash.display.MovieClip;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;

@@ -8,7 +8,7 @@
 	import com.inassets.statemachines.interfaces.IStateMachine;
 	import com.jac.soundManager.SMSound;
 	import com.sven.utils.AppSettings;
-	import com.sven.utils.SpriteFactory;
+	import com.sven.factories.SpriteFactory;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -39,7 +39,9 @@
 		 * Handler for entering (and executing) this state.
 		 */
 		override public function onEnter():void
-		{			
+		{	
+			DartsGlobals.instance.hideControlPanel();
+			
 			var titleScreenImg:Sprite;
 			
 			try

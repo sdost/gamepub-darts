@@ -1,6 +1,5 @@
 ﻿package com.bored.games.darts.ui.hud 
 {
-	import caurina.transitions.properties.CurveModifiers;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.input.ThrowController;
 	import com.greensock.TweenLite;

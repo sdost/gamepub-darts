@@ -7,7 +7,7 @@
 	import com.bored.games.darts.logic.AIShotCandidate;
 	import com.bored.games.darts.models.dae_DartFlightPincer;
 	import com.bored.games.darts.profiles.EnemyProfile;
-	import com.sven.utils.ImageFactory;
+	import com.sven.factories.ImageFactory;
 	import com.sven.utils.AppSettings;
 	import flash.display.Sprite;
 	import com.bored.games.darts.models.dae_DartFlightHeart;

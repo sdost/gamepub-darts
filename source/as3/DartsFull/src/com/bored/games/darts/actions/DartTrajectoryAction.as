@@ -1,10 +1,11 @@
 ﻿package com.bored.games.darts.actions 
 {
 	import com.bored.games.actions.Action;
+	import com.bored.games.darts.objects.I3D;
 	import com.bored.games.objects.GameElement;
-	import com.bored.games.objects.GameElement3D;
-	import com.sven.utils.TrajectoryCalculator;
+	import com.bored.games.darts.utils.TrajectoryCalculator;
 	import com.sven.utils.AppSettings;
+	import flash.geom.Vector3D;
 	
 	/**
 	 * ...
@@ -46,13 +47,15 @@
 		{
 			super.startAction();
 			
-			_calc.initialPosition = (_gameElement as GameElement3D).position;
+			_calc.initialPosition = new Vector3D(_gameElement.x, _gameElement.y, _gameElement.z);
 			_calc.thrust = _thrust;
 			_calc.theta = _theta;
 			_calc.gravity = _gravity;
 			
-			(_gameElement as GameElement3D).pitch = 90;
-			(_gameElement as GameElement3D).roll = 0;
+			trace("Trajectory: " + _calc.toString());
+			
+			(_gameElement as I3D).pitch = 90;
+			(_gameElement as I3D).roll = 0;
 			
 			_lastUpdate = -1;
 		}//end startAction()
@@ -79,22 +82,22 @@
 				adjust = Number( diff / 33 );
 			}
 			
-			var z:Number = (_gameElement as GameElement3D).position.z + _calc.thrustVector.x * _stepScale * adjust;
+			var z:Number = _gameElement.z + _calc.thrustVector.x * _stepScale * adjust;
 			
 			if ( z > this._finalZ ) z = this._finalZ;
 			
 			var y:Number = _calc.calculateHeightAtPos(z);
-			var x:Number = (_gameElement as GameElement3D).position.x + _lean * _stepScale;
+			var x:Number = _calc.initialPosition.x + (z * _lean * _stepScale);
 				
-			var rad:Number = Math.atan2(y - (_gameElement as GameElement3D).position.y, z - (_gameElement as GameElement3D).position.z);
+			var rad:Number = Math.atan2(y - _gameElement.y, z - _gameElement.z);
 	
-			(_gameElement as GameElement3D).pitch = rad * 180 / Math.PI + 90;
+			(_gameElement as I3D).pitch = rad * 180 / Math.PI + 90;
 			
-			(_gameElement as GameElement3D).roll += AppSettings.instance.dartRollSpeed;
+			(_gameElement as I3D).roll += AppSettings.instance.dartRollSpeed;
 					
-			(_gameElement as GameElement3D).position.x = x;
-			(_gameElement as GameElement3D).position.y = y;
-			(_gameElement as GameElement3D).position.z = z;	
+			_gameElement.x = x;
+			_gameElement.y = y;
+			_gameElement.z = z;	
 		}//end update()
 		
 	}//end TrajectoryAction

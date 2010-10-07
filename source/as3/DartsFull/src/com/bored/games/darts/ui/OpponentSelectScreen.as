@@ -16,7 +16,7 @@
 	import com.inassets.ui.contentholders.ContentHolder;
 	import com.jac.soundManager.SMSound;
 	import com.jac.soundManager.SoundController;
-	import com.sven.utils.FontFactory;
+	import com.sven.factories.FontFactory;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;

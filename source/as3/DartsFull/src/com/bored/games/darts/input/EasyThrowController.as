@@ -2,8 +2,8 @@
 {
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.input.ThrowController;
-	import com.bored.games.events.InputStateEvent;
-	import com.bored.games.input.InputController;
+	import com.bored.games.darts.events.InputStateEvent;
+	import com.bored.games.darts.input.InputController;
 	import com.sven.utils.AppSettings;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -84,8 +84,8 @@
 					_timer.stop();
 						
 					DartsGlobals.instance.gameManager.playerThrow(
-						DartsGlobals.instance.gameManager.currentDart.position.x,
-						DartsGlobals.instance.gameManager.currentDart.position.y,
+						DartsGlobals.instance.gameManager.currentDart.x,
+						DartsGlobals.instance.gameManager.currentDart.y,
 						0,
 						AppSettings.instance.dartSweetSpotThrust,
 						0,
@@ -99,13 +99,13 @@
 			var x:Number = _radius * Math.cos(_angle * Math.PI / 180);
 			var y:Number = _radius * Math.sin(_angle * Math.PI / 180);
 			
-			DartsGlobals.instance.gameManager.cursor.position.x = ((x * AppSettings.instance.cursorPositionZ * Math.tan(57.5 * Math.PI / 180))/ 700);
-			DartsGlobals.instance.gameManager.cursor.position.y = ((-y * AppSettings.instance.cursorPositionZ * Math.tan(51 * Math.PI / 180))/ 550);
-			DartsGlobals.instance.gameManager.cursor.position.z = AppSettings.instance.cursorPositionZ;
+			DartsGlobals.instance.gameManager.cursor.x = ((x * AppSettings.instance.cursorPositionZ * Math.tan(57.5 * Math.PI / 180))/ 700);
+			DartsGlobals.instance.gameManager.cursor.y = ((-y * AppSettings.instance.cursorPositionZ * Math.tan(51 * Math.PI / 180))/ 550);
+			DartsGlobals.instance.gameManager.cursor.z = AppSettings.instance.cursorPositionZ;
 					
-			DartsGlobals.instance.gameManager.currentDart.position.x = ((x * AppSettings.instance.dartboardPositionZ * Math.tan(50 * Math.PI / 180)) / 700);
-			DartsGlobals.instance.gameManager.currentDart.position.y = ((-y * AppSettings.instance.dartboardPositionZ * Math.tan(50 * Math.PI / 180)) / 550);
-			DartsGlobals.instance.gameManager.currentDart.position.z = 0;
+			DartsGlobals.instance.gameManager.currentDart.x = ((x * AppSettings.instance.dartboardPositionZ * Math.tan(50 * Math.PI / 180)) / 700);
+			DartsGlobals.instance.gameManager.currentDart.y = ((-y * AppSettings.instance.dartboardPositionZ * Math.tan(50 * Math.PI / 180)) / 550);
+			DartsGlobals.instance.gameManager.currentDart.z = 0;
 		}//end updateMousePosition()
 		
 	}//end EasyThrowController

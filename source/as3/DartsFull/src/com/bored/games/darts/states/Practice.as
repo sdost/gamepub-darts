@@ -22,7 +22,7 @@
 	import com.inassets.statemachines.interfaces.IStateMachine;
 	import com.jac.soundManager.SMSound;
 	import com.sven.utils.AppSettings;
-	import com.sven.utils.ImageFactory;
+	import com.sven.factories.ImageFactory;
 	import flash.display.Bitmap;
 	import flash.display.MovieClip;
 	import flash.events.Event;
@@ -63,6 +63,7 @@
 			DartsGlobals.instance.localPlayer.setSkin(DartsGlobals.instance.playerProfile.skins[0]);
 			
 			DartsGlobals.instance.opponentProfile = new EnemyProfile("Computer");
+			DartsGlobals.instance.opponentProfile.portrait = ImageFactory.getBitmapDataByQualifiedName("com.bored.games.darts.assets.icons.Computer_Portrait_BMP", 150, 150);
 			DartsGlobals.instance.opponentProfile.accuracy = 0.7;
 			DartsGlobals.instance.opponentProfile.stepScale = 0.05;
 			DartsGlobals.instance.opponentProfile.dartSkin = new DartSkin( ImageFactory.getBitmapDataByQualifiedName("dartuv_techno", 512, 512), dae_DartShaft.data, dae_DartFlightModHex.data );

@@ -31,11 +31,15 @@
 		private var _abilityStock:Vector.<Ability>;
 		private var _activeAbilities:Array;
 		
+		private var _turnTime:Number;
+		
 		public function DartsPlayer(a_name:String = "") 
 		{
 			_name = a_name;
 			_abilityStock = new Vector.<Ability>();
 			_activeAbilities = new Array(3);
+			
+			_turnTime = -1;
 		}//end constructor()
 		
 		public function set dartGame(a_game:DartsGameLogic):void
@@ -88,6 +92,16 @@
 		{
 			return _skin;
 		}//end get skin()
+		
+		public function set turnTime(a_time:Number):void
+		{
+			_turnTime = a_time;
+		}//end set turnTime()
+		
+		public function get turnTime():Number
+		{
+			return _turnTime;
+		}//end get turnTime()
 		
 		public function addAbilities(a_ability:Ability):void
 		{

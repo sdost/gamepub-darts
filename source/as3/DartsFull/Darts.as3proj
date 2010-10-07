@@ -27,6 +27,7 @@
     <option optimize="False" />
     <option showActionScriptWarnings="True" />
     <option showBindingWarnings="True" />
+    <option showInvalidCSS="True" />
     <option showDeprecationWarnings="True" />
     <option showUnusedTypeSelectorWarnings="True" />
     <option strict="True" />
@@ -49,7 +50,6 @@
   <libraryPaths>
     <element path="swcLibs_includeAll\BoredEngine.swc" />
     <element path="swcLibs_includeAll\FileLoader.swc" />
-    <element path="swcLibs_includeAll\gsclient.swc" />
     <element path="swcLibs_includeAll\SFS_JSON.swc" />
     <element path="swfLibs_includeAll\TitleScreen.swc" />
     <element path="swfLibs_includeAll\AttractScreen.swc" />
@@ -68,6 +68,34 @@
     <element path="swfLibs_includeAll\Fonts.swc" />
     <element path="swcLibs_includeAll\away3Dlite.swc" />
     <element path="swcLibs_includeAll\MonsterProofEngine.swc" />
+    <element path="swcLibs_includeAll\InAssetsUtils.swc" />
+    <element path="swcLibs_includeAll\StateMachines.swc" />
+    <element path="swcLibs_includeAll\AS3_Corelib.swc" />
+    <element path="swcLibs_includeAll\greensock.swc" />
+    <element path="swfLibs_includeAll\Confirm_Screen.swc" />
+    <element path="swfLibs_includeAll\Confirm_Screen.swc" />
+    <element path="swfLibs_includeAll\Confirm_Screen.swc" />
+    <element path="swfLibs_includeAll\Confirm_Screen.swc" />
+    <element path="swfLibs_includeAll\HUDAssets.swc" />
+    <element path="swfLibs_includeAll\HUDAssets.swc" />
+    <element path="swfLibs_includeAll\Portraits.swc" />
+    <element path="swfLibs_includeAll\Portraits.swc" />
+    <element path="swfLibs_includeAll\MonsterproofLogo.swc" />
+    <element path="swfLibs_includeAll\HUDAssets.swc" />
+    <element path="swfLibs_includeAll\HUDAssets.swc" />
+    <element path="swfLibs_includeAll\HUDAssets.swc" />
+    <element path="swfLibs_includeAll\HUDAssets.swc" />
+    <element path="swfLibs_includeAll\StoryAssets.swc" />
+    <element path="swfLibs_includeAll\TitleScreen.swc" />
+    <element path="swfLibs_includeAll\Confirm_Screen.swc" />
+    <element path="swfLibs_includeAll\HUDAssets.swc" />
+    <element path="swfLibs_includeAll\HUDAssets.swc" />
+    <element path="swfLibs_includeAll\HUDAssets.swc" />
+    <element path="swfLibs_includeAll\HUDAssets.swc" />
+    <element path="swfLibs_includeAll\HUDAssets.swc" />
+    <element path="swfLibs_includeAll\Portraits.swc" />
+    <element path="swfLibs_includeAll\HUDAssets.swc" />
+    <element path="swfLibs_includeAll\Confirm_Screen.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>

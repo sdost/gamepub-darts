@@ -5,7 +5,8 @@
 	import com.inassets.ui.contentholders.ContentHolder;
 	import com.sven.containers.Panel;
 	import com.sven.utils.AppSettings;
-	import com.sven.utils.SpriteFactory;
+	import com.sven.factories.SpriteFactory;
+	import flash.display.Bitmap;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -72,7 +73,12 @@
 			
 			if (_playerImage)
 			{
-				_playerImage.addChild(DartsGlobals.instance.gameManager.players[DartsGlobals.instance.gameManager.currentPlayer].portrait);
+				var portrait:Bitmap = new Bitmap(DartsGlobals.instance.gameManager.players[DartsGlobals.instance.gameManager.currentPlayer].portrait.bitmapData);
+				portrait.smoothing = true;
+				portrait.width = 58;
+				portrait.height = 58;
+				
+				_playerImage.addChild(portrait);
 			}
 			else
 			{

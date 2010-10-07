@@ -1,8 +1,8 @@
 ﻿package com.bored.games.darts.actions 
 {
 	import com.bored.games.actions.Action;
+	import com.bored.games.darts.objects.I3D;
 	import com.bored.games.objects.GameElement;
-	import com.bored.games.objects.GameElement3D;
 	import flash.utils.getTimer;
 	import com.sven.utils.AppSettings;
 	
@@ -40,20 +40,20 @@
 			
 			_time = getTimer();
 			
-			_zBounce = Math.floor((_gameElement as GameElement3D).position.z - (Math.random() * _zBounceRange));
+			_zBounce = Math.floor(_gameElement.z - (Math.random() * _zBounceRange));
 		}//end startAction()
 	
 		override public function update(a_time:Number):void
 		{
-			(_gameElement as GameElement3D).pitch += (0 - (_gameElement as GameElement3D).pitch) / 8;
-			(_gameElement as GameElement3D).position.z += (_zBounce - (_gameElement as GameElement3D).position.z) / 8;
+			(_gameElement as I3D).pitch += (0 - (_gameElement as I3D).pitch) / 8;
+			_gameElement.z += (_zBounce - _gameElement.z) / 8;
 			
 			var elapsed:Number = (a_time - _time)/1000;
 			
 			var moveY:Number = _gravity * elapsed * elapsed;
 			
-			(_gameElement as GameElement3D).position.y -= moveY * AppSettings.instance.simulationStepScale;
-			if ((_gameElement as GameElement3D).position.y <= _yFloor)
+			_gameElement.y -= moveY * AppSettings.instance.simulationStepScale;
+			if (_gameElement.y <= _yFloor)
 			{
 				this.finished = true;
 			}

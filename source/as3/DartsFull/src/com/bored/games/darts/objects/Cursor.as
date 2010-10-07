@@ -10,7 +10,7 @@
 	import away3dlite.sprites.Sprite3D;
 	import com.sven.utils.AppSettings;
 	import away3dlite.core.base.Object3D;
-	import com.bored.games.objects.GameElement3D;
+	import com.bored.games.objects.GameElement;
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
 	import flash.geom.Matrix;
@@ -20,12 +20,16 @@
 	 * ...
 	 * @author sam
 	 */
-	public class Cursor extends GameElement3D
+	public class Cursor extends GameElement implements I3D
 	{
 		private var _cursor:Sprite;
 		private var _cursorSprite:Sprite3D;
 		private var _cursorMaterial:MovieMaterial;
 		private var _hidden:Boolean;
+		
+		private var _pitch:Number;
+		private var _roll:Number;
+		private var _yaw:Number;
 		
 		public function Cursor(a_img:Sprite) 
 		{
@@ -55,10 +59,16 @@
 		{
 			super.update(a_time);
 			
-			if ( _cursorSprite ) {
-				_cursorSprite.x = this.position.x * AppSettings.instance.away3dEngineScale;
-				_cursorSprite.y = -(this.position.y * AppSettings.instance.away3dEngineScale);
-				_cursorSprite.z = this.position.z * AppSettings.instance.away3dEngineScale;
+			if ( _cursorMaterial )
+			{
+				_cursorMaterial.update();
+			}
+			
+			if ( _cursorSprite ) 
+			{				
+				_cursorSprite.x = this.x * AppSettings.instance.away3dEngineScale;
+				_cursorSprite.y = -(this.y * AppSettings.instance.away3dEngineScale);
+				_cursorSprite.z = this.z * AppSettings.instance.away3dEngineScale;
 			}
 		}//end update()
 		
@@ -71,9 +81,15 @@
 			
 		}//end setCursorImage()
 		
+		public function setCursorScale(a_num:Number):void
+		{
+			_cursorSprite.scale = a_num;
+		}//end setCursorScale()
+		
 		public function resetCursorImage():void
 		{
 			_cursorMaterial.movie = _cursor;
+			_cursorSprite.scale = 0.35;
 		}//end resetCursorImage()
 		
 		public function show():void
@@ -93,6 +109,36 @@
 			return _cursorSprite;
 		}//end get model()
 				
+		public function set pitch(a_num:Number):void
+		{
+			_pitch = a_num;
+		}//end set pitch()
+		
+		public function get pitch():Number
+		{
+			return _pitch;
+		}//end set pitch()
+		
+		public function set roll(a_num:Number):void
+		{
+			_roll = a_num;
+		}//end set roll()
+		
+		public function get roll():Number
+		{
+			return _roll;
+		}//end set roll()
+		
+		public function set yaw(a_num:Number):void
+		{
+			_yaw = a_num;
+		}//end set yaw()
+		
+		public function get yaw():Number
+		{
+			return _yaw;
+		}//end set yaw()
+		
 	}//end Cursor
 
 }//end com.bored.games.darts.objects

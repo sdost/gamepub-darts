@@ -8,7 +8,7 @@
 	import com.inassets.ui.contentholders.ContentHolder;
 	import com.jac.soundManager.SMSound;
 	import com.sven.utils.AppSettings;
-	import com.sven.utils.SpriteFactory;
+	import com.sven.factories.SpriteFactory;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;

@@ -113,6 +113,8 @@
 			}
 			
 			_opponentTotal.text = _scoreMgr.getPlayerScore(DartsGlobals.instance.opponentPlayer.playerNum).toString();
+			
+			super.update();
 		}//end update()
 		
 		override public function destroy(...args):void

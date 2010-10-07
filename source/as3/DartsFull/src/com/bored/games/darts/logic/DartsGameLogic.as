@@ -13,16 +13,16 @@
 	import com.bored.games.darts.ui.modals.ClickContinueModal;
 	import com.bored.games.darts.ui.modals.GameResultsModal;
 	import com.bored.games.darts.ui.modals.TurnAnnounceModal;
-	import com.bored.games.input.InputController;
+	import com.bored.games.darts.input.InputController;
 	import com.bored.games.darts.input.ThrowController;
 	import com.bored.games.darts.objects.Dart;
 	import com.bored.games.darts.player.DartsPlayer;
-	import com.bored.games.events.InputStateEvent;
+	import com.bored.games.darts.events.InputStateEvent;
 	import com.bored.games.GameUtils;
 	import com.greensock.TweenMax;
 	import com.jac.soundManager.SMSound;
 	import com.jac.soundManager.SoundController;
-	import com.sven.utils.SpriteFactory;
+	import com.sven.factories.SpriteFactory;
 	import flash.display.Bitmap;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
@@ -72,6 +72,7 @@
 		protected var _paused:Boolean = false;
 		
 		protected var _bullOff:Boolean = false;
+		protected var _bullOffWinner:int;
 		protected var _bullOffResults:Array;
 		
 		protected var _resting:Boolean = false;
@@ -100,6 +101,7 @@
 			
 			DartsGlobals.instance.soundManager.getSoundControllerByID("loopsController").addSound( new SMSound("ambient_bar_loop", "loop_ambience_bar_wav", true) );
 			DartsGlobals.instance.soundManager.getSoundControllerByID("loopsController").addSound( new SMSound("theme_loop", "loop_theme1_wav", true) );
+	
 		}//end constructor()
 		
 		public function loadGameState(a_state:Object):void
@@ -153,6 +155,16 @@
 			return _bullOff;
 		}//end get bullOff()
 		
+		public function set bullOffWinner(a_winner:int):void
+		{
+			_bullOffWinner = a_winner;
+		}//end set bullOffWinner()
+		
+		public function get bullOffWinner():int
+		{
+			return _bullOffWinner;
+		}//end get bullOffWinner()
+		
 		public function registerPlayer(a_player:DartsPlayer):void
 		{
 			if ( _players == null ) {
@@ -168,8 +180,8 @@
 			
 			for each( var dart:Dart in a_player.darts )
 			{
-				dart.position.x = -1000;
-				dart.position.y = -1000;
+				dart.x = -1000;
+				dart.y = -1000;
 				_darts.push(dart);
 			}
 			
@@ -264,15 +276,15 @@
 		{	
 			var winner:int;
 			
-			if ( _currentDart && ( _currentDart.position.z >= AppSettings.instance.dartboardPositionZ || _currentDart.position.y <= -10 ) )
+			if ( _currentDart && ( _currentDart.z >= AppSettings.instance.dartboardPositionZ || _currentDart.y <= -10 ) )
 			{	
-				_currentDart.position.z = AppSettings.instance.dartboardPositionZ;
+				_currentDart.z = AppSettings.instance.dartboardPositionZ;
 				
 				_currentDart.finishThrow();	
 				
 				if ( _bullOff ) 
 				{
-					var dist:Number = _dartboard.getDistanceFromSection(_currentDart.position.x, _currentDart.position.y, 25, 2);
+					var dist:Number = _dartboard.getDistanceFromSection(_currentDart.x, _currentDart.y, 25, 2);
 					
 					_bullOffResults[_currentPlayer - 1] = dist;
 					
@@ -314,7 +326,7 @@
 				}
 				else 
 				{
-					if ( !_dartboard.submitDartPosition(_currentDart.position.x, _currentDart.position.y, _currentDart.blockBoard) ) 
+					if ( !_dartboard.submitDartPosition(_currentDart.x, _currentDart.y, _currentDart.blockBoard) ) 
 					{
 						_currentDart.beginFalling();
 					}
@@ -370,6 +382,8 @@
 		{			
 			_bullOff = true;
 			
+			_currentPlayer = DartsGlobals.instance.localPlayer.playerNum;
+			
 			startNewTurn();
 		}//end bullOff()
 		
@@ -408,9 +422,9 @@
 			
 			trace("Current Dart: " + _currentDart);
 			
-			_currentDart.position.x = AppSettings.instance.defaultStartPositionX;
-			_currentDart.position.y = AppSettings.instance.defaultStartPositionY;
-			_currentDart.position.z = AppSettings.instance.defaultStartPositionZ;
+			_currentDart.x = AppSettings.instance.defaultStartPositionX;
+			_currentDart.y = AppSettings.instance.defaultStartPositionY;
+			_currentDart.z = AppSettings.instance.defaultStartPositionZ;
 			
 			dispatchEvent(new Event(THROW_END));
 			
@@ -424,18 +438,18 @@
 		
 		public function redoDart():void
 		{	
-			_currentDart.position.x = AppSettings.instance.defaultStartPositionX;
-			_currentDart.position.y = AppSettings.instance.defaultStartPositionY;
-			_currentDart.position.z = AppSettings.instance.defaultStartPositionZ;
+			_currentDart.x = AppSettings.instance.defaultStartPositionX;
+			_currentDart.y = AppSettings.instance.defaultStartPositionY;
+			_currentDart.z = AppSettings.instance.defaultStartPositionZ;
 						
 			if( _lastDart ) {
 				_currentTurn.redoThrow();
 				_currentDart = _lastDart;
 				_currentDart.reset();
 				
-				_currentDart.position.x = AppSettings.instance.defaultStartPositionX;
-				_currentDart.position.y = AppSettings.instance.defaultStartPositionY;
-				_currentDart.position.z = AppSettings.instance.defaultStartPositionZ;
+				_currentDart.x = AppSettings.instance.defaultStartPositionX;
+				_currentDart.y = AppSettings.instance.defaultStartPositionY;
+				_currentDart.z = AppSettings.instance.defaultStartPositionZ;
 			}
 						
 			_players[_currentPlayer].takeTheShot(_currentTurn.throwsRemaining);
@@ -445,9 +459,9 @@
 		{
 			for each( var dart:Dart in _darts )
 			{
-				dart.position.x = AppSettings.instance.defaultStartPositionX;
-				dart.position.y = AppSettings.instance.defaultStartPositionY;
-				dart.position.z = AppSettings.instance.defaultStartPositionZ;
+				dart.x = AppSettings.instance.defaultStartPositionX;
+				dart.y = AppSettings.instance.defaultStartPositionY;
+				dart.z = AppSettings.instance.defaultStartPositionZ;
 			}
 		}//end resetDarts()
 		
@@ -534,7 +548,7 @@
 				
 				_soundController.play("throw_normal_" + version.toString());
 				
-				thrust = a_thrust;
+				thrust = (a_thrust > AppSettings.instance.defaultMinThrustThreshold) ? a_thrust : AppSettings.instance.defaultMinThrustThreshold;
 				lean = a_lean;
 				angle = AppSettings.instance.defaultAngle;
 			}

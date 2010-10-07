@@ -7,7 +7,7 @@
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.models.dae_DartFlightThin;
 	import com.sven.utils.AppSettings;
-	import com.sven.utils.ImageFactory;
+	import com.sven.factories.ImageFactory;
 	import com.bored.games.darts.profiles.EnemyProfile;
 	import com.bored.games.darts.logic.AIShotCandidate;
 	import flash.display.Sprite;

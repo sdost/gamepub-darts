@@ -4,9 +4,10 @@
 	import com.bored.games.darts.profiles.UserProfile;
 	import com.bored.games.darts.states.LogoSplash;
 	import com.bored.games.darts.states.Multiplayer;
+	import com.bored.games.darts.states.MultiplayerGameConfirm;
 	import com.bored.games.darts.states.Practice;
 	import com.bored.games.darts.states.statemachines.GameFSM;
-	import com.bored.games.animations.CutsceneManager;
+	import com.bored.games.darts.animations.CutsceneManager;
 	import com.bored.games.darts.states.GameConfirm;
 	import com.bored.games.darts.states.Gameplay;
 	import com.bored.games.darts.states.CPUOpponentSelect;
@@ -15,6 +16,7 @@
 	import com.bored.games.darts.states.Initialization;
 	import com.bored.games.darts.states.Attract;
 	import com.bored.services.BoredServices;
+	import com.inassets.utils.debug.WarningManager;
 	import com.sven.containers.Panel;
 	import com.sven.utils.AppSettings;
 	import flash.display.Shape;
@@ -57,6 +59,8 @@
 			
 			DartsGlobals.instance.stateMachine = _myStateMachine = new GameFSM();
 			
+			WarningManager.instance.handleMethod = WarningManager.TRACE_WARNINGS;
+			
 			addStates();
 			
 			stage.align = StageAlign.TOP_LEFT;
@@ -97,6 +101,7 @@
 			_myStateMachine.addState(new GameStore("GameStore", _myStateMachine));
 			_myStateMachine.addState(new Practice("Practice", _myStateMachine));
 			_myStateMachine.addState(new Multiplayer("Multiplayer", _myStateMachine));
+			_myStateMachine.addState(new MultiplayerGameConfirm("MultiplayerGameConfirm", _myStateMachine));
 		}//end addStates()
 		
 	}//end class DartsFull

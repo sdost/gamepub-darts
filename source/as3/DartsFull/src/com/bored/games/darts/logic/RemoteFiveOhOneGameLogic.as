@@ -10,11 +10,9 @@
 	import com.bored.games.darts.ui.modals.BullOffWinnerModal;
 	import com.bored.games.darts.ui.modals.GameResultsModal;
 	import com.bored.games.darts.ui.modals.TurnAnnounceModal;
-	import com.bored.games.events.InputStateEvent;
-	import com.bored.gs.game.GameClient;
-	import com.bored.gs.game.IGameClient;
-	import com.bored.gs.game.ITurnBased;
-	import com.bored.gs.game.TurnBasedGameClient;
+	import com.bored.games.darts.events.InputStateEvent;
+	import com.bored.services.client.GameClient;
+	import com.bored.services.client.TurnBasedGameClient;
 	import com.sven.utils.AppSettings;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -51,7 +49,7 @@
 		
 		private function onGameEnd(e:Event):void
 		{
-			var obj:Object = (DartsGlobals.instance.multiplayerClient as IGameClient).getData(GameClient.GAME_RESULTS);
+			var obj:Object = DartsGlobals.instance.multiplayerClient.getData(GameClient.GAME_RESULTS);
 			DartsGlobals.instance.localPlayer.record.gameTime = obj.gameTime;
 			DartsGlobals.instance.localPlayer.record.doubles = obj["doubles_" + DartsGlobals.instance.localPlayer.playerNum];
 			DartsGlobals.instance.localPlayer.record.triples = obj["triples_" + DartsGlobals.instance.localPlayer.playerNum];
@@ -106,7 +104,7 @@
 				angle = AppSettings.instance.defaultAngle;
 			}
 			
-			(DartsGlobals.instance.multiplayerClient as ITurnBased).sendTurnUpdate(
+			DartsGlobals.instance.multiplayerClient.sendTurnUpdate(
 				{
 					action: "p_t",
 					x: a_x,
@@ -135,34 +133,34 @@
 			switch(e.type)
 			{
 				case TurnBasedGameClient.ROUND_START:
-					obj = (DartsGlobals.instance.multiplayerClient as ITurnBased).getData(TurnBasedGameClient.ROUND_START);
+					obj = DartsGlobals.instance.multiplayerClient.getData(TurnBasedGameClient.ROUND_START);
 					_bullOff = obj.bulloff;
 					break;
 				case TurnBasedGameClient.ROUND_END:
 					break;
 				case TurnBasedGameClient.ROUND_RESULTS:
-					obj = (DartsGlobals.instance.multiplayerClient as ITurnBased).getData(TurnBasedGameClient.ROUND_RESULTS);
+					obj = DartsGlobals.instance.multiplayerClient.getData(TurnBasedGameClient.ROUND_RESULTS);
 					if (_bullOff)
 					{
 						_winner = obj.winner;
 					}
 					break;
 				case TurnBasedGameClient.TURN_START:
-					obj = (DartsGlobals.instance.multiplayerClient as ITurnBased).getData(TurnBasedGameClient.TURN_START);
+					obj = DartsGlobals.instance.multiplayerClient.getData(TurnBasedGameClient.TURN_START);
 					trace("Current Player: " + obj.pid);
 					cursor.show();
 					_currentPlayer = obj.pid;
 					DartsGlobals.instance.showModalPopup(TurnAnnounceModal);
 					break;
 				case TurnBasedGameClient.TURN_WAIT:
-					obj = (DartsGlobals.instance.multiplayerClient as ITurnBased).getData(TurnBasedGameClient.TURN_WAIT);
+					obj = DartsGlobals.instance.multiplayerClient.getData(TurnBasedGameClient.TURN_WAIT);
 					trace("Current Player: " + obj.pid);
 					cursor.hide();
 					_currentPlayer = obj.pid;
 					DartsGlobals.instance.showModalPopup(TurnAnnounceModal);
 					break;
 				case TurnBasedGameClient.TURN_UPDATE:
-					obj = (DartsGlobals.instance.multiplayerClient as ITurnBased).getData(TurnBasedGameClient.TURN_UPDATE);
+					obj = DartsGlobals.instance.multiplayerClient.getData(TurnBasedGameClient.TURN_UPDATE);
 					
 					if ( obj.action == "p_t" && _currentPlayer != DartsGlobals.instance.localPlayer.playerNum)
 					{
@@ -202,7 +200,7 @@
 		{			
 			super.endCurrentTurn(e);
 			
-			(DartsGlobals.instance.multiplayerClient as ITurnBased).sendTurnEnd();
+			DartsGlobals.instance.multiplayerClient.sendTurnEnd();
 		}//end endTurn()
 				
 		override public function get gameType():String
@@ -229,9 +227,9 @@
 		
 		override protected function handleGameLogic():void
 		{
-			if ( _currentDart && ( _currentDart.position.z >= AppSettings.instance.dartboardPositionZ || _currentDart.position.y <= -10 ) )
+			if ( _currentDart && ( _currentDart.z >= AppSettings.instance.dartboardPositionZ || _currentDart.y <= -10 ) )
 			{	
-				_currentDart.position.z = AppSettings.instance.dartboardPositionZ;
+				_currentDart.z = AppSettings.instance.dartboardPositionZ;
 				
 				_currentDart.finishThrow();
 				
@@ -286,7 +284,7 @@
 					trace("_serverResults[" + key + "]: " + _serverResults[key]);
 				}
 				
-				if ( !_dartboard.submitDartPositionUnscored(_currentDart.position.x, _currentDart.position.y, _currentDart.blockBoard, _serverResults) ) 
+				if ( !_dartboard.submitDartPositionUnscored(_currentDart.x, _currentDart.y, _currentDart.blockBoard, _serverResults) ) 
 				{
 					_currentDart.beginFalling();
 				}

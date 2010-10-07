@@ -15,9 +15,9 @@
 	import com.bored.games.darts.models.dae_DartFlightHeart;
 	import com.bored.games.darts.models.dae_DartShaft;
 	import com.bored.games.darts.skins.DartSkin;
-	import com.bored.games.objects.GameElement3D;
-	import com.sven.utils.MovieClipFactory;
-	import com.sven.utils.TrajectoryCalculator;
+	import com.bored.games.objects.GameElement;
+	import com.sven.factories.MovieClipFactory;
+	import com.bored.games.darts.utils.TrajectoryCalculator;
 	import com.sven.utils.AppSettings;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
@@ -26,7 +26,7 @@
 	 * ...
 	 * @author sam
 	 */
-	public class Dart extends GameElement3D
+	public class Dart extends GameElement implements I3D
 	{
 		protected var _trajectoryAction:DartTrajectoryAction;
 		protected var _pullBackAction:DartPullBackAction;
@@ -53,6 +53,10 @@
 		private var _indicatorSprite:Sprite;
 		private var _indicatorMaterial:MovieMaterial;
 		private var _modifierIndicator:Sprite3D;
+		
+		private var _pitch:Number;
+		private var _roll:Number;
+		private var _yaw:Number;
 		
 		public function Dart(a_skin:DartSkin, a_radius:int = 1) 
 		{
@@ -127,9 +131,9 @@
 				//_dartModel.rotationX = _dartModel.rotationY = _dartModel.rotationZ = 0;
 				//_dartModel.rotationY = this.roll;
 				_dartModel.rotationX = this.pitch;
-				_dartModel.x = this.position.x * AppSettings.instance.away3dEngineScale;
-				_dartModel.y = -(this.position.y * AppSettings.instance.away3dEngineScale);
-				_dartModel.z = this.position.z * AppSettings.instance.away3dEngineScale;
+				_dartModel.x = this.x * AppSettings.instance.away3dEngineScale;
+				_dartModel.y = -(this.y * AppSettings.instance.away3dEngineScale);
+				_dartModel.z = this.z * AppSettings.instance.away3dEngineScale;
 			}
 		}//end update()
 		
@@ -205,9 +209,9 @@
 			this.pitch = 90;
 			this.roll = 0;
 			this.yaw = 0;
-			this.position.x = releaseX;
-			this.position.y = releaseY;
-			this.position.z = releaseZ;
+			this.x = releaseX;
+			this.y = releaseY;
+			this.z = releaseZ;
 			
 			_throwAction.initParams({
 				"thrust": thrust,
@@ -242,16 +246,19 @@
 		public function resetThrow():void
 		{
 			deactivateAction(_pullBackAction.actionName);
-			this.position.z = 0;
+			this.z = 0;
 		}//end resetThrow()
 		
 		public function finishThrow():void
 		{
-			deactivateAction(_throwAction.actionName);
-			
-			trace("Final Position: " + this.position.toString());
-			
-			resetThrowAction();
+			if ( !_throwAction.finished )
+			{
+				deactivateAction(_throwAction.actionName);
+				
+				trace("Final Position: [" + this.x + ", " + this.y + ", " + this.z + "]");
+				
+				resetThrowAction();
+			}
 		}//end finishThrow()
 		
 		public function pullBack():void
@@ -263,6 +270,36 @@
 		{
 			activateAction(_fallingAction.actionName);
 		}//end beginFalling()
+		
+		public function set pitch(a_num:Number):void
+		{
+			_pitch = a_num;
+		}//end set pitch()
+		
+		public function get pitch():Number
+		{
+			return _pitch;
+		}//end set pitch()
+		
+		public function set roll(a_num:Number):void
+		{
+			_roll = a_num;
+		}//end set roll()
+		
+		public function get roll():Number
+		{
+			return _roll;
+		}//end set roll()
+		
+		public function set yaw(a_num:Number):void
+		{
+			_yaw = a_num;
+		}//end set yaw()
+		
+		public function get yaw():Number
+		{
+			return _yaw;
+		}//end set yaw()
 		
 	}//end Dart
 

@@ -31,6 +31,9 @@
 		protected var _playerOnePortrait:MovieClip;
 		protected var _playerTwoPortrait:MovieClip;
 		
+		protected var _playerOneTimer:MovieClip;
+		protected var _playerTwoTimer:MovieClip;
+		
 		protected var _scoreMgr:AbstractScoreManager;
 		
 		public function ScoreBoard(a_img:Sprite, a_buildFromAllDescendants:Boolean = false, a_bAddContents:Boolean = true) 
@@ -54,6 +57,9 @@
 						
 			_playerOnePortrait = descendantsDict["playerOnePortrait_mc"] as MovieClip;
 			_playerTwoPortrait = descendantsDict["playerTwoPortrait_mc"] as MovieClip;
+			
+			_playerOneTimer = descendantsDict["playerOneTimer_mc"] as MovieClip;
+			_playerTwoTimer = descendantsDict["playerTwoTimer_mc"] as MovieClip;
 			
 			return descendantsDict;
 			
@@ -95,10 +101,34 @@
 			} else {
 				throw new Error("ScoreBoard::registerScoreManager(): _playerTwoPortrait=" + _playerTwoPortrait);
 			}
+			
+			_playerOneTimer.visible = false;
+			_playerOneTimer.gotoAndStop(1);
+			_playerTwoTimer.visible = false;
+			_playerTwoTimer.gotoAndStop(1);
 		}//end registerScoreManager()
 		
 		public function update():void
-		{			
+		{	
+			if ( DartsGlobals.instance.localPlayer.turnTime >= 0 )
+			{
+				_playerOneTimer.visible = true;
+				_playerOneTimer.gotoAndStop( Math.ceil(100 * (30 - DartsGlobals.instance.localPlayer.turnTime) / 30) );
+			}
+			else
+			{
+				_playerOneTimer.visible = false;
+			}
+				
+			if ( DartsGlobals.instance.opponentPlayer.turnTime >= 0 )
+			{
+				_playerTwoTimer.visible = true;
+				_playerTwoTimer.gotoAndStop( Math.ceil(100 * (30 - DartsGlobals.instance.opponentPlayer.turnTime) / 30) );
+			}
+			else
+			{
+				_playerTwoTimer.visible = false;
+			}
 		}//end update()
 		
 		public function show():void
@@ -117,6 +147,9 @@
 			
 			_playerOnePortrait = null;
 			_playerTwoPortrait = null;
+			
+			_playerOneTimer = null;
+			_playerTwoTimer = null;
 			
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			this.removeEventListener(Event.REMOVED_FROM_STAGE, destroy);		

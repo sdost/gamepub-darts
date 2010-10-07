@@ -1,7 +1,7 @@
 ﻿package com.bored.games.darts.states 
 {
-	import com.bored.games.input.InputController;
-	import com.bored.games.input.MouseInputController;
+	import com.bored.games.darts.input.InputController;
+	import com.bored.games.darts.input.MouseInputController;
 	import com.bored.games.darts.input.GestureThrowController;
 	import com.bored.games.darts.input.ThrowController;
 	import com.bored.games.darts.logic.DartsGameLogic;
@@ -11,14 +11,14 @@
 	import com.bored.games.darts.objects.Dart;
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.bored.games.darts.ui.GameStoreScreen;
-	import com.bored.games.events.InputStateEvent;
+	import com.bored.games.darts.events.InputStateEvent;
 	import com.bored.services.AbstractExternalService;
 	import com.inassets.events.ObjectEvent;
 	import com.inassets.statemachines.Finite.State;
 	import com.inassets.statemachines.interfaces.IStateMachine;
 	import com.jac.soundManager.SMSound;
 	import com.sven.utils.AppSettings;
-	import com.sven.utils.SpriteFactory;
+	import com.sven.factories.SpriteFactory;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.GraphicsBitmapFill;

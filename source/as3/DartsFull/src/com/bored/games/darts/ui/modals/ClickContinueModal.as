@@ -3,7 +3,7 @@
 	import com.bored.games.darts.DartsGlobals;
 	import com.sven.containers.Panel;
 	import com.sven.utils.AppSettings;
-	import com.sven.utils.SpriteFactory;
+	import com.sven.factories.SpriteFactory;
 	import flash.display.MovieClip;
 	import flash.events.Event;
 	import flash.events.MouseEvent;

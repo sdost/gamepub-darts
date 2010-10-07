@@ -22,17 +22,17 @@
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.bored.games.darts.ui.GameConfirmScreen;
 	import com.bored.games.darts.ui.MultiplayerGameConfirmScreen;
-	import com.bored.gs.chat.ChatClient;
-	import com.bored.gs.chat.IChatClient;
-	import com.bored.gs.game.GameClient;
-	import com.bored.gs.game.TurnBasedGameClient;
+	import com.bored.services.BoredServices;
+	import com.bored.services.client.ChatClient;
+	import com.bored.services.client.GameClient;
+	import com.bored.services.client.TurnBasedGameClient;
 	import com.bored.services.AbstractExternalService;
 	import com.inassets.statemachines.Finite.State;
 	import com.inassets.statemachines.interfaces.IStateMachine;
 	import com.jac.soundManager.SMSound;
 	import com.sven.utils.AppSettings;
-	import com.sven.utils.ImageFactory;
-	import com.sven.utils.SpriteFactory;
+	import com.sven.factories.ImageFactory;
+	import com.sven.factories.SpriteFactory;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -72,13 +72,12 @@
 			
 			try
 			{
-				trace("Confirm Screen Sprite Name: " + AppSettings.instance.confirmScreenSprite);
+				trace("Confirm Screen Sprite Name: " + AppSettings.instance.multiplayerConfirmScreenSprite);
 				
-				gameConfirmScreenImg = SpriteFactory.getSpriteByQualifiedName(AppSettings.instance.confirmScreenSprite);
+				gameConfirmScreenImg = SpriteFactory.getSpriteByQualifiedName(AppSettings.instance.multiplayerConfirmScreenSprite);
 				_gameConfirmScreen = new MultiplayerGameConfirmScreen(gameConfirmScreenImg, false, true);
 				_gameConfirmScreen.addEventListener(GameConfirmScreen.PLAY_CLICKED_EVT, onPlay, false, 0, true);
 				_gameConfirmScreen.addEventListener(GameConfirmScreen.BACK_CLICKED_EVT, onBack, false, 0, true);
-				_gameConfirmScreen.addEventListener(GameConfirmScreen.LAUNCH_STORE_EVT, onLaunchStore, false, 0, true);
 				DartsGlobals.instance.screenSpace.addChild(_gameConfirmScreen);
 				
 				DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").addSound( new SMSound("store_sound", "button_getdarts_mp3") );
@@ -123,7 +122,7 @@
 		{
 			
 			if( a_evt ) {
-				var obj:Object = (DartsGlobals.instance.multiplayerClient as GameClient).getData(GameClient.GAME_START);
+				var obj:Object = DartsGlobals.instance.multiplayerClient.getData(GameClient.GAME_START);
 				
 				if( obj ) {
 					var flightXML:XML = null;
@@ -160,8 +159,11 @@
 				}
 			}
 			
-			DartsGlobals.instance.gameManager.registerPlayer( DartsGlobals.instance.opponentPlayer );			
-			(this.stateMachine as GameFSM).transitionToNextState();
+			DartsGlobals.instance.gameManager.registerPlayer( DartsGlobals.instance.opponentPlayer );		
+			
+			BoredServices.showChatUI();
+			
+			(this.stateMachine as GameFSM).transitionToStateNamed("Gameplay");
 		}//end onReady()
 		
 		private function onBack(a_evt:Event):void
@@ -171,13 +173,6 @@
 			(this.stateMachine as GameFSM).transitionToPreviousState();
 		}//end onBack()
 		
-		private function onLaunchStore(a_evt:Event):void
-		{
-			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("store_sound");
-			
-			(this.stateMachine as GameFSM).transitionToStateNamed("GameStore");
-		}//end onLaunchStore()
-		
 		/**
 		 * Handler for exiting this state.
 		 */
@@ -185,7 +180,6 @@
 		{
 			_gameConfirmScreen.removeEventListener(GameConfirmScreen.BACK_CLICKED_EVT, onBack);
 			_gameConfirmScreen.removeEventListener(GameConfirmScreen.PLAY_CLICKED_EVT, onPlay);
-			_gameConfirmScreen.removeEventListener(GameConfirmScreen.LAUNCH_STORE_EVT, onLaunchStore);
 			
 			_gameConfirmScreen.destroy();
 			

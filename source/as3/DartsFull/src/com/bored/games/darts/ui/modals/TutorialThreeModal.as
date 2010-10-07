@@ -13,7 +13,7 @@
 	import flash.events.MouseEvent;
 	import flash.text.TextField;
 	import flash.utils.Dictionary;
-	import com.sven.utils.SpriteFactory;
+	import com.sven.factories.SpriteFactory;
 	import com.sven.utils.AppSettings;
 	/**
 	 * ...

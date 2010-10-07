@@ -100,6 +100,11 @@
 			return _scoringThrows;
 		}//end get scoringThrows()
 		
+		public function set scoringThrows(a_scoringThrows:int):void
+		{
+			_scoringThrows = a_scoringThrows;
+		}//end get scoringThrows()
+		
 		public function get doubles():int
 		{
 			return _doubles;

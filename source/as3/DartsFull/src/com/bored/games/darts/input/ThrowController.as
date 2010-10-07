@@ -1,14 +1,16 @@
 ﻿package com.bored.games.darts.input 
 {
 	import com.bored.games.darts.logic.DartsGameLogic;
-	import com.bored.games.events.InputStateEvent;
-	import com.bored.games.input.InputController;
+	import com.bored.games.darts.events.InputStateEvent;
+	import com.bored.games.darts.input.InputController;
 	/**
 	 * ...
 	 * @author sam
 	 */
 	public class ThrowController
-	{		
+	{	
+		protected var _show:Boolean = false;
+		
 		protected var _thrust:Number = 0;
 		protected var _lean:Number = 0;
 		
@@ -50,6 +52,16 @@
 		{
 			return _trueAngle;
 		}//end get trueAngle()
+		
+		public function set show(a_bool:Boolean):void
+		{
+			_show = a_bool;
+		}//end set show()
+		
+		public function get show():Boolean
+		{
+			return _show;
+		}//end get show()
 		
 	}//end ThrowController
 

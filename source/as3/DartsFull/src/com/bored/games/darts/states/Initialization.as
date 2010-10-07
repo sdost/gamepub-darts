@@ -14,7 +14,7 @@
 	import com.inassets.statemachines.Finite.State;
 	import com.inassets.statemachines.interfaces.IStateMachine;
 	import com.sven.utils.AppSettings;
-	import com.sven.utils.ImageFactory;
+	import com.sven.factories.ImageFactory;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.net.URLLoader;

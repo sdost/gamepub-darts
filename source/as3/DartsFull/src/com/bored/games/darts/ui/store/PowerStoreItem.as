@@ -3,7 +3,7 @@
 	import com.bored.games.darts.abilities.Ability;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.services.StoreItem;
-	import com.sven.utils.SpriteFactory;
+	import com.sven.factories.SpriteFactory;
 	import flash.display.MovieClip;
 	import flash.text.TextField;
 	import flash.utils.getQualifiedClassName;

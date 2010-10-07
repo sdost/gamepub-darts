@@ -9,7 +9,7 @@
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
-	import com.sven.utils.ImageFactory;
+	import com.sven.factories.ImageFactory;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Loader;

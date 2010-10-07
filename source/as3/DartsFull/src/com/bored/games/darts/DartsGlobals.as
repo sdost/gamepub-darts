@@ -7,9 +7,8 @@
 	import com.bored.games.darts.profiles.Profile;
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.bored.games.darts.ui.hud.CashPanel;
-	import com.bored.gs.game.GameClient;
-	import com.bored.gs.game.IGameClient;
-	import com.bored.gs.game.TurnBasedGameClient;
+	import com.bored.services.client.GameClient;
+	import com.bored.services.client.TurnBasedGameClient;
 	import com.inassets.statemachines.interfaces.IStateMachine;
 	import com.jac.soundManager.SoundController;
 	import com.sven.utils.AppSettings;
@@ -22,7 +21,7 @@
 	import com.bored.games.darts.profiles.UserProfile;
 	import com.bored.games.darts.ui.hud.ControlPanel;
 	import com.bored.services.AbstractExternalService;
-	import com.sven.managers.ModalDisplayManager;
+	import com.bored.games.darts.managers.ModalDisplayManager;
 	import com.jac.soundManager.SoundManager;
 	import flash.display.Sprite;
 	import flash.display.Stage;
@@ -107,7 +106,7 @@
 		
 		private var _throwMode:int;
 		
-		private var _multiplayerGameClient:IGameClient;
+		private var _multiplayerGameClient:*;
 		
 		public function DartsGlobals(a_singletonEnforcer:DartsGlobals_SingletonEnforcer) 
 		{
@@ -384,12 +383,12 @@
 			return _opponentPlayer;
 		}//end get cpuPlayer()
 		
-		public function set multiplayerClient(a_client:IGameClient):void
+		public function set multiplayerClient(a_client:*):void
 		{
 			_multiplayerGameClient = a_client;
 		}//end set multiplayerClient()
 		
-		public function get multiplayerClient():IGameClient
+		public function get multiplayerClient():*
 		{
 			return _multiplayerGameClient;
 		}//end get multiplayerClient()	
@@ -419,16 +418,25 @@
 				_cashPanel.y = AppSettings.instance.cashPanelPositionY;
 				_cashPanel.show();
 			}
+			else
+			{
+				if(_cashPanel) _cashPanel.hide();
+			}
 			
 			_gameManager.addEventListener(DartsGameLogic.QUIT_TO_TITLE, onQuitToTitle, false, 0, true);			
+		}//end setupControlPanel()
+		
+		public function hideControlPanel():void
+		{
+			if( _controlPanel ) _controlPanel.hide();
+			if( _cashPanel ) _cashPanel.hide();
 		}//end setupControlPanel()
 		
 		private function onQuitToTitle(a_evt:Event):void
 		{
 			_gameManager.removeEventListener(DartsGameLogic.QUIT_TO_TITLE, onQuitToTitle);
 			
-			_controlPanel.hide();
-			_cashPanel.hide();
+			hideControlPanel();
 			
 			(this.stateMachine as GameFSM).transitionToStateNamed("Attract");
 		}//end onGameEnd()
@@ -487,7 +495,7 @@
 			
 			if (warningStr)
 			{
-				throw new Error(warningStr);
+				trace(warningStr);
 			}
 			
 		}//end onWarning()

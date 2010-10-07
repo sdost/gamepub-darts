@@ -21,17 +21,16 @@
 	import com.bored.games.darts.skins.DartSkin;
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.bored.games.darts.ui.GameConfirmScreen;
-	import com.bored.gs.chat.ChatClient;
-	import com.bored.gs.chat.IChatClient;
-	import com.bored.gs.game.GameClient;
-	import com.bored.gs.game.TurnBasedGameClient;
+	import com.bored.services.client.ChatClient;
+	import com.bored.services.client.GameClient;
+	import com.bored.services.client.TurnBasedGameClient;
 	import com.bored.services.AbstractExternalService;
 	import com.inassets.statemachines.Finite.State;
 	import com.inassets.statemachines.interfaces.IStateMachine;
 	import com.jac.soundManager.SMSound;
 	import com.sven.utils.AppSettings;
-	import com.sven.utils.ImageFactory;
-	import com.sven.utils.SpriteFactory;
+	import com.sven.factories.ImageFactory;
+	import com.sven.factories.SpriteFactory;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -120,12 +119,16 @@
 		{
 			
 			if( a_evt ) {
-				var obj:Object = (DartsGlobals.instance.multiplayerClient as GameClient).getData(GameClient.GAME_START);
+				var obj:Object = DartsGlobals.instance.multiplayerClient.getData(GameClient.GAME_START);
 				
 				if( obj ) {
 					var flightXML:XML = null;
 					
-					switch( obj["skin_"+DartsGlobals.instance.opponentPlayer.playerNum].flightid )
+					trace("playerNum: " + DartsGlobals.instance.opponentPlayer.playerNum);
+					
+					trace("playerObj: " + obj["playerSkin" + DartsGlobals.instance.opponentPlayer.playerNum]);
+					
+					switch( obj["playerSkin"+DartsGlobals.instance.opponentPlayer.playerNum].flightid )
 					{
 						case "heart":
 							flightXML = dae_DartFlightHeart.data;
@@ -149,9 +152,9 @@
 							break;
 					}
 					
-					var skin:DartSkin = new DartSkin(ImageFactory.getBitmapDataByQualifiedName("dartuv_" + obj["skin_"+DartsGlobals.instance.opponentPlayer.playerNum].skinid, AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight), dae_DartShaft.data, flightXML );
-					skin.skinid = obj["skin_"+DartsGlobals.instance.opponentPlayer.playerNum].skinid;
-					skin.flightid = obj["skin_"+DartsGlobals.instance.opponentPlayer.playerNum].flightid;
+					var skin:DartSkin = new DartSkin(ImageFactory.getBitmapDataByQualifiedName("dartuv_" + obj["playerSkin"+DartsGlobals.instance.opponentPlayer.playerNum].skinid, AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight), dae_DartShaft.data, flightXML );
+					skin.skinid = obj["playerSkin"+DartsGlobals.instance.opponentPlayer.playerNum].skinid;
+					skin.flightid = obj["playerSkin"+DartsGlobals.instance.opponentPlayer.playerNum].flightid;
 					
 					DartsGlobals.instance.opponentPlayer.setSkin(skin);
 				}

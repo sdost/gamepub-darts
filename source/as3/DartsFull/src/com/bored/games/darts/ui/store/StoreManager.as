@@ -2,9 +2,9 @@
 {
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.services.StoreItem;
-	import com.sven.utils.ImageFactory;
-	import com.sven.utils.MovieClipFactory;
-	import com.sven.utils.SpriteFactory;
+	import com.sven.factories.ImageFactory;
+	import com.sven.factories.MovieClipFactory;
+	import com.sven.factories.SpriteFactory;
 	/**
 	 * ...
 	 * @author sam

@@ -9,12 +9,12 @@
 	import com.bored.games.darts.actions.ShieldDartboardAction;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.ui.effects.AnimatedText;
-	import com.bored.games.objects.GameElement3D;
+	import com.bored.games.objects.GameElement;
 	import com.greensock.TweenLite;
 	import com.greensock.TweenMax;
 	import com.jac.soundManager.SMSound;
 	import com.jac.soundManager.SoundController;
-	import com.sven.utils.FontFactory;
+	import com.sven.factories.FontFactory;
 	import flash.display.Sprite;
 	import com.sven.utils.AppSettings;
 	import flash.geom.Point;
@@ -24,7 +24,7 @@
 	 * ...
 	 * @author sam
 	 */
-	public class Dartboard extends GameElement3D
+	public class Dartboard extends GameElement implements I3D
 	{
 		private var _boardArrangement:Array = [6,13,4,18,1,20,5,12,9,14,11,8,16,7,19,3,17,2,15,10];
 		
@@ -39,6 +39,10 @@
 		private var _shieldAction:ShieldDartboardAction;
 		
 		private var _dartboardSoundController:SoundController;
+		
+		private var _pitch:Number;
+		private var _roll:Number;
+		private var _yaw:Number;
 		
 		public function Dartboard(a_img:Sprite) 
 		{
@@ -202,9 +206,9 @@
 			super.update(a_time);
 			
 			if ( _boardSprite ) {
-				_boardSprite.x = this.position.x * AppSettings.instance.away3dEngineScale;
-				_boardSprite.y = -(this.position.y * AppSettings.instance.away3dEngineScale);
-				_boardSprite.z = this.position.z * AppSettings.instance.away3dEngineScale;
+				_boardSprite.x = this.x * AppSettings.instance.away3dEngineScale;
+				_boardSprite.y = -(this.y * AppSettings.instance.away3dEngineScale);
+				_boardSprite.z = this.z * AppSettings.instance.away3dEngineScale;
 			}
 		}//end update()
 		
@@ -453,6 +457,36 @@
 		{
 			return _boardSprite;
 		}//end get boardSprite()
+		
+		public function set pitch(a_num:Number):void
+		{
+			_pitch = a_num;
+		}//end set pitch()
+		
+		public function get pitch():Number
+		{
+			return _pitch;
+		}//end set pitch()
+		
+		public function set roll(a_num:Number):void
+		{
+			_roll = a_num;
+		}//end set roll()
+		
+		public function get roll():Number
+		{
+			return _roll;
+		}//end set roll()
+		
+		public function set yaw(a_num:Number):void
+		{
+			_yaw = a_num;
+		}//end set yaw()
+		
+		public function get yaw():Number
+		{
+			return _yaw;
+		}//end set yaw()
 		
 	}//end Dartboard
 

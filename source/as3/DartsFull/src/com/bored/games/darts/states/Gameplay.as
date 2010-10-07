@@ -2,11 +2,14 @@
 {
 	import com.bored.games.darts.input.EasyThrowController;
 	import com.bored.games.darts.input.SimplifiedThrowController;
+	import com.bored.games.darts.input.ThreeClickThrowController;
+	import com.bored.games.darts.input.TwoClickThrowController;
+	import com.bored.games.darts.logic.RemoteCricketGameLogic;
 	import com.bored.games.darts.profiles.OldManProfile;
 	import com.bored.games.darts.ui.modals.BullOffAnnounceModal;
 	import com.bored.games.darts.ui.modals.TurnAnnounceModal;
-	import com.bored.games.input.InputController;
-	import com.bored.games.input.MouseInputController;
+	import com.bored.games.darts.input.InputController;
+	import com.bored.games.darts.input.MouseInputController;
 	import com.bored.games.darts.input.GestureThrowController;
 	import com.bored.games.darts.input.ThrowController;
 	import com.bored.games.darts.logic.DartsGameLogic;
@@ -16,12 +19,14 @@
 	import com.bored.games.darts.objects.Dart;
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.bored.games.darts.ui.GameplayScreen;
-	import com.bored.games.events.InputStateEvent;
+	import com.bored.games.darts.events.InputStateEvent;
+	import com.bored.services.client.GameClient;
+	import com.bored.services.client.GameServices;
 	import com.inassets.statemachines.Finite.State;
 	import com.inassets.statemachines.interfaces.IStateMachine;
-	import com.sven.managers.ModalDisplayManager;
+	import com.bored.games.darts.managers.ModalDisplayManager;
 	import com.sven.utils.AppSettings;
-	import com.sven.utils.SpriteFactory;
+	import com.sven.factories.SpriteFactory;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.GraphicsBitmapFill;
@@ -79,25 +84,25 @@
 		 * Handler for entering (and executing) this state.
 		 */
 		override public function onEnter():void
-		{									
-			_inputController = new MouseInputController(DartsGlobals.instance.stage);
-		
+		{					
+			_inputController = new MouseInputController(DartsGlobals.instance.screenSpace);
+			
 			if ( DartsGlobals.instance.throwMode == DartsGlobals.THROW_BEGINNER ) 
 			{
-				_throwController = new SimplifiedThrowController();
+				_throwController = new ThreeClickThrowController();
 			}
 			else if ( DartsGlobals.instance.throwMode == DartsGlobals.THROW_EXPERT ) 
 			{
 				_throwController = new GestureThrowController();
 			}
 			
-			DartsGlobals.instance.gameManager.inputController = _inputController;
 			DartsGlobals.instance.gameManager.throwController = _throwController;
+			DartsGlobals.instance.gameManager.inputController = _inputController;
 			DartsGlobals.instance.gameManager.newGame();
 			DartsGlobals.instance.gameManager.addEventListener(DartsGameLogic.GAME_END, onGameEnd, false, 0, true);
 			
 			try
-			{				
+			{
 				_gameplayScreen = new GameplayScreen();
 				
 				DartsGlobals.instance.screenSpace.addChild(_gameplayScreen);
@@ -114,14 +119,20 @@
 					}
 					else 
 					{
-						DartsGlobals.instance.gameManager.bullOff = true;
+						DartsGlobals.instance.gameManager.currentPlayer = DartsGlobals.instance.localPlayer.playerNum;
 						DartsGlobals.instance.showModalPopup(TurnAnnounceModal);
 					}
 				}
 				else if ( DartsGlobals.instance.gameMode == DartsGlobals.GAME_PRACTICE )
 				{
-					DartsGlobals.instance.gameManager.bullOff = true;
+					DartsGlobals.instance.gameManager.currentPlayer = DartsGlobals.instance.localPlayer.playerNum;
 					DartsGlobals.instance.showModalPopup(TurnAnnounceModal);
+				}
+				else if ( DartsGlobals.instance.gameMode == DartsGlobals.GAME_MULTIPLAYER )
+				{
+					DartsGlobals.instance.multiplayerClient.addEventListener(GameServices.DISCONNECTED, returnToLobby, false, 0, true);
+					DartsGlobals.instance.multiplayerClient.addEventListener(GameClient.GAME_VOID, returnToLobby, false, 0, true);
+					DartsGlobals.instance.gameManager.addEventListener(RemoteCricketGameLogic.RETURN_TO_LOBBY, returnToLobby, false, 0, true);
 				}
 			}
 			catch (e:Error)
@@ -143,6 +154,16 @@
 			(this.stateMachine as GameFSM).transitionToStateNamed("CPUOpponentSelect");
 		}//end onGameEnd()
 		
+		private function returnToLobby(e:Event):void
+		{
+			DartsGlobals.instance.gameManager.removeEventListener(RemoteCricketGameLogic.RETURN_TO_LOBBY, returnToLobby);
+			DartsGlobals.instance.multiplayerClient.removeEventListener(GameClient.GAME_VOID, returnToLobby);
+			
+			DartsGlobals.instance.hideControlPanel();
+			
+			(this.stateMachine as GameFSM).transitionToStateNamed("Multiplayer");
+		}//end returnToLobby()
+		
 		/**
 		 * Handler for exiting this state.
 		 */
@@ -151,12 +172,14 @@
 			DartsGlobals.instance.gameManager.removeEventListener(DartsGameLogic.GAME_END, onGameEnd);
 			
 			DartsGlobals.instance.stage.removeEventListener(Event.ENTER_FRAME, update);
-			_gameplayScreen.cleanupObjects();
+			if (_gameplayScreen) 
+			{
+				_gameplayScreen.cleanupObjects();
+				DartsGlobals.instance.screenSpace.removeChild(_gameplayScreen);
+				_gameplayScreen = null;
+			}
 			
 			DartsGlobals.instance.gameManager.cleanup();
-			DartsGlobals.instance.screenSpace.removeChild(_gameplayScreen);
-			
-			_gameplayScreen = null;
 			
 			System.gc();
 		}//end onExit()

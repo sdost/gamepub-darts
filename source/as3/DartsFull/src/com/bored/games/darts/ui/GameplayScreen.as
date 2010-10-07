@@ -29,14 +29,14 @@
 	import com.bored.games.darts.ui.hud.ThrowIndicator;
 	import com.bored.games.darts.ui.hud.ThrowIndicatorV2;
 	import com.bored.games.darts.ui.hud.ThrowIndicatorV3;
-	import com.bored.games.events.InputStateEvent;
+	import com.bored.games.darts.events.InputStateEvent;
 	import com.bored.games.darts.DartsGlobals;
 	import com.greensock.TweenLite;
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
 	import com.sven.utils.AppSettings;
-	import com.sven.utils.ImageFactory;
+	import com.sven.factories.ImageFactory;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.BlendMode;
@@ -94,6 +94,8 @@
 		private var _dartDock:DartDock;
 		private var _controlPanel:ControlPanel;
 		
+		private var _turnTimer:MovieClip;
+		
 		public function GameplayScreen() 
 		{
 			_wallClip = new Bitmap(ImageFactory.getBitmapDataByQualifiedName(AppSettings.instance.wallTextureBitmap, AppSettings.instance.wallTextureWidth, AppSettings.instance.wallTextureHeight));
@@ -106,13 +108,28 @@
 			
 			var cls:Class;
 			
-			cls = getDefinitionByName(AppSettings.instance.throwIndicatorMovie) as Class;
-			_throwIndicator = new ThrowIndicatorV3(new cls());
-			DartsGlobals.instance.optionsInterfaceSpace.addChild(_throwIndicator);
-			_throwIndicator.x = AppSettings.instance.throwIndicatorPositionX;
-			_throwIndicator.y = AppSettings.instance.throwIndicatorPositionY;
-			_throwIndicator.registerThrowController(DartsGlobals.instance.gameManager.throwController);
-			_throwIndicator.show();
+			if ( DartsGlobals.instance.gameMode == DartsGlobals.GAME_STORY )
+			{
+				cls = getDefinitionByName(AppSettings.instance.throwIndicatorMovie) as Class;
+				_throwIndicator = new ThrowIndicatorV3(new cls());
+				DartsGlobals.instance.optionsInterfaceSpace.addChild(_throwIndicator);
+				_throwIndicator.x = AppSettings.instance.throwIndicatorPositionX;
+				_throwIndicator.y = AppSettings.instance.throwIndicatorPositionY;
+				_throwIndicator.registerThrowController(DartsGlobals.instance.gameManager.throwController);
+				_throwIndicator.show();
+			}
+			/*
+			else
+			{
+				cls = getDefinitionByName(AppSettings.instance.multiplayerThrowIndicatorMovie) as Class;
+				_multiplayerThrowIndicator = new ThrowIndicatorV4(new cls());
+				DartsGlobals.instance.optionsInterfaceSpace.addChild(_multiplayerThrowIndicator);
+				_multiplayerThrowIndicator.x = AppSettings.instance.throwIndicatorPositionX;
+				_multiplayerThrowIndicator.y = AppSettings.instance.throwIndicatorPositionY;
+				_multiplayerThrowIndicator.registerThrowController(DartsGlobals.instance.gameManager.throwController);
+				//_multiplayerThrowIndicator.show();
+			}
+			*/
 						
 			cls = getDefinitionByName(AppSettings.instance.scoreboardMovie) as Class;
 			if ( DartsGlobals.instance.gameType == DartsGlobals.TYPE_CRICKET ) 
@@ -168,6 +185,9 @@
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			this.addEventListener(Event.REMOVED_FROM_STAGE, destroy, false, 0, true);
 			
+			//this.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut, false, 0, true);
+			//this.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver, false, 0, true);
+			
 			this.alpha = 0;
 			
 			_view.x = (this.stage.stageWidth / 2);
@@ -211,9 +231,9 @@
 		{			
 			DartsGlobals.instance.gameManager.dartboard.initModels();
 			_scene.addSprite(DartsGlobals.instance.gameManager.dartboard.boardSprite);
-			DartsGlobals.instance.gameManager.dartboard.position.x = AppSettings.instance.dartboardPositionX * _engineScale;
-			DartsGlobals.instance.gameManager.dartboard.position.y = AppSettings.instance.dartboardPositionY * _engineScale;
-			DartsGlobals.instance.gameManager.dartboard.position.z = AppSettings.instance.dartboardPositionZ * _engineScale;
+			DartsGlobals.instance.gameManager.dartboard.x = AppSettings.instance.dartboardPositionX * _engineScale;
+			DartsGlobals.instance.gameManager.dartboard.y = AppSettings.instance.dartboardPositionY * _engineScale;
+			DartsGlobals.instance.gameManager.dartboard.z = AppSettings.instance.dartboardPositionZ * _engineScale;
 			
 			DartsGlobals.instance.gameManager.cursor.initModels();
 			_scene.addSprite(DartsGlobals.instance.gameManager.cursor.sprite);
@@ -244,6 +264,7 @@
 		{	
 			if (_scoreBoard) _scoreBoard.update();
 			if (_throwIndicator) _throwIndicator.update();
+			//if (_multiplayerThrowIndicator) _multiplayerThrowIndicator.update();
 			if (_abilityDock) _abilityDock.update();
 			if (_dartDock) _dartDock.update();
 			

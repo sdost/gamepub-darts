@@ -11,7 +11,7 @@
 	import com.bored.games.darts.ui.modals.TutorialTwoModal;
 	import com.bored.games.darts.ui.modals.TutorialThreeModal;
 	import com.bored.games.darts.ui.modals.TutorialFourModal;
-	import com.sven.utils.ImageFactory;
+	import com.sven.factories.ImageFactory;
 	import com.sven.utils.AppSettings;
 	import flash.display.Sprite;
 	import com.bored.games.darts.DartsGlobals;

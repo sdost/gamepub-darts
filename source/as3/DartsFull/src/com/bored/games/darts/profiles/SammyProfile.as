@@ -6,7 +6,7 @@
 	import com.bored.games.darts.logic.DartsGameLogic;
 	import com.bored.games.darts.models.dae_DartFlightHexagon;
 	import com.bored.games.darts.profiles.EnemyProfile;
-	import com.sven.utils.ImageFactory;
+	import com.sven.factories.ImageFactory;
 	import com.sven.utils.AppSettings;
 	import com.bored.games.darts.models.dae_DartFlightHeart;
 	import com.bored.games.darts.models.dae_DartShaft;

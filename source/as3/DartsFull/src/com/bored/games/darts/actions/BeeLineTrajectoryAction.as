@@ -2,8 +2,8 @@
 {
 	import com.bored.games.actions.Action;
 	import com.bored.games.darts.DartsGlobals;
+	import com.bored.games.darts.objects.I3D;
 	import com.bored.games.objects.GameElement;
-	import com.bored.games.objects.GameElement3D;
 	import com.sven.utils.AppSettings;
 	
 	/**
@@ -34,7 +34,7 @@
 		{
 			super.startAction();
 			
-			(_gameElement as GameElement3D).roll = 0;
+			(_gameElement as I3D).roll = 0;
 			
 			DartsGlobals.instance.soundManager.getSoundControllerByID("abilitySounds").stop("beelineLoop");
 			DartsGlobals.instance.soundManager.getSoundControllerByID("abilitySounds").play("beelineFire");
@@ -64,13 +64,13 @@
 				adjust = Number( diff / 33 );
 			}
 			
-			(_gameElement as GameElement3D).roll += AppSettings.instance.dartRollSpeed;
+			(_gameElement as I3D).roll += AppSettings.instance.dartRollSpeed;
 			
-			var z:Number = (_gameElement as GameElement3D).position.z + AppSettings.instance.beelineSpeed * _stepScale;
+			var z:Number = _gameElement.z + AppSettings.instance.beelineSpeed * _stepScale;
 			
 			if ( z > _finalZ ) z = _finalZ;
 			
-			(_gameElement as GameElement3D).position.z = z;	
+			_gameElement.z = z;	
 		}//end update()
 		
 	}//end BeeLineTrajectoryAction

@@ -102,7 +102,9 @@
 			(_opponentSlots[17] as MovieClip).gotoAndStop(opponentScores[17]+1);
 			(_opponentSlots[16] as MovieClip).gotoAndStop(opponentScores[16]+1);
 			(_opponentSlots[15] as MovieClip).gotoAndStop(opponentScores[15]+1);
-			(_opponentSlots[25] as MovieClip).gotoAndStop(opponentScores[25]+1);				
+			(_opponentSlots[25] as MovieClip).gotoAndStop(opponentScores[25] + 1);	
+			
+			super.update();
 		}//end update()
 		
 		override public function destroy(...args):void

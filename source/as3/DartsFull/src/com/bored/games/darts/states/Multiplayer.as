@@ -20,20 +20,19 @@
 	import com.bored.games.darts.skins.DartSkin;
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.bored.games.darts.ui.OpponentSelectScreen;
-	import com.bored.gs.chat.ChatClient;
-	import com.bored.gs.chat.IChatClient;
-	import com.bored.gs.chat.IPlayRequest;
-	import com.bored.gs.game.GameClient;
-	import com.bored.gs.game.IGameClient;
-	import com.bored.gs.game.TurnBasedGameClient;
-	import com.bored.gs.GameServices;
+	import com.bored.services.client.ChatClient;
+	import com.bored.services.client.GameClient;
+	import com.bored.services.client.GameServices;
+	import com.bored.services.client.TurnBasedGameClient;
 	import com.bored.services.AbstractExternalService;
+	import com.bored.services.BoredServices;
+	import com.bored.services.events.ObjectEvent;
 	import com.inassets.FileLoader;
 	import com.inassets.statemachines.Finite.State;
 	import com.inassets.statemachines.interfaces.IStateMachine;
 	import com.jac.soundManager.SMSound;
 	import com.sven.utils.AppSettings;
-	import com.sven.utils.ImageFactory;
+	import com.sven.factories.ImageFactory;
 	import flash.display.Bitmap;
 	import flash.display.LoaderInfo;
 	import flash.display.MovieClip;
@@ -56,10 +55,6 @@
 	 */
 	public class Multiplayer extends State
 	{		
-		private var _igs:IPlayRequest;
-		private var _fl:FileLoader;
-		private var _fsm:Object;
-		
 		public function Multiplayer(a_name:String, a_stateMachine:IStateMachine)
 		{
 			super(a_name, a_stateMachine);
@@ -72,51 +67,32 @@
 		{			
 			trace("Multiplayer::onEnter()");
 			
-			_igs = new TurnBasedGameClient();
+			DartsGlobals.instance.hideControlPanel();
 			
-			_fl = new FileLoader();
-			_fl.request("views.xml", "views", null, 0, onViewComplete);
+			BoredServices.addEventListener(ObjectEvent.MULTPLAYER_GAME_FAIL_EVT, onFail);
+			BoredServices.addEventListener(ObjectEvent.MULTPLAYER_GAME_START_EVT, onMPGameReady);
+			
+			BoredServices.showGameLobby(AppSettings.instance.multiplayerGameId);
 		}//end onEnter()
 		
-		private function onViewComplete(k:String):void
+		private function onFail(e:Event):void
 		{
-			trace("Multiplayer::onViewComplete " + k);
+			trace("Multiplayer::onFail()");
 			
-			_fl.request("PlayRequest.swf", "pr", null, 0, onPRComplete);
-		}
+			BoredServices.removeEventListener(ObjectEvent.MULTPLAYER_GAME_FAIL_EVT, onFail);
+			BoredServices.removeEventListener(ObjectEvent.MULTPLAYER_GAME_START_EVT, onMPGameReady);
+			
+			(this.stateMachine as GameFSM).transitionToPreviousState();
+		}//end onFail()
 		
-		private function onPRComplete(k:String):void
+		private function onMPGameReady(e:ObjectEvent):void
 		{
-			trace("Multiplayer::onPRComplete " + k);
+			trace("Multiplayer::onMPGameReady(" + e.obj + ")");
 			
-			var ied:IEventDispatcher = _fl.getIED(k);
-			var li:LoaderInfo = ied as LoaderInfo;
+			BoredServices.removeEventListener(ObjectEvent.MULTPLAYER_GAME_FAIL_EVT, onFail);
+			BoredServices.removeEventListener(ObjectEvent.MULTPLAYER_GAME_START_EVT, onMPGameReady);
 			
-			var fsmCls:Class = li.applicationDomain.getDefinition("chat.ChatFSM") as Class;
-			_fl.cleanUp(k);
-			
-			_fsm = new fsmCls(new XML(_fl.getData("views")), _igs, AppSettings.instance.multiplayerGameId, DartsGlobals.instance.stage);
-			_fsm.addEventListener("t_r", onFSMReady);
-			
-			_fl.cleanUp("views");
-		}
-		
-		private function onFSMReady(e:Event = null):void
-		{
-			trace("Multiplayer::onFSMReady " + e);
-			
-			_fsm.removeEventListener("t_r", onFSMReady);
-			
-			_fsm.addEventListener("m_p", onMPGameReady);
-			_fsm.start();
-		}
-		
-		private function onMPGameReady(e:Event):void
-		{
-			trace("Multiplayer::onMPGameReady");
-			_fsm.removeEventListener("m_p", onMPGameReady);
-			
-			DartsGlobals.instance.multiplayerClient = _igs as IGameClient;
+			DartsGlobals.instance.multiplayerClient = e.obj;
 			
 			if ( DartsGlobals.instance.gameType == DartsGlobals.TYPE_CRICKET ) 
 			{
@@ -127,8 +103,6 @@
 				DartsGlobals.instance.gameManager = new RemoteFiveOhOneGameLogic();
 			}
 			
-			_fsm.hide();
-			
 			DartsGlobals.instance.multiplayerClient.addEventListener(ChatClient.ROOM_JOIN, onRoomJoin);
 			DartsGlobals.instance.multiplayerClient.addEventListener(ChatClient.USER_IN, onUserIn);
 		}
@@ -137,20 +111,26 @@
 		{
 			DartsGlobals.instance.multiplayerClient.removeEventListener(ChatClient.ROOM_JOIN, onRoomJoin);
 					
-			for each( var user:Object in (DartsGlobals.instance.multiplayerClient as IChatClient).users )
+			for each( var user:Object in DartsGlobals.instance.multiplayerClient.users )
 			{
-				if ( (DartsGlobals.instance.multiplayerClient as IChatClient).account.id == user.id )
+				if ( DartsGlobals.instance.multiplayerClient.account.id == user.id )
 				{
+					DartsGlobals.instance.localPlayer.playerName = user.name;
+					
+					
+					
+					DartsGlobals.instance.localPlayer.setPortrait(ImageFactory.getBitmapDataByQualifiedName(AppSettings.instance.defaultMultiplayerPic, 150, 150));
 					DartsGlobals.instance.localPlayer.playerNum = user.pid;
 				}
 				else
 				{
 					DartsGlobals.instance.opponentProfile = new UserProfile();
 					DartsGlobals.instance.opponentProfile.name = user.name;
+					
 					DartsGlobals.instance.opponentProfile.unlockSkin("basicplaid", "heart");					
 			
 					DartsGlobals.instance.opponentPlayer = new RemotePlayer(DartsGlobals.instance.opponentProfile);
-					DartsGlobals.instance.opponentPlayer.setPortrait(ImageFactory.getBitmapDataByQualifiedName(AppSettings.instance.defaultPlayerPic, 150, 150));
+					DartsGlobals.instance.opponentPlayer.setPortrait(ImageFactory.getBitmapDataByQualifiedName(AppSettings.instance.defaultMultiplayerPic, 150, 150));
 					DartsGlobals.instance.opponentPlayer.setSkin(DartsGlobals.instance.opponentProfile.skins[0]);
 					DartsGlobals.instance.opponentPlayer.playerNum = user.pid;
 			
@@ -170,16 +150,16 @@
 		{
 			DartsGlobals.instance.multiplayerClient.removeEventListener(ChatClient.USER_IN, onUserIn);
 			
-			for each( var user:Object in (DartsGlobals.instance.multiplayerClient as IChatClient).users )
+			for each( var user:Object in DartsGlobals.instance.multiplayerClient.users )
 			{
-				if ( (DartsGlobals.instance.multiplayerClient as IChatClient).account.id != user.id )
+				if ( DartsGlobals.instance.multiplayerClient.account.id != user.id )
 				{
 					DartsGlobals.instance.opponentProfile = new UserProfile();
 					DartsGlobals.instance.opponentProfile.name = user.name;
 					DartsGlobals.instance.opponentProfile.unlockSkin("basicplaid", "heart");
 			
 					DartsGlobals.instance.opponentPlayer = new RemotePlayer(DartsGlobals.instance.opponentProfile);
-					DartsGlobals.instance.opponentPlayer.setPortrait(ImageFactory.getBitmapDataByQualifiedName(AppSettings.instance.defaultPlayerPic, 150, 150));
+					DartsGlobals.instance.opponentPlayer.setPortrait(ImageFactory.getBitmapDataByQualifiedName(AppSettings.instance.defaultMultiplayerPic, 150, 150));
 					DartsGlobals.instance.opponentPlayer.setSkin(DartsGlobals.instance.opponentProfile.skins[0]);
 					DartsGlobals.instance.opponentPlayer.playerNum = user.pid;
 			
@@ -196,7 +176,7 @@
 		{
 			trace("Multiplayer::finished()");
 			
-			(this.stateMachine as GameFSM).transitionToStateNamed("GameConfirm");
+			(this.stateMachine as GameFSM).transitionToStateNamed("MultiplayerGameConfirm");
 		}
 		
 		/**
