@@ -226,7 +226,7 @@
 					_currentDart = null;
 					_throwController.resetThrowParams();
 					_inputController.pause = true;
-					//endCurrentTurn();
+					if( _currentPlayer == DartsGlobals.instance.localPlayer.playerNum ) endCurrentTurn();
 					break;
 				default:
 					break;
@@ -242,6 +242,21 @@
 		
 		override public function endGame(a_winner:int):void
 		{
+			DartsGlobals.instance.multiplayerClient.removeEventListener(GameClient.GAME_RESULTS, onGameEnd);
+			
+			DartsGlobals.instance.multiplayerClient.removeEventListener(GameClient.GAME_TIMER, handleStateChange);
+			DartsGlobals.instance.multiplayerClient.removeEventListener(GameClient.GAME_TIMER_END, handleStateChange);
+			
+			DartsGlobals.instance.multiplayerClient.removeEventListener(TurnBasedGameClient.ROUND_START, handleStateChange);
+			DartsGlobals.instance.multiplayerClient.removeEventListener(TurnBasedGameClient.ROUND_END, handleStateChange);
+			DartsGlobals.instance.multiplayerClient.removeEventListener(TurnBasedGameClient.ROUND_RESULTS, handleStateChange);
+			
+			DartsGlobals.instance.multiplayerClient.removeEventListener(TurnBasedGameClient.TURN_START, handleStateChange);
+			DartsGlobals.instance.multiplayerClient.removeEventListener(TurnBasedGameClient.TURN_WAIT, handleStateChange);
+			DartsGlobals.instance.multiplayerClient.removeEventListener(TurnBasedGameClient.TURN_UPDATE, handleStateChange);
+			DartsGlobals.instance.multiplayerClient.removeEventListener(TurnBasedGameClient.TURN_END, handleStateChange);
+			DartsGlobals.instance.multiplayerClient.removeEventListener(TurnBasedGameClient.TURN_RESULTS, handleStateChange);
+			
 			_dartboard.resetBlockedSections();
 			
 			if( _inputController && _throwController )

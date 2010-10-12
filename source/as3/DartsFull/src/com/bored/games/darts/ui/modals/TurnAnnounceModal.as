@@ -75,8 +75,8 @@
 			{
 				var portrait:Bitmap = new Bitmap(DartsGlobals.instance.gameManager.players[DartsGlobals.instance.gameManager.currentPlayer].portrait.bitmapData);
 				portrait.smoothing = true;
-				portrait.width = 58;
-				portrait.height = 58;
+				portrait.width = 40;
+				portrait.height = 40;
 				
 				_playerImage.addChild(portrait);
 			}
@@ -93,7 +93,7 @@
 		{
 			this.removeEventListener(MouseEvent.CLICK, dismissPopup);
 			
-			_delayedCall.kill();
+			if(_delayedCall ) _delayedCall.kill();
 			
 			DartsGlobals.instance.processModalQueue();
 			

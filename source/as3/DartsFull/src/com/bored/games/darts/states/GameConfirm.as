@@ -168,7 +168,7 @@
 		{			
 			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("back_sound");
 			
-			(this.stateMachine as GameFSM).transitionToPreviousState();
+			(this.stateMachine as GameFSM).transitionToStateNamed("CPUOpponentSelect");
 		}//end onBack()
 		
 		private function onLaunchStore(a_evt:Event):void

@@ -7,6 +7,7 @@
 	import com.bored.games.darts.profiles.Profile;
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.bored.games.darts.ui.hud.CashPanel;
+	import com.bored.services.BoredServices;
 	import com.bored.services.client.GameClient;
 	import com.bored.services.client.TurnBasedGameClient;
 	import com.inassets.statemachines.interfaces.IStateMachine;

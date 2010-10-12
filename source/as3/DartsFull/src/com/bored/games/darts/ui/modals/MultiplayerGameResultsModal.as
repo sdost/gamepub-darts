@@ -81,9 +81,9 @@
 			
 			if (_playerOneStats)
 			{
-				_playerOneStats.text = "Doubles: " + DartsGlobals.instance.localPlayer.record.doubles + "\n" 
-				+ "Triples: " + DartsGlobals.instance.localPlayer.record.triples + "\n"
-				+ "Accuracy: " + Math.ceil(100 * DartsGlobals.instance.localPlayer.record.scoringThrows / DartsGlobals.instance.localPlayer.record.throws) + "%";
+				_playerOneStats.text = // "Accuracy: " + Math.ceil(100 * DartsGlobals.instance.localPlayer.record.scoringThrows / DartsGlobals.instance.localPlayer.record.throws) + "%\n"
+				/*+*/ "Doubles: " + DartsGlobals.instance.localPlayer.record.doubles + "\n" 
+				+ "Triples: " + DartsGlobals.instance.localPlayer.record.triples;
 			}
 		
 			_playerTwoName = descendantsDict["playerTwoName_text"] as TextField;
@@ -102,9 +102,9 @@
 			
 			if (_playerTwoStats)
 			{
-				_playerTwoStats.text = "Doubles: " + DartsGlobals.instance.opponentPlayer.record.doubles + "\n" 
-				+ "Triples: " + DartsGlobals.instance.opponentPlayer.record.triples + "\n"
-				+ "Accuracy: " + Math.ceil(100 * DartsGlobals.instance.opponentPlayer.record.scoringThrows / DartsGlobals.instance.opponentPlayer.record.throws) + "%";
+				_playerTwoStats.text = // "Accuracy: " + Math.ceil(100 * DartsGlobals.instance.opponentPlayer.record.scoringThrows / DartsGlobals.instance.opponentPlayer.record.throws) + "%\n"
+				/*+*/ "Doubles: " + DartsGlobals.instance.opponentPlayer.record.doubles + "\n" 
+				+ "Triples: " + DartsGlobals.instance.opponentPlayer.record.triples;
 			}
 		
 			_matchTime = descendantsDict["matchTime_text"] as TextField;			

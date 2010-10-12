@@ -4,6 +4,7 @@
 	import com.bored.games.darts.ui.buttons.ToggleButton;
 	import com.bored.games.darts.ui.modals.AchievementsModal;
 	import com.bored.games.darts.ui.modals.HelpModal;
+	import com.bored.games.darts.ui.modals.MultiplayerQuitModal;
 	import com.bored.games.darts.ui.modals.QuitModal;
 	import com.greensock.TweenLite;
 	import com.inassets.ui.buttons.events.ButtonEvent;
@@ -85,10 +86,11 @@
 			if (_musicBtnImg)
 			{
 				_musicBtn = new ToggleButton(_musicBtnImg, false);
-				_musicBtn.pause(false);
-				_musicBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, onMouseOver, false, 0, true);
+				_musicBtn.buttonContents.visible = false;
+				//_musicBtn.pause(false);
+				//_musicBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, onMouseOver, false, 0, true);
 				//_musicBtn.buttonContents.addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
-				_musicBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onMusicButtonClick, false, 0, true);
+				//_musicBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onMusicButtonClick, false, 0, true);
 			}
 			else
 			{
@@ -111,10 +113,11 @@
 			if (_trophyBtnImg)
 			{
 				_trophyBtn = new ToggleButton(_trophyBtnImg, false);
-				_trophyBtn.pause(false);
-				_trophyBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, onMouseOver, false, 0, true);
+				_trophyBtn.buttonContents.visible = false;
+				//_trophyBtn.pause(false);
+				//_trophyBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, onMouseOver, false, 0, true);
 				//_trophyBtn.buttonContents.addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
-				_trophyBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onTrophyButtonClick, false, 0, true);
+				//_trophyBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onTrophyButtonClick, false, 0, true);
 			}
 			else
 			{
@@ -205,10 +208,17 @@
 		}//end onTrophyButtonClick()
 		
 		private function onQuitButtonClick(a_evt:Event):void
-		{
+		{			
 			DartsGlobals.instance.gameManager.pause(true);
 			
-			DartsGlobals.instance.showModalPopup(QuitModal);
+			if ( DartsGlobals.instance.gameMode == DartsGlobals.GAME_MULTIPLAYER )
+			{
+				DartsGlobals.instance.showModalPopup(MultiplayerQuitModal);
+			}
+			else
+			{
+				DartsGlobals.instance.showModalPopup(QuitModal);
+			}
 			
 			_soundManager.getSoundControllerByID("buttonSoundController").play("quit_sound");
 			

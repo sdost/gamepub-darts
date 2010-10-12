@@ -503,11 +503,11 @@
 						
 			_backBtnImg = null;
 			
-			_storeSlotOne.removeChild(_slotBitmapOne);
+			if(_storeSlotOne) _storeSlotOne.removeChild(_slotBitmapOne);
 			_slotBitmapOne = null;
-			_storeSlotTwo.removeChild(_slotBitmapTwo);
+			if(_storeSlotTwo) _storeSlotTwo.removeChild(_slotBitmapTwo);
 			_slotBitmapTwo = null;
-			_storeSlotThree.removeChild(_slotBitmapThree);
+			if(_storeSlotThree) _storeSlotThree.removeChild(_slotBitmapThree);
 			_slotBitmapThree = null;
 			
 			_storeSlotOne = null;

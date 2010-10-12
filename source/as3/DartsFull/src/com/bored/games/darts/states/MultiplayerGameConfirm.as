@@ -161,8 +161,6 @@
 			
 			DartsGlobals.instance.gameManager.registerPlayer( DartsGlobals.instance.opponentPlayer );		
 			
-			BoredServices.showChatUI();
-			
 			(this.stateMachine as GameFSM).transitionToStateNamed("Gameplay");
 		}//end onReady()
 		

@@ -66,7 +66,7 @@
 			ext.init( { rootContainer: DartsGlobals.instance.optionsInterfaceSpace } );
 			DartsGlobals.instance.externalServices = ext;
 			
-			DartsGlobals.instance.externalServices.setData("gameCash", 10000);
+			DartsGlobals.instance.externalServices.setData("gameCash", 500);
 			DartsGlobals.instance.externalServices.setData("powerLevels", new Object());
 			DartsGlobals.instance.externalServices.setData("ownedSkins", new Array());
 			

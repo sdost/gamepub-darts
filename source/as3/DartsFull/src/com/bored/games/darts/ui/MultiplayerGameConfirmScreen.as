@@ -194,15 +194,6 @@
 				throw new Error("MultiplayerGameConfirmScreen::buildFrom(): _playerName=" + _playerName);
 			}
 			
-			if (_playerRecord)
-			{
-				//_opponentBio.text = DartsGlobals.instance.opponentProfile.bio;
-			}
-			else
-			{
-				throw new Error("MultiplayerGameConfirmScreen::buildFrom(): _playerRecord=" + _playerRecord);
-			}
-			
 			if (_playerPortrait)
 			{
 				trace("User Profile: ")
@@ -226,15 +217,6 @@
 			else
 			{
 				throw new Error("MultiplayerGameConfirmScreen::buildFrom(): _opponentName=" + _opponentName);
-			}
-			
-			if (_opponentRecord)
-			{
-				//_opponentBio.text = DartsGlobals.instance.opponentProfile.bio;
-			}
-			else
-			{
-				throw new Error("MultiplayerGameConfirmScreen::buildFrom(): _opponentRecord=" + _opponentRecord);
 			}
 			
 			if (_opponentPortrait)

@@ -2,6 +2,7 @@
 {
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.logic.DartsGameLogic;
+	import com.bored.games.darts.logic.RemoteCricketGameLogic;
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
@@ -20,17 +21,14 @@
 	 * ...
 	 * @author sam
 	 */
-	public class QuitModal extends ContentHolder
+	public class OpponentQuitModal extends ContentHolder
 	{
-		private var _yesBtnImg:MovieClip;
-		private var _yesBtn:MightyButton;
+		private var _lobbyBtnImg:MovieClip;
+		private var _lobbyBtn:MightyButton;
 		
-		private var _noBtnImg:MovieClip;
-		private var _noBtn:MightyButton;
-		
-		public function QuitModal() 
+		public function OpponentQuitModal() 
 		{
-			super(SpriteFactory.getSpriteByQualifiedName(AppSettings.instance.quitModalSprite), false, true);
+			super(SpriteFactory.getSpriteByQualifiedName(AppSettings.instance.opponentQuitModalSprite), false, true);
 		
 			if (this.stage) {
 				addedToStage();
@@ -56,78 +54,48 @@
 			
 			// now build ourselves from the descendantsDict.
 			
-			_yesBtnImg = descendantsDict["yesBtn_mc"] as MovieClip;
-			_noBtnImg = descendantsDict["noBtn_mc"] as MovieClip;
+			_lobbyBtnImg = descendantsDict["lobbyBtn_mc"] as MovieClip;
 			
-			if (_yesBtnImg) 
+			if (_lobbyBtnImg) 
 			{
-				_yesBtn = new MightyButton(_yesBtnImg, false);
-				_yesBtn.pause(false);
-				_yesBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onYesClicked, false, 0, true);
+				_lobbyBtn = new MightyButton(_lobbyBtnImg, false);
+				_lobbyBtn.pause(false);
+				_lobbyBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, lobbyClicked, false, 0, true);
 			}
 			else
 			{
-				throw new Error("QuitModal::buildFrom(): _yesBtnImg=" + _yesBtnImg);
-			}
-			
-			if (_noBtnImg) 
-			{
-				_noBtn = new MightyButton(_noBtnImg, false);
-				_noBtn.pause(false);
-				_noBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onNoClicked, false, 0, true);
-			}
-			else
-			{
-				throw new Error("QuitModal::buildFrom(): _noBtnImg=" + _noBtnImg);
+				throw new Error("OpponentQuitModal::buildFrom(): _lobbyBtnImg=" + _lobbyBtnImg);
 			}
 			
 			return descendantsDict;
 			
 		}//end buildFrom()
 		
-		private function onYesClicked(evt:Event):void
+		private function lobbyClicked(evt:Event):void
 		{
-			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("yes_sound");
-			
-			_yesBtn.removeEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onYesClicked);
-			_noBtn.removeEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onNoClicked);
-
 			DartsGlobals.instance.processModalQueue();
 			
-			//DartsGlobals.instance.gameManager.pause(false);
-			
-			DartsGlobals.instance.gameManager.endGame(0);
-		
-			DartsGlobals.instance.gameManager.dispatchEvent(new Event(DartsGameLogic.QUIT_TO_TITLE));
-		}//end onYesClicked()
-		
-		private function onNoClicked(evt:Event):void
-		{
-			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("no_sound");
-			
-			_yesBtn.removeEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onYesClicked);
-			_noBtn.removeEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onNoClicked);
-			
-			DartsGlobals.instance.processModalQueue();
+			DartsGlobals.instance.gameManager.resetDarts();
+			DartsGlobals.instance.gameManager.endTurn();
 			
 			DartsGlobals.instance.gameManager.pause(false);
+			
+			DartsGlobals.instance.gameManager.dispatchEvent(new Event(RemoteCricketGameLogic.RETURN_TO_LOBBY));
 		}//end onYesClicked()
 		
 		override public function destroy(...args):void
 		{
 			super.destroy();	
 			
-			_yesBtnImg = null;
-			_noBtnImg = null;
+			_lobbyBtnImg = null;
 			
-			_yesBtn = null;
-			_noBtn = null;
+			_lobbyBtn = null;
 						
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			this.removeEventListener(Event.REMOVED_FROM_STAGE, destroy);
 			
 		}//end destroy()
 		
-	}//end QuitModal
+	}//end OpponentQuitModal
 
 }//end com.bored.games.darts.ui.modals

@@ -2,6 +2,7 @@
 {
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.logic.DartsGameLogic;
+	import com.bored.games.darts.logic.RemoteCricketGameLogic;
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
@@ -20,7 +21,7 @@
 	 * ...
 	 * @author sam
 	 */
-	public class QuitModal extends ContentHolder
+	public class MultiplayerQuitModal extends ContentHolder
 	{
 		private var _yesBtnImg:MovieClip;
 		private var _yesBtn:MightyButton;
@@ -28,9 +29,9 @@
 		private var _noBtnImg:MovieClip;
 		private var _noBtn:MightyButton;
 		
-		public function QuitModal() 
+		public function MultiplayerQuitModal() 
 		{
-			super(SpriteFactory.getSpriteByQualifiedName(AppSettings.instance.quitModalSprite), false, true);
+			super(SpriteFactory.getSpriteByQualifiedName(AppSettings.instance.multiplayerQuitModalSprite), false, true);
 		
 			if (this.stage) {
 				addedToStage();
@@ -67,7 +68,7 @@
 			}
 			else
 			{
-				throw new Error("QuitModal::buildFrom(): _yesBtnImg=" + _yesBtnImg);
+				throw new Error("MultiplayerQuitModal::buildFrom(): _yesBtnImg=" + _yesBtnImg);
 			}
 			
 			if (_noBtnImg) 
@@ -78,7 +79,7 @@
 			}
 			else
 			{
-				throw new Error("QuitModal::buildFrom(): _noBtnImg=" + _noBtnImg);
+				throw new Error("MultiplayerQuitModal::buildFrom(): _noBtnImg=" + _noBtnImg);
 			}
 			
 			return descendantsDict;
@@ -98,7 +99,7 @@
 			
 			DartsGlobals.instance.gameManager.endGame(0);
 		
-			DartsGlobals.instance.gameManager.dispatchEvent(new Event(DartsGameLogic.QUIT_TO_TITLE));
+			DartsGlobals.instance.gameManager.dispatchEvent(new Event(RemoteCricketGameLogic.RETURN_TO_LOBBY));
 		}//end onYesClicked()
 		
 		private function onNoClicked(evt:Event):void
@@ -128,6 +129,6 @@
 			
 		}//end destroy()
 		
-	}//end QuitModal
+	}//end MultiplayerQuitModal
 
 }//end com.bored.games.darts.ui.modals

@@ -99,8 +99,8 @@
 			_soundController.addSound( new SMSound("turn_switch_3", "turnswitch3_mp3") );
 			_soundController.addSound( new SMSound("turn_switch_4", "turnswitch4_mp3") );
 			
-			DartsGlobals.instance.soundManager.getSoundControllerByID("loopsController").addSound( new SMSound("ambient_bar_loop", "loop_ambience_bar_wav", true) );
-			DartsGlobals.instance.soundManager.getSoundControllerByID("loopsController").addSound( new SMSound("theme_loop", "loop_theme1_wav", true) );
+			//DartsGlobals.instance.soundManager.getSoundControllerByID("loopsController").addSound( new SMSound("ambient_bar_loop", "loop_ambience_bar_wav", true) );
+			//DartsGlobals.instance.soundManager.getSoundControllerByID("loopsController").addSound( new SMSound("theme_loop", "loop_theme1_wav", true) );
 	
 		}//end constructor()
 		

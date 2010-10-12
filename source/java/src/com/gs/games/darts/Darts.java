@@ -25,7 +25,7 @@ public class Darts extends TurnBasedExtension {
 	private long _startTime;
 	private long _endTime;
 	
-	private long _roundTime = 30;
+	private long _roundTime = 60;
 	
 	private HashMap<Integer, DartsPlayer> _players;
 		
@@ -327,6 +327,8 @@ public class Darts extends TurnBasedExtension {
 	@Override
 	public void checkRestrictions(int fromRoom, LinkedList<SocketChannel> ll)
 	{
+		System.out.println("Darts::checkRestrictions()");
+		
 		cleanExpiredFuture();
 
 		User holdPlayer = _curPlayer;
@@ -362,7 +364,7 @@ public class Darts extends TurnBasedExtension {
 		super.startTurn(fromRoom, ll, nextPlayer);
 
 		// Create game timer and store into map using the current player as the key
-		super.startSecondsTimer(1L, 1L, _roundTime, nextPlayer, fromRoom);
+		super.startSecondsTimer(4L, 1L, _roundTime, nextPlayer, fromRoom);
 	}
 	
 	/**
@@ -374,7 +376,9 @@ public class Darts extends TurnBasedExtension {
 	{
 		super.sendGameTimerEnd(u, fromRoom);
 
-		chooseNextPlayer(fromRoom);
+		System.out.println("Darts::sendGameTimerEnd()");
+		
+		//chooseNextPlayer(fromRoom);
 	}
 	
 	private void finishGame(int fromRoom, LinkedList<SocketChannel> ll, int winner) throws JSONException

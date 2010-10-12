@@ -113,7 +113,7 @@
 			if ( DartsGlobals.instance.localPlayer.turnTime >= 0 )
 			{
 				_playerOneTimer.visible = true;
-				_playerOneTimer.gotoAndStop( Math.ceil(100 * (30 - DartsGlobals.instance.localPlayer.turnTime) / 30) );
+				_playerOneTimer.gotoAndStop( Math.ceil(100 * (60 - DartsGlobals.instance.localPlayer.turnTime) / 60) );
 			}
 			else
 			{
@@ -123,7 +123,7 @@
 			if ( DartsGlobals.instance.opponentPlayer.turnTime >= 0 )
 			{
 				_playerTwoTimer.visible = true;
-				_playerTwoTimer.gotoAndStop( Math.ceil(100 * (30 - DartsGlobals.instance.opponentPlayer.turnTime) / 30) );
+				_playerTwoTimer.gotoAndStop( Math.ceil(100 * (60 - DartsGlobals.instance.opponentPlayer.turnTime) / 60) );
 			}
 			else
 			{
