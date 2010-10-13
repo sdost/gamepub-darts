@@ -108,6 +108,7 @@
     <element path="swfLibs_includeAll\HUDAssets.swc" />
     <element path="swfLibs_includeAll\HUDAssets.swc" />
     <element path="swfLibs_includeAll\Confirm_Screen.swc" />
+    <element path="swcLibs_includeAll\DeveloperBoredGameServices.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>

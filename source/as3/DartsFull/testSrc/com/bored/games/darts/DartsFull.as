@@ -59,7 +59,7 @@
 			
 			DartsGlobals.instance.stateMachine = _myStateMachine = new GameFSM();
 			
-			WarningManager.instance.handleMethod = WarningManager.TRACE_WARNINGS;
+			WarningManager.instance.handleMethod = WarningManager.THROW_WARNINGS;
 			
 			addStates();
 			

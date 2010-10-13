@@ -26,7 +26,7 @@
 		
 		protected var _skin:DartSkin;
 		
-		protected var _portrait:Bitmap;
+		protected var _portrait:BitmapData;
 		
 		private var _abilityStock:Vector.<Ability>;
 		private var _activeAbilities:Array;
@@ -72,13 +72,13 @@
 			return _num;
 		}//end get playerNum()
 		
-		public function setPortrait(a_bmd:BitmapData):void
+		public function set portrait(a_bmd:BitmapData):void
 		{
-			_portrait = new Bitmap(a_bmd);
-			_portrait.smoothing = true;
-		}//end setPortrait()
+			_portrait = a_bmd;
+		}//end set portrait()
 		
-		public function get portrait():Bitmap
+		[Bindable]
+		public function get portrait():BitmapData
 		{
 			return _portrait;
 		}//end get portrait()

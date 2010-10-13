@@ -21,6 +21,7 @@
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
+	import flash.net.LocalConnection;
 	import flash.net.URLRequest;
 	import flash.system.ApplicationDomain;
 	import flash.text.TextField;
@@ -29,6 +30,7 @@
 	import flash.utils.Dictionary;
 	import flash.utils.getDefinitionByName;
 	import com.sven.utils.AppSettings;
+	import mx.binding.utils.ChangeWatcher;
 	import mx.controls.Text;
 	
 	/**
@@ -195,13 +197,15 @@
 			}
 			
 			if (_playerPortrait)
-			{				
-				var playerPortrait:Bitmap = new Bitmap(DartsGlobals.instance.localPlayer.portrait.bitmapData);
+			{					
+				ChangeWatcher.watch(DartsGlobals.instance.localPlayer, "portrait", updatePortraits);				
+				
+				var playerPortrait:Bitmap = new Bitmap(DartsGlobals.instance.localPlayer.portrait);
 				playerPortrait.smoothing = true;
 				playerPortrait.width = 75;
 				playerPortrait.height = 75;
 				
-				_opponentPortrait.addChild(playerPortrait);
+				_playerPortrait.addChild(playerPortrait);
 			}
 			else
 			{
@@ -219,7 +223,9 @@
 			
 			if (_opponentPortrait)
 			{
-				var opponentPortrait:Bitmap = new Bitmap(DartsGlobals.instance.opponentPlayer.portrait.bitmapData);
+				ChangeWatcher.watch(DartsGlobals.instance.opponentPlayer, "portrait", updatePortraits);
+				
+				var opponentPortrait:Bitmap = new Bitmap(DartsGlobals.instance.opponentPlayer.portrait);
 				opponentPortrait.smoothing = true;
 				opponentPortrait.width = 75;
 				opponentPortrait.height = 75;
@@ -269,6 +275,29 @@
 			TweenLite.to(this, 2, {alpha:1} );
 			
 		}//end addedToStage()
+		
+		public function updatePortraits(...args):void
+		{
+			new LocalConnection().send("_debugBridge", "debugMsg", "MultiplayerGameConfirmScreen::updatePortraits()");
+			
+			if (_playerPortrait.numChildren > 0) _playerPortrait.removeChildAt(1);
+			
+			var playerPortrait:Bitmap = new Bitmap(DartsGlobals.instance.localPlayer.portrait);
+			playerPortrait.smoothing = true;
+			playerPortrait.width = 75;
+			playerPortrait.height = 75;
+			
+			_playerPortrait.addChild(playerPortrait);
+			
+			if (_opponentPortrait.numChildren > 0) _opponentPortrait.removeChildAt(1);
+			
+			var opponentPortrait:Bitmap = new Bitmap(DartsGlobals.instance.opponentPlayer.portrait);
+			opponentPortrait.smoothing = true;
+			opponentPortrait.width = 75;
+			opponentPortrait.height = 75;
+			
+			_opponentPortrait.addChild(opponentPortrait);
+		}//end updatePortraits()
 		
 		private function onPickLeftClicked(a_evt:Event):void
 		{

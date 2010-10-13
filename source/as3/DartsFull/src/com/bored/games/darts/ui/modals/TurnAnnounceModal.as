@@ -73,7 +73,7 @@
 			
 			if (_playerImage)
 			{
-				var portrait:Bitmap = new Bitmap(DartsGlobals.instance.gameManager.players[DartsGlobals.instance.gameManager.currentPlayer].portrait.bitmapData);
+				var portrait:Bitmap = new Bitmap(DartsGlobals.instance.gameManager.players[DartsGlobals.instance.gameManager.currentPlayer].portrait);
 				portrait.smoothing = true;
 				portrait.width = 40;
 				portrait.height = 40;
