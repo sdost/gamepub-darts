@@ -55,7 +55,7 @@
 			DartsGlobals.instance.playerProfile.unlockSkin("basicplaid", "heart");
 			
 			DartsGlobals.instance.localPlayer = new LocalPlayer();
-			DartsGlobals.instance.localPlayer.setPortrait(ImageFactory.getBitmapDataByQualifiedName(AppSettings.instance.defaultPlayerPic, 150, 150));
+			DartsGlobals.instance.localPlayer.portrait = ImageFactory.getBitmapDataByQualifiedName(AppSettings.instance.defaultPlayerPic, 150, 150);
 			
 			DartsGlobals.instance.localPlayer.addAbilities(new ShieldAbility(10))
 			DartsGlobals.instance.localPlayer.addAbilities(new BeeLineAbility(10))

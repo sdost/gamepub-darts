@@ -2,6 +2,7 @@
 {
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.logic.DartsGameLogic;
+	import com.bored.games.darts.profiles.EnemyProfile;
 	import com.bored.games.GameUtils;
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
@@ -84,7 +85,11 @@
 			
 			if (_matchValue) 
 			{
-				_matchValue.text = "";
+				if ( DartsGlobals.instance.localPlayer.record.wonGame() ) {
+					_matchValue.text = "You won: $" + (DartsGlobals.instance.opponentProfile as EnemyProfile).prize;
+				} else {
+					_matchValue.text = "'Rematch' to replay. 'Return' to change opponents.";
+				}
 			}
 			else
 			{

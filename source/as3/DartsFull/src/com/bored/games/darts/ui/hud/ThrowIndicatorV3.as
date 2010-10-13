@@ -30,7 +30,7 @@
 		private var _reticle:MovieClip;
 		private var _harness:MovieClip;
 		private var _trueThrust:MovieClip;
-		private var _trueAngle:TextField;
+		//private var _trueAngle:TextField;
 		
 		private var _throwController:ThrowController;
 		
@@ -60,7 +60,7 @@
 			_reticle = descendantsDict["reticle_mc"] as MovieClip;
 			_harness = descendantsDict["harness_mc"] as MovieClip;
 			_trueThrust = descendantsDict["trueThrust_mc"] as MovieClip;
-			_trueAngle = descendantsDict["angle_text"] as TextField;
+			//_trueAngle = descendantsDict["angle_text"] as TextField;
 			
 			if (_terminus)
 			{
@@ -98,14 +98,14 @@
 				throw new Error("ThrowIndicatorV3::buildFrom(): _trueThrust=" + _trueThrust);
 			}
 			
-			if (_trueAngle)
+			/*if (_trueAngle)
 			{
 				_trueAngle.text = "";
 			}
 			else
 			{
 				throw new Error("ThrowIndicatorV3::buildFrom(): _trueAngle=" + _trueAngle);
-			}
+			}*/
 			
 			return descendantsDict;
 			
@@ -145,7 +145,7 @@
 			
 			_trueThrust.height = 200 * (_throwController.trueThrust / AppSettings.instance.dartMaxThrust);
 			
-			_trueAngle.text = (Math.floor(_throwController.trueAngle * 100) / 100) + " degs";
+			//_trueAngle.text = (Math.floor(_throwController.trueAngle * 100) / 100) + " degs";
 		}//end update()		
 		
 		public function show():void
@@ -167,7 +167,7 @@
 			_reticle = null;
 			_harness = null;
 			_trueThrust = null;
-			_trueAngle = null;
+			//_trueAngle = null;
 			
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			this.removeEventListener(Event.REMOVED_FROM_STAGE, destroy);

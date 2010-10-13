@@ -41,7 +41,7 @@
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			this.addEventListener(Event.REMOVED_FROM_STAGE, destroy, false, 0, true);
 			
-			_delayedCall = TweenMax.delayedCall(3, dismissPopup);
+			_delayedCall = TweenMax.delayedCall(2, dismissPopup);
 			
 			this.addEventListener(MouseEvent.CLICK, dismissPopup, false, 0, true);
 		}//end addedToStage()
@@ -73,7 +73,7 @@
 			
 			if (_playerImage)
 			{
-				var portrait:Bitmap = new Bitmap(DartsGlobals.instance.gameManager.players[DartsGlobals.instance.gameManager.currentPlayer].portrait.bitmapData);
+				var portrait:Bitmap = new Bitmap(DartsGlobals.instance.gameManager.players[DartsGlobals.instance.gameManager.currentPlayer].portrait);
 				portrait.smoothing = true;
 				portrait.width = 40;
 				portrait.height = 40;

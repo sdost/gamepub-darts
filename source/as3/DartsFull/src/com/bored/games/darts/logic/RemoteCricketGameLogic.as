@@ -222,6 +222,7 @@
 					break;
 				case GameClient.GAME_TIMER_END:
 					DartsPlayer(_players[_currentPlayer]).turnTime = -1;
+					_cursor.reset();
 					_cursor.hide();
 					_currentDart = null;
 					_throwController.resetThrowParams();
