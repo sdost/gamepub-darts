@@ -41,7 +41,7 @@
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			this.addEventListener(Event.REMOVED_FROM_STAGE, destroy, false, 0, true);
 			
-			_delayedCall = TweenMax.delayedCall(3, dismissPopup);
+			_delayedCall = TweenMax.delayedCall(2, dismissPopup);
 			
 			this.addEventListener(MouseEvent.CLICK, dismissPopup, false, 0, true);
 		}//end addedToStage()

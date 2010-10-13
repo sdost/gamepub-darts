@@ -3,7 +3,7 @@
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.input.ThrowController;
 	import com.bored.games.darts.ui.hud.ThrowIndicatorV4;
-	import com.bored.games.darts.ui.modals.ThrowTutorialModal;
+	import com.bored.games.darts.ui.modals.BasicThrowTutorialModal;
 	import com.bored.games.darts.events.InputStateEvent;
 	import com.bored.games.darts.input.InputController;
 	import com.sven.factories.MovieClipFactory;
@@ -44,7 +44,7 @@
 		}//end constructor()
 		
 		override public function startThrow(a_inputController:InputController):void
-		{	
+		{		
 			_buttonDown = false;
 			_state = INIT_THROW;
 			
@@ -54,7 +54,15 @@
 			_timer.addEventListener(TimerEvent.TIMER, updateCursorPosition, false, 0, true);			
 			_timer.start();
 			
-			a_inputController.pause = false;
+			if ( !DartsGlobals.instance.externalServices.getData("seenBasicThrowTutorial") && DartsGlobals.instance.gameMode == DartsGlobals.GAME_PRACTICE )
+			{
+				DartsGlobals.instance.showModalPopup(BasicThrowTutorialModal);
+				//DartsGlobals.instance.gameManager.pause(true);
+			} 
+			else 
+			{				
+				a_inputController.pause = false;
+			}
 		}//end startThrow()
 		
 		override public function onInputUpdate(a_evt:InputStateEvent):void

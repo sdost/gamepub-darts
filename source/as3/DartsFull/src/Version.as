@@ -8,10 +8,10 @@ package
 	public final class Version 
 	{
 		
-		static public const Major:int = 335;
-		static public const Minor:int = 335;
-		static public const Build:int = 108;
-		static public const Revision:int = 1758;
+		static public const Major:int = 364;
+		static public const Minor:int = 364;
+		static public const Build:int = 1012;
+		static public const Revision:int = 1929;
 		
 	}
 	

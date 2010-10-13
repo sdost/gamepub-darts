@@ -195,15 +195,13 @@
 			}
 			
 			if (_playerPortrait)
-			{
-				trace("User Profile: ")
-				trace("[userProfile]: " + BoredServices.userProfile);
-				/*
-				var loader:Loader = new Loader();
-				loader.load(new URLRequest(BoredServices.userProfile.avatarUrl));
+			{				
+				var playerPortrait:Bitmap = new Bitmap(DartsGlobals.instance.localPlayer.portrait.bitmapData);
+				playerPortrait.smoothing = true;
+				playerPortrait.width = 75;
+				playerPortrait.height = 75;
 				
-				_playerPortrait.addChild(loader);
-				*/
+				_opponentPortrait.addChild(playerPortrait);
 			}
 			else
 			{
@@ -221,12 +219,12 @@
 			
 			if (_opponentPortrait)
 			{
-				//var portrait:Bitmap = new Bitmap(DartsGlobals.instance.opponentProfile.portrait);
-				//portrait.smoothing = true;
-				//portrait.width = 75;
-				//portrait.height = 75;
+				var opponentPortrait:Bitmap = new Bitmap(DartsGlobals.instance.opponentPlayer.portrait.bitmapData);
+				opponentPortrait.smoothing = true;
+				opponentPortrait.width = 75;
+				opponentPortrait.height = 75;
 				
-				//_opponentPortrait.addChild(portrait);
+				_opponentPortrait.addChild(opponentPortrait);
 			}
 			else
 			{

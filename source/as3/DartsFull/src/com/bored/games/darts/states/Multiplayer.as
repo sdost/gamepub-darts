@@ -34,6 +34,8 @@
 	import com.sven.utils.AppSettings;
 	import com.sven.factories.ImageFactory;
 	import flash.display.Bitmap;
+	import flash.display.BitmapData;
+	import flash.display.DisplayObject;
 	import flash.display.LoaderInfo;
 	import flash.display.MovieClip;
 	import flash.events.ErrorEvent;
@@ -41,6 +43,7 @@
 	import flash.events.IEventDispatcher;
 	import flash.events.IOErrorEvent;
 	import flash.events.MouseEvent;
+	import flash.geom.Rectangle;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.net.URLVariables;
@@ -117,7 +120,8 @@
 				{
 					DartsGlobals.instance.localPlayer.playerName = user.name;
 					
-					
+					BoredServices.addEventListener(ObjectEvent.GET_USER_INFO_EVT, onPlayerProfile, false, 0, true);
+					BoredServices.getUserProfileByName(user.name);
 					
 					DartsGlobals.instance.localPlayer.setPortrait(ImageFactory.getBitmapDataByQualifiedName(AppSettings.instance.defaultMultiplayerPic, 150, 150));
 					DartsGlobals.instance.localPlayer.playerNum = user.pid;
@@ -126,6 +130,9 @@
 				{
 					DartsGlobals.instance.opponentProfile = new UserProfile();
 					DartsGlobals.instance.opponentProfile.name = user.name;
+					
+					BoredServices.getUserProfileByName(user.name);
+					BoredServices.addEventListener(ObjectEvent.GET_USER_INFO_EVT, onOpponentProfile, false, 0, true);
 					
 					DartsGlobals.instance.opponentProfile.unlockSkin("basicplaid", "heart");					
 			
@@ -146,6 +153,32 @@
 			}
 		}//end onRoomJoin()
 		
+		private function onPlayerProfile(e:ObjectEvent):void
+		{
+			if (!e.obj) return;
+			
+			if (e.obj.valueOf("screen_name") != DartsGlobals.instance.localPlayer.playerName) return;
+			
+			BoredServices.removeEventListener(ObjectEvent.GET_USER_INFO_EVT, onPlayerProfile);
+			
+			var bmp:Bitmap = e.obj.getUserAvatarImg(new Rectangle(150, 150), false);
+			
+			DartsGlobals.instance.localPlayer.setPortrait(bmp.bitmapData);
+		}
+		
+		private function onOpponentProfile(e:ObjectEvent):void
+		{
+			if (!e.obj) return;
+			
+			if (e.obj.valueOf("screen_name") != DartsGlobals.instance.opponentPlayer.playerName) return;
+			
+			BoredServices.removeEventListener(ObjectEvent.GET_USER_INFO_EVT, onOpponentProfile);
+			
+			var bmp:Bitmap = e.obj.getUserAvatarImg(new Rectangle(150, 150), false);
+			
+			DartsGlobals.instance.opponentPlayer.setPortrait(bmp.bitmapData);
+		}
+		
 		private function onUserIn(e:Event):void
 		{
 			DartsGlobals.instance.multiplayerClient.removeEventListener(ChatClient.USER_IN, onUserIn);
@@ -157,6 +190,9 @@
 					DartsGlobals.instance.opponentProfile = new UserProfile();
 					DartsGlobals.instance.opponentProfile.name = user.name;
 					DartsGlobals.instance.opponentProfile.unlockSkin("basicplaid", "heart");
+					
+					BoredServices.getUserProfileByName(user.name);
+					BoredServices.addEventListener(ObjectEvent.GET_USER_INFO_EVT, onOpponentProfile, false, 0, true);
 			
 					DartsGlobals.instance.opponentPlayer = new RemotePlayer(DartsGlobals.instance.opponentProfile);
 					DartsGlobals.instance.opponentPlayer.setPortrait(ImageFactory.getBitmapDataByQualifiedName(AppSettings.instance.defaultMultiplayerPic, 150, 150));
