@@ -14,6 +14,7 @@
 	import com.jac.soundManager.SoundController;
 	import com.sven.utils.AppSettings;
 	import flash.media.SoundChannel;
+	import flash.net.LocalConnection;
 	import flash.sampler.NewObjectSample;
 	import flash.utils.getDefinitionByName;
 	import com.bored.games.darts.logic.DartsGameLogic;
@@ -73,6 +74,7 @@
 		
 		private static var _warningTmr:Timer;
 		private static var _warningArr:Array;
+		private static var _debugLocalConn:LocalConnection;
 		
 		private static var _instance:DartsGlobals;
 		private var _constructed:Boolean = false;
@@ -497,6 +499,11 @@
 			if (warningStr)
 			{
 				trace(warningStr);
+				if (!_debugLocalConn)
+				{
+					_debugLocalConn = new LocalConnection();
+				}
+				_debugLocalConn.send("_debugBridge", "debugMsg", warningStr);
 			}
 			
 		}//end onWarning()
