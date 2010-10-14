@@ -82,7 +82,7 @@
 			
 			if (_harness && _reticle)
 			{
-				_reticle.y = -((AppSettings.instance.dartMaxThrust - AppSettings.instance.dartMinThrust) / 2 + AppSettings.instance.dartMinThrust) * (200 / AppSettings.instance.dartMaxThrust);				
+				_reticle.y = -((AppSettings.instance.dartMaxThrust - AppSettings.instance.dartMinThrust) / 2) * (200 / (AppSettings.instance.dartMaxThrust - AppSettings.instance.dartMinThrust));				
 			}
 			else
 			{
@@ -134,7 +134,7 @@
 				0.05, 
 				{
 					x: _throwController.lean * 12,
-					y: -_throwController.thrust * (206 / AppSettings.instance.dartMaxThrust)
+					y: -(Math.abs(_throwController.thrust - AppSettings.instance.dartMinThrust)) * (200 / (AppSettings.instance.dartMaxThrust - AppSettings.instance.dartMinThrust))
 				}
 			);
 			

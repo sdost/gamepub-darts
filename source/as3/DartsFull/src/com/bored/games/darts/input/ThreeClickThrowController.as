@@ -50,6 +50,13 @@
 			
 			trace("ThreeClickThrowController::startThrow() -- _state = " + _state);
 			
+			if (_timer)
+			{
+				_timer.removeEventListener(TimerEvent.TIMER, updateCursorPosition);			
+				_timer.stop();
+				_timer = null;
+			}
+			
 			_timer = new Timer(AppSettings.instance.simpleThrowUpdate);
 			_timer.addEventListener(TimerEvent.TIMER, updateCursorPosition, false, 0, true);			
 			_timer.start();
@@ -134,7 +141,7 @@
 					}
 				break;
 				case START_X_THROW:
-					_lean += _direction / 4;
+					_lean += _direction / 3;
 				
 					if ( _lean < -2.5 ) {
 						_lean = -2.5;
@@ -176,6 +183,7 @@
 			{
 				_timer.removeEventListener(TimerEvent.TIMER, updateCursorPosition);			
 				_timer.stop();
+				_timer = null;
 			}
 		}
 		
