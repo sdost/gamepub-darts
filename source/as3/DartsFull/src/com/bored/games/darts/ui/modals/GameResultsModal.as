@@ -146,11 +146,10 @@
 			DartsGlobals.instance.processModalQueue();
 			
 			DartsGlobals.instance.gameManager.resetDarts();
-			DartsGlobals.instance.gameManager.endTurn();
 			
 			DartsGlobals.instance.gameManager.newGame();
 			
-			DartsGlobals.instance.gameManager.currentPlayer = DartsGlobals.instance.localPlayer.playerNum;
+			//DartsGlobals.instance.gameManager.currentPlayer = DartsGlobals.instance.localPlayer.playerNum;
 			
 			DartsGlobals.instance.gameManager.startNewTurn();
 			

@@ -209,6 +209,7 @@
 				DartsGlobals.instance.gameManager.abilityManager.activateAbility(DartsGlobals.instance.opponentPlayer.getAbilityByName(DoOverAbility.NAME));
 			}
 			*/
+			/*
 			var version:int = Math.ceil( Math.random() * 2 );
 			
 			if ( _shotIntention.points == a_points && _shotIntention.multiplier == a_multiplier ) 
@@ -219,11 +220,13 @@
 			{
 				_voSoundController.play("generic_miss" + version.toString());
 			}
+			*/
 			
-			
+			/*
 			if ( _shotIntention.points != a_points && _shotIntention.multiplier == 1 && DartsGlobals.instance.opponentPlayer.hasAbility(DoOverAbility.NAME) ) {
 				DartsGlobals.instance.gameManager.abilityManager.activateAbility(DartsGlobals.instance.opponentPlayer.getAbilityByName(DoOverAbility.NAME));
 			}
+			*/
 		}//end handleShot()
 		
 	}//end IreneProfile
