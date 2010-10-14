@@ -90,6 +90,7 @@
 		{
 			for ( var i:int = 0; i < _abilities.length; i++ )
 			{
+				_timers[i] = 0;
 				_abilities[i].armAbility();
 			}
 		}//end resetAbilities()
