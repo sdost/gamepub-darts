@@ -83,16 +83,38 @@
 			if (_state == INIT_THROW)
 			{
 				//Mouse.hide();
-				DartsGlobals.instance.gameManager.cursor.x = (((_mousePosition.x - 350) * AppSettings.instance.cursorPositionZ * Math.tan(57.5 * Math.PI / 180))/ 700);
-				DartsGlobals.instance.gameManager.cursor.y = (((275 - _mousePosition.y) * AppSettings.instance.cursorPositionZ * Math.tan(51 * Math.PI / 180))/ 550);
-				DartsGlobals.instance.gameManager.cursor.z = AppSettings.instance.cursorPositionZ;
-				
-				DartsGlobals.instance.gameManager.currentDart.x = (((_mousePosition.x - 350) * AppSettings.instance.dartboardPositionZ * Math.tan(50 * Math.PI / 180)) / 700);
-				DartsGlobals.instance.gameManager.currentDart.y = (((275 - _mousePosition.y) * AppSettings.instance.dartboardPositionZ * Math.tan(50 * Math.PI / 180)) / 550);
-				DartsGlobals.instance.gameManager.currentDart.z = 0;
+				if (DartsGlobals.instance.gameManager)
+				{
+					if (DartsGlobals.instance.gameManager.cursor)
+					{
+						DartsGlobals.instance.gameManager.cursor.x = (((_mousePosition.x - 350) * AppSettings.instance.cursorPositionZ * Math.tan(57.5 * Math.PI / 180))/ 700);
+						DartsGlobals.instance.gameManager.cursor.y = (((275 - _mousePosition.y) * AppSettings.instance.cursorPositionZ * Math.tan(51 * Math.PI / 180))/ 550);
+						DartsGlobals.instance.gameManager.cursor.z = AppSettings.instance.cursorPositionZ;
+					}
+					else
+					{
+						DartsGlobals.addWarning("ThreeClickThrowController::onInputUpdate(): DartsGlobals.instance.gameManager.cursor=" + DartsGlobals.instance.gameManager.cursor);
+					}
+					
+					if (DartsGlobals.instance.gameManager.currentDart)
+					{
+						DartsGlobals.instance.gameManager.currentDart.x = (((_mousePosition.x - 350) * AppSettings.instance.dartboardPositionZ * Math.tan(50 * Math.PI / 180)) / 700);
+						DartsGlobals.instance.gameManager.currentDart.y = (((275 - _mousePosition.y) * AppSettings.instance.dartboardPositionZ * Math.tan(50 * Math.PI / 180)) / 550);
+						DartsGlobals.instance.gameManager.currentDart.z = 0;
+					}
+					else
+					{
+						DartsGlobals.addWarning("ThreeClickThrowController::onInputUpdate(): DartsGlobals.instance.gameManager.currentDart=" + DartsGlobals.instance.gameManager.currentDart);
+					}
+				}
+				else
+				{
+					DartsGlobals.addWarning("ThreeClickThrowController::onInputUpdate(): DartsGlobals.instance.gameManager=" + DartsGlobals.instance.gameManager);
+				}
 			}
 			
 			_buttonDown = a_evt.button;
+			
 		}//end onInputUpdate()
 		
 		private function updateCursorPosition(evt:Event):void

@@ -86,7 +86,9 @@
 		 * Handler for entering (and executing) this state.
 		 */
 		override public function onEnter():void
-		{					
+		{
+			DartsGlobals.addWarning("Gameplay::onEnter()");
+			
 			_inputController = new MouseInputController(DartsGlobals.instance.screenSpace);
 			
 			if ( DartsGlobals.instance.throwMode == DartsGlobals.THROW_BEGINNER ) 
@@ -182,6 +184,8 @@
 		 */
 		override public function onExit():void
 		{
+			DartsGlobals.addWarning("Gameplay::onExit()");
+			
 			DartsGlobals.instance.gameManager.removeEventListener(DartsGameLogic.GAME_END, onGameEnd);
 			
 			DartsGlobals.instance.stage.removeEventListener(Event.ENTER_FRAME, update);

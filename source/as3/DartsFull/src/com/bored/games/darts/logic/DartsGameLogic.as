@@ -301,7 +301,7 @@
 						
 						//resetDarts();
 						_currentPlayer = winner + 1;
-												
+						
 						_bullOff = false;
 						_currentDart = null;
 						DartsGlobals.instance.showModalPopup(BullOffWinnerModal);
@@ -498,7 +498,7 @@
 			_cursor.hide();
 			
 			_currentDart = null;
-						
+			
 			if ( _resting ) {
 				endCurrentTurn();
 			} else {

@@ -61,8 +61,8 @@
 		 * Handler for entering (and executing) this state.
 		 */
 		override public function onEnter():void
-		{			
-			trace("GameConfirm::onEnter()");
+		{
+			DartsGlobals.addWarning("GameConfirm::onEnter()");
 						
 			var gameConfirmScreenImg:Sprite;
 			
@@ -90,7 +90,7 @@
 		
 		public function onPlay(a_evt:Event):void
 		{
-			trace("GameConfirm::onPlay");
+			DartsGlobals.addWarning("GameConfirm::onPlay()");
 			
 			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("play_sound");
 			
@@ -183,6 +183,8 @@
 		 */
 		override public function onExit():void
 		{
+			DartsGlobals.addWarning("GameConfirm::onExit()");
+			
 			_gameConfirmScreen.removeEventListener(GameConfirmScreen.BACK_CLICKED_EVT, onBack);
 			_gameConfirmScreen.removeEventListener(GameConfirmScreen.PLAY_CLICKED_EVT, onPlay);
 			_gameConfirmScreen.removeEventListener(GameConfirmScreen.LAUNCH_STORE_EVT, onLaunchStore);

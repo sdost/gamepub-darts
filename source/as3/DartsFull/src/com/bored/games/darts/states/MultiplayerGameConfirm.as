@@ -66,9 +66,9 @@
 		 * Handler for entering (and executing) this state.
 		 */
 		override public function onEnter():void
-		{			
-			trace("MultiplayerGameConfirm::onEnter()");
-									
+		{
+			DartsGlobals.addWarning("MultiplayerGameConfirm::onEnter()");
+			
 			var gameConfirmScreenImg:Sprite;
 			
 			DartsGlobals.instance.setupControlPanel();
@@ -100,7 +100,7 @@
 		
 		public function onPlay(a_evt:Event):void
 		{
-			trace("MultiplayerGameConfirm::onPlay");
+			DartsGlobals.addWarning("MultiplayerGameConfirm::onPlay()");
 			
 			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("play_sound");
 			
@@ -127,6 +127,8 @@
 		
 		private function returnToLobby(e:Event):void
 		{
+			DartsGlobals.addWarning("MultiplayerGameConfirm::returnToLobby()");
+			
 			DartsGlobals.instance.gameManager.removeEventListener(RemoteCricketGameLogic.RETURN_TO_LOBBY, returnToLobby);
 			DartsGlobals.instance.multiplayerClient.removeEventListener(ChatClient.LOBBY_ROOM, returnToLobby);
 			
@@ -137,6 +139,8 @@
 		
 		private function onReady(a_evt:Event = null):void
 		{
+			DartsGlobals.addWarning("MultiplayerGameConfirm::onReady()");
+
 			DartsGlobals.instance.gameManager.removeEventListener(RemoteCricketGameLogic.RETURN_TO_LOBBY, returnToLobby);
 			DartsGlobals.instance.multiplayerClient.removeEventListener(ChatClient.LOBBY_ROOM, returnToLobby);
 			
@@ -181,10 +185,13 @@
 			DartsGlobals.instance.gameManager.registerPlayer( DartsGlobals.instance.opponentPlayer );		
 			
 			(this.stateMachine as GameFSM).transitionToStateNamed("Gameplay");
+			
 		}//end onReady()
 		
 		private function onBack(a_evt:Event):void
-		{			
+		{
+			DartsGlobals.addWarning("MultiplayerGameConfirm::onBack()");
+			
 			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("back_sound");
 			
 			DartsGlobals.instance.gameManager.removeEventListener(RemoteCricketGameLogic.RETURN_TO_LOBBY, returnToLobby);
@@ -200,12 +207,15 @@
 		 */
 		override public function onExit():void
 		{
+			DartsGlobals.addWarning("MultiplayerGameConfirm::onExit()");
+			
 			_gameConfirmScreen.removeEventListener(GameConfirmScreen.BACK_CLICKED_EVT, onBack);
 			_gameConfirmScreen.removeEventListener(GameConfirmScreen.PLAY_CLICKED_EVT, onPlay);
 			
 			_gameConfirmScreen.destroy();
 			
 			_gameConfirmScreen = null;
+			
 		}//end onExit()
 		
 	}//end class Initialization

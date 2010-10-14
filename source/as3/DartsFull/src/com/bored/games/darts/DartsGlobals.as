@@ -75,6 +75,7 @@
 		private static var _warningTmr:Timer;
 		private static var _warningArr:Array;
 		private static var _debugLocalConn:LocalConnection;
+		private static var _debugLcName:String;
 		
 		private static var _instance:DartsGlobals;
 		private var _constructed:Boolean = false;
@@ -515,11 +516,24 @@
 			if (warningStr)
 			{
 				trace(warningStr);
-				if (!_debugLocalConn)
+				
+				COMPILEVAR::DEBUG
 				{
-					_debugLocalConn = new LocalConnection();
+					if (!_debugLocalConn)
+					{
+						_debugLocalConn = new LocalConnection();
+						
+						var lcName:* = DartsGlobals.instance.stage.root.loaderInfo.parameters["debugLcName"];
+						_debugLcName = lcName;
+						
+						if (!_debugLcName || !_debugLcName.length || _debugLcName == "" || _debugLcName.toLowerCase() == "null" || _debugLcName.toLowerCase() == "undefined")
+						{
+							throw new Error("DartsGlobals::onWarning(): this.stage.root.loaderInfo.parameters[\"debugLcName\"]=" + lcName + ", using default=" + "_debugBridge");
+							_debugLcName = "_debugBridge";
+						}
+					}
+					_debugLocalConn.send(_debugLcName, "debugMsg", warningStr);
 				}
-				_debugLocalConn.send("_debugBridge", "debugMsg", warningStr);
 			}
 			
 		}//end onWarning()

@@ -72,7 +72,7 @@
 		 */
 		override public function onEnter():void
 		{			
-			trace("Multiplayer::onEnter()");
+			DartsGlobals.addWarning("Multiplayer::onEnter()");
 			
 			DartsGlobals.instance.hideControlPanel();
 			
@@ -84,7 +84,7 @@
 		
 		private function onFail(e:Event):void
 		{
-			trace("Multiplayer::onFail()");
+			DartsGlobals.addWarning("Multiplayer::onFail()");
 			
 			BoredServices.removeEventListener(ObjectEvent.MULTPLAYER_GAME_FAIL_EVT, onFail);
 			BoredServices.removeEventListener(ObjectEvent.MULTPLAYER_GAME_START_EVT, onMPGameReady);
@@ -94,7 +94,7 @@
 		
 		private function onMPGameReady(e:ObjectEvent):void
 		{
-			trace("Multiplayer::onMPGameReady(" + e.obj + ")");
+			DartsGlobals.addWarning("Multiplayer::onMPGameReady(" + e.obj + ")");
 			
 			BoredServices.removeEventListener(ObjectEvent.MULTPLAYER_GAME_FAIL_EVT, onFail);
 			BoredServices.removeEventListener(ObjectEvent.MULTPLAYER_GAME_START_EVT, onMPGameReady);
@@ -116,6 +116,8 @@
 		
 		private function onRoomJoin(e:Event):void
 		{
+			DartsGlobals.addWarning("Multiplayer::onRoomJoin()");
+			
 			DartsGlobals.instance.multiplayerClient.removeEventListener(ChatClient.ROOM_JOIN, onRoomJoin);
 					
 			for each( var user:Object in DartsGlobals.instance.multiplayerClient.users )
@@ -160,6 +162,8 @@
 		
 		private function onPlayerProfile(e:Event):void
 		{
+			DartsGlobals.addWarning("Multiplayer::onPlayerProfile()");
+			
 			if (!(e as Object).obj) return;
 			
 			if ((e as Object).obj.valueOf("screen_name") != DartsGlobals.instance.localPlayer.playerName) return;
@@ -176,13 +180,15 @@
 			var loader:Loader = Loader(e.target.loader);
 			var bmp:Bitmap = Bitmap(loader.content);
 			
-			new LocalConnection().send("_debugBridge", "debugMsg", "Multiplayer::playerImageLoadComplete() -> bmp = " + bmp);
+			DartsGlobals.addWarning("Multiplayer::playerImageLoadComplete() -> bmp = " + bmp);
 			
 			DartsGlobals.instance.localPlayer.portrait = bmp.bitmapData;
 		}//end playerImageLoadComplete()
 		
 		private function onOpponentProfile(e:Event):void
 		{
+			DartsGlobals.addWarning("Multiplayer::onOpponentProfile()");
+			
 			if (!(e as Object).obj) return;
 			
 			if ((e as Object).obj.valueOf("screen_name") != DartsGlobals.instance.opponentPlayer.playerName) return;
@@ -199,13 +205,15 @@
 			var loader:Loader = Loader(e.target.loader);
 			var bmp:Bitmap = Bitmap(loader.content);
 			
-			new LocalConnection().send("_debugBridge", "debugMsg", "Multiplayer::opponentImageLoadComplete() -> bmp = " + bmp);
+			DartsGlobals.addWarning("Multiplayer::opponentImageLoadComplete() -> bmp = " + bmp);
 			
 			DartsGlobals.instance.opponentPlayer.portrait = bmp.bitmapData;
 		}//end opponentImageLoadComplete()
 		
 		private function onUserIn(e:Event):void
 		{
+			DartsGlobals.addWarning("Multiplayer::onUserIn()");
+			
 			DartsGlobals.instance.multiplayerClient.removeEventListener(ChatClient.USER_IN, onUserIn);
 			
 			for each( var user:Object in DartsGlobals.instance.multiplayerClient.users )
@@ -246,6 +254,8 @@
 		 */
 		override public function onExit():void
 		{
+			DartsGlobals.addWarning("Multiplayer::onExit()");
+			
 		}//end onExit()
 		
 	}//end class Multiplayer
