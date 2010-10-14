@@ -336,7 +336,7 @@
 			
 			this.dispatchEvent(new Event(PLAY_CLICKED_EVT));
 			
-			_backBtn.pause(true);
+			//_backBtn.pause(true);
 			_playBtn.pause(true);
 			
 			//TweenLite.to(this, 0.4, {alpha:0, onComplete:destroy} );

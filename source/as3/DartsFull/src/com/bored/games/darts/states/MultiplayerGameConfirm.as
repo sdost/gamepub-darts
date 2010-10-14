@@ -7,6 +7,7 @@
 	import com.bored.games.darts.abilities.ShieldAbility;
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.logic.CricketGameLogic;
+	import com.bored.games.darts.logic.RemoteCricketGameLogic;
 	import com.bored.games.darts.models.dae_DartFlightHeart;
 	import com.bored.games.darts.models.dae_DartFlightHexagon;
 	import com.bored.games.darts.models.dae_DartFlightModHex;
@@ -21,10 +22,12 @@
 	import com.bored.games.darts.skins.DartSkin;
 	import com.bored.games.darts.states.statemachines.GameFSM;
 	import com.bored.games.darts.ui.GameConfirmScreen;
+	import com.bored.games.darts.ui.modals.OpponentQuitModal;
 	import com.bored.games.darts.ui.MultiplayerGameConfirmScreen;
 	import com.bored.services.BoredServices;
 	import com.bored.services.client.ChatClient;
 	import com.bored.services.client.GameClient;
+	import com.bored.services.client.GameServices;
 	import com.bored.services.client.TurnBasedGameClient;
 	import com.bored.services.AbstractExternalService;
 	import com.inassets.statemachines.Finite.State;
@@ -65,10 +68,11 @@
 		override public function onEnter():void
 		{			
 			trace("MultiplayerGameConfirm::onEnter()");
+									
+			var gameConfirmScreenImg:Sprite;
 			
 			DartsGlobals.instance.setupControlPanel();
-						
-			var gameConfirmScreenImg:Sprite;
+				DartsGlobals.instance.showControlPanel();
 			
 			try
 			{
@@ -83,6 +87,9 @@
 				DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").addSound( new SMSound("store_sound", "button_getdarts_mp3") );
 				DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").addSound( new SMSound("play_sound", "button_play_mp3") );
 				DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").addSound( new SMSound("back_sound", "button_back_mp3") );
+				
+				DartsGlobals.instance.gameManager.addEventListener(RemoteCricketGameLogic.RETURN_TO_LOBBY, returnToLobby, false, 0, true);
+				DartsGlobals.instance.multiplayerClient.addEventListener(ChatClient.LOBBY_ROOM, returnToLobby, false, 0, true);
 			}
 			catch (e:Error)
 			{
@@ -110,13 +117,23 @@
 			if ( DartsGlobals.instance.multiplayerClient )
 			{
 				DartsGlobals.instance.multiplayerClient.addEventListener(GameClient.GAME_START, onReady);
-				DartsGlobals.instance.multiplayerClient.sendReady({"skinid": DartsGlobals.instance.localPlayer.skin.skinid,"flightid":DartsGlobals.instance.localPlayer.skin.flightid});
+				DartsGlobals.instance.multiplayerClient.sendReady( { "skinid": DartsGlobals.instance.localPlayer.skin.skinid, "flightid":DartsGlobals.instance.localPlayer.skin.flightid } );
 			}
 			else
 			{
 				onReady();
 			}
 		}//end onPlay()
+		
+		private function returnToLobby(e:Event):void
+		{
+			DartsGlobals.instance.gameManager.removeEventListener(RemoteCricketGameLogic.RETURN_TO_LOBBY, returnToLobby);
+			DartsGlobals.instance.multiplayerClient.removeEventListener(ChatClient.LOBBY_ROOM, returnToLobby);
+			
+			BoredServices.hideChatUI();
+			
+			(this.stateMachine as GameFSM).transitionToStateNamed("Multiplayer");
+		}//end returnToLobby()
 		
 		private function onReady(a_evt:Event = null):void
 		{

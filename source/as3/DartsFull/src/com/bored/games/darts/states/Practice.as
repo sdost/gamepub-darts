@@ -58,6 +58,7 @@
 			DartsGlobals.instance.gameManager = new CricketGameLogic(); //new FiveOhOneGameLogic();
 			
 			DartsGlobals.instance.setupControlPanel();
+			DartsGlobals.instance.showControlPanel();
 			
 			DartsGlobals.instance.localPlayer.playerNum = CricketGameLogic.HUMAN_PLAYER;
 			DartsGlobals.instance.localPlayer.setSkin(DartsGlobals.instance.playerProfile.skins[0]);

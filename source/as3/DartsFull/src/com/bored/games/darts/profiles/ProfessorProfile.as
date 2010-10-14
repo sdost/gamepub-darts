@@ -60,6 +60,8 @@
 			_voSoundController.addSound( new SMSound("generic_special1", "TheProf_SpcDartAskedForIt_mp3") );
 			_voSoundController.addSound( new SMSound("generic_special2", "TheProf_SpcDartHowDoYou_mp3") );
 			
+			_voSoundController.muteAllSounds();
+			
 			this.prize = 2000;
 		}//end constructor()
 		

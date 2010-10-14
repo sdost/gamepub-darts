@@ -74,7 +74,7 @@
 					_mouseTimer.addEventListener( TimerEvent.TIMER, updateThrust );
 					_mouseTimer.start();
 				} else {
-					Mouse.hide();
+					//Mouse.hide();
 					DartsGlobals.instance.gameManager.cursor.x = (((a_evt.x - 350) * AppSettings.instance.cursorPositionZ * Math.tan(57.5 * Math.PI / 180))/ 700);
 					DartsGlobals.instance.gameManager.cursor.y = (((275 - a_evt.y) * AppSettings.instance.cursorPositionZ * Math.tan(51 * Math.PI / 180))/ 550);
 					DartsGlobals.instance.gameManager.cursor.z = AppSettings.instance.cursorPositionZ;

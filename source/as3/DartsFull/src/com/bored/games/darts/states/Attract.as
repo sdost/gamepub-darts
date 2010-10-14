@@ -39,7 +39,7 @@
 		 * Handler for entering (and executing) this state.
 		 */
 		override public function onEnter():void
-		{	
+		{				
 			DartsGlobals.instance.hideControlPanel();
 			
 			var titleScreenImg:Sprite;

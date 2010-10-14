@@ -55,6 +55,7 @@
 			DartsGlobals.instance.gameManager = new CricketGameLogic();
 			
 			DartsGlobals.instance.setupControlPanel();
+			DartsGlobals.instance.showControlPanel();
 					
 			var opponentSelectScreenImg:Sprite;
 			

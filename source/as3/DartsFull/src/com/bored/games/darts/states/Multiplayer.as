@@ -89,7 +89,7 @@
 			BoredServices.removeEventListener(ObjectEvent.MULTPLAYER_GAME_FAIL_EVT, onFail);
 			BoredServices.removeEventListener(ObjectEvent.MULTPLAYER_GAME_START_EVT, onMPGameReady);
 			
-			(this.stateMachine as GameFSM).transitionToPreviousState();
+			(this.stateMachine as GameFSM).transitionToStateNamed("Attract");
 		}//end onFail()
 		
 		private function onMPGameReady(e:ObjectEvent):void
