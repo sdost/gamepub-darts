@@ -118,7 +118,7 @@
 		{
 			DartsGlobals.addWarning("Multiplayer::onRoomJoin()");
 			
-			DartsGlobals.instance.multiplayerClient.removeEventListener(ChatClient.ROOM_JOIN, onRoomJoin);
+			
 					
 			for each( var user:Object in DartsGlobals.instance.multiplayerClient.users )
 			{
@@ -214,8 +214,6 @@
 		{
 			DartsGlobals.addWarning("Multiplayer::onUserIn()");
 			
-			DartsGlobals.instance.multiplayerClient.removeEventListener(ChatClient.USER_IN, onUserIn);
-			
 			for each( var user:Object in DartsGlobals.instance.multiplayerClient.users )
 			{
 				if ( DartsGlobals.instance.multiplayerClient.account.id != user.id )
@@ -245,6 +243,9 @@
 		private function finished():void
 		{
 			trace("Multiplayer::finished()");
+			
+			DartsGlobals.instance.multiplayerClient.removeEventListener(ChatClient.USER_IN, onUserIn);
+			DartsGlobals.instance.multiplayerClient.removeEventListener(ChatClient.ROOM_JOIN, onRoomJoin);
 			
 			(this.stateMachine as GameFSM).transitionToStateNamed("MultiplayerGameConfirm");
 		}
