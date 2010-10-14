@@ -13,6 +13,7 @@
 	import flash.events.MouseEvent;
 	import flash.text.TextField;
 	import flash.utils.Dictionary;
+	import mx.utils.ObjectUtil;
 	
 	/**
 	 * ...
@@ -68,7 +69,10 @@
 			}
 			else
 			{
-				throw new Error("TurnAnnounceModal::buildFrom(): _playerNameText=" + _playerNameText);
+				//throw new Error("TurnAnnounceModal::buildFrom(): _playerNameText=" + _playerNameText);
+				var a_imgDesc:String = ObjectUtil.toString(a_img);
+				DartsGlobals.addWarning("ERROR: TurnAnnounceModal::buildFrom(): _playerNameText=" + _playerNameText + ", a_img=" + a_imgDesc);
+				return descendantsDict;
 			}
 			
 			if (_playerImage)
@@ -107,7 +111,9 @@
 		
 		override public function destroy(...args):void
 		{
-			super.destroy();	
+			//DartsGlobals.addWarning("ERROR: TurnAnnounceModal::destroy()");
+			
+			super.destroy();
 			
 			_playerImage = null;
 			_playerNameText = null;
