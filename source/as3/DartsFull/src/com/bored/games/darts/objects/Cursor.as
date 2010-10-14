@@ -15,6 +15,7 @@
 	import flash.display.Sprite;
 	import flash.geom.Matrix;
 	import flash.geom.Rectangle;
+	import flash.ui.Mouse;
 	
 	/**
 	 * ...
@@ -94,12 +95,14 @@
 		
 		public function show():void
 		{
+			Mouse.hide();
 			_hidden = false;
 			_cursor.alpha = 1;
 		}//end show()
 		
 		public function hide():void
 		{
+			Mouse.show();
 			_hidden = true;
 			_cursor.alpha = 0;
 		}//end hide()

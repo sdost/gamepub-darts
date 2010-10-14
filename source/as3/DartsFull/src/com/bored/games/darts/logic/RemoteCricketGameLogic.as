@@ -15,6 +15,8 @@
 	import com.bored.games.darts.events.InputStateEvent;
 	import com.bored.services.client.GameClient;
 	import com.bored.services.client.TurnBasedGameClient;
+	import com.sven.factories.MovieClipFactory;
+	import com.sven.factories.SpriteFactory;
 	import com.sven.utils.AppSettings;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -174,6 +176,7 @@
 				case TurnBasedGameClient.TURN_START:
 					obj = DartsGlobals.instance.multiplayerClient.getData(TurnBasedGameClient.TURN_START);
 					trace("Current Player: " + obj.pid);
+					cursor.resetCursorImage();
 					cursor.show();
 					_currentPlayer = obj.pid;
 					if (_bullOff)
@@ -190,6 +193,7 @@
 					obj = DartsGlobals.instance.multiplayerClient.getData(TurnBasedGameClient.TURN_WAIT);
 					trace("Current Player: " + obj.pid);
 					cursor.hide();
+					//cursor.setCursorImage(MovieClipFactory.getMovieClipByQualifiedName("com.bored.games.assets.hud.WaitCursor_MC"));
 					_currentPlayer = obj.pid;
 					if (_bullOff)
 					{
@@ -222,8 +226,6 @@
 					break;
 				case GameClient.GAME_TIMER_END:
 					DartsPlayer(_players[_currentPlayer]).turnTime = -1;
-					_cursor.reset();
-					_cursor.hide();
 					_currentDart = null;
 					_throwController.resetThrowParams();
 					_inputController.pause = true;

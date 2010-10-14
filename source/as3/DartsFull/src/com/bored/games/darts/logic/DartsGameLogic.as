@@ -526,6 +526,7 @@
 				
 		public function playerAim():void
 		{
+			_cursor.resetCursorImage();
 			_cursor.show();
 			_throwController.startThrow(_inputController);
 		}//end playerAim()
