@@ -404,6 +404,8 @@
 		
 		public function setupControlPanel():void
 		{
+			DartsGlobals.addWarning("DartsGlobals::setupControlPanel()");
+			
 			if (!_controlPanel)
 			{
 				var cls:Class = getDefinitionByName(AppSettings.instance.controlPanelMovie) as Class;
@@ -435,12 +437,16 @@
 		
 		public function showControlPanel():void
 		{
+			DartsGlobals.addWarning("DartsGlobals::showControlPanel()");
+			
 			if( _controlPanel ) _controlPanel.show();
 			if ( _cashPanel ) _cashPanel.show();
 		}//end setupControlPanel()
 		
 		public function hideControlPanel():void
 		{
+			DartsGlobals.addWarning("DartsGlobals::hideControlPanel()");
+			
 			if( _controlPanel ) _controlPanel.hide();
 			if( _cashPanel ) _cashPanel.hide();
 		}//end setupControlPanel()

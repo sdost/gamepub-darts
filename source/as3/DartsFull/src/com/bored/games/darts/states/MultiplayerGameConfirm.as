@@ -102,9 +102,6 @@
 		{
 			trace("MultiplayerGameConfirm::onPlay");
 			
-			DartsGlobals.instance.gameManager.removeEventListener(RemoteCricketGameLogic.RETURN_TO_LOBBY, returnToLobby);
-			DartsGlobals.instance.multiplayerClient.removeEventListener(ChatClient.LOBBY_ROOM, returnToLobby);
-			
 			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("play_sound");
 			
 			DartsGlobals.instance.localPlayer.setAbilitiesSlot(0, 0);
@@ -140,6 +137,8 @@
 		
 		private function onReady(a_evt:Event = null):void
 		{
+			DartsGlobals.instance.gameManager.removeEventListener(RemoteCricketGameLogic.RETURN_TO_LOBBY, returnToLobby);
+			DartsGlobals.instance.multiplayerClient.removeEventListener(ChatClient.LOBBY_ROOM, returnToLobby);
 			
 			if( a_evt ) {
 				var obj:Object = DartsGlobals.instance.multiplayerClient.getData(GameClient.GAME_START);
@@ -188,7 +187,12 @@
 		{			
 			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("back_sound");
 			
-			(this.stateMachine as GameFSM).transitionToPreviousState();
+			DartsGlobals.instance.gameManager.removeEventListener(RemoteCricketGameLogic.RETURN_TO_LOBBY, returnToLobby);
+			DartsGlobals.instance.multiplayerClient.removeEventListener(ChatClient.LOBBY_ROOM, returnToLobby);
+			
+			BoredServices.hideChatUI();
+			
+			(this.stateMachine as GameFSM).transitionToStateNamed("Multiplayer");
 		}//end onBack()
 		
 		/**
