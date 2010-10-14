@@ -73,8 +73,6 @@
 				throw new Error("ThrowIndicatorV4::buildFrom(): _terminusY=" + _terminusY);
 			}
 			
-			this.addEventListener(Event.ENTER_FRAME, update, false, 0, true);
-			
 			return descendantsDict;
 			
 		}//end buildFrom()
@@ -82,6 +80,8 @@
 		public function registerThrowController(a_controller:ThrowController):void
 		{
 			_throwController = a_controller;
+			
+			this.addEventListener(Event.ENTER_FRAME, update, false, 0, true);
 		}//end registerThrowController()		
 		
 		private function addedToStage(a_evt:Event = null):void
@@ -97,12 +97,14 @@
 		
 		public function update(a_evt:Event = null):void
 		{				
+						
+			
 			TweenLite.to(
 				_terminusY,
 				0.05, 
 				{
 					x: 0,
-					y: -_throwController.thrust * (100 / AppSettings.instance.dartMaxThrust) + 50
+					y: -(Math.abs(_throwController.thrust - AppSettings.instance.dartMinThrust)) * (100 / (AppSettings.instance.dartMaxThrust-AppSettings.instance.dartMinThrust)) + 50
 				}
 			);
 			
