@@ -550,7 +550,7 @@
 				
 				thrust = (a_thrust > AppSettings.instance.defaultMinThrustThreshold) ? a_thrust : AppSettings.instance.defaultMinThrustThreshold;
 				lean = a_lean;
-				angle = AppSettings.instance.defaultAngle;
+				angle = AppSettings.instance.underthrowAngle;
 			}
 			else if ( a_thrust > AppSettings.instance.dartSweetSpotMax ) 
 			{

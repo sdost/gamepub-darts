@@ -168,12 +168,14 @@
 		
 		public function show():void
 		{
-			TweenLite.to(this, 2, {alpha:1} );
+			this.alpha = 1;
+			//TweenLite.to(this, 2, {alpha:1} );
 		}//end show()
 		
 		public function hide():void
 		{
-			TweenLite.to(this, 2, {alpha:0} );
+			this.alpha = 0;
+			//TweenLite.to(this, 2, {alpha:0} );
 		}//end hide()
 		
 		private function onSoundButtonClick(a_evt:Event):void

@@ -82,7 +82,7 @@
 			
 			if (_state == INIT_THROW)
 			{
-				Mouse.hide();
+				//Mouse.hide();
 				DartsGlobals.instance.gameManager.cursor.x = (((_mousePosition.x - 350) * AppSettings.instance.cursorPositionZ * Math.tan(57.5 * Math.PI / 180))/ 700);
 				DartsGlobals.instance.gameManager.cursor.y = (((275 - _mousePosition.y) * AppSettings.instance.cursorPositionZ * Math.tan(51 * Math.PI / 180))/ 550);
 				DartsGlobals.instance.gameManager.cursor.z = AppSettings.instance.cursorPositionZ;

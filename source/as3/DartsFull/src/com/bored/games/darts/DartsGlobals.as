@@ -404,22 +404,26 @@
 		
 		public function setupControlPanel():void
 		{
-			var cls:Class = getDefinitionByName(AppSettings.instance.controlPanelMovie) as Class;
-			_controlPanel = new ControlPanel(new cls());
-			DartsGlobals.instance.optionsInterfaceSpace.addChild(_controlPanel);
-			_controlPanel.x = AppSettings.instance.controlPanelPositionX;
-			_controlPanel.y = AppSettings.instance.controlPanelPositionY;
-			_controlPanel.registerSoundManager(DartsGlobals.instance.soundManager);
-			_controlPanel.show();
+			if (!_controlPanel)
+			{
+				var cls:Class = getDefinitionByName(AppSettings.instance.controlPanelMovie) as Class;
+				_controlPanel = new ControlPanel(new cls());
+				DartsGlobals.instance.optionsInterfaceSpace.addChild(_controlPanel);
+				_controlPanel.x = AppSettings.instance.controlPanelPositionX;
+				_controlPanel.y = AppSettings.instance.controlPanelPositionY;
+				_controlPanel.registerSoundManager(DartsGlobals.instance.soundManager);
+			}
 			
 			if ( this._gameMode == DartsGlobals.GAME_STORY ) 
 			{
-				cls = getDefinitionByName(AppSettings.instance.cashPanelMovie) as Class;
-				_cashPanel = new CashPanel(new cls());
-				DartsGlobals.instance.optionsInterfaceSpace.addChild(_cashPanel);
-				_cashPanel.x = AppSettings.instance.cashPanelPositionX;
-				_cashPanel.y = AppSettings.instance.cashPanelPositionY;
-				_cashPanel.show();
+				if (!_cashPanel)
+				{
+					cls = getDefinitionByName(AppSettings.instance.cashPanelMovie) as Class;
+					_cashPanel = new CashPanel(new cls());
+					DartsGlobals.instance.optionsInterfaceSpace.addChild(_cashPanel);
+					_cashPanel.x = AppSettings.instance.cashPanelPositionX;
+					_cashPanel.y = AppSettings.instance.cashPanelPositionY;
+				}
 			}
 			else
 			{
@@ -427,6 +431,12 @@
 			}
 			
 			_gameManager.addEventListener(DartsGameLogic.QUIT_TO_TITLE, onQuitToTitle, false, 0, true);			
+		}//end setupControlPanel()
+		
+		public function showControlPanel():void
+		{
+			if( _controlPanel ) _controlPanel.show();
+			if ( _cashPanel ) _cashPanel.show();
 		}//end setupControlPanel()
 		
 		public function hideControlPanel():void
