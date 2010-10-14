@@ -71,7 +71,7 @@
 					
 			DartsGlobals.instance.opponentPlayer = new ComputerPlayer(DartsGlobals.instance.opponentProfile);
 			DartsGlobals.instance.opponentPlayer.playerNum = CricketGameLogic.CPU_PLAYER;
-			DartsGlobals.instance.opponentPlayer.setPortrait(DartsGlobals.instance.opponentProfile.portrait);
+			DartsGlobals.instance.opponentPlayer.portrait = DartsGlobals.instance.opponentProfile.portrait;
 			//DartsGlobals.instance.opponentPlayer.setAbilities(new BeeLineAbility(5), new ShieldAbility(5), new DoOverAbility(5));			
 			DartsGlobals.instance.opponentPlayer.setSkin(DartsGlobals.instance.opponentProfile.dartSkin);
 			

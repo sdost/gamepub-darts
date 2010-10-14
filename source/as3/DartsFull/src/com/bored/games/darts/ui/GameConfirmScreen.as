@@ -244,7 +244,8 @@
 			}
 			else
 			{
-				throw new Error("GameConfirmScreen::buildFrom(): _opponentPortrait=" + _opponentPortrait);
+				//throw new Error("GameConfirmScreen::buildFrom(): _opponentPortrait=" + _opponentPortrait);
+				DartsGlobals.addWarning("GameConfirmScreen::buildFrom(): _opponentPortrait=" + _opponentPortrait);
 			}
 			
 			if (_abilityIconOne && _abilityNameOne && _abilityOnePowerGauge)
@@ -255,7 +256,8 @@
 			}
 			else
 			{
-				throw new Error("GameConfirmScreen::buildFrom(): _abilityIconOne=" + _abilityIconOne);
+				//throw new Error("GameConfirmScreen::buildFrom(): _abilityIconOne=" + _abilityIconOne);
+				DartsGlobals.addWarning("GameConfirmScreen::buildFrom(): _abilityIconOne=" + _abilityIconOne);
 			}
 			
 			if (_abilityIconTwo && _abilityNameTwo && _abilityTwoPowerGauge)
@@ -266,7 +268,8 @@
 			}
 			else
 			{
-				throw new Error("GameConfirmScreen::buildFrom(): _abilityIconTwo=" + _abilityIconTwo);
+				//throw new Error("GameConfirmScreen::buildFrom(): _abilityIconTwo=" + _abilityIconTwo);
+				DartsGlobals.addWarning("GameConfirmScreen::buildFrom(): _abilityIconTwo=" + _abilityIconTwo);
 			}
 			
 			if (_abilityIconThree && _abilityNameThree && _abilityThreePowerGauge)
@@ -277,7 +280,8 @@
 			}
 			else
 			{
-				throw new Error("GameConfirmScreen::buildFrom(): _abilityIconThree=" + _abilityIconThree);
+				//throw new Error("GameConfirmScreen::buildFrom(): _abilityIconThree=" + _abilityIconThree);
+				DartsGlobals.addWarning("GameConfirmScreen::buildFrom(): _abilityIconThree=" + _abilityIconThree);
 			}
 			
 			if (_opponentAbilityIconOne && _opponentAbilityOnePowerGauge)
@@ -289,7 +293,8 @@
 			}
 			else
 			{
-				throw new Error("GameConfirmScreen::buildFrom(): _opponentAbilityIconOne=" + _opponentAbilityIconOne);
+				//throw new Error("GameConfirmScreen::buildFrom(): _opponentAbilityIconOne=" + _opponentAbilityIconOne);
+				DartsGlobals.addWarning("GameConfirmScreen::buildFrom(): _opponentAbilityIconOne=" + _opponentAbilityIconOne);
 			}
 			
 			if (_opponentAbilityIconTwo && _opponentAbilityTwoPowerGauge)
@@ -301,7 +306,8 @@
 			}
 			else
 			{
-				throw new Error("GameConfirmScreen::buildFrom(): _opponentAbilityIconTwo=" + _opponentAbilityIconTwo);
+				//throw new Error("GameConfirmScreen::buildFrom(): _opponentAbilityIconTwo=" + _opponentAbilityIconTwo);
+				DartsGlobals.addWarning("GameConfirmScreen::buildFrom(): _opponentAbilityIconTwo=" + _opponentAbilityIconTwo);
 			}
 			
 			if (_opponentAbilityIconThree && _opponentAbilityThreePowerGauge)
@@ -313,7 +319,8 @@
 			}
 			else
 			{
-				throw new Error("GameConfirmScreen::buildFrom(): _opponentAbilityIconThree=" + _opponentAbilityIconThree);
+				//throw new Error("GameConfirmScreen::buildFrom(): _opponentAbilityIconThree=" + _opponentAbilityIconThree);
+				DartsGlobals.addWarning("GameConfirmScreen::buildFrom(): _opponentAbilityIconThree=" + _opponentAbilityIconThree);
 			}
 			
 			if(_buildBackground)

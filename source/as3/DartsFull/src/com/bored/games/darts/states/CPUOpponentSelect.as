@@ -87,14 +87,17 @@
 			
 			DartsGlobals.instance.opponentPlayer = new ComputerPlayer(DartsGlobals.instance.opponentProfile);
 			DartsGlobals.instance.opponentPlayer.playerNum = CricketGameLogic.CPU_PLAYER;
-			DartsGlobals.instance.opponentPlayer.setPortrait(DartsGlobals.instance.opponentProfile.portrait);
+			
+			DartsGlobals.instance.opponentPlayer.portrait = DartsGlobals.instance.opponentProfile.portrait;
+			
 			DartsGlobals.instance.opponentPlayer.addAbilities(new BeeLineAbility(10));
 			DartsGlobals.instance.opponentPlayer.addAbilities(new ShieldAbility(10));
 			DartsGlobals.instance.opponentPlayer.addAbilities(new DoOverAbility(10));
 			DartsGlobals.instance.opponentPlayer.setSkin(DartsGlobals.instance.opponentProfile.dartSkin);
 			
 			this.finished();
-		}//end pickOpponent()
+			
+		}//end onOpponentChosen()
 		
 		public function onShowStoreChosen(a_evt:Event):void
 		{
