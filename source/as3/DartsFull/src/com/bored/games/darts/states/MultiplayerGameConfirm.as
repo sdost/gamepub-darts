@@ -102,6 +102,9 @@
 		{
 			trace("MultiplayerGameConfirm::onPlay");
 			
+			DartsGlobals.instance.gameManager.removeEventListener(RemoteCricketGameLogic.RETURN_TO_LOBBY, returnToLobby);
+			DartsGlobals.instance.multiplayerClient.removeEventListener(ChatClient.LOBBY_ROOM, returnToLobby);
+			
 			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("play_sound");
 			
 			DartsGlobals.instance.localPlayer.setAbilitiesSlot(0, 0);
