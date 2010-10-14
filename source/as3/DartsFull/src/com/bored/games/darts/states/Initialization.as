@@ -44,8 +44,8 @@
 		 * Handler for entering (and executing) this state.
 		 */
 		override public function onEnter():void
-		{		
-			trace("Initialization::onEnter()");
+		{
+			DartsGlobals.addWarning("Initialization::onEnter()");
 			
 			//DartsGlobals.instance.gameManager = new CricketGameLogic();
 			
@@ -88,6 +88,8 @@
 		 */
 		override public function onExit():void
 		{
+			DartsGlobals.addWarning("Initialization::onExit()");
+			
 		}//end onExit()
 		
 	}//end class Initialization

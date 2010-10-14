@@ -56,7 +56,9 @@
 		 * Handler for entering (and executing) this state.
 		 */
 		override public function onEnter():void
-		{						
+		{
+			DartsGlobals.addWarning("GameStore::onEnter()");
+			
 			var gameStoreScreenImg:Sprite;
 			
 			try
@@ -92,6 +94,8 @@
 		 */
 		override public function onExit():void
 		{
+			DartsGlobals.addWarning("GameStore::onExit()");
+			
 			_gameStoreScreen.removeEventListener(GameStoreScreen.BACK_CLICKED_EVT, onBackClicked);
 			
 			_gameStoreScreen.destroy();

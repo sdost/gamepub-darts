@@ -39,7 +39,9 @@
 		 * Handler for entering (and executing) this state.
 		 */
 		override public function onEnter():void
-		{				
+		{
+			DartsGlobals.addWarning("Attract::onEnter()");
+			
 			DartsGlobals.instance.hideControlPanel();
 			
 			var titleScreenImg:Sprite;
@@ -95,7 +97,9 @@
 		 * Handler for exiting this state.
 		 */
 		override public function onExit():void
-		{			
+		{
+			DartsGlobals.addWarning("Attract::onExit()");
+			
 			_titleScreen.removeEventListener(TitleScreen.PRACTICE_GAME_CLICKED_EVT, onPracticeGameClicked);
 			_titleScreen.removeEventListener(TitleScreen.STORY_GAME_CLICKED_EVT, onStoryGameClicked);	
 			

@@ -49,8 +49,8 @@
 		 * Handler for entering (and executing) this state.
 		 */
 		override public function onEnter():void
-		{			
-			trace("GameSelect::onEnter()");
+		{
+			DartsGlobals.addWarning("CPUOpponentSelect::onEnter()");
 			
 			DartsGlobals.instance.gameManager = new CricketGameLogic();
 			
@@ -72,7 +72,7 @@
 			}
 			catch (e:Error)
 			{
-				DartsGlobals.addWarning("Attract::onEnter(): Caught error=" + e);
+				DartsGlobals.addWarning("CPUOpponentSelect::onEnter(): Caught error=" + e);
 			}
 			
 		}//end onEnter()
@@ -113,6 +113,8 @@
 		 */
 		override public function onExit():void
 		{
+			DartsGlobals.addWarning("CPUOpponentSelect::onExit()");
+			
 			_opponentSelectScreen.removeEventListener(OpponentSelectScreen.OPPONENT_CHOSEN_EVT, onOpponentChosen);
 			_opponentSelectScreen.removeEventListener(OpponentSelectScreen.SHOW_STORE_EVT, onShowStoreChosen);
 			
@@ -121,6 +123,6 @@
 			_opponentSelectScreen = null;
 		}//end onExit()
 		
-	}//end class Initialization
+	}//end class CPUOpponentSelect
 	
 }//end package com.bored.games.darts.states

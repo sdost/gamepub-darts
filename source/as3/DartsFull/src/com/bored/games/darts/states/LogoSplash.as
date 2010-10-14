@@ -38,6 +38,8 @@
 		 */
 		override public function onEnter():void
 		{
+			DartsGlobals.addWarning("LogoSplash::onEnter()");
+			
 			try
 			{
 				_monsterproofLogo = MovieClipFactory.getMovieClipByQualifiedName(AppSettings.instance.splashLogo);
@@ -73,7 +75,9 @@
 		 * Handler for exiting this state.
 		 */
 		override public function onExit():void
-		{		
+		{
+			DartsGlobals.addWarning("LogoSplash::onExit()");
+			
 		}//end onExit()
 		
 	}//end class LogoSplash

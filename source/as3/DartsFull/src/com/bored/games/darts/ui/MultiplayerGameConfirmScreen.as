@@ -278,7 +278,7 @@
 		
 		public function updatePortraits(...args):void
 		{
-			new LocalConnection().send("_debugBridge", "debugMsg", "MultiplayerGameConfirmScreen::updatePortraits()");
+			DartsGlobals.addWarning("MultiplayerGameConfirmScreen::updatePortraits()");
 			
 			if (_playerPortrait.numChildren > 0) _playerPortrait.removeChildAt(1);
 			

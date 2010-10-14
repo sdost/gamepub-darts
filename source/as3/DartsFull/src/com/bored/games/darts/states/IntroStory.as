@@ -43,6 +43,8 @@
 		 */
 		override public function onEnter():void
 		{
+			DartsGlobals.addWarning("IntroStory::onEnter()");
+			
 			_openingCutscene = CutsceneManager.instance.getScene("opening");
 			_openingCutscene.addEventListener(Event.COMPLETE, onCutsceneComplete);
 			
@@ -85,6 +87,8 @@
 		 */
 		override public function onExit():void
 		{
+			DartsGlobals.addWarning("IntroStory::onExit()");
+			
 			DartsGlobals.instance.screenSpace.removeChild(_openingCutscene);
 			DartsGlobals.instance.screenSpace.removeChild(_skipButton.buttonContents);
 			
