@@ -168,6 +168,7 @@
 		{
 			DartsGlobals.instance.gameManager.endGame(0);
 			
+			DartsGlobals.instance.multiplayerClient.removeEventListener(GameServices.DISCONNECTED, returnToLobby);
 			DartsGlobals.instance.gameManager.removeEventListener(RemoteCricketGameLogic.RETURN_TO_LOBBY, returnToLobby);
 			DartsGlobals.instance.multiplayerClient.removeEventListener(GameClient.GAME_VOID, handleOpponentQuit);
 			
