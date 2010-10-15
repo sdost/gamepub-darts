@@ -96,7 +96,7 @@
 			
 			//DartsGlobals.instance.gameManager.pause(false);
 			
-			DartsGlobals.instance.gameManager.endGame(0);
+			//DartsGlobals.instance.gameManager.endGame(0);
 		
 			DartsGlobals.instance.gameManager.dispatchEvent(new Event(DartsGameLogic.QUIT_TO_TITLE));
 		}//end onYesClicked()

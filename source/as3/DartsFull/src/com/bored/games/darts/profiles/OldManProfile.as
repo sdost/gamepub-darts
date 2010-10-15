@@ -116,6 +116,7 @@
 			
 		override public function handleShot(a_points:int, a_multiplier:int):void
 		{
+			/*
 			if ( _currentThrow < 14 ) 
 			{
 				if ( a_points == 2 ) 
@@ -123,6 +124,7 @@
 					DartsGlobals.instance.gameManager.addEventListener(DartsGameLogic.THROW_END, useDoOver, false, 0, true);
 				}
 			}
+			*/
 		}//end handleShot()
 		
 	}//end OldManProfile		

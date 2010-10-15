@@ -89,8 +89,8 @@
 		
 		public function resetCursorImage():void
 		{
-			_cursorMaterial.movie = _cursor;
-			_cursorSprite.scale = 0.35;
+			if(_cursorMaterial) _cursorMaterial.movie = _cursor;
+			if(_cursorSprite) _cursorSprite.scale = 0.35;
 		}//end resetCursorImage()
 		
 		public function show():void

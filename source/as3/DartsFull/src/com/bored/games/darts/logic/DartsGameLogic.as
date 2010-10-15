@@ -196,6 +196,9 @@
 		
 		public function newGame():void
 		{	
+			_cursor.hide();
+			_currentDart = null;
+						
 			GameUtils.newGame();
 			
 			for each( var player:DartsPlayer in _players )

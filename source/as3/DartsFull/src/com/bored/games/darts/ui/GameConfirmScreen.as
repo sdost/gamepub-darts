@@ -135,13 +135,13 @@
 			_abilityNameTwo = descendantsDict["abilityTwo_text"] as TextField;
 			_abilityNameThree = descendantsDict["abilityThree_text"] as TextField;
 		
-			_opponentAbilityIconOne = descendantsDict["opponentAbilityOne_mc"] as MovieClip;
-			_opponentAbilityIconTwo = descendantsDict["opponentAbilityTwo_mc"] as MovieClip;
-			_opponentAbilityIconThree = descendantsDict["opponentAbilityThree_mc"] as MovieClip;
+			//_opponentAbilityIconOne = descendantsDict["opponentAbilityOne_mc"] as MovieClip;
+			//_opponentAbilityIconTwo = descendantsDict["opponentAbilityTwo_mc"] as MovieClip;
+			//_opponentAbilityIconThree = descendantsDict["opponentAbilityThree_mc"] as MovieClip;
 			
-			_opponentAbilityOnePowerGauge = descendantsDict["opponentAbilityOnePowerGauge_mc"] as MovieClip;
-			_opponentAbilityTwoPowerGauge = descendantsDict["opponentAbilityTwoPowerGauge_mc"] as MovieClip;
-			_opponentAbilityThreePowerGauge = descendantsDict["opponentAbilityThreePowerGauge_mc"] as MovieClip;
+			//_opponentAbilityOnePowerGauge = descendantsDict["opponentAbilityOnePowerGauge_mc"] as MovieClip;
+			//_opponentAbilityTwoPowerGauge = descendantsDict["opponentAbilityTwoPowerGauge_mc"] as MovieClip;
+			//_opponentAbilityThreePowerGauge = descendantsDict["opponentAbilityThreePowerGauge_mc"] as MovieClip;
 			
 			if (_backBtnImg)
 			{
@@ -284,6 +284,7 @@
 				DartsGlobals.addWarning("GameConfirmScreen::buildFrom(): _abilityIconThree=" + _abilityIconThree);
 			}
 			
+			/*
 			if (_opponentAbilityIconOne && _opponentAbilityOnePowerGauge)
 			{
 				_opponentAbilityIconOne.addChild(DartsGlobals.instance.opponentPlayer.abilities[0].icon);
@@ -322,6 +323,7 @@
 				//throw new Error("GameConfirmScreen::buildFrom(): _opponentAbilityIconThree=" + _opponentAbilityIconThree);
 				DartsGlobals.addWarning("GameConfirmScreen::buildFrom(): _opponentAbilityIconThree=" + _opponentAbilityIconThree);
 			}
+			*/
 			
 			if(_buildBackground)
 			{

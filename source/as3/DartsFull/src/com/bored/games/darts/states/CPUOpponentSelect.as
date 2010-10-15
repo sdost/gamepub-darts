@@ -79,6 +79,8 @@
 		
 		public function onOpponentChosen(a_evt:Event):void
 		{
+			DartsGlobals.addWarning("CPUOpponentSelect::onOpponentChosen()");
+			
 			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("select_sound");
 			
 			_opponentSelectScreen.removeEventListener(OpponentSelectScreen.OPPONENT_CHOSEN_EVT, onOpponentChosen);
@@ -87,17 +89,14 @@
 			
 			DartsGlobals.instance.opponentPlayer = new ComputerPlayer(DartsGlobals.instance.opponentProfile);
 			DartsGlobals.instance.opponentPlayer.playerNum = CricketGameLogic.CPU_PLAYER;
-			
 			DartsGlobals.instance.opponentPlayer.portrait = DartsGlobals.instance.opponentProfile.portrait;
-			
 			DartsGlobals.instance.opponentPlayer.addAbilities(new BeeLineAbility(10));
 			DartsGlobals.instance.opponentPlayer.addAbilities(new ShieldAbility(10));
 			DartsGlobals.instance.opponentPlayer.addAbilities(new DoOverAbility(10));
 			DartsGlobals.instance.opponentPlayer.setSkin(DartsGlobals.instance.opponentProfile.dartSkin);
 			
 			this.finished();
-			
-		}//end onOpponentChosen()
+		}//end pickOpponent()
 		
 		public function onShowStoreChosen(a_evt:Event):void
 		{
@@ -108,7 +107,9 @@
 		
 		private function finished(...args):void
 		{
-			(this.stateMachine as GameFSM).transitionToNextState();			
+			DartsGlobals.addWarning("CPUOpponentSelect::finished()");
+			
+			(this.stateMachine as GameFSM).transitionToStateNamed("GameConfirm");			
 		}//end finished()
 		
 		/**
