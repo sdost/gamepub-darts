@@ -83,7 +83,7 @@
 			}
 			catch (e:Error)
 			{
-				DartsGlobals.addWarning("GameConfirm::onEnter(): Caught error=" + e);
+				DartsGlobals.addWarning("GameConfirm::onEnter(): Caught error=" + e + ", stacktrace=" + e.getStackTrace());
 			}
 			
 		}//end onEnter()

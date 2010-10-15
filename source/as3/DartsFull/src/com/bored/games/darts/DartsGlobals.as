@@ -13,6 +13,8 @@
 	import com.inassets.statemachines.interfaces.IStateMachine;
 	import com.jac.soundManager.SoundController;
 	import com.sven.utils.AppSettings;
+	import flash.events.AsyncErrorEvent;
+	import flash.events.StatusEvent;
 	import flash.media.SoundChannel;
 	import flash.net.LocalConnection;
 	import flash.sampler.NewObjectSample;
@@ -482,7 +484,7 @@
 			if (!_warningArr)
 			{
 				_warningArr = new Array();
-				_warningTmr = new Timer(1000, 0);
+				_warningTmr = new Timer(200, 0);
 				_warningTmr.addEventListener(TimerEvent.TIMER, onWarning, false, 0, true);
 			}
 			
@@ -522,6 +524,10 @@
 					if (!_debugLocalConn)
 					{
 						_debugLocalConn = new LocalConnection();
+						_debugLocalConn.allowDomain("*", "localhost");
+						_debugLocalConn.allowInsecureDomain("*", "localhost");
+						_debugLocalConn.addEventListener(AsyncErrorEvent.ASYNC_ERROR, DartsGlobals.onLcAsyncError, false, 0, true);
+						_debugLocalConn.addEventListener(StatusEvent.STATUS, DartsGlobals.onLcStatus, false, 0, true);
 						
 						var lcName:* = DartsGlobals.instance.stage.root.loaderInfo.parameters["debugLcName"];
 						_debugLcName = lcName;
@@ -537,6 +543,20 @@
 			}
 			
 		}//end onWarning()
+		
+		COMPILEVAR::DEBUG
+		private static function onLcAsyncError(a_asyncErrEvt:AsyncErrorEvent):void
+		{
+			DartsGlobals.addWarning("DartsGlobal::onLcAsyncError(): a_asyncErrEvt=" + a_asyncErrEvt);
+			
+		}//end onLcAsyncError()
+		
+		COMPILEVAR::DEBUG
+		private static function onLcStatus(a_statusEvt:StatusEvent):void
+		{
+			//DartsGlobals.addWarning("DartsGlobal::onLcStatus(): a_statusEvt=" + a_statusEvt);
+			
+		}//end onLcStatus()
 		
 	}//end class DartsGlobals
 	
