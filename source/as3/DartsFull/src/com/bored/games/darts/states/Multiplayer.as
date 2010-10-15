@@ -74,6 +74,8 @@
 		{			
 			DartsGlobals.addWarning("Multiplayer::onEnter()");
 			
+			DartsGlobals.instance.opponentPlayer = null;
+			
 			DartsGlobals.instance.hideControlPanel();
 			
 			BoredServices.addEventListener(ObjectEvent.MULTPLAYER_GAME_FAIL_EVT, onFail);
