@@ -72,7 +72,7 @@
 			var gameConfirmScreenImg:Sprite;
 			
 			DartsGlobals.instance.setupControlPanel();
-				DartsGlobals.instance.showControlPanel();
+			DartsGlobals.instance.showControlPanel();
 			
 			try
 			{
@@ -90,6 +90,8 @@
 				
 				DartsGlobals.instance.gameManager.addEventListener(RemoteCricketGameLogic.RETURN_TO_LOBBY, returnToLobby, false, 0, true);
 				DartsGlobals.instance.multiplayerClient.addEventListener(ChatClient.LOBBY_ROOM, returnToLobby, false, 0, true);
+				
+				_gameConfirmScreen.updateUsers();
 			}
 			catch (e:Error)
 			{

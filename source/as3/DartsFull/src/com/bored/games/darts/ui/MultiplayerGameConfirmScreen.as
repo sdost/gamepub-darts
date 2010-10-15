@@ -198,7 +198,7 @@
 			
 			if (_playerPortrait)
 			{					
-				ChangeWatcher.watch(DartsGlobals.instance.localPlayer, "portrait", updatePortraits);				
+				ChangeWatcher.watch(DartsGlobals.instance.localPlayer, "portrait", updateUsers);				
 				
 				var playerPortrait:Bitmap = new Bitmap(DartsGlobals.instance.localPlayer.portrait);
 				playerPortrait.smoothing = true;
@@ -223,7 +223,7 @@
 			
 			if (_opponentPortrait)
 			{
-				ChangeWatcher.watch(DartsGlobals.instance.opponentPlayer, "portrait", updatePortraits);
+				ChangeWatcher.watch(DartsGlobals.instance.opponentPlayer, "portrait", updateUsers);
 				
 				var opponentPortrait:Bitmap = new Bitmap(DartsGlobals.instance.opponentPlayer.portrait);
 				opponentPortrait.smoothing = true;
@@ -276,9 +276,12 @@
 			
 		}//end addedToStage()
 		
-		public function updatePortraits(...args):void
+		public function updateUsers(...args):void
 		{
 			DartsGlobals.addWarning("MultiplayerGameConfirmScreen::updatePortraits()");
+			
+			_playerName.text = DartsGlobals.instance.localPlayer.playerName;
+			_opponentName.text = DartsGlobals.instance.opponentProfile.name;
 			
 			if (_playerPortrait.numChildren > 0) _playerPortrait.removeChildAt(1);
 			

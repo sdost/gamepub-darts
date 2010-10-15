@@ -406,6 +406,8 @@ public class Darts extends TurnBasedExtension {
 		jso.put("winner", winner);
 		super.sendResponse(jso, fromRoom, SERVER, ll);
 
+		this._bGameFinished = true;
+		
 		// Kick out all users for now
 		/*
 		Room rm = super.getRoom(fromRoom);
