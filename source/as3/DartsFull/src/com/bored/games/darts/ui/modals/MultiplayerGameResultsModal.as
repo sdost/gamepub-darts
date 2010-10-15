@@ -70,7 +70,7 @@
 		
 			_playerOneName = descendantsDict["playerOneName_text"] as TextField;
 			_playerOnePicHolder = descendantsDict["playerOnePicHolder_mc"] as MovieClip;
-			_playerOneResults = descendantsDict["playerOneResults_text"] as TextField;
+			_playerOneResults = descendantsDict["playerOneResult_text"] as TextField;
 			_playerOneStats = descendantsDict["playerOneStats_text"] as TextField;
 			
 			if (_playerOneName)
@@ -102,7 +102,7 @@
 		
 			_playerTwoName = descendantsDict["playerTwoName_text"] as TextField;
 			_playerTwoPicHolder = descendantsDict["playerTwoPicHolder_mc"] as MovieClip;
-			_playerTwoResults = descendantsDict["playerTwoResults_text"] as TextField;
+			_playerTwoResults = descendantsDict["playerTwoResult_text"] as TextField;
 			_playerTwoStats = descendantsDict["playerTwoStats_text"] as TextField;
 			
 			if (_playerTwoName)
