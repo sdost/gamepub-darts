@@ -519,6 +519,7 @@
 			{
 				trace(warningStr);
 				
+				/*
 				COMPILEVAR::DEBUG
 				{
 					if (!_debugLocalConn)
@@ -540,6 +541,7 @@
 					}
 					_debugLocalConn.send(_debugLcName, "debugMsg", warningStr);
 				}
+				*/
 			}
 			
 		}//end onWarning()

@@ -129,14 +129,26 @@
 		
 		public function update():void
 		{	
+			var thrust:Number;			
+			if (_throwController.thrust < AppSettings.instance.dartMinThrust) 
+			{
+				thrust = AppSettings.instance.dartMinThrust;
+			}
+			else
+			{
+				thrust = _throwController.thrust;
+			}
+			
 			TweenLite.to(
 				_terminus,
 				0.05, 
 				{
 					x: _throwController.lean * 12,
-					y: -(Math.abs(_throwController.thrust - AppSettings.instance.dartMinThrust)) * (200 / (AppSettings.instance.dartMaxThrust - AppSettings.instance.dartMinThrust))
+					y: -(Math.abs(thrust - AppSettings.instance.dartMinThrust)) * (200 / (AppSettings.instance.dartMaxThrust - AppSettings.instance.dartMinThrust))
 				}
 			);
+			
+			
 			
 			_maskBar.rotation = 0;
 			_maskBar.height = -_terminus.y;
