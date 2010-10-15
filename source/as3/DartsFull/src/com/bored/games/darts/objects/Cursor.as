@@ -8,6 +8,7 @@
 	import away3dlite.primitives.Plane;
 	import away3dlite.sprites.AlignmentType;
 	import away3dlite.sprites.Sprite3D;
+	import com.bored.games.darts.DartsGlobals;
 	import com.sven.utils.AppSettings;
 	import away3dlite.core.base.Object3D;
 	import com.bored.games.objects.GameElement;
@@ -84,7 +85,15 @@
 		
 		public function setCursorScale(a_num:Number):void
 		{
-			_cursorSprite.scale = a_num;
+			if (_cursorSprite)
+			{
+				_cursorSprite.scale = a_num;
+			}
+			else
+			{
+				DartsGlobals.addWarning("Cursor::setCursorScale(" + a_num + "): _cursorSprite=" + _cursorSprite + ", IS THIS OKAY?");
+			}
+			
 		}//end setCursorScale()
 		
 		public function resetCursorImage():void
