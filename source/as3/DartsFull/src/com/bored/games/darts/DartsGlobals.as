@@ -419,20 +419,13 @@
 				_controlPanel.registerSoundManager(DartsGlobals.instance.soundManager);
 			}
 			
-			if ( this._gameMode == DartsGlobals.GAME_STORY ) 
+			if (!_cashPanel)
 			{
-				if (!_cashPanel)
-				{
-					cls = getDefinitionByName(AppSettings.instance.cashPanelMovie) as Class;
-					_cashPanel = new CashPanel(new cls());
-					DartsGlobals.instance.optionsInterfaceSpace.addChild(_cashPanel);
-					_cashPanel.x = AppSettings.instance.cashPanelPositionX;
-					_cashPanel.y = AppSettings.instance.cashPanelPositionY;
-				}
-			}
-			else
-			{
-				if(_cashPanel) _cashPanel.hide();
+				cls = getDefinitionByName(AppSettings.instance.cashPanelMovie) as Class;
+				_cashPanel = new CashPanel(new cls());
+				DartsGlobals.instance.optionsInterfaceSpace.addChild(_cashPanel);
+				_cashPanel.x = AppSettings.instance.cashPanelPositionX;
+				_cashPanel.y = AppSettings.instance.cashPanelPositionY;
 			}
 			
 			_gameManager.addEventListener(DartsGameLogic.QUIT_TO_TITLE, onQuitToTitle, false, 0, true);			
@@ -443,7 +436,7 @@
 			DartsGlobals.addWarning("DartsGlobals::showControlPanel()");
 			
 			if( _controlPanel ) _controlPanel.show();
-			if ( _cashPanel ) _cashPanel.show();
+			if ( _cashPanel && this._gameMode == DartsGlobals.GAME_STORY ) _cashPanel.show();
 		}//end setupControlPanel()
 		
 		public function hideControlPanel():void
