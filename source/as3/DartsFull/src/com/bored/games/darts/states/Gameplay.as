@@ -89,6 +89,8 @@
 		{
 			DartsGlobals.addWarning("Gameplay::onEnter()");
 			
+			BoredServices.hideLoginUI();
+			
 			_inputController = new MouseInputController(DartsGlobals.instance.screenSpace);
 			
 			if ( DartsGlobals.instance.throwMode == DartsGlobals.THROW_BEGINNER ) 
