@@ -130,9 +130,6 @@
 									
 					DartsGlobals.instance.localPlayer.portrait = ImageFactory.getBitmapDataByQualifiedName(AppSettings.instance.defaultMultiplayerPic, 150, 150);
 					DartsGlobals.instance.localPlayer.playerNum = user.pid;
-					
-					BoredServices.addEventListener(ObjectEvent.USER_INFO_READY_EVT, onPlayerProfile, false, 0, true);
-					BoredServices.getUserProfileByName(user.name);
 				}
 				else
 				{
@@ -150,9 +147,6 @@
 					DartsGlobals.instance.opponentPlayer.addAbilities(new ShieldAbility(10));
 					DartsGlobals.instance.opponentPlayer.addAbilities(new BeeLineAbility(10));
 					DartsGlobals.instance.opponentPlayer.addAbilities(new DoOverAbility(10));
-					
-					BoredServices.addEventListener(ObjectEvent.USER_INFO_READY_EVT, onOpponentProfile, false, 0, true);
-					BoredServices.getUserProfileByName(user.name);
 				}
 			}
 			
@@ -161,56 +155,6 @@
 				this.finished();
 			}
 		}//end onRoomJoin()
-		
-		private function onPlayerProfile(e:Event):void
-		{
-			DartsGlobals.addWarning("Multiplayer::onPlayerProfile()");
-			
-			if (!(e as Object).obj) return;
-			
-			if ((e as Object).obj.valueOf("screen_name") != DartsGlobals.instance.localPlayer.playerName) return;
-			
-			BoredServices.removeEventListener(ObjectEvent.USER_INFO_READY_EVT, onPlayerProfile);
-			
-			var ldr:Loader = new Loader();
-			ldr.contentLoaderInfo.addEventListener(Event.COMPLETE, playerImageLoadComplete);
-			ldr.load( new URLRequest((e as Object).obj.valueOf("avatar_url")) );
-		}
-		
-		private function playerImageLoadComplete(e:Event):void
-		{
-			var loader:Loader = Loader(e.target.loader);
-			var bmp:Bitmap = Bitmap(loader.content);
-			
-			DartsGlobals.addWarning("Multiplayer::playerImageLoadComplete() -> bmp = " + bmp);
-			
-			DartsGlobals.instance.localPlayer.portrait = bmp.bitmapData;
-		}//end playerImageLoadComplete()
-		
-		private function onOpponentProfile(e:Event):void
-		{
-			DartsGlobals.addWarning("Multiplayer::onOpponentProfile()");
-			
-			if (!(e as Object).obj) return;
-			
-			if ((e as Object).obj.valueOf("screen_name") != DartsGlobals.instance.opponentPlayer.playerName) return;
-			
-			BoredServices.removeEventListener(ObjectEvent.USER_INFO_READY_EVT, onOpponentProfile);
-			
-			var ldr:Loader = new Loader();
-			ldr.contentLoaderInfo.addEventListener(Event.COMPLETE, opponentImageLoadComplete);
-			ldr.load( new URLRequest((e as Object).obj.valueOf("avatar_url")) );
-		}
-		
-		private function opponentImageLoadComplete(e:Event):void
-		{
-			var loader:Loader = Loader(e.target.loader);
-			var bmp:Bitmap = Bitmap(loader.content);
-			
-			DartsGlobals.addWarning("Multiplayer::opponentImageLoadComplete() -> bmp = " + bmp);
-			
-			DartsGlobals.instance.opponentPlayer.portrait = bmp.bitmapData;
-		}//end opponentImageLoadComplete()
 		
 		private function onUserIn(e:Event):void
 		{
@@ -231,11 +175,7 @@
 			
 					DartsGlobals.instance.opponentPlayer.addAbilities(new ShieldAbility(10));
 					DartsGlobals.instance.opponentPlayer.addAbilities(new BeeLineAbility(10));
-					DartsGlobals.instance.opponentPlayer.addAbilities(new DoOverAbility(10));
-					
-					BoredServices.addEventListener(ObjectEvent.USER_INFO_READY_EVT, onOpponentProfile, false, 0, true);
-					BoredServices.getUserProfileByName(user.name);
-			
+					DartsGlobals.instance.opponentPlayer.addAbilities(new DoOverAbility(10));			
 				}
 			}
 			
@@ -245,6 +185,9 @@
 		private function finished():void
 		{
 			trace("Multiplayer::finished()");
+			
+			//BoredServices.removeEventListener(ObjectEvent.USER_INFO_READY_EVT, onOpponentProfile);
+			//BoredServices.removeEventListener(ObjectEvent.USER_INFO_READY_EVT, onPlayerProfile);
 			
 			DartsGlobals.instance.multiplayerClient.removeEventListener(ChatClient.USER_IN, onUserIn);
 			DartsGlobals.instance.multiplayerClient.removeEventListener(ChatClient.ROOM_JOIN, onRoomJoin);

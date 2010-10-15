@@ -174,6 +174,8 @@
 		public function initGameRecord():void
 		{
 			_gameRecord = new GameRecord();
+			
+			_turnTime = -1;
 		}//end initGameRecord()
 		
 		public function clearTurnRecord():void

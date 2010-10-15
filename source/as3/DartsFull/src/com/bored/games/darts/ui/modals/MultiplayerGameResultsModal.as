@@ -9,6 +9,7 @@
 	import com.inassets.ui.contentholders.ContentHolder;
 	import com.sven.utils.AppSettings;
 	import com.sven.factories.SpriteFactory;
+	import flash.display.Bitmap;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -25,10 +26,12 @@
 		private var _lobbyBtnImg:MovieClip;
 		
 		private var _playerOneName:TextField;
+		private var _playerOnePicHolder:MovieClip;
 		private var _playerOneResults:TextField;
 		private var _playerOneStats:TextField;
 		
 		private var _playerTwoName:TextField;
+		private var _playerTwoPicHolder:MovieClip;
 		private var _playerTwoResults:TextField;
 		private var _playerTwoStats:TextField;
 		
@@ -66,12 +69,23 @@
 			}
 		
 			_playerOneName = descendantsDict["playerOneName_text"] as TextField;
+			_playerOnePicHolder = descendantsDict["playerOnePicHolder_mc"] as MovieClip;
 			_playerOneResults = descendantsDict["playerOneResults_text"] as TextField;
 			_playerOneStats = descendantsDict["playerOneStats_text"] as TextField;
 			
 			if (_playerOneName)
 			{
 				_playerOneName.text = DartsGlobals.instance.localPlayer.playerName;
+			}
+			
+			if (_playerOnePicHolder)
+			{
+				var playerOnePortrait:Bitmap = new Bitmap(DartsGlobals.instance.localPlayer.portrait);
+				playerOnePortrait.smoothing = true;
+				playerOnePortrait.width = 58;
+				playerOnePortrait.height = 58;
+				
+				_playerOnePicHolder.addChild(playerOnePortrait);
 			}
 			
 			if (_playerOneResults)
@@ -87,12 +101,23 @@
 			}
 		
 			_playerTwoName = descendantsDict["playerTwoName_text"] as TextField;
+			_playerTwoPicHolder = descendantsDict["playerTwoPicHolder_mc"] as MovieClip;
 			_playerTwoResults = descendantsDict["playerTwoResults_text"] as TextField;
 			_playerTwoStats = descendantsDict["playerTwoStats_text"] as TextField;
 			
 			if (_playerTwoName)
 			{
 				_playerTwoName.text = DartsGlobals.instance.opponentPlayer.playerName;
+			}
+			
+			if (_playerTwoPicHolder)
+			{
+				var playerTwoPortrait:Bitmap = new Bitmap(DartsGlobals.instance.opponentPlayer.portrait);
+				playerTwoPortrait.smoothing = true;
+				playerTwoPortrait.width = 58;
+				playerTwoPortrait.height = 58;
+				
+				_playerTwoPicHolder.addChild(playerTwoPortrait);
 			}
 			
 			if (_playerTwoResults)
@@ -107,7 +132,12 @@
 				+ "Triples: " + DartsGlobals.instance.opponentPlayer.record.triples;
 			}
 		
-			_matchTime = descendantsDict["matchTime_text"] as TextField;			
+			_matchTime = descendantsDict["matchTime_text"] as TextField;
+			
+			if (_matchTime)
+			{
+				_matchTime.text = "Total Time: " + formatTime(DartsGlobals.instance.localPlayer.record.gameTime);
+			}
 			
 			return descendantsDict;
 			

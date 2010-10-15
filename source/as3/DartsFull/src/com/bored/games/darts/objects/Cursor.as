@@ -75,7 +75,7 @@
 		
 		public function setCursorImage(a_spr:Sprite):void
 		{
-			_cursorMaterial.movie = a_spr;
+			if(_cursorMaterial) _cursorMaterial.movie = a_spr;
 			
 			if ( _hidden ) 
 				_cursor.alpha = 0;

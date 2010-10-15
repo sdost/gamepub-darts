@@ -73,6 +73,9 @@
 		private var _skinIndex:int;
 		private var _skinBitmap:Bitmap;
 		
+		private var _playerPortraitChangeWatcher:ChangeWatcher;
+		private var _opponentPortraitChangeWatcher:ChangeWatcher;
+		
 		private var _buildBackground:Boolean = false;
 		
 		public function MultiplayerGameConfirmScreen(a_img:Sprite, a_buildFromAllDescendants:Boolean = false, a_bAddContents:Boolean = true, a_buildBackground:Boolean = false) 
@@ -198,7 +201,7 @@
 			
 			if (_playerPortrait)
 			{					
-				ChangeWatcher.watch(DartsGlobals.instance.localPlayer, "portrait", updateUsers);				
+				_playerPortraitChangeWatcher = ChangeWatcher.watch(DartsGlobals.instance.localPlayer, "portrait", updateUsers);				
 				
 				var playerPortrait:Bitmap = new Bitmap(DartsGlobals.instance.localPlayer.portrait);
 				playerPortrait.smoothing = true;
@@ -223,7 +226,7 @@
 			
 			if (_opponentPortrait)
 			{
-				ChangeWatcher.watch(DartsGlobals.instance.opponentPlayer, "portrait", updateUsers);
+				_opponentPortraitChangeWatcher = ChangeWatcher.watch(DartsGlobals.instance.opponentPlayer, "portrait", updateUsers);
 				
 				var opponentPortrait:Bitmap = new Bitmap(DartsGlobals.instance.opponentPlayer.portrait);
 				opponentPortrait.smoothing = true;
@@ -283,7 +286,7 @@
 			_playerName.text = DartsGlobals.instance.localPlayer.playerName;
 			_opponentName.text = DartsGlobals.instance.opponentProfile.name;
 			
-			if (_playerPortrait.numChildren > 0) _playerPortrait.removeChildAt(1);
+			if (_playerPortrait.numChildren > 0) _playerPortrait.removeChildAt(0);
 			
 			var playerPortrait:Bitmap = new Bitmap(DartsGlobals.instance.localPlayer.portrait);
 			playerPortrait.smoothing = true;
@@ -292,7 +295,7 @@
 			
 			_playerPortrait.addChild(playerPortrait);
 			
-			if (_opponentPortrait.numChildren > 0) _opponentPortrait.removeChildAt(1);
+			if (_opponentPortrait.numChildren > 0) _opponentPortrait.removeChildAt(0);
 			
 			var opponentPortrait:Bitmap = new Bitmap(DartsGlobals.instance.opponentPlayer.portrait);
 			opponentPortrait.smoothing = true;
@@ -359,8 +362,11 @@
 		
 		override public function destroy(...args):void
 		{
-			super.destroy();			
-						
+			super.destroy();	
+			
+			_playerPortraitChangeWatcher.unwatch();
+			_opponentPortraitChangeWatcher.unwatch();
+				
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			this.removeEventListener(Event.REMOVED_FROM_STAGE, destroy);
 			
