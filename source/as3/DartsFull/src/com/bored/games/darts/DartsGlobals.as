@@ -77,7 +77,7 @@
 		private static var _warningTmr:Timer;
 		private static var _warningArr:Array;
 		private static var _debugLocalConn:LocalConnection;
-		private static var _debugLcName:String;
+		private static var _debugLcName:String = "_debugBridge";
 		
 		private static var _instance:DartsGlobals;
 		private var _constructed:Boolean = false;
@@ -512,29 +512,35 @@
 			{
 				trace(warningStr);
 				
-				/*
 				COMPILEVAR::DEBUG
 				{
-					if (!_debugLocalConn)
+					if (!_debugLocalConn && _debugLcName)
 					{
-						_debugLocalConn = new LocalConnection();
-						_debugLocalConn.allowDomain("*", "localhost");
-						_debugLocalConn.allowInsecureDomain("*", "localhost");
-						_debugLocalConn.addEventListener(AsyncErrorEvent.ASYNC_ERROR, DartsGlobals.onLcAsyncError, false, 0, true);
-						_debugLocalConn.addEventListener(StatusEvent.STATUS, DartsGlobals.onLcStatus, false, 0, true);
+						// Initialized our LocalConnection for the first and only time:
 						
 						var lcName:* = DartsGlobals.instance.stage.root.loaderInfo.parameters["debugLcName"];
 						_debugLcName = lcName;
 						
 						if (!_debugLcName || !_debugLcName.length || _debugLcName == "" || _debugLcName.toLowerCase() == "null" || _debugLcName.toLowerCase() == "undefined")
 						{
-							throw new Error("DartsGlobals::onWarning(): this.stage.root.loaderInfo.parameters[\"debugLcName\"]=" + lcName + ", using default=" + "_debugBridge");
-							_debugLcName = "_debugBridge";
+							trace("DartsGlobals::onWarning(): this.stage.root.loaderInfo.parameters[\"debugLcName\"]=" + lcName + ", using default=" + "_debugBridge");
+							_debugLcName = null;
+						}
+						else
+						{
+							_debugLocalConn = new LocalConnection();
+							_debugLocalConn.allowDomain("*", "localhost");
+							_debugLocalConn.allowInsecureDomain("*", "localhost");
+							_debugLocalConn.addEventListener(AsyncErrorEvent.ASYNC_ERROR, DartsGlobals.onLcAsyncError, false, 0, true);
+							_debugLocalConn.addEventListener(StatusEvent.STATUS, DartsGlobals.onLcStatus, false, 0, true);
 						}
 					}
-					_debugLocalConn.send(_debugLcName, "debugMsg", warningStr);
+					
+					if (_debugLocalConn)
+					{
+						_debugLocalConn.send(_debugLcName, "debugMsg", warningStr);
+					}
 				}
-				*/
 			}
 			
 		}//end onWarning()

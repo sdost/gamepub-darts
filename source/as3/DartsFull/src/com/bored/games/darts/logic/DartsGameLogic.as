@@ -538,7 +538,15 @@
 		{			
 			//_cursor.hide();
 			_cursor.resetCursorImage();
-			_inputController.pause = true;
+			if (_inputController)
+			{
+				_inputController.pause = true;
+			}
+			else
+			{
+				DartsGlobals.addWarning("DartsGameLogic::playerThrow(): _inputController=" + _inputController + ", WHY?");
+			}
+			
 			
 			var thrust:Number;
 			var lean:Number;
@@ -581,9 +589,12 @@
 				angle = AppSettings.instance.defaultAngle;
 			}
 			
+			DartsGlobals.addWarning("DartsGameLogic::playerThrow(): _currentDart=" + _currentDart);
+			
 			_currentDart.initThrowParams(a_x, a_y, a_z, thrust, angle, AppSettings.instance.defaultGravity, lean, AppSettings.instance.dartboardPositionZ, a_stepScale);
 			
 			return { t: thrust, ang: angle };
+			
 		}//end playerThrow()
 		
 		public function get cursor():Cursor

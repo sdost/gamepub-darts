@@ -12,6 +12,7 @@
 	import com.bored.games.darts.actions.DartFallingAction;
 	import com.bored.games.darts.actions.DartPullBackAction;
 	import com.bored.games.darts.actions.DartTrajectoryAction;
+	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.models.dae_DartFlightHeart;
 	import com.bored.games.darts.models.dae_DartShaft;
 	import com.bored.games.darts.skins.DartSkin;
@@ -58,8 +59,14 @@
 		private var _roll:Number;
 		private var _yaw:Number;
 		
+		private var _myId:String;
+		
+		private static var _constructionCt:int = 0;
+		
 		public function Dart(a_skin:DartSkin, a_radius:int = 1) 
 		{
+			_myId = "Dart_" + _constructionCt++;
+			
 			_radius = a_radius;
 			
 			this.pitch = 90;
@@ -70,7 +77,9 @@
 		}//end constructor()
 		
 		public function initModels():void
-		{			
+		{
+			DartsGlobals.addWarning("Dart::initModels(): this=" + this);
+			
 			var colladaShaft:Collada = new Collada();
 			colladaShaft.scaling = AppSettings.instance.dartModelScale;
 			colladaShaft.centerMeshes = true;
@@ -103,10 +112,13 @@
 			_dartModel = new ObjectContainer3D(_shaft, _flight);
 			
 			_dartModel.addSprite(_modifierIndicator);
+			
 		}//end initModels()
 		
 		public function cleanupModels():void
-		{		
+		{
+			DartsGlobals.addWarning("Dart::cleanupModels(): this=" + this);
+			
 			_dartModel.removeSprite(_modifierIndicator);
 			_modifierIndicator = null;
 			
@@ -169,11 +181,19 @@
 			}			
 		}//end addModifier()
 		
-		public function clearModifiers():void
+		protected function clearModifiers():void
 		{
 			_modifierList = new Vector.<Ability>();
 			
-			_indicatorMaterial.movie = new Sprite();
+			if(_indicatorMaterial)
+			{
+				_indicatorMaterial.movie = new Sprite();
+			}
+			else
+			{
+				DartsGlobals.addWarning("Dart::clearModifiers(): this=" + this + ", _indicatorMaterial=" + _indicatorMaterial + ", WHY?");
+			}
+			
 		}//end clearModifiers()
 		
 		public function setThrowAction(a_action:Action):void
@@ -202,6 +222,8 @@
 
 		public function initThrowParams(releaseX:Number, releaseY:Number, releaseZ:Number, thrust:Number, angle:Number, grav:Number, lean:Number, finalZ:Number, stepScale:Number):void
 		{
+			DartsGlobals.addWarning("Dart::initThrowParams(): this=" + this);
+			
 			deactivateAction(_pullBackAction.actionName);
 			
 			clearModifiers();
@@ -300,6 +322,12 @@
 		{
 			return _yaw;
 		}//end set yaw()
+		
+		override public function toString():String
+		{
+			return "[Dart _myId=" + _myId + " ]";
+			
+		}//end toString()
 		
 	}//end Dart
 
