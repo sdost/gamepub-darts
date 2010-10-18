@@ -17,13 +17,13 @@
 		private var _section:int;
 		private var _turnsRemaining:int;
 		
-		private var _timers:Object;
+		private var _timers:Array;
 		
 		public function ShieldDartboardAction(a_gameElement:GameElement, a_params:Object = null) 
 		{
 			super(NAME, a_gameElement, a_params);
 			
-			_timers = new Object();
+			_timers = new Array();
 		}//end constructor()
 		
 		override public function initParams(a_params:Object):void
@@ -46,12 +46,20 @@
 		
 		private function onTurnEnd(evt:Event):void
 		{
+			trace("ShieldDartboardAction::onTurnEnd()");		
+			
+			var visitedKeys:Array = [];
+			
 			for ( var key:String in _timers ) 
 			{
-				if( _timers[key] > 0 ) {
+				if( _timers[key] > 0 && visitedKeys.indexOf(key) < 0 ) {
 					_timers[key]--;
 				}
+				
+				visitedKeys.push(key);
 			}
+			
+			visitedKeys = null;
 		}//end onTurnEnd()
 	
 		override public function update(a_time:Number):void

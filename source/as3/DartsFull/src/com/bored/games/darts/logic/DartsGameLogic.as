@@ -313,6 +313,8 @@
 					
 					_currentTurn.advanceThrows();
 					
+					DartsGlobals.addWarning("DartsGameLogic::handleGameLogic() -- _currentTurn.throwsRemaining: " + _currentTurn.throwsRemaining);
+					
 					if (_currentTurn.throwsRemaining == 0) 
 					{
 						_currentDart = null;
