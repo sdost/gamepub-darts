@@ -198,11 +198,7 @@
 		
 		public function setThrowAction(a_action:Action):void
 		{
-			if (!checkForActionNamed(a_action.actionName)) {
-				addAction(a_action);
-			}
-			
-			_throwAction = a_action;
+			_throwAction = addAction(a_action);
 		}//end setThrowAction()
 		
 		public function resetThrowAction():void
@@ -259,7 +255,7 @@
 		
 		override public function reset():void
 		{
-			super.reset();
+			//super.reset();
 			this.roll = 0;
 			this.pitch = 90;
 			this.blockBoard = false;
