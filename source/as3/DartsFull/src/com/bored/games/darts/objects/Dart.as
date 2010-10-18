@@ -222,7 +222,7 @@
 
 		public function initThrowParams(releaseX:Number, releaseY:Number, releaseZ:Number, thrust:Number, angle:Number, grav:Number, lean:Number, finalZ:Number, stepScale:Number):void
 		{
-			DartsGlobals.addWarning("Dart::initThrowParams(): this=" + this);
+			//DartsGlobals.addWarning("Dart::initThrowParams(): this=" + this);
 			
 			deactivateAction(_pullBackAction.actionName);
 			

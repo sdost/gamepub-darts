@@ -335,7 +335,6 @@
 		
 		private function onPlayClicked(a_evt:Event):void
 		{
-			_backBtn.removeEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onBackClicked);
 			_playBtn.removeEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onPlayClicked);
 			
 			DartsGlobals.instance.localPlayer.setSkin(DartsGlobals.instance.playerProfile.skins[_skinIndex]);
@@ -363,6 +362,9 @@
 		override public function destroy(...args):void
 		{
 			super.destroy();	
+			
+			_backBtn.removeEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onBackClicked);
+			_playBtn.removeEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onPlayClicked);
 			
 			_playerPortraitChangeWatcher.unwatch();
 			_opponentPortraitChangeWatcher.unwatch();

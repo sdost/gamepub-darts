@@ -313,6 +313,8 @@
 					
 					_currentTurn.advanceThrows();
 					
+					DartsGlobals.addWarning("DartsGameLogic::handleGameLogic() -- _currentTurn.throwsRemaining: " + _currentTurn.throwsRemaining);
+					
 					if (_currentTurn.throwsRemaining == 0) 
 					{
 						_currentDart = null;
@@ -589,7 +591,7 @@
 				angle = AppSettings.instance.defaultAngle;
 			}
 			
-			DartsGlobals.addWarning("DartsGameLogic::playerThrow(): _currentDart=" + _currentDart);
+			//DartsGlobals.addWarning("DartsGameLogic::playerThrow(): _currentDart=" + _currentDart);
 			
 			_currentDart.initThrowParams(a_x, a_y, a_z, thrust, angle, AppSettings.instance.defaultGravity, lean, AppSettings.instance.dartboardPositionZ, a_stepScale);
 			

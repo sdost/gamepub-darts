@@ -64,7 +64,6 @@
 				}
 			}
 			
-			
 		}//end onTurnEnd()
 	
 		override public function update(a_time:Number):void
@@ -80,6 +79,7 @@
 					(_gameElement as Dartboard).unblockSection(int(key));
 				}
 			}
+			
 		}//end update()
 		
 	}//end ShieldDartboardAction
