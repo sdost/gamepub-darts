@@ -67,14 +67,14 @@
 			DartsGlobals.instance.localPlayer.record.triples = obj["playerStats" + DartsGlobals.instance.localPlayer.playerNum]["triples"];
 			DartsGlobals.instance.localPlayer.record.throws = obj["playerStats" + DartsGlobals.instance.localPlayer.playerNum]["throws"];
 			DartsGlobals.instance.localPlayer.record.scoringThrows = obj["playerStats" + DartsGlobals.instance.localPlayer.playerNum]["scoringThrows"];
-			DartsGlobals.instance.localPlayer.record.recordEndOfGame(obj["playerStats" + DartsGlobals.instance.localPlayer.playerNum]["win"]);
+			DartsGlobals.instance.localPlayer.record.recordEndOfGame((DartsGlobals.instance.localPlayer.playerNum == obj.winner));
 			
 			DartsGlobals.instance.opponentPlayer.record.gameTime = obj.gameTime;
 			DartsGlobals.instance.opponentPlayer.record.doubles = obj["playerStats" + DartsGlobals.instance.opponentPlayer.playerNum]["doubles"];
 			DartsGlobals.instance.opponentPlayer.record.triples = obj["playerStats" + DartsGlobals.instance.opponentPlayer.playerNum]["triples"];
 			DartsGlobals.instance.opponentPlayer.record.throws = obj["playerStats" + DartsGlobals.instance.opponentPlayer.playerNum]["throws"];
 			DartsGlobals.instance.opponentPlayer.record.scoringThrows = obj["playerStats" + DartsGlobals.instance.opponentPlayer.playerNum]["scoringThrows"];
-			DartsGlobals.instance.opponentPlayer.record.recordEndOfGame(obj["playerStats" + DartsGlobals.instance.opponentPlayer.playerNum]["win"]);
+			DartsGlobals.instance.opponentPlayer.record.recordEndOfGame((DartsGlobals.instance.opponentPlayer.playerNum == obj.winner));
 			_winner = obj.winner;
 		}//end onGameEnd()
 		
