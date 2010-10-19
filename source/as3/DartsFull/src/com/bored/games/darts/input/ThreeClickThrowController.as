@@ -31,12 +31,14 @@
 		
 		private var _state:int;
 		
-		protected var _buttonDown:Boolean;
+		protected var _buttonActive:Boolean;
 		private var _mousePosition:Point;
 		
 		private var _timer:Timer;
 		
 		private var _direction:int;
+		
+		private var _lastInputStateEvent:InputStateEvent;
 		
 		public function ThreeClickThrowController()
 		{
@@ -46,10 +48,10 @@
 		
 		override public function startThrow(a_inputController:InputController):void
 		{		
-			_buttonDown = false;
-			_state = INIT_THROW;
+			_buttonActive = false;
+			this.state = INIT_THROW;
 			
-			trace("ThreeClickThrowController::startThrow() -- _state = " + _state);
+			//DartsGlobals.addWarning("ThreeClickThrowController::startThrow(): this.state == INIT_THROW");
 			
 			if (_timer)
 			{
@@ -71,10 +73,26 @@
 			{				
 				a_inputController.pause = false;
 			}
+			
+			if (!_lastInputStateEvent)
+			{
+				_lastInputStateEvent = new InputStateEvent(InputStateEvent.UPDATE, 427, 325);
+			}
+			
+			_lastInputStateEvent.origMouseEvt = null;
+			this.onInputUpdate(_lastInputStateEvent);
+			
 		}//end startThrow()
 		
+		/**
+		 * This is triggered via InputStateEvent dispatched by the MouseInputController, 
+		 * for Mouse move, up, over, and roll-out events on the DartsGlobals.instance.screenSpace.
+		 * @param	a_evt
+		 */
 		override public function onInputUpdate(a_evt:InputStateEvent):void
 		{			
+			_lastInputStateEvent = a_evt;
+			
 			if ( _mousePosition == null )
 			{
 				_mousePosition = new Point();
@@ -82,39 +100,36 @@
 			_mousePosition.x = a_evt.x;
 			_mousePosition.y = a_evt.y;
 			
-			var buttonDown:Boolean;
-			
-			// with each click, we progress through the three-click button controller's states.
-			
-			/**/
-			if (!a_evt.button) {
-				if (_buttonDown) {
-					_state++;
-				}
-			}
-			buttonDown = a_evt.button;
-			
-			/**
+			// otherwise we act on mouse-down.
 			if (a_evt.origMouseEvt)
 			{
-				if (a_evt.origMouseEvt && a_evt.origMouseEvt.type == MouseEvent.MOUSE_DOWN)
+				if (_buttonActive)
 				{
-					_state++;
-					buttonDown = true;
+					if (a_evt.origMouseEvt.type == MouseEvent.MOUSE_UP)
+					{
+						// no longer active!
+						_buttonActive = false;
+					}
+					else if (a_evt.origMouseEvt.type == MouseEvent.ROLL_OUT)
+					{
+						// we are currently active, but the three-click throwing method doesn't care...just wait for the next activation of the throw.
+						//_buttonActive = false;
+					}
 				}
-				else if (a_evt.origMouseEvt && a_evt.origMouseEvt.type != MouseEvent.MOUSE_UP)
+				else
 				{
-					buttonDown = false;
+					// the button is not currently active, so check for what makes it active, and increment our state, should we find it.
+					if (a_evt.origMouseEvt.type == MouseEvent.MOUSE_DOWN)
+					{
+						_buttonActive = true;
+						
+						// mouse-down, go to next state.
+						this.state++;
+					}
 				}
 			}
-			else
-			{
-				buttonDown = a_evt.button;
-			}
 			
-			/**/
-			
-			if (_state == INIT_THROW)
+			if (this.state == INIT_THROW)
 			{
 				//Mouse.hide();
 				if (DartsGlobals.instance.gameManager)
@@ -127,7 +142,7 @@
 					}
 					else
 					{
-						DartsGlobals.addWarning("ThreeClickThrowController::onInputUpdate(): DartsGlobals.instance.gameManager.cursor=" + DartsGlobals.instance.gameManager.cursor);
+						DartsGlobals.addWarning("ThreeClickThrowController::onInputUpdate(): DartsGlobals.instance.gameManager.cursor=" + DartsGlobals.instance.gameManager.cursor + ", IS THIS A PROBLEM?");
 					}
 					
 					if (DartsGlobals.instance.gameManager.currentDart)
@@ -138,31 +153,33 @@
 					}
 					else
 					{
-						DartsGlobals.addWarning("ThreeClickThrowController::onInputUpdate(): DartsGlobals.instance.gameManager.currentDart=" + DartsGlobals.instance.gameManager.currentDart);
+						DartsGlobals.addWarning("ThreeClickThrowController::onInputUpdate(): DartsGlobals.instance.gameManager.currentDart=" + DartsGlobals.instance.gameManager.currentDart + ", IS THIS A PROBLEM?");
 					}
 				}
 				else
 				{
-					DartsGlobals.addWarning("ThreeClickThrowController::onInputUpdate(): DartsGlobals.instance.gameManager=" + DartsGlobals.instance.gameManager);
+					DartsGlobals.addWarning("ThreeClickThrowController::onInputUpdate(): DartsGlobals.instance.gameManager=" + DartsGlobals.instance.gameManager + ", IS THIS A PROBLEM?");
 				}
 			}
-			
-			_buttonDown = buttonDown;
 			
 		}//end onInputUpdate()
 		
 		private function updateCursorPosition(evt:Event):void
 		{
-			switch(_state) {
+			switch(this.state)
+			{
 				case START_Y_THROW:
 					DartsGlobals.instance.gameManager.cursor.setCursorImage(_throwCursor);
 					DartsGlobals.instance.gameManager.cursor.setCursorScale(1.2);
 					_thrust += _direction;
 				
-					if ( _thrust < AppSettings.instance.dartMinThrust ) {
+					if ( _thrust < AppSettings.instance.dartMinThrust )
+					{
 						_thrust = AppSettings.instance.dartMinThrust;
 						_direction = 1;
-					} else if ( _thrust > AppSettings.instance.dartMaxThrust ) {
+					}
+					else if ( _thrust > AppSettings.instance.dartMaxThrust )
+					{
 						_thrust = AppSettings.instance.dartMaxThrust;
 						_direction = -1;
 					}
@@ -170,15 +187,21 @@
 				case START_X_THROW:
 					_lean += _direction / 3;
 				
-					if ( _lean < -2.5 ) {
+					if ( _lean < -2.5 )
+					{
 						_lean = -2.5;
 						_direction = 1;
-					} else if ( _lean > 2.5 ) {
+					}
+					else if ( _lean > 2.5 )
+					{
 						_lean = 2.5;
 						_direction = -1;
 					}
 				break;
 				case END_THROW:
+					
+					DartsGlobals.addWarning("ThreeClickThrowController::updateCursorPosition(): END_THROW");
+					
 					DartsGlobals.instance.gameManager.cursor.resetCursorImage();
 					_timer.removeEventListener(TimerEvent.TIMER, updateCursorPosition);
 					_timer.stop();
@@ -194,17 +217,22 @@
 						AppSettings.instance.simulationStepScale
 					);
 				break;
+				case INIT_THROW:
+					break;
 				default:
+					DartsGlobals.addWarning("ThreeClickThrowController::updateCursorPosition(): this.state=" + this.state + ", NOT HANDLED HERE.");
 				break;
 			}
 		}//end updateMousePosition()
 		
 		override public function resetThrowParams():void 
 		{
+			//DartsGlobals.addWarning("ThreeClickThrowController::resetThrowParams(): resetting this.state to INIT_THROW");
+			
 			super.resetThrowParams();
 			
-			_buttonDown = false;
-			_state = INIT_THROW;
+			_buttonActive = false;
+			this.state = INIT_THROW;
 			
 			if (_timer)
 			{
@@ -212,8 +240,21 @@
 				_timer.stop();
 				_timer = null;
 			}
-		}
+			
+		}//end resetThrowParams()
+		
+		private function get state():int
+		{
+			return _state;
+			
+		}//end get state()
+		
+		private function set state(a_int:int):void
+		{
+			_state = a_int;
+			
+		}//end set state()
 		
 	}//end ThreeClickThrowController
-
+	
 }//end com.bored.games.darts.input
