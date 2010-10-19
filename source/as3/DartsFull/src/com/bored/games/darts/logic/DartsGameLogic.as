@@ -212,13 +212,16 @@
 			_currentPlayer = 1;
 			
 			if( _inputController && _throwController )
-				_inputController.addEventListener(InputStateEvent.UPDATE, _throwController.onInputUpdate);				
+			{
+				_inputController.addEventListener(InputStateEvent.UPDATE, _throwController.onInputUpdate);
+			}
+			
 		}//end startGame()
 		
 		public function endGame(a_winner:int):void
 		{
 			GameUtils.endGame();
-						
+			
 			for each( var player:DartsPlayer in _players )
 			{
 				player.record.recordEndOfGame( a_winner == player.playerNum );

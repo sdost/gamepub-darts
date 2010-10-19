@@ -10,6 +10,7 @@
 	import com.sven.utils.AppSettings;
 	import flash.display.MovieClip;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
 	import flash.ui.Mouse;
@@ -81,11 +82,37 @@
 			_mousePosition.x = a_evt.x;
 			_mousePosition.y = a_evt.y;
 			
+			var buttonDown:Boolean;
+			
+			// with each click, we progress through the three-click button controller's states.
+			
+			/**/
 			if (!a_evt.button) {
 				if (_buttonDown) {
 					_state++;
 				}
 			}
+			buttonDown = a_evt.button;
+			
+			/**
+			if (a_evt.origMouseEvt)
+			{
+				if (a_evt.origMouseEvt && a_evt.origMouseEvt.type == MouseEvent.MOUSE_DOWN)
+				{
+					_state++;
+					buttonDown = true;
+				}
+				else if (a_evt.origMouseEvt && a_evt.origMouseEvt.type != MouseEvent.MOUSE_UP)
+				{
+					buttonDown = false;
+				}
+			}
+			else
+			{
+				buttonDown = a_evt.button;
+			}
+			
+			/**/
 			
 			if (_state == INIT_THROW)
 			{
@@ -120,7 +147,7 @@
 				}
 			}
 			
-			_buttonDown = a_evt.button;
+			_buttonDown = buttonDown;
 			
 		}//end onInputUpdate()
 		

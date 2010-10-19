@@ -1,6 +1,7 @@
 ﻿package com.bored.games.darts.events 
 {
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.utils.getTimer;
 	
 	/**
@@ -15,14 +16,15 @@
 		
 		private static var _lastButtonState:Boolean = false;
 		
-		public var x:Number, y:Number, button:Boolean, timestamp:Number;
+		public var x:Number, y:Number, button:Boolean, timestamp:Number, origMouseEvt:MouseEvent;
 		
-		public function InputStateEvent(type:String, x:Number, y:Number, but:int = -1, bubbles:Boolean = false, cancelable:Boolean = false) 
+		public function InputStateEvent(type:String, x:Number, y:Number, but:int = -1, a_origMouseEvt:MouseEvent = null, bubbles:Boolean = false, cancelable:Boolean = false) 
 		{ 
 			super(type, bubbles, cancelable);
 			
 			this.x = x;
 			this.y = y;
+			origMouseEvt = a_origMouseEvt;
 			
 			if ( but < 0 ) 
 			{
@@ -41,12 +43,12 @@
 		
 		public override function clone():Event 
 		{ 
-			return new InputStateEvent(type, x, y, (button ? 1 : 0), bubbles, cancelable);
+			return new InputStateEvent(type, x, y, (button ? 1 : 0), origMouseEvt, bubbles, cancelable);
 		} //end clone()
 		
 		public override function toString():String 
 		{ 
-			return formatToString("InputStateEvent", "type", "x", "y", "button", "bubbles", "cancelable", "eventPhase"); 
+			return formatToString("InputStateEvent", "type", "x", "y", "button", "origMouseEvt", "bubbles", "cancelable", "eventPhase"); 
 		} //end toString()
 		
 	}//end InputStateEvent
