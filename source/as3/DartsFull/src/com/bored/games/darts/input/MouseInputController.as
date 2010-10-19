@@ -50,36 +50,40 @@
 			_listener.removeEventListener(MouseEvent.ROLL_OUT, handleMouseRollOut, true);
 		}//end removeListeners()
 				
-		private function handleMousePositionUpdate(evt:* = null):void
+		private function handleMousePositionUpdate(evt:MouseEvent = null):void
 		{
 			var x:Number = evt.stageX;
 			var y:Number = evt.stageY;
 			
-			var dispatched:Boolean = this.dispatchEvent(new InputStateEvent(InputStateEvent.UPDATE, x, y));		
+			var dispatched:Boolean = this.dispatchEvent(new InputStateEvent(InputStateEvent.UPDATE, x, y, -1, evt));
+			
 		}//end handleMouseMove()
 		
-		private function handleMouseDown(evt:* = null):void
+		private function handleMouseDown(evt:MouseEvent = null):void
 		{			
 			var x:Number = evt.stageX;
 			var y:Number = evt.stageY;
 			
-			var dispatched:Boolean = this.dispatchEvent(new InputStateEvent(InputStateEvent.UPDATE, x, y, InputStateEvent.DOWN));
+			var dispatched:Boolean = this.dispatchEvent(new InputStateEvent(InputStateEvent.UPDATE, x, y, InputStateEvent.DOWN, evt));
+			
 		}//end handleMouseButtons()
 		
-		private function handleMouseUp(evt:* = null):void
+		private function handleMouseUp(evt:MouseEvent = null):void
 		{
 			var x:Number = evt.stageX;
 			var y:Number = evt.stageY;
 			
-			var dispatched:Boolean = this.dispatchEvent(new InputStateEvent(InputStateEvent.UPDATE, x, y, InputStateEvent.UP));
+			var dispatched:Boolean = this.dispatchEvent(new InputStateEvent(InputStateEvent.UPDATE, x, y, InputStateEvent.UP, evt));
+			
 		}//end handleMouseButtons()
 		
-		private function handleMouseRollOut(evt:* = null):void
+		private function handleMouseRollOut(evt:MouseEvent = null):void
 		{
 			var x:Number = evt.stageX;
 			var y:Number = evt.stageY;
 			
-			var dispatched:Boolean = this.dispatchEvent(new InputStateEvent(InputStateEvent.UPDATE, x, y, InputStateEvent.UP));
+			var dispatched:Boolean = this.dispatchEvent(new InputStateEvent(InputStateEvent.UPDATE, x, y, InputStateEvent.UP, evt));
+			
 		}//end handleMouseButtons()
 		
 	}//end MouseInputController

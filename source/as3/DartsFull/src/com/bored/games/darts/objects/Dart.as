@@ -74,6 +74,7 @@
 			_dartSkin = a_skin;
 			
 			initActions();
+			
 		}//end constructor()
 		
 		public function initModels():void
@@ -199,6 +200,7 @@
 		public function setThrowAction(a_action:Action):void
 		{
 			_throwAction = addAction(a_action);
+			
 		}//end setThrowAction()
 		
 		public function resetThrowAction():void
@@ -321,7 +323,11 @@
 		
 		override public function toString():String
 		{
-			return "[Dart _myId=" + _myId + " ]";
+			var guts:String = "";
+			guts += " _myId= " + _myId;
+			guts += " _actionsActive=[" + (_actionsActive.toArray()).join(",") + "]";
+			
+			return "[Dart" + guts + " ]";
 			
 		}//end toString()
 		
