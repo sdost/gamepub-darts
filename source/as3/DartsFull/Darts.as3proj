@@ -15,6 +15,7 @@
   <classpaths>
     <class path="src" />
     <class path="testSrc" />
+    <class path="..\..\..\..\mp_engine\source\src" />
   </classpaths>
   <!-- Build options -->
   <build>
@@ -126,7 +127,7 @@
   </rslPaths>
   <!-- Intrinsic Libraries -->
   <intrinsics>
-    <element path="Library\AS3\frameworks\Flex3" />
+    <element path="Library\AS3\frameworks\Flex3." />
   </intrinsics>
   <!-- Assets to embed into the output SWF -->
   <library>
