@@ -59,7 +59,8 @@
 			
 			DartsGlobals.instance.stateMachine = _myStateMachine = new GameFSM();
 			
-			WarningManager.instance.handleMethod = WarningManager.THROW_WARNINGS;
+			WarningManager.instance.handleMethod = WarningManager.DISPATCH_WARNINGS;
+			WarningManager.instance.addEventListener(WarningManager.WARNING_EVT, DartsGlobals.onWarningMngrWarning);
 			
 			addStates();
 			
@@ -75,7 +76,7 @@
 			AppSettings.instance.load("development.config");
 			
 			AppSettings.instance.addEventListener(Event.COMPLETE, onConfigReady);
-		}//end addedToStage()		
+		}//end addedToStage()
 		
 		private function onConfigReady(a_evt:Event):void
 		{

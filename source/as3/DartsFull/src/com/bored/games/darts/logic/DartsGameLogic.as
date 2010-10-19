@@ -263,16 +263,24 @@
 				dart.update(a_time);
 				
 				resting = ((!dart.active) && resting);
+				
+				/**
+				if (dart.active)
+				{
+					DartsGlobals.addWarning("DartsGameLogic::update(): dart=" + dart);
+				}
+				/**/
 			}
 			
 			_resting = resting;
 			
 			if (_resting) 
 			{
-				this.dispatchEvent(new Event(AT_REST));
+				this.dispatchEvent(new Event(DartsGameLogic.AT_REST));
 			}
 			
 			handleGameLogic();
+			
 		}//end update();
 		
 		protected function handleGameLogic():void
@@ -313,7 +321,7 @@
 					
 					_currentTurn.advanceThrows();
 					
-					DartsGlobals.addWarning("DartsGameLogic::handleGameLogic() -- _currentTurn.throwsRemaining: " + _currentTurn.throwsRemaining);
+					//DartsGlobals.addWarning("DartsGameLogic::handleGameLogic() -- _currentTurn.throwsRemaining: " + _currentTurn.throwsRemaining);
 					
 					if (_currentTurn.throwsRemaining == 0) 
 					{
@@ -360,7 +368,7 @@
 						_abilityManager.processTurn();
 						_currentDart = null;
 						//pause(true);
-											
+						
 						_soundController.play("turn_switch_" + Math.ceil(Math.random() * 4).toString());
 						
 						endTurn();
@@ -504,11 +512,15 @@
 			
 			_currentDart = null;
 			
-			if ( _resting ) {
+			if ( _resting )
+			{
 				endCurrentTurn();
-			} else {
-				this.addEventListener(AT_REST, endCurrentTurn, false, 0, true);
+			}else
+			{
+				//DartsGlobals.addWarning("DartsGameLogic::endTurn(): _resting=" + _resting + ", listening for DartsGameLogic.AT_REST.");
+				this.addEventListener(DartsGameLogic.AT_REST, endCurrentTurn, false, 0, true);
 			}
+			
 		}//end endTurn()
 		
 		protected function endCurrentTurn(e:Event = null):void

@@ -10,6 +10,7 @@
 	import com.bored.services.BoredServices;
 	import com.bored.services.client.GameClient;
 	import com.bored.services.client.TurnBasedGameClient;
+	import com.inassets.events.ObjectEvent;
 	import com.inassets.statemachines.interfaces.IStateMachine;
 	import com.jac.soundManager.SoundController;
 	import com.sven.utils.AppSettings;
@@ -544,6 +545,22 @@
 			}
 			
 		}//end onWarning()
+		
+		public static function onWarningMngrWarning(a_objEvt:ObjectEvent):void
+		{
+			if (!_warningArr)
+			{
+				_warningArr = new Array();
+				_warningTmr = new Timer(200, 0);
+				_warningTmr.addEventListener(TimerEvent.TIMER, onWarning, false, 0, true);
+			}
+			
+			var warningStr:String = String(a_objEvt.obj);
+			
+			_warningArr.push(warningStr);
+			onWarning(null);
+			
+		}//end onWarningMngrWarning()
 		
 		COMPILEVAR::DEBUG
 		private static function onLcAsyncError(a_asyncErrEvt:AsyncErrorEvent):void
