@@ -227,6 +227,7 @@
 				case GameClient.GAME_TIMER_END:
 					DartsPlayer(_players[_currentPlayer]).turnTime = -1;
 					_currentDart = null;
+					cursor.resetCursorImage();
 					_throwController.resetThrowParams();
 					_inputController.pause = true;
 					if( _currentPlayer == DartsGlobals.instance.localPlayer.playerNum ) endCurrentTurn();
