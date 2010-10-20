@@ -127,7 +127,8 @@
   </rslPaths>
   <!-- Intrinsic Libraries -->
   <intrinsics>
-    <element path="Library\AS3\frameworks\Flex3." />
+    <element path="Library\AS3\frameworks\Flex3" />
+    <element path="C:\projects\inassets\projects\ALL_SVN_HEAD\bored.com\branches\projects\as3\ExposedBoredGameServicesAPI\src" />
   </intrinsics>
   <!-- Assets to embed into the output SWF -->
   <library>

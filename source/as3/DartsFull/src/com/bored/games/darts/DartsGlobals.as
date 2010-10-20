@@ -36,6 +36,7 @@
 	import flash.net.URLRequest;
 	import flash.utils.Timer;
 	import flash.utils.getDefinitionByName;
+	import mx.utils.ObjectUtil;
 	
 	/**
 	 * ...
@@ -308,6 +309,7 @@
 			_externalService = a_ext;
 			_externalService.addEventListener(AbstractExternalService.USER_LOGIN, onLogin, false, 0, true);
 			_externalService.addEventListener(AbstractExternalService.USER_DATA_AVAILABLE, onUserData, false, 0, true);
+			
 		}//end set externalServices()
 		
 		public function get externalServices():AbstractExternalService
@@ -320,13 +322,15 @@
 			_externalService.pullUserData();
 		}//end onInventoryUpdate()
 		
-		private function onUserData(evt:Event):void
+		public function onUserData(evt:Event = null):void
 		{
+			DartsGlobals.addWarning("DartsGlobals::onUserData()");
+			
 			var gameCash:int = _externalService.getData("gameCash");
 			
 			trace("Game Cash: " + gameCash);
 			
-			if (gameCash <= 0) 
+			if (gameCash <= 0)
 			{
 				gameCash = 0;
 				_externalService.setData("gameCash", gameCash);
@@ -341,11 +345,13 @@
 			
 			_playerProfile.clearUnlockedSkins();
 			
-			for each( var obj:Object in _externalService.getData("ownedSkins") ) 
+			var ownedSkins:Object = _externalService.getData("ownedSkins");
+			
+			for each( var obj:Object in ownedSkins) 
 			{		
-				if (obj.properties.skinid && obj.properties.flightid) 
+				if (obj.skinid && obj.flightid) 
 				{
-					_playerProfile.unlockSkin(obj.properties.skinid, obj.properties.flightid);
+					_playerProfile.unlockSkin(obj.skinid, obj.flightid);
 				}
 			}
 		}//end onInventoryUpdate()
