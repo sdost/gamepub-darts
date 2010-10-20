@@ -59,14 +59,8 @@
 		private var _roll:Number;
 		private var _yaw:Number;
 		
-		private var _myId:String;
-		
-		private static var _constructionCt:int = 0;
-		
 		public function Dart(a_skin:DartSkin, a_radius:int = 1) 
 		{
-			_myId = "Dart_" + _constructionCt++;
-			
 			_radius = a_radius;
 			
 			this.pitch = 90;
@@ -320,14 +314,13 @@
 		{
 			return _yaw;
 		}//end set yaw()
-		
+			
 		override public function toString():String
 		{
-			var guts:String = "";
-			guts += " _myId= " + _myId;
-			guts += " _actionsActive=[" + (_actionsActive.toArray()).join(",") + "]";
-			
-			return "[Dart" + guts + " ]";
+			var guts:String = super.toString() + "\n";
+			guts += "\t --> _actionsActive=[" + this.activeActions.join(",") + "]";
+						
+			return guts;
 			
 		}//end toString()
 		

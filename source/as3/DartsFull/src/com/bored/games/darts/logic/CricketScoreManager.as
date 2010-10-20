@@ -28,6 +28,7 @@
 			_previousScoreboard = new Object();
 			
 			_soundController = new SoundController("scoreboardSounds");
+			DartsGlobals.instance.soundManager.addSoundController(_soundController);
 			_soundController.addSound( new SMSound("closeout_player", "closeout_player_final_mp3") );
 			_soundController.addSound( new SMSound("closeout_opponent", "closeout_opponent_final_mp3") );
 		}//end constructor()

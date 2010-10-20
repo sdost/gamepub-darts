@@ -19,6 +19,7 @@
 	import com.bored.games.darts.player.DartsPlayer;
 	import com.bored.games.darts.events.InputStateEvent;
 	import com.bored.games.GameUtils;
+	import com.bored.services.BoredServices;
 	import com.greensock.TweenMax;
 	import com.jac.soundManager.SMSound;
 	import com.jac.soundManager.SoundController;
@@ -444,7 +445,8 @@
 			
 			dispatchEvent(new Event(THROW_END));
 			
-			_players[_currentPlayer].takeTheShot(_currentTurn.throwsRemaining);
+			TweenMax.delayedCall(0.5, _players[_currentPlayer].takeTheShot, [_currentTurn.throwsRemaining]);
+			
 		}//end nextDart()
 		
 		public function get lastDart():Dart

@@ -5,7 +5,9 @@ import it.gotoandplay.smartfoxserver.data.User;
 
 import java.nio.channels.SocketChannel;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.json.JSONException;
@@ -27,6 +29,9 @@ public class Darts extends TurnBasedExtension {
 	
 	private long _roundTime = 60;
 	
+	// Players who report they are ready to play
+	protected Set<User>											_endPlayersSet;
+	
 	private HashMap<Integer, DartsPlayer> _players;
 		
 	public Darts() 
@@ -37,6 +42,8 @@ public class Darts extends TurnBasedExtension {
 		_bullOffResults = new HashMap<Integer, Double>();
 		
 		_players = new HashMap<Integer, DartsPlayer>();
+		
+		_endPlayersSet = new HashSet<User>();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -139,6 +146,7 @@ public class Darts extends TurnBasedExtension {
 		
 		if(super.handleTurnUpdate(jso, u, fromRoom) || _bullOff)
 		{
+			String dart = jso.optString("dart");
 			double x0 = jso.optDouble("x");
 			double y0 = jso.optDouble("y");
 			double z0 = jso.optDouble("z");
@@ -271,6 +279,7 @@ public class Darts extends TurnBasedExtension {
 				
 				jso = this.getJSONTurnUpdateObject(null);
 				super.setJSONArg(jso, "action", "p_r");
+				super.setJSONArg(jso, "dart", dart);
 				super.setJSONArg(jso, "p", board_Section);
 				super.setJSONArg(jso, "m", board_Multiplier);
 				

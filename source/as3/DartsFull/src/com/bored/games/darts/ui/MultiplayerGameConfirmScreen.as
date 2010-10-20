@@ -63,10 +63,12 @@
 		private var _playerName:TextField;
 		private var _playerRecord:TextField;
 		private var _playerPortrait:MovieClip;
+		private var _playerReadyCheck:MovieClip;
 		
 		private var _opponentName:TextField;
 		private var _opponentRecord:TextField;
 		private var _opponentPortrait:MovieClip;
+		private var _opponentReadyCheck:MovieClip;
 		
 		private var _dartIcon:MovieClip;
 		
@@ -110,10 +112,12 @@
 			_playerName = descendantsDict["playerName_text"] as TextField;
 			_playerRecord = descendantsDict["playerRecord_text"] as TextField;
 			_playerPortrait = descendantsDict["playerPortrait_mc"] as MovieClip;
+			_playerReadyCheck = descendantsDict["playerReadyCheck_mc"] as MovieClip;
 			
 			_opponentName = descendantsDict["opponentName_text"] as TextField;
 			_opponentRecord = descendantsDict["opponentRecord_text"] as TextField;
 			_opponentPortrait = descendantsDict["opponentPortrait_mc"] as MovieClip;
+			_opponentReadyCheck = descendantsDict["opponentReadyCheck_mc"] as MovieClip;
 			
 			_dartIcon = descendantsDict["dartIcon_mc"] as MovieClip;
 			
@@ -215,6 +219,11 @@
 				throw new Error("MultiplayerGameConfirmScreen::buildFrom(): _playerPortrait=" + _playerPortrait);
 			}
 			
+			if (_playerReadyCheck)
+			{
+				_playerReadyCheck.gotoAndStop("NOT_READY");
+			}
+			
 			if (_opponentName)
 			{
 				_opponentName.text = DartsGlobals.instance.opponentProfile.name;
@@ -238,6 +247,11 @@
 			else
 			{
 				throw new Error("MultiplayerGameConfirmScreen::buildFrom(): _opponentPortrait=" + _opponentPortrait);
+			}
+			
+			if (_opponentReadyCheck)
+			{
+				_opponentReadyCheck.gotoAndStop("NOT_READY");
 			}
 			
 			if(_buildBackground)
@@ -278,6 +292,16 @@
 			TweenLite.to(this, 2, {alpha:1} );
 			
 		}//end addedToStage()
+		
+		public function setPlayerReady():void
+		{
+			_playerReadyCheck.gotoAndStop("READY");
+		}//end setPlayerReady()
+		
+		public function setOpponentReady():void
+		{
+			_opponentReadyCheck.gotoAndStop("READY");
+		}//end setOpponentReady()
 		
 		public function updateUsers(...args):void
 		{

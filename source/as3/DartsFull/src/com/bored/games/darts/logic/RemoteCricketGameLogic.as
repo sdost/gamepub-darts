@@ -127,6 +127,7 @@
 			
 			DartsGlobals.instance.multiplayerClient.sendTurnUpdate(
 				{
+					dart: currentDart.objectId,
 					action: "p_t",
 					x: a_x,
 					y: a_y,
@@ -341,7 +342,7 @@
 			{
 				for ( var key:String in _serverResults )
 				{
-					trace("_serverResults[" + key + "]: " + _serverResults[key]);
+					DartsGlobals.addWarning("_serverResults[" + key + "]: " + _serverResults[key]);
 				}
 				
 				if ( !_dartboard.submitDartPositionUnscored(_currentDart.x, _currentDart.y, _currentDart.blockBoard, _serverResults) ) 

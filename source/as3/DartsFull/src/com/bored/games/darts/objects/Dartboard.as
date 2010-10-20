@@ -61,6 +61,7 @@
 		private function initSounds():void
 		{
 			_dartboardSoundController = new SoundController("dartboardSoundController");
+			DartsGlobals.instance.soundManager.addSoundController(_dartboardSoundController);
 			
 			_dartboardSoundController.addSound( new SMSound( "noscore_1", "darthit_noscore1_mp3" ) );
 			_dartboardSoundController.addSound( new SMSound( "noscore_2", "darthit_noscore2_mp3" ) );
@@ -176,8 +177,6 @@
 			_dartboardSoundController.addSound( new SMSound( "bounce_board", "darthit_bounceboard_mp3" ) );
 			_dartboardSoundController.addSound( new SMSound( "shieldApply", "dartpower_shieldapply_mp3" ) );
 			_dartboardSoundController.addSound( new SMSound( "shieldHit", "dartpower_shieldhit_mp3" ) );
-			
-			DartsGlobals.instance.soundManager.addSoundController(_dartboardSoundController);
 		}//end initSounds()
 		
 		public function initModels():void

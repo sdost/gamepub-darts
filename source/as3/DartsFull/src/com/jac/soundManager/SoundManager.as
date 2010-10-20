@@ -250,8 +250,8 @@ package com.jac.soundManager
 			
 			for (var i:int = 0; i < _soundControllerList.length; i++)
 			{//mute
-				//_soundControllerList[i].muteAllSounds();
-				_soundControllerList[i].checkMute();
+				_soundControllerList[i].muteAllSounds();
+				//_soundControllerList[i].checkMute();
 			}//mute
 			
 			dispatchEvent(new SMSoundEvent(SMSoundEvent.MUTE, this,true, false));
@@ -267,7 +267,7 @@ package com.jac.soundManager
 			
 			for (var i:int = 0; i < _soundControllerList.length; i++)
 			{//mute
-				_soundControllerList[i].checkMute();
+				_soundControllerList[i].unMuteAllSounds();
 			}//mute
 			
 			dispatchEvent(new SMSoundEvent(SMSoundEvent.UNMUTE, this, false, false));
