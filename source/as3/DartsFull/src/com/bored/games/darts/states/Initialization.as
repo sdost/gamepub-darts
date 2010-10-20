@@ -24,6 +24,7 @@
 	import flash.system.LoaderContext;
 	import flash.utils.Dictionary;
 	import flash.utils.getDefinitionByName;
+	import mx.utils.ObjectUtil;
 	
 	/**
 	 * ...
@@ -66,9 +67,32 @@
 			ext.init( { rootContainer: DartsGlobals.instance.optionsInterfaceSpace } );
 			DartsGlobals.instance.externalServices = ext;
 			
-			DartsGlobals.instance.externalServices.setData("gameCash", 500);
-			DartsGlobals.instance.externalServices.setData("powerLevels", new Object());
-			DartsGlobals.instance.externalServices.setData("ownedSkins", new Array());
+			var currentVar:*;
+			var currentData:Object;
+			var currentVarDesc:String;
+			
+			currentVar = DartsGlobals.instance.externalServices.getData("gameCash");
+			
+			if (undefined === currentVar || null === currentVar)
+			{
+				DartsGlobals.instance.externalServices.setData("gameCash", 500);
+			}
+			
+			currentVar = DartsGlobals.instance.externalServices.getData("powerLevels");
+			
+			
+			if (undefined === currentVar || null === currentVar)
+			{
+				DartsGlobals.instance.externalServices.setData("powerLevels", new Object());
+			}
+			
+			currentVar = DartsGlobals.instance.externalServices.getData("ownedSkins");
+			if (undefined === currentVar || null === currentVar)
+			{
+				DartsGlobals.instance.externalServices.setData("ownedSkins", [{skinid:"basicplaid", flightid:"heart"}] );
+			}
+			
+			DartsGlobals.instance.onUserData();
 			
 			_infoLoaded = false;
 			_dataLoaded = false;
