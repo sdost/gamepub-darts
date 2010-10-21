@@ -8,6 +8,7 @@
 	{
 		private var _throws:int;
 		private var _scoringThrows:int;
+		private var _singles:int;
 		private var _doubles:int;
 		private var _triples:int;
 		
@@ -19,11 +20,15 @@
 		
 		private var _win:Boolean;
 		
-		public function GameRecord() 
+		private var _submitAchievements:Boolean;
+		
+		public function GameRecord(a_submitAchievements:Boolean) 
 		{
+			_submitAchievements = a_submitAchievements;
 			_gameTime = 0;
 			_throws = 0;
 			_scoringThrows = 0;
+			_singles = 0;
 			_doubles = 0;
 			_triples = 0;
 			_lastScore = { };
@@ -37,7 +42,7 @@
 			{
 				_scoringThrows++;
 				
-				if ( _scoringThrows == 9 )
+				if ( _submitAchievements && _scoringThrows == 9 )
 				{
 					AchievementTracker.bestowAchievement(AchievementTracker.ACHIEVEMENT_NINER);
 				}
@@ -51,17 +56,23 @@
 			
 			_throws++;
 			
-			if (a_multiplier == 2) _doubles++;
+			if (a_multiplier == 1) _singles++;
+			else if (a_multiplier == 2) _doubles++;
 			else if (a_multiplier == 3) _triples++;
 			
-			if ( _doubles == 3 ) 
+			if ( _submitAchievements && _doubles == 3 ) 
 			{
 				AchievementTracker.bestowAchievement(AchievementTracker.ACHIEVEMENT_THREE_DOUBLE);
 			}
 			
-			if ( _triples == 3 )			
+			if ( _submitAchievements && _triples == 3 )			
 			{
 				AchievementTracker.bestowAchievement(AchievementTracker.ACHIEVEMENT_THREE_TRIPLES);
+			}
+			
+			if ( _submitAchievements && _singles == 1 && _doubles == 2 && _triples == 3 )
+			{
+				AchievementTracker.bestowAchievement(AchievementTracker.ACHIEVEMENT_SHANGHAI);
 			}
 		}//end logThrow()
 		

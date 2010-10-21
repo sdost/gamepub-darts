@@ -116,6 +116,9 @@
     <element path="swfLibs_includeAll\HUDAssets.swc" />
     <element path="swfLibs_includeAll\HUDAssets.swc" />
     <element path="swfLibs_includeAll\HUDAssets.swc" />
+    <element path="swfLibs_includeAll\Confirm_Screen.swc" />
+    <element path="swfLibs_includeAll\HUDAssets.swc" />
+    <element path="swfLibs_includeAll\HUDAssets.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>
@@ -127,8 +130,7 @@
   </rslPaths>
   <!-- Intrinsic Libraries -->
   <intrinsics>
-    <element path="Library\AS3\frameworks\Flex3" />
-    <element path="C:\projects\inassets\projects\ALL_SVN_HEAD\bored.com\branches\projects\as3\ExposedBoredGameServicesAPI\src" />
+    <element path="Library\AS3\frameworks\Flex3." />
   </intrinsics>
   <!-- Assets to embed into the output SWF -->
   <library>

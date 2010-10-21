@@ -50,6 +50,7 @@
 	import flash.system.LoaderContext;
 	import flash.utils.Dictionary;
 	import flash.utils.getDefinitionByName;
+	import mx.utils.ObjectUtil;
 	
 	/**
 	 * ...
@@ -93,6 +94,8 @@
 				
 				DartsGlobals.instance.gameManager.addEventListener(RemoteCricketGameLogic.RETURN_TO_LOBBY, returnToLobby, false, 0, true);
 				DartsGlobals.instance.multiplayerClient.addEventListener(ChatClient.LOBBY_ROOM, returnToLobby, false, 0, true);
+				
+				DartsGlobals.instance.multiplayerClient.addEventListener(GameClient.USER_READY, handleUserReady, false, 0, true);
 				
 				BoredServices.addEventListener(ObjectEvent.USER_INFO_READY_EVT, onPlayerProfile, false, 0, true);
 				BoredServices.getUserProfileByName(DartsGlobals.instance.localPlayer.playerName);
@@ -156,6 +159,20 @@
 			
 			DartsGlobals.instance.opponentPlayer.portrait = bmp.bitmapData;
 		}//end opponentImageLoadComplete()
+		
+		private function handleUserReady(a_evt:Event):void
+		{
+			var obj:Object = DartsGlobals.instance.multiplayerClient.getData(GameClient.USER_READY);
+			
+			if (obj.pid == DartsGlobals.instance.localPlayer.playerNum)
+			{
+				_gameConfirmScreen.setPlayerReady();
+			}
+			else if (obj.pid == DartsGlobals.instance.opponentPlayer.playerNum)
+			{
+				_gameConfirmScreen.setOpponentReady();
+			}
+		}//end onUserReady()
 		
 		public function onPlay(a_evt:Event):void
 		{

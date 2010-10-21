@@ -75,7 +75,7 @@
 			
 			if (undefined === currentVar || null === currentVar)
 			{
-				DartsGlobals.instance.externalServices.setData("gameCash", 500);
+				DartsGlobals.instance.externalServices.setData("gameCash", 150);
 			}
 			
 			currentVar = DartsGlobals.instance.externalServices.getData("powerLevels");

@@ -11,17 +11,19 @@
 	{
 		public static const ACHIEVEMENT_THREE_DOUBLE:String = "three_doubles";
 		public static const ACHIEVEMENT_THREE_TRIPLES:String = "three_triples";
-		public static const ACHIEVEMENT_HAT_TRICK:String = "hat_trick";
-		public static const ACHIEVEMENT_SHANGHAI:String = "shanghai";
-		public static const ACHIEVEMENT_THREE_IN_A_BED:String = "three_in_a_bed";
-		public static const ACHIEVEMENT_ROBIN_HOOD:String = "robin_hood";
-		public static const ACHIEVEMENT_C_6:String = "c_6";
-		public static const ACHIEVEMENT_C_9:String = "c_9";
-		public static const ACHIEVEMENT_NINER:String = "niner";
-		public static const ACHIEVEMENT_PERFECT_NINER:String = "perfect_niner";
+		public static const ACHIEVEMENT_HAT_TRICK:String = "monsterproof_darts0_hattrick ";
+		public static const ACHIEVEMENT_SHANGHAI:String = "monsterproof_darts0_shanghai ";
+		public static const ACHIEVEMENT_THREE_IN_A_BED:String = "monsterproof_darts0_threeinabed ";
+		public static const ACHIEVEMENT_ROBIN_HOOD:String = "monsterproof_darts0_robinhood ";
+		public static const ACHIEVEMENT_C_6:String = "monsterproof_darts0_c6";
+		public static const ACHIEVEMENT_C_9:String = "monsterproof_darts0_c9 ";
+		public static const ACHIEVEMENT_NINER:String = "monsterproof_darts0_niner ";
+		public static const ACHIEVEMENT_PERFECT_NINER:String = "monsterproof_darts0_perfectniner";
 				
 		public static function bestowAchievement(a_id:String):void
 		{
+			DartsGlobals.addWarning("AchievementTracker::bestowAchievement(" + a_id + ")");
+			
 			if ( DartsGlobals.instance.externalServices.loggedIn )
 			{
 				DartsGlobals.instance.externalServices.bestowAchievement(a_id);

@@ -1,5 +1,6 @@
 ﻿package com.bored.games.darts.statistics 
 {
+	import com.bored.games.darts.DartsGlobals;
 	/**
 	 * ...
 	 * @author sam
@@ -16,8 +17,12 @@
 		private var _threeInABed:Boolean;
 		private var _section:int;
 		
-		public function TurnRecord() 
+		private var _submitAchievements:Boolean;
+		
+		public function TurnRecord(a_submitAchievements:Boolean) 
 		{
+			_submitAchievements = a_submitAchievements;
+			
 			_throws = 0;
 			
 			_threeInABed = true;
@@ -39,7 +44,7 @@
 				
 				_threeInABed = (_section == a_points);
 				
-				if ( _throws == 3 )
+				if ( _submitAchievements && _threeInABed && _throws == 3 )
 					AchievementTracker.bestowAchievement(AchievementTracker.ACHIEVEMENT_THREE_IN_A_BED);
 			}
 			
@@ -47,19 +52,16 @@
 			else if (a_multiplier == 2) _doubles++;
 			else if (a_multiplier == 3) _triples++;
 			
-			if ( _doubles == 3 ) 
+			if ( _submitAchievements && _doubles == 3 ) 
 			{
+				DartsGlobals.addWarning("TurnRecord::recordThrow(" + a_points + ", " + a_multiplier + ") --> trying for Three In A Bed --> " + _threeInABed);
+				
 				AchievementTracker.bestowAchievement(AchievementTracker.ACHIEVEMENT_C_6);
 			}
 			
-			if ( _triples == 3 )			
+			if ( _submitAchievements && _triples == 3 )			
 			{
 				AchievementTracker.bestowAchievement(AchievementTracker.ACHIEVEMENT_C_9);
-			}
-			
-			if ( _singles == 1 && _doubles == 2 && _triples == 3 )
-			{
-				AchievementTracker.bestowAchievement(AchievementTracker.ACHIEVEMENT_SHANGHAI);
 			}
 		}//end logThrow()
 		

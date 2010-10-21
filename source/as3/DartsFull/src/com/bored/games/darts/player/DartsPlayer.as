@@ -33,8 +33,12 @@
 		
 		private var _turnTime:Number;
 		
+		protected var _localPlayer:Boolean;
+		
 		public function DartsPlayer(a_name:String = "") 
 		{
+			_localPlayer = false;
+			
 			_name = a_name;
 			_abilityStock = new Vector.<Ability>();
 			_activeAbilities = new Array(3);
@@ -173,14 +177,14 @@
 		
 		public function initGameRecord():void
 		{
-			_gameRecord = new GameRecord();
+			_gameRecord = new GameRecord(_localPlayer);
 			
 			_turnTime = -1;
 		}//end initGameRecord()
 		
 		public function clearTurnRecord():void
 		{
-			_turnRecord = new TurnRecord();
+			_turnRecord = new TurnRecord(_localPlayer);
 		}//end clearTurnRecord()
 		
 	}//end DartsPlayer

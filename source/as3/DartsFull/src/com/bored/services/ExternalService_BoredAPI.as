@@ -150,7 +150,7 @@
 		
 		override public function bestowAchievement(a_id:String):void
 		{
-			BoredServices.submitAchievementAcquired(a_id, false);
+			BoredServices.submitAchievementAcquired(a_id, true);
 			//BoredServices.addEventListener("ScoreSubmissionCompleteEvent", onAchievementEarned, false, 0, true);
 		}//end bestowAchievement()
 		

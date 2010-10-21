@@ -22,9 +22,12 @@
 		
 		override public function useAbility():int
 		{	
-			DartsGlobals.instance.gameManager.currentDart.blockBoard = true;
+			if ( DartsGlobals.instance.gameManager.currentDart )
+			{
+				DartsGlobals.instance.gameManager.currentDart.blockBoard = true;
 			
-			DartsGlobals.instance.gameManager.currentDart.addModifier(this);
+				DartsGlobals.instance.gameManager.currentDart.addModifier(this);
+			}
 			
 			return super.useAbility();
 		}//end useAbility()

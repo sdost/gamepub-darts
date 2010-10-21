@@ -8,10 +8,12 @@
 	 * @author sam
 	 */
 	public class LocalPlayer extends DartsPlayer
-	{
+	{		
 		public function LocalPlayer(a_profile:Profile = null) 
-		{
+		{			
 			super(a_profile ? a_profile.name : "Player");
+			
+			_localPlayer = true;
 		}//end construtor()
 		
 		override public function takeTheShot(a_dartsRemaining:int):void

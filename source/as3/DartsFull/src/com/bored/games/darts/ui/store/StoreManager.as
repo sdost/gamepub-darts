@@ -17,28 +17,44 @@
 		{
 			_storeContents = new Vector.<StoreItem>();
 			
-			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_blackpearl", 270, 103), "blackpearl", "oval", 2500 ) );
-			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_blue", 270, 103), "blue", "hex", 2500 ) );
-			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_brazil", 270, 103), "brazil", "heart", 2500 ) );
-			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_canada", 270, 103), "canada", "hex", 2500 ) );
-			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_france", 270, 103), "france", "thin", 2500 ) );
-			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_germany", 270, 103), "germany", "heart", 2500 ) );
-			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_green", 270, 103), "green", "modhex", 2500 ) );
-			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_india", 270, 103), "india", "heart", 2500 ) );
-			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_indigo", 270, 103), "indigo", "pincer", 2500 ) );
-			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_japan", 270, 103), "japan", "heart", 2500 ) );
-			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_japanimperial", 270, 103), "japanimperial", "pincer", 2500 ) );
-			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_jollyroger", 270, 103), "jollyroger", "heart", 2500 ) );
-			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_oldglory", 270, 103), "oldglory", "modhex", 2500 ) );
-			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_orange", 270, 103), "orange", "thin", 2500 ) );
-			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_pearl", 270, 103), "pearl", "oval", 2500 ) );
-			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_red", 270, 103), "red", "pincer", 2500 ) );
-			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_russia", 270, 103), "russia", "heart", 2500 ) );
-			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_skorea", 270, 103), "skorea", "heart", 2500 ) );
+			//Pg 1
+			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_blue", 270, 103), "blue", "hex", 100 ) );
+			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_red", 270, 103), "red", "pincer", 100 ) );
+			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_violet", 270, 103), "violet", "heart", 100 ) );
+			
+			//Pg 2
+			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_yellow", 270, 103), "yellow", "thin", 250 ) );
+			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_green", 270, 103), "green", "modhex", 250 ) );
+			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_indigo", 270, 103), "indigo", "pincer", 250) );
+			
+			//Pg 3
+			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_orange", 270, 103), "orange", "thin", 500 ) );
+			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_blackpearl", 270, 103), "blackpearl", "oval", 500 ) );
+			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_pearl", 270, 103), "pearl", "oval", 500 ) );
+			
+			//Pg 4
+			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_brazil", 270, 103), "brazil", "heart", 1000 ) );
+			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_canada", 270, 103), "canada", "hex", 1000 ) );
+			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_germany", 270, 103), "germany", "heart", 1000 ) );
+			
+			//Pg 5
+			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_france", 270, 103), "france", "thin", 1000 ) );
+			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_india", 270, 103), "india", "heart", 1000 ) );
+			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_japan", 270, 103), "japan", "heart", 1000 ) );
+			
+			//Pg 6
+			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_japanimperial", 270, 103), "japanimperial", "pincer", 1000 ) );
+			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_skorea", 270, 103), "skorea", "heart", 1000 ) );
+			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_oldglory", 270, 103), "oldglory", "modhex", 1000 ) );
+			
+			//Pg 7
+			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_russia", 270, 103), "russia", "heart", 1000 ) );
+			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_unionjack", 270, 103), "unionjack", "hex", 1000 ) );
+			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_jollyroger", 270, 103), "jollyroger", "heart", 2500) );
+			
+			//Pg 8
 			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_techno", 270, 103), "techno", "modhex", 2500 ) );
-			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_unionjack", 270, 103), "unionjack", "hex", 2500 ) );
-			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_violet", 270, 103), "violet", "heart", 2500 ) );
-			_storeContents.push( new DartSkinStoreItem( ImageFactory.getBitmapDataByQualifiedName("storeskin_yellow", 270, 103), "yellow", "thin", 2500 ) );
+			
 		}//end generateDartList()
 		
 		public static function generatePowerList():void

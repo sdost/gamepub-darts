@@ -81,6 +81,13 @@ public class Darts extends TurnBasedExtension {
 
 		Room rm = super.getRoom(fromRoom);
 
+		// Send USER_READY message to every one in the room
+		JSONObject js = getJSONStateObject(USER_READY, null);
+		js = setJSONArg(js, "uid", u.getUserId());
+		js = setJSONArg(js, "pid", u.getPlayerIndex());
+		js = setJSONArg(js, "username", u.getName());
+		super.sendResponse(js, fromRoom, SERVER, rm.getChannellList());
+		
 		/**
 		 * We are assuming that game rooms are created
 		 * with max number of players as there are
@@ -114,7 +121,7 @@ public class Darts extends TurnBasedExtension {
 		super.trace("::handleReady Sending " + state + " to client " + u.getName());
 		
 		// Create JSON object and send decided state
-		JSONObject js = getJSONStateObject(state, jso);
+		js = getJSONStateObject(state, jso);
 		super.trace("JSON object " + js + ".\n");
 		super.sendResponse(js, fromRoom, SERVER, ll);
 

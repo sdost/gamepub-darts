@@ -113,11 +113,10 @@
 			if (_trophyBtnImg)
 			{
 				_trophyBtn = new ToggleButton(_trophyBtnImg, false);
-				_trophyBtn.buttonContents.visible = false;
-				//_trophyBtn.pause(false);
-				//_trophyBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, onMouseOver, false, 0, true);
+				_trophyBtn.pause(false);
+				_trophyBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, onMouseOver, false, 0, true);
 				//_trophyBtn.buttonContents.addEventListener(MouseEvent.ROLL_OUT, onMouseOut, false, 0, true);
-				//_trophyBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onTrophyButtonClick, false, 0, true);
+				_trophyBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onTrophyButtonClick, false, 0, true);
 			}
 			else
 			{
