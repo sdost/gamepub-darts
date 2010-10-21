@@ -456,21 +456,30 @@
 		
 		public function redoDart():void
 		{	
-			_currentDart.x = AppSettings.instance.defaultStartPositionX;
-			_currentDart.y = AppSettings.instance.defaultStartPositionY;
-			_currentDart.z = AppSettings.instance.defaultStartPositionZ;
-						
-			if( _lastDart ) {
-				_currentTurn.redoThrow();
-				_currentDart = _lastDart;
-				_currentDart.reset();
-				
+			if (_currentDart)
+			{
 				_currentDart.x = AppSettings.instance.defaultStartPositionX;
 				_currentDart.y = AppSettings.instance.defaultStartPositionY;
 				_currentDart.z = AppSettings.instance.defaultStartPositionZ;
 			}
-						
+			
+			
+			if ( _lastDart )
+			{
+				_currentTurn.redoThrow();
+				_currentDart = _lastDart;
+				_currentDart.reset();
+				
+				if (_currentDart)
+				{
+					_currentDart.x = AppSettings.instance.defaultStartPositionX;
+					_currentDart.y = AppSettings.instance.defaultStartPositionY;
+					_currentDart.z = AppSettings.instance.defaultStartPositionZ;
+				}
+			}
+			
 			_players[_currentPlayer].takeTheShot(_currentTurn.throwsRemaining);
+			
 		}//end resetDart()
 		
 		public function resetDarts():void
