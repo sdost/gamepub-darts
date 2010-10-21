@@ -195,6 +195,12 @@
 		{
 			_throwAction = addAction(a_action);
 			
+			if (a_action != _throwAction)
+			{
+				DartsGlobals.addWarning("Dart::setThrowAction(): a_action != _throwAction, _throwAction=" + _throwAction);
+			}
+			
+			
 		}//end setThrowAction()
 		
 		public function resetThrowAction():void

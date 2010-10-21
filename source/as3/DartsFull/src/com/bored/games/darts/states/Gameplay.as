@@ -201,6 +201,9 @@
 			DartsGlobals.instance.gameManager.cleanup();
 			
 			System.gc();
+			
+			BoredServices.showLoginUI();
+			
 		}//end onExit()
 		
 	}//end class Gameplay
