@@ -423,9 +423,9 @@
 				_currentTurn = new DartsTurn(this, _throwsPerTurn);
 			}
 			
-			(players[_currentPlayer] as DartsPlayer).clearTurnRecord();
-			
 			_lastDart = null;
+			
+			(players[_currentPlayer] as DartsPlayer).clearTurnRecord();
 			
 			nextDart();
 		}//end startNewRound()

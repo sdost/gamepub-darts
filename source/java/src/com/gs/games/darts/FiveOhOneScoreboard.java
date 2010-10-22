@@ -91,7 +91,20 @@ public class FiveOhOneScoreboard extends Scoreboard {
 		} 
 		else if ( temp == FIVE_OH_ONE )
 		{
-			if( multiplier == 2 )
+			if( points > 1 && multiplier == 2 )
+			{
+				if( _newTurn ) {
+					scoreList.add(points * multiplier);
+				} else {
+					int s = scoreList.get(scoreList.size()-1);
+					s += (points * multiplier);
+					scoreList.set(scoreList.size()-1, s);
+				}
+				_scoreMap.put(player, scoreList);
+				
+				return true;
+			}
+			else if( points == 1 && multiplier == 1 )
 			{
 				if( _newTurn ) {
 					scoreList.add(points * multiplier);

@@ -3,7 +3,6 @@
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.ui.buttons.ToggleButton;
 	import com.bored.games.darts.ui.modals.AchievementsModal;
-	import com.bored.games.darts.ui.modals.HelpModal;
 	import com.bored.games.darts.ui.modals.QuitModal;
 	import com.greensock.TweenLite;
 	import com.inassets.ui.buttons.events.ButtonEvent;

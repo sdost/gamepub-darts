@@ -96,11 +96,12 @@
 		{
 			DartsGlobals.addWarning("GameStore::onExit()");
 			
-			_gameStoreScreen.removeEventListener(GameStoreScreen.BACK_CLICKED_EVT, onBackClicked);
-			
-			_gameStoreScreen.destroy();
-			
-			_gameStoreScreen = null;
+			if (_gameStoreScreen)
+			{
+				_gameStoreScreen.removeEventListener(GameStoreScreen.BACK_CLICKED_EVT, onBackClicked);
+				_gameStoreScreen.destroy();
+				_gameStoreScreen = null;
+			}
 		}//end onExit()
 		
 	}//end class GameStore

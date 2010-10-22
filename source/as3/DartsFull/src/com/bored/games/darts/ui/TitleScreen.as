@@ -23,21 +23,29 @@
 	 */
 	public class TitleScreen extends ContentHolder
 	{
-		public static const PRACTICE_GAME_CLICKED_EVT:String = "PracticeGameClickedEvent";
 		public static const STORY_GAME_CLICKED_EVT:String = "StoryGameClickedEvent";
-		public static const MULTIPLAYER_GAME_CLICKED_EVT:String = "MutliplayerGameClickedEvent";
+		public static const PRACTICE_CRICKET_GAME_CLICKED_EVT:String = "PracticeCricketGameClickedEvent";
+		public static const PRACTICE_501_GAME_CLICKED_EVT:String = "Practice501GameClickedEvent";
+		public static const MULTIPLAYER_CRICKET_GAME_CLICKED_EVT:String = "MutliplayerCricketGameClickedEvent";
+		public static const MULTIPLAYER_501_GAME_CLICKED_EVT:String = "Mutliplayer501GameClickedEvent";
 		
 		private var _background:Sprite;
 		private var _buildBackground:Boolean = false;
 		
-		private var _practiceGameBtn:MightyButton;
-		private var _practiceGameBtnImg:MovieClip;
-		
 		private var _storyGameBtn:MightyButton;
 		private var _storyGameBtnImg:MovieClip;
 		
-		private var _multiplayerGameBtn:MightyButton;
-		private var _multiplayerGameBtnImg:MovieClip;
+		private var _practiceCricketGameBtn:MightyButton;
+		private var _practiceCricketGameBtnImg:MovieClip;
+		
+		private var _practice501GameBtn:MightyButton;
+		private var _practice501GameBtnImg:MovieClip;		
+		
+		private var _multiplayerCricketGameBtn:MightyButton;
+		private var _multiplayerCricketGameBtnImg:MovieClip;
+		
+		private var _multiplayer501GameBtn:MightyButton;
+		private var _multiplayer501GameBtnImg:MovieClip;
 		
 		public function TitleScreen(a_img:Sprite, a_buildFromAllDescendants:Boolean = false, a_bAddContents:Boolean = true, a_buildBackground:Boolean = false) 
 		{
@@ -62,21 +70,12 @@
 			
 			// now build ourselves from the descendantsDict.
 			
-			_practiceGameBtnImg = descendantsDict["practiceButton_mc"] as MovieClip;
 			_storyGameBtnImg = descendantsDict["storyButton_mc"] as MovieClip;
-			_multiplayerGameBtnImg = descendantsDict["multiplayerButton_mc"] as MovieClip;
-			
-			if (_practiceGameBtnImg)
-			{
-				_practiceGameBtn = new MightyButton(_practiceGameBtnImg, false);
-				_practiceGameBtn.pause(false);
-				_practiceGameBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onPracticeGameClicked, false, 0, true);
-			}
-			else
-			{
-				throw new Error("TitleScreen::buildFrom(): _practiceGameBtnImg=" + _practiceGameBtnImg);
-			}
-			
+			_practiceCricketGameBtnImg = descendantsDict["practiceCricketButton_mc"] as MovieClip;
+			_practice501GameBtnImg = descendantsDict["practice501Button_mc"] as MovieClip;
+			_multiplayerCricketGameBtnImg = descendantsDict["multiplayerCricketButton_mc"] as MovieClip;
+			_multiplayer501GameBtnImg = descendantsDict["multiplayer501Button_mc"] as MovieClip;
+					
 			if (_storyGameBtnImg)
 			{
 				_storyGameBtn = new MightyButton(_storyGameBtnImg, false);
@@ -88,15 +87,48 @@
 				throw new Error("TitleScreen::buildFrom(): _storyGameBtnImg=" + _storyGameBtnImg);
 			}
 			
-			if (_multiplayerGameBtnImg)
+			if (_practiceCricketGameBtnImg)
 			{
-				_multiplayerGameBtn = new MightyButton(_multiplayerGameBtnImg, false);
-				_multiplayerGameBtn.pause(false);
-				_multiplayerGameBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onMultiplayerGameClicked, false, 0, true);
+				_practiceCricketGameBtn = new MightyButton(_practiceCricketGameBtnImg, false);
+				_practiceCricketGameBtn.pause(false);
+				_practiceCricketGameBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onPracticeCricketGameClicked, false, 0, true);
 			}
 			else
 			{
-				throw new Error("TitleScreen::buildFrom(): _multiplayerGameBtnImg=" + _multiplayerGameBtnImg);
+				throw new Error("TitleScreen::buildFrom(): _practiceCricketGameBtnImg=" + _practiceCricketGameBtnImg);
+			}
+			
+			if (_practice501GameBtnImg)
+			{
+				_practice501GameBtn = new MightyButton(_practice501GameBtnImg, false);
+				_practice501GameBtn.pause(false);
+				_practice501GameBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onPractice501GameClicked, false, 0, true);
+			}
+			else
+			{
+				throw new Error("TitleScreen::buildFrom(): _practice501GameBtnImg=" + _practice501GameBtnImg);
+			}
+			
+			if (_multiplayerCricketGameBtnImg)
+			{
+				_multiplayerCricketGameBtn = new MightyButton(_multiplayerCricketGameBtnImg, false);
+				_multiplayerCricketGameBtn.pause(false);
+				_multiplayerCricketGameBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onMultiplayerCricketGameClicked, false, 0, true);
+			}
+			else
+			{
+				throw new Error("TitleScreen::buildFrom(): _multiplayerCricketGameBtnImg=" + _multiplayerCricketGameBtnImg);
+			}
+			
+			if (_multiplayer501GameBtnImg)
+			{
+				_multiplayer501GameBtn = new MightyButton(_multiplayer501GameBtnImg, false);
+				_multiplayer501GameBtn.pause(false);
+				_multiplayer501GameBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onMultiplayer501GameClicked, false, 0, true);
+			}
+			else
+			{
+				throw new Error("TitleScreen::buildFrom(): _multiplayer501GameBtnImg=" + _multiplayer501GameBtnImg);
 			}
 			
 			if(_buildBackground)
@@ -138,46 +170,33 @@
 			
 		}//end addedToStage()
 		
-		private function onPracticeGameClicked(a_evt:Event):void
-		{
-			this.dispatchEvent(new Event(PRACTICE_GAME_CLICKED_EVT));
-			
-			if (_practiceGameBtn)
-			{
-				_practiceGameBtn.pause(true);
-			}
-			
-			if (_storyGameBtn)
-			{
-				_storyGameBtn.pause(true);
-			}
-			
-			if (_multiplayerGameBtn)
-			{
-				_multiplayerGameBtn.pause(true);
-			}
-			
-			//Tweener.addTween(this, { alpha:0, onComplete:destroy, time:0.4 } );
-			
-		}//end onPracticeGameClicked()
-		
 		private function onStoryGameClicked(a_evt:Event):void
 		{
 			this.dispatchEvent(new Event(STORY_GAME_CLICKED_EVT));
-			
-			if (_practiceGameBtn)
-			{
-				_practiceGameBtn.pause(true);
-			}
-			
+						
 			if (_storyGameBtn)
 			{
 				_storyGameBtn.pause(true);
 			}
 			
-			if (_multiplayerGameBtn)
+			if (_practiceCricketGameBtn)
 			{
-				_multiplayerGameBtn.pause(true);
+				_practiceCricketGameBtn.pause(true);
+			}
+			
+			if (_practice501GameBtn)
+			{
+				_practice501GameBtn.pause(true);
+			}
+			
+			if (_multiplayerCricketGameBtn)
+			{
+				_multiplayerCricketGameBtn.pause(true);
+			}
+			
+			if (_multiplayer501GameBtn)
+			{
+				_multiplayer501GameBtn.pause(true);
 			}
 			
 			// simply hide ourselves and remove ourselves from the display list.
@@ -185,59 +204,183 @@
 			
 		}//end onStoryGameClicked()
 		
-		private function onMultiplayerGameClicked(a_evt:Event):void
+		private function onPracticeCricketGameClicked(a_evt:Event):void
 		{
-			this.dispatchEvent(new Event(MULTIPLAYER_GAME_CLICKED_EVT));
-			
-			if (_practiceGameBtn)
-			{
-				_practiceGameBtn.pause(true);
-			}
+			this.dispatchEvent(new Event(PRACTICE_CRICKET_GAME_CLICKED_EVT));
 			
 			if (_storyGameBtn)
 			{
 				_storyGameBtn.pause(true);
 			}
 			
-			if (_multiplayerGameBtn)
+			if (_practiceCricketGameBtn)
 			{
-				_multiplayerGameBtn.pause(true);
+				_practiceCricketGameBtn.pause(true);
+			}
+			
+			if (_practice501GameBtn)
+			{
+				_practice501GameBtn.pause(true);
+			}
+			
+			if (_multiplayerCricketGameBtn)
+			{
+				_multiplayerCricketGameBtn.pause(true);
+			}
+			
+			if (_multiplayer501GameBtn)
+			{
+				_multiplayer501GameBtn.pause(true);
+			}
+			
+			//Tweener.addTween(this, { alpha:0, onComplete:destroy, time:0.4 } );
+			
+		}//end onPracticeCricketGameClicked()
+		
+		private function onPractice501GameClicked(a_evt:Event):void
+		{
+			this.dispatchEvent(new Event(PRACTICE_501_GAME_CLICKED_EVT));
+			
+			if (_storyGameBtn)
+			{
+				_storyGameBtn.pause(true);
+			}
+			
+			if (_practiceCricketGameBtn)
+			{
+				_practiceCricketGameBtn.pause(true);
+			}
+			
+			if (_practice501GameBtn)
+			{
+				_practice501GameBtn.pause(true);
+			}
+			
+			if (_multiplayerCricketGameBtn)
+			{
+				_multiplayerCricketGameBtn.pause(true);
+			}
+			
+			if (_multiplayer501GameBtn)
+			{
+				_multiplayer501GameBtn.pause(true);
+			}
+			
+			//Tweener.addTween(this, { alpha:0, onComplete:destroy, time:0.4 } );
+			
+		}//end onPractice501GameClicked()
+		
+		private function onMultiplayerCricketGameClicked(a_evt:Event):void
+		{
+			this.dispatchEvent(new Event(MULTIPLAYER_CRICKET_GAME_CLICKED_EVT));
+			
+			if (_storyGameBtn)
+			{
+				_storyGameBtn.pause(true);
+			}
+			
+			if (_practiceCricketGameBtn)
+			{
+				_practiceCricketGameBtn.pause(true);
+			}
+			
+			if (_practice501GameBtn)
+			{
+				_practice501GameBtn.pause(true);
+			}
+			
+			if (_multiplayerCricketGameBtn)
+			{
+				_multiplayerCricketGameBtn.pause(true);
+			}
+			
+			if (_multiplayer501GameBtn)
+			{
+				_multiplayer501GameBtn.pause(true);
 			}
 			
 			// simply hide ourselves and remove ourselves from the display list.
 			TweenLite.to(this, 0.4, {alpha:0, onComplete:destroy} );
 			
-		}//end onMultiplayerGameClicked()
+		}//end onMultiplayerCricketGameClicked()
+		
+		private function onMultiplayer501GameClicked(a_evt:Event):void
+		{
+			this.dispatchEvent(new Event(MULTIPLAYER_501_GAME_CLICKED_EVT));
+			
+			if (_storyGameBtn)
+			{
+				_storyGameBtn.pause(true);
+			}
+			
+			if (_practiceCricketGameBtn)
+			{
+				_practiceCricketGameBtn.pause(true);
+			}
+			
+			if (_practice501GameBtn)
+			{
+				_practice501GameBtn.pause(true);
+			}
+			
+			if (_multiplayerCricketGameBtn)
+			{
+				_multiplayerCricketGameBtn.pause(true);
+			}
+			
+			if (_multiplayer501GameBtn)
+			{
+				_multiplayer501GameBtn.pause(true);
+			}
+			
+			// simply hide ourselves and remove ourselves from the display list.
+			TweenLite.to(this, 0.4, {alpha:0, onComplete:destroy} );
+			
+		}//end onMultiplayer501GameClicked()
 		
 		override public function destroy(...args):void
 		{
 			super.destroy();
-			
-			if(_practiceGameBtn)
-			{
-				_practiceGameBtn.removeEventListener(MouseEvent.CLICK, onPracticeGameClicked);
-			}
 			
 			if (_storyGameBtn)
 			{
 				_storyGameBtn.removeEventListener(MouseEvent.CLICK, onStoryGameClicked);
 			}
 			
-			if (_multiplayerGameBtn)
+			if (_practiceCricketGameBtn)
 			{
-				_multiplayerGameBtn.removeEventListener(MouseEvent.CLICK, onMultiplayerGameClicked);
+				_practiceCricketGameBtn.removeEventListener(MouseEvent.CLICK, onPracticeCricketGameClicked);
+			}
+			
+			if (_practice501GameBtn)
+			{
+				_practice501GameBtn.removeEventListener(MouseEvent.CLICK, onPractice501GameClicked);
+			}
+			
+			if (_multiplayerCricketGameBtn)
+			{
+				_multiplayerCricketGameBtn.removeEventListener(MouseEvent.CLICK, onMultiplayerCricketGameClicked);
+			}
+			
+			if (_multiplayer501GameBtn)
+			{
+				_multiplayer501GameBtn.removeEventListener(MouseEvent.CLICK, onMultiplayer501GameClicked);
 			}
 			
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			this.removeEventListener(Event.REMOVED_FROM_STAGE, destroy);
 			
-			_practiceGameBtnImg = null;
 			_storyGameBtnImg = null;
-			_multiplayerGameBtnImg = null;
+			_practiceCricketGameBtnImg = null;
+			_practice501GameBtnImg = null;
+			_multiplayerCricketGameBtnImg = null;
+			_multiplayer501GameBtnImg = null;
 			
-			_practiceGameBtn = null;
 			_storyGameBtn = null;
-			_multiplayerGameBtn = null;
+			_practiceCricketGameBtn = null;
+			_practice501GameBtn = null;
+			_multiplayerCricketGameBtn = null;
+			_multiplayer501GameBtn = null;
 			
 			_background = null;
 			

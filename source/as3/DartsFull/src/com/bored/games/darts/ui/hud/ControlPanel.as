@@ -3,7 +3,9 @@
 	import com.bored.games.darts.DartsGlobals;
 	import com.bored.games.darts.ui.buttons.ToggleButton;
 	import com.bored.games.darts.ui.modals.AchievementsModal;
-	import com.bored.games.darts.ui.modals.HelpModal;
+	import com.bored.games.darts.ui.modals.BasicCricketHelpModal;
+	import com.bored.games.darts.ui.modals.Basic501HelpModal;
+	import com.bored.games.darts.ui.modals.StoryHelpModal;
 	import com.bored.games.darts.ui.modals.MultiplayerQuitModal;
 	import com.bored.games.darts.ui.modals.QuitModal;
 	import com.greensock.TweenLite;
@@ -192,7 +194,12 @@
 		{			
 			DartsGlobals.instance.gameManager.pause(true);
 			
-			DartsGlobals.instance.showModalPopup(HelpModal);
+			if (DartsGlobals.instance.gameMode == DartsGlobals.GAME_STORY)
+				DartsGlobals.instance.showModalPopup(StoryHelpModal);
+			else if (DartsGlobals.instance.gameType == DartsGlobals.TYPE_CRICKET)
+				DartsGlobals.instance.showModalPopup(BasicCricketHelpModal);
+			else if (DartsGlobals.instance.gameType == DartsGlobals.TYPE_FIVEOHONE)
+				DartsGlobals.instance.showModalPopup(Basic501HelpModal);
 			
 			_soundManager.getSoundControllerByID("buttonSoundController").play("help_sound");
 			
