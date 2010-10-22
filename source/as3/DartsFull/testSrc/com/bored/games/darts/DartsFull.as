@@ -55,7 +55,7 @@
 		{
 			super.addedToStage();
 			
-			DartsGlobals.instance.gameType = DartsGlobals.TYPE_CRICKET;
+			DartsGlobals.instance.gameType = DartsGlobals.TYPE_FIVEOHONE;
 			
 			DartsGlobals.instance.stateMachine = _myStateMachine = new GameFSM();
 			
@@ -81,6 +81,8 @@
 		private function onConfigReady(a_evt:Event):void
 		{
 			AppSettings.instance.removeEventListener(Event.COMPLETE, onConfigReady);
+			
+			DartsGlobals.instance.multiplayerGameId = AppSettings.instance.fiveOhOneMultiplayerGameId;
 			
 			// our flashVars were set before we were added to the stage, so, now that we're on the stage, we can start.
 			_myStateMachine.start();

@@ -158,7 +158,14 @@
 		{
 			DartsGlobals.instance.gameManager.removeEventListener(DartsGameLogic.GAME_END, onGameEnd);
 				
-			(this.stateMachine as GameFSM).transitionToStateNamed("CPUOpponentSelect");
+			if ( DartsGlobals.instance.gameMode == DartsGlobals.GAME_STORY )
+			{
+				(this.stateMachine as GameFSM).transitionToStateNamed("CPUOpponentSelect");
+			}
+			else if ( DartsGlobals.instance.gameMode == DartsGlobals.GAME_PRACTICE )
+			{
+				(this.stateMachine as GameFSM).transitionToStateNamed("Attract");
+			}
 		}//end onGameEnd()
 		
 		private function handleOpponentQuit(e:Event):void

@@ -88,7 +88,7 @@
 				
 				_playerOnePortrait.addChild(portraitOne);
 			} else {
-				throw new Error("ScoreBoard::registerScoreManager(): _playerOnePortrait=" + _playerOnePortrait);
+				//DartsGlobals.addWarning("ScoreBoard::registerScoreManager(): _playerOnePortrait=" + _playerOnePortrait);
 			}
 			
 			if (_playerTwoPortrait) {
@@ -99,35 +99,64 @@
 				
 				_playerTwoPortrait.addChild(portraitTwo);
 			} else {
-				throw new Error("ScoreBoard::registerScoreManager(): _playerTwoPortrait=" + _playerTwoPortrait);
+				//DartsGlobals.addWarning("ScoreBoard::registerScoreManager(): _playerTwoPortrait=" + _playerTwoPortrait);
 			}
 			
-			_playerOneTimer.visible = false;
-			_playerOneTimer.gotoAndStop(1);
-			_playerTwoTimer.visible = false;
-			_playerTwoTimer.gotoAndStop(1);
+			if (_playerOneTimer)
+			{
+				_playerOneTimer.visible = false;
+				_playerOneTimer.gotoAndStop(1);
+			}
+			else
+			{
+				//DartsGlobals.addWarning("ScoreBoard::registerScoreManager(): _playerOneTimer=" + _playerOneTimer);
+			}
+			
+			if (_playerTwoTimer)
+			{
+				_playerTwoTimer.visible = false;
+				_playerTwoTimer.gotoAndStop(1);
+			}
+			else
+			{
+				//DartsGlobals.addWarning("ScoreBoard::registerScoreManager(): _playerTwoTimer=" + _playerTwoTimer);
+			}
 		}//end registerScoreManager()
 		
 		public function update():void
 		{	
-			if ( DartsGlobals.instance.localPlayer.turnTime >= 0 )
+			if (_playerOneTimer)
 			{
-				_playerOneTimer.visible = true;
-				_playerOneTimer.gotoAndStop( Math.ceil(100 * (60 - DartsGlobals.instance.localPlayer.turnTime) / 60) );
+				if ( DartsGlobals.instance.localPlayer.turnTime >= 0 )
+				{
+					_playerOneTimer.visible = true;
+					_playerOneTimer.gotoAndStop( Math.ceil(100 * (60 - DartsGlobals.instance.localPlayer.turnTime) / 60) );
+				}
+				else
+				{
+					_playerOneTimer.visible = false;
+				}
 			}
 			else
 			{
-				_playerOneTimer.visible = false;
+				//DartsGlobals.addWarning("ScoreBoard::update() -- _playerOneTimer = " + _playerOneTimer);
 			}
-				
-			if ( DartsGlobals.instance.opponentPlayer.turnTime >= 0 )
+			
+			if (_playerTwoTimer)
 			{
-				_playerTwoTimer.visible = true;
-				_playerTwoTimer.gotoAndStop( Math.ceil(100 * (60 - DartsGlobals.instance.opponentPlayer.turnTime) / 60) );
+				if ( DartsGlobals.instance.opponentPlayer.turnTime >= 0 )
+				{
+					_playerTwoTimer.visible = true;
+					_playerTwoTimer.gotoAndStop( Math.ceil(100 * (60 - DartsGlobals.instance.opponentPlayer.turnTime) / 60) );
+				}
+				else
+				{
+					_playerTwoTimer.visible = false;
+				}
 			}
 			else
 			{
-				_playerTwoTimer.visible = false;
+				//DartsGlobals.addWarning("ScoreBoard::update() -- _playerTwoTimer = " + _playerTwoTimer);
 			}
 		}//end update()
 		

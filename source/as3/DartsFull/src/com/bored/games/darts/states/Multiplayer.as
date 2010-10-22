@@ -81,7 +81,7 @@
 			BoredServices.addEventListener(ObjectEvent.MULTPLAYER_GAME_FAIL_EVT, onFail);
 			BoredServices.addEventListener(ObjectEvent.MULTPLAYER_GAME_START_EVT, onMPGameReady);
 			
-			BoredServices.showGameLobby(AppSettings.instance.multiplayerGameId);
+			BoredServices.showGameLobby(DartsGlobals.instance.multiplayerGameId);
 		}//end onEnter()
 		
 		private function onFail(e:Event):void

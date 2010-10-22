@@ -32,9 +32,10 @@
 			var gameType:String = a_gameType;
 			var myStats:Object = a_myStats;
 			var myShotList:Vector.<AIShotCandidate> = new Vector.<AIShotCandidate>();
-						
+			var points:int;			
+			
 			if (gameType == "CRICKET") {				
-				var points:int = 15;
+				points = 15;
 				while ( points <= 20 ) {
 					if ( myStats[points] < 3 )
 					{
@@ -47,6 +48,58 @@
 				if ( myStats[25] < 3 ) {
 					addShot(myShotList, 25, 1);
 					addShot(myShotList, 25, 2);
+				}
+			} else if (gameType == "501") {
+				var score:Number = 0;
+				for each ( var s:int in myStats ) {
+					score += s;				
+				}
+				
+				DartsGlobals.addWarning("AIProfile::generateShotList() -- score = " + score);
+				
+				var pointsRemaining:int = 501 - score;
+				
+				DartsGlobals.addWarning("AIProfile::generateShotList() -- pointsRemaining = " + pointsRemaining);
+				
+				if ( pointsRemaining > 60 )
+				{
+					addShot(myShotList, 20, 3);
+				}
+				else
+				{
+					points = 1;
+					while ( points <= 20 ) {
+						if ( pointsRemaining < points * 3 )
+						{
+							addShot(myShotList, points, 3);
+						}
+						
+						if ( pointsRemaining < points * 2 )
+						{
+							addShot(myShotList, points, 2);
+						}
+						
+						if ( pointsRemaining < points )
+						{
+							addShot(myShotList, points, 1);
+						}
+						++points;
+					}
+					
+					if ( pointsRemaining < 25 * 3 )
+					{
+						addShot(myShotList, 25, 3);
+					}
+					
+					if ( pointsRemaining < 25 * 2 )
+					{
+						addShot(myShotList, 25, 2);
+					}
+					
+					if ( pointsRemaining < 25 )
+					{
+						addShot(myShotList, 25, 1);
+					}
 				}
 			}
 			

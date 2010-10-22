@@ -24,7 +24,7 @@
 		
 		override public function get gameType():String
 		{
-			return "CRICKET";
+			return "501";
 		}//end get gameType()
 		
 		override public function nextPlayer():void

@@ -94,6 +94,8 @@
 			
 			var playerScores:Array = _scoreMgr.getPlayerStats(DartsGlobals.instance.localPlayer.playerNum) as Array;
 			
+			//DartsGlobals.addWarning("FiveOhOneScoreBoard::update() -- playerScores = " + playerScores);
+			
 			i = (playerScores.length - 6) >= 0 ? (playerScores.length - 6) : 0;
 			score = 1;
 			for ( ; i < playerScores.length; i++ ) 

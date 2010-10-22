@@ -24,10 +24,6 @@
 		public function FiveOhOneScoreManager() 
 		{
 			_scoreboard = new Object();
-			
-			_soundController = new SoundController("scoreboardSounds");
-			_soundController.addSound( new SMSound("closeout_player", "closeout_player_final_mp3") );
-			_soundController.addSound( new SMSound("closeout_opponent", "closeout_opponent_final_mp3") );
 		}//end constructor()
 		
 		override public function initPlayerStats(a_playerNum:int):void
@@ -56,10 +52,12 @@
 				score += s;
 			}
 			
-			var temp:int = score + (a_section + a_multiplier);
+			var temp:int = score + (a_section * a_multiplier);
 			
 			if ( temp < FIVE_OH_ONE ) 
 			{
+				DartsGlobals.addWarning("FiveOhOneScoreManager::submitThrow() -- scoring throw: " + temp);
+				
 				if ( _newTurn ) {
 					scoreList.push(a_section * a_multiplier);
 				} else {
@@ -71,7 +69,20 @@
 			}
 			else if ( temp == FIVE_OH_ONE )
 			{
-				if ( a_multiplier == 2 ) 
+				DartsGlobals.addWarning("FiveOhOneScoreManager::submitThrow() -- winning throw?: " + temp);
+				
+				if ( a_section > 1 && a_multiplier == 2 ) 
+				{
+					if ( _newTurn ) {
+						scoreList.push(a_section * a_multiplier);
+					} else {
+						scoreList[scoreList.length-1] += (a_section * a_multiplier);
+					}
+					_scoreboard[a_playerNum] = scoreList;
+					
+					return true;
+				}
+				else if ( a_section == 1 && a_multiplier == 1 )
 				{
 					if ( _newTurn ) {
 						scoreList.push(a_section * a_multiplier);
@@ -89,6 +100,8 @@
 			}
 			else
 			{
+				DartsGlobals.addWarning("FiveOhOneScoreManager::submitThrow() -- busting throw: " + temp);
+				
 				return false;
 			}
 		}//end submitThrow()
@@ -104,6 +117,8 @@
 		
 		override public function getPlayerStats(a_playerNum:int):Object
 		{
+			//DartsGlobals.addWarning("FiveOhOneScoreManager::getPlayerStats(" + a_playerNum + ") -- _scorboard[" + a_playerNum + "] = " + _scoreboard[a_playerNum]);
+			
 			return _scoreboard[a_playerNum];
 		}//end getPlayerStats();
 		

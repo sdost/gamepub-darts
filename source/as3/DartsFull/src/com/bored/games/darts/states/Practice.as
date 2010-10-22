@@ -55,7 +55,14 @@
 		{			
 			trace("Practice::onEnter()");
 			
-			DartsGlobals.instance.gameManager = new CricketGameLogic(); //new FiveOhOneGameLogic();
+			if (DartsGlobals.instance.gameType == DartsGlobals.TYPE_CRICKET)
+			{
+				DartsGlobals.instance.gameManager = new CricketGameLogic(); //new FiveOhOneGameLogic();
+			}
+			else if (DartsGlobals.instance.gameType == DartsGlobals.TYPE_FIVEOHONE)
+			{
+				DartsGlobals.instance.gameManager = new FiveOhOneGameLogic();
+			}
 			
 			DartsGlobals.instance.setupControlPanel();
 			DartsGlobals.instance.showControlPanel();

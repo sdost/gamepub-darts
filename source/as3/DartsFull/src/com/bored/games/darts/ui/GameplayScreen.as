@@ -131,13 +131,15 @@
 			}
 			*/
 						
-			cls = getDefinitionByName(AppSettings.instance.scoreboardMovie) as Class;
+			
 			if ( DartsGlobals.instance.gameType == DartsGlobals.TYPE_CRICKET ) 
 			{
+				cls = getDefinitionByName(AppSettings.instance.cricketScoreboardMovie) as Class;
 				_scoreBoard = new CricketScoreBoard(new cls());
 			}
 			else if ( DartsGlobals.instance.gameType == DartsGlobals.TYPE_FIVEOHONE )
 			{
+				cls = getDefinitionByName(AppSettings.instance.fiveOhOneScoreboardMovie) as Class;
 				_scoreBoard = new FiveOhOneScoreBoard(new cls());
 			}
 			DartsGlobals.instance.optionsInterfaceSpace.addChild(_scoreBoard);

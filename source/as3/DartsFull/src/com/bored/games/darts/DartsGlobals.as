@@ -114,6 +114,8 @@
 		
 		private var _throwMode:int;
 		
+		private var _multiplayerGameId:int;
+		
 		private var _multiplayerGameClient:*;
 		
 		public function DartsGlobals(a_singletonEnforcer:DartsGlobals_SingletonEnforcer) 
@@ -316,6 +318,16 @@
 		{
 			return _externalService;
 		}//end get externalServices()
+		
+		public function set multiplayerGameId(a_id:int):void
+		{
+			_multiplayerGameId = a_id;
+		}//end set multiplayerGameId()
+		
+		public function get multiplayerGameId():int
+		{
+			return _multiplayerGameId;
+		}//end get multiplayerGameId()
 		
 		private function onLogin(evt:Event):void
 		{
