@@ -103,7 +103,7 @@
 				(_playerList[score++] as TextField).text = playerScores[i];
 			}
 			
-			_playerTotal.text = _scoreMgr.getPlayerScore(DartsGlobals.instance.localPlayer.playerNum).toString();
+			_playerTotal.text = (501 - _scoreMgr.getPlayerScore(DartsGlobals.instance.localPlayer.playerNum)).toString();
 				
 			var opponentScores:Array = _scoreMgr.getPlayerStats(DartsGlobals.instance.opponentPlayer.playerNum) as Array;
 			
@@ -114,7 +114,7 @@
 				(_opponentList[score++] as TextField).text = opponentScores[i];
 			}
 			
-			_opponentTotal.text = _scoreMgr.getPlayerScore(DartsGlobals.instance.opponentPlayer.playerNum).toString();
+			_opponentTotal.text = (501 - _scoreMgr.getPlayerScore(DartsGlobals.instance.opponentPlayer.playerNum)).toString();
 			
 			super.update();
 		}//end update()

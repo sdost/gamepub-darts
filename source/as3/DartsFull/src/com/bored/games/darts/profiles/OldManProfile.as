@@ -38,6 +38,8 @@
 			this.portrait = ImageFactory.getBitmapDataByQualifiedName("com.bored.games.darts.assets.icons.OldMan_Portrait_BMP", 150, 150);
 			
 			this.setDartSkin(new DartSkin(ImageFactory.getBitmapDataByQualifiedName("dartuv_oldman", AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight), dae_DartShaft.data, dae_DartFlightHeart.data));
+			this.dartSkin.skinid = "oldman";
+			this.dartSkin.flightid = "heart";
 			
 			this.accuracy = 0.7;
 		
@@ -68,12 +70,13 @@
 			addShot(a_list, 2, 1, false, "boost");
 			addShot(a_list, 10, 1, false, "boost");
 			addShot(a_list, 17, 1, false, "boost");
-			addShot(a_list, 17, 1, false, "boost");
 			
 		}//end buildTutorialsThrows()
 		
 		override public function generateShotList(a_gameType:String, a_myStats:Object, a_allStats:Object):Vector.<AIShotCandidate>
 		{	
+			DartsGlobals.addWarning("OldManProfile::generateShotList()");
+			
 			if ( _currentThrow < 14 ) 
 			{
 				return _throwList;
@@ -84,6 +87,8 @@
 		
 		override public function pickShot(a_dartsRemaining:int, a_shots:Vector.<AIShotCandidate>):AIShotCandidate
 		{
+			DartsGlobals.addWarning("OldManProfile::pickShot()");
+			
 			if ( _currentThrow < 14 ) 
 			{			
 				if ( _currentThrow == 0 ) 
@@ -116,7 +121,6 @@
 			
 		override public function handleShot(a_points:int, a_multiplier:int):void
 		{
-			/*
 			if ( _currentThrow < 14 ) 
 			{
 				if ( a_points == 2 ) 
@@ -124,7 +128,6 @@
 					DartsGlobals.instance.gameManager.addEventListener(DartsGameLogic.THROW_END, useDoOver, false, 0, true);
 				}
 			}
-			*/
 		}//end handleShot()
 		
 	}//end OldManProfile		

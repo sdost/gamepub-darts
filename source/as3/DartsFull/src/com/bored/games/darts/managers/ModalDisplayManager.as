@@ -11,6 +11,7 @@ http://qops.blogspot.com/
 
 package com.bored.games.darts.managers
 {
+	import com.bored.games.darts.DartsGlobals;
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.display.Graphics;
@@ -58,6 +59,8 @@ package com.bored.games.darts.managers
 
 		public static function createModalDisplay(container:DisplayObject, content:Class = null, promp:Object = null):ModalDisplayManager
 		{
+			DartsGlobals.addWarning("ModalDisplayManager::createModalDisplay(" + container + ", " + content + ", " + promp + ")");
+			
 			if (! _displayManager) {
 				_displayManager = new ModalDisplayManager(container);
 			}
@@ -83,6 +86,9 @@ package com.bored.games.darts.managers
 			};
 
 			_alert = new content() as Sprite;
+			
+			DartsGlobals.addWarning("ModalDisplayManager::createModalDisplay() -- _alert = " + _alert);
+			
 			_overlay._alert = _alert;
 			_overlay.stageResizeHandler();
 			

@@ -33,6 +33,8 @@
 			this.portrait = ImageFactory.getBitmapDataByQualifiedName("com.bored.games.darts.assets.icons.BigBill_Portrait_BMP", 150, 150);
 			
 			this.setDartSkin(new DartSkin(ImageFactory.getBitmapDataByQualifiedName("dartuv_bigbill", AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight), dae_DartShaft.data, dae_DartFlightPincer.data));
+			this.dartSkin.skinid = "bigbill";
+			this.dartSkin.flightid = "pincer";
 			
 			this.accuracy = AppSettings.instance.bigBillAccuracy;
 			this.stepScale = AppSettings.instance.bigBillStepScale;

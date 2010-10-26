@@ -7,6 +7,7 @@
 	import com.bored.games.darts.skins.DartSkin;
 	import com.bored.games.darts.ui.modals.TurnAnnounceModal;
 	import flash.utils.Dictionary;
+	import mx.utils.ObjectUtil;
 	
 	/**
 	 * ...
@@ -54,7 +55,11 @@
 		
 		override public function endGame(a_winner:int):void
 		{
+			DartsGlobals.addWarning("CricketGameLogic::endGame(" + a_winner + ")");
+			
 			super.endGame(a_winner);
+			
+			DartsGlobals.addWarning("CricketGameLogic::endGame(" + a_winner + ") -- DartsGlobals.instance.localPlayer.playerNum = " + DartsGlobals.instance.localPlayer.playerNum);
 			
 			if ( a_winner == DartsGlobals.instance.localPlayer.playerNum ) 
 			{				
@@ -62,7 +67,14 @@
 				cash += (DartsGlobals.instance.opponentProfile as EnemyProfile).prize;
 				DartsGlobals.instance.externalServices.setData("gameCash", cash);
 				
+				DartsGlobals.addWarning("CricketGameLogic::endGame() -- DartsGlobals.instance.opponentProfile = " + DartsGlobals.instance.opponentProfile);
+				
+				DartsGlobals.addWarning("CricketGameLogic::endGame() -- (DartsGlobals.instance.opponentProfile as EnemyProfile) = " + (DartsGlobals.instance.opponentProfile as EnemyProfile));
+				
 				var skin:DartSkin = (DartsGlobals.instance.opponentProfile as EnemyProfile).dartSkin;
+				
+				DartsGlobals.addWarning("CricketGameLogic::endGame() -- skin = " + skin);
+				
 				var arr:Array = DartsGlobals.instance.externalServices.getData("ownedSkins");
 				if ( arr )
 				{

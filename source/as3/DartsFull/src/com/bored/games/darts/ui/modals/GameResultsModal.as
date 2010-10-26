@@ -4,6 +4,7 @@
 	import com.bored.games.darts.logic.DartsGameLogic;
 	import com.bored.games.darts.profiles.EnemyProfile;
 	import com.bored.games.GameUtils;
+	import com.greensock.TweenMax;
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
@@ -15,6 +16,7 @@
 	import flash.events.MouseEvent;
 	import flash.text.TextField;
 	import flash.utils.Dictionary;
+	import mx.effects.Tween;
 	/**
 	 * ...
 	 * @author sam
@@ -148,6 +150,8 @@
 			DartsGlobals.instance.gameManager.resetDarts();
 			
 			DartsGlobals.instance.gameManager.newGame();
+			
+			TweenMax.killAll();
 			
 			//DartsGlobals.instance.gameManager.currentPlayer = DartsGlobals.instance.localPlayer.playerNum;
 			

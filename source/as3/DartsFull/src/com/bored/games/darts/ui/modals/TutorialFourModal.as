@@ -25,6 +25,8 @@
 		
 		public function TutorialFourModal() 
 		{
+			DartsGlobals.addWarning("TutorialFourModal::constructor() -- " + AppSettings.instance.tutorialModalSprite);
+			
 			super(SpriteFactory.getSpriteByQualifiedName(AppSettings.instance.tutorialModalSprite), false, true);
 			
 			if (this.stage) {

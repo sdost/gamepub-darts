@@ -477,6 +477,8 @@
 		
 		public function showModalPopup(a_content:Class = null, a_prompt:Object = null):void
 		{
+			addWarning("DartsGlobals::showModalPopup() -- a_content = " + a_content);
+			
 			_modalDisplayManager = ModalDisplayManager.createModalDisplay(_popupSpace, a_content, a_prompt);
 		}//end showModalPopup()
 		

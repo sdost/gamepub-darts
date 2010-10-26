@@ -25,6 +25,8 @@
 		
 		public function TutorialThreeModal() 
 		{
+			DartsGlobals.addWarning("TutorialThreeModal::constructor() -- " + AppSettings.instance.tutorialModalSprite);
+			
 			super(SpriteFactory.getSpriteByQualifiedName(AppSettings.instance.tutorialModalSprite), false, true);
 			
 			if (this.stage) {

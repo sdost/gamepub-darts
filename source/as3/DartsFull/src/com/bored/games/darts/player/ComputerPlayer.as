@@ -41,6 +41,8 @@
 		
 		override public function takeTheShot(a_dartsRemaining:int):void
 		{
+			DartsGlobals.addWarning("ComputerPlayer::takeTheShot()");
+			
 			var myStats:Object = this._game.scoreManager.getPlayerStats(this.playerNum);
 			var allStats:Object = this._game.scoreManager.getAllPlayerStats();
 			

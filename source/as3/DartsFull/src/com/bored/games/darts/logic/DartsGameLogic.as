@@ -252,6 +252,8 @@
 			_players = null;
 			
 			_paused = false;
+			
+			TweenMax.killAll();
 		}//end cleanup();
 		
 		public function update(a_time:Number = 0):void
@@ -431,13 +433,15 @@
 		}//end startNewRound()
 		
 		public function nextDart():void
-		{	
+		{
+			DartsGlobals.addWarning("DartsGameLogic::nextDart()");
+			
 			_lastDart = _currentDart;
 			
 			_currentDart = _players[_currentPlayer].darts[_currentTurn.throwIndex];
 			_currentDart.reset();
 			
-			trace("Current Dart: " + _currentDart);
+			DartsGlobals.addWarning("DartsGameLogic::nextDart() --> Current Dart: " + _currentDart);
 			
 			_currentDart.x = AppSettings.instance.defaultStartPositionX;
 			_currentDart.y = AppSettings.instance.defaultStartPositionY;

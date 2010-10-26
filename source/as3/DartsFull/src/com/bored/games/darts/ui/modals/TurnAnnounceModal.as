@@ -1,6 +1,7 @@
 ﻿package com.bored.games.darts.ui.modals 
 {
 	import com.bored.games.darts.DartsGlobals;
+	import com.bored.games.darts.profiles.OldManProfile;
 	import com.greensock.TweenMax;
 	import com.inassets.ui.contentholders.ContentHolder;
 	import com.sven.containers.Panel;
@@ -11,6 +12,7 @@
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.sampler.NewObjectSample;
 	import flash.text.TextField;
 	import flash.utils.Dictionary;
 	import mx.utils.ObjectUtil;
@@ -101,7 +103,7 @@
 			
 			DartsGlobals.instance.processModalQueue();
 			
-			if ( DartsGlobals.instance.gameManager.currentPlayer == DartsGlobals.instance.localPlayer.playerNum ) 
+			if ( DartsGlobals.instance.gameManager.currentPlayer == DartsGlobals.instance.localPlayer.playerNum || DartsGlobals.instance.opponentProfile is OldManProfile ) 
 			{
 				DartsGlobals.instance.gameManager.pause(false);
 			}

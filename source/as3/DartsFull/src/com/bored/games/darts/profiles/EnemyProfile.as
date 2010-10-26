@@ -64,13 +64,11 @@
 		
 		public function useDoOver(evt:Event):void
 		{
-			/*
 			DartsGlobals.instance.gameManager.removeEventListener(DartsGameLogic.THROW_END, useDoOver);
 			
 			(DartsGlobals.instance.opponentPlayer as ComputerPlayer).cancelShot();
 			
-			DartsGlobals.instance.gameManager.abilityManager.activateAbility(DartsGlobals.instance.opponentPlayer.getAbilityByName(DoOverAbility.NAME));
-			*/
+			DartsGlobals.instance.gameManager.abilityManager.activateAbility(DartsGlobals.instance.opponentPlayer.getAbilityByName(DoOverAbility.NAME))
 		}//end performDoOver()
 		
 	}//end EnemyProfile

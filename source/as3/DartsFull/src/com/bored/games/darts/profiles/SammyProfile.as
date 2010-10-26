@@ -31,6 +31,8 @@
 			this.portrait = ImageFactory.getBitmapDataByQualifiedName("com.bored.games.darts.assets.icons.Sammy_Portrait_BMP", 150, 150);
 			
 			this.setDartSkin(new DartSkin(ImageFactory.getBitmapDataByQualifiedName("dartuv_sammy", AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight), dae_DartShaft.data, dae_DartFlightHexagon.data));
+			this.dartSkin.skinid = "sammy";
+			this.dartSkin.flightid = "hex";
 			
 			this.accuracy = AppSettings.instance.sammyAccuracy;
 			this.stepScale = AppSettings.instance.sammyStepScale;

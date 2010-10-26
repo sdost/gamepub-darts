@@ -34,6 +34,8 @@
 			this.portrait = ImageFactory.getBitmapDataByQualifiedName("com.bored.games.darts.assets.icons.Irene_Portrait_BMP", 150, 150);
 			
 			this.setDartSkin(new DartSkin(ImageFactory.getBitmapDataByQualifiedName("dartuv_irene", AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight), dae_DartShaft.data, dae_DartFlightThin.data));
+			this.dartSkin.skinid = "irene";
+			this.dartSkin.flightid = "thin";
 			
 			this.accuracy = AppSettings.instance.ireneAccuracy;
 			this.stepScale = AppSettings.instance.ireneStepScale;

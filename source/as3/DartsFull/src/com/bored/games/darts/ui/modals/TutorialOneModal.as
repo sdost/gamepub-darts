@@ -25,6 +25,8 @@
 		
 		public function TutorialOneModal() 
 		{
+			DartsGlobals.addWarning("TutorialOneModal::constructor() -- " + AppSettings.instance.tutorialModalSprite);
+			
 			super(SpriteFactory.getSpriteByQualifiedName(AppSettings.instance.tutorialModalSprite), false, true);
 			
 			if (this.stage) {

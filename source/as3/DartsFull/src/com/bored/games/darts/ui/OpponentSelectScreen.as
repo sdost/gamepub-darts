@@ -147,14 +147,12 @@
 			if (_oldmanBtnImg)
 			{
 				_oldmanBtn = new MightyButton(_oldmanBtnImg, false);
-				_oldmanBtn.pause(true);
-				//_oldmanBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
+				_oldmanBtn.pause(false);
+				_oldmanBtn.addEventListener(ButtonEvent.MIGHTYBUTTON_CLICK_EVT, onOpponentClicked, false, 0, true);
 				
-				/*
 				_oldmanBtn.buttonContents.addEventListener(MouseEvent.ROLL_OVER, function(a_evt:Event):void {
 					generateToolTip(_oldmanBtnImg).show(_oldmanBtnImg, "Old Man", "Tutorial");
 				});
-				*/
 			}
 			else
 			{

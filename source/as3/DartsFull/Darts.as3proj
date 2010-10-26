@@ -122,6 +122,13 @@
     <element path="swfLibs_includeAll\TitleScreen.swc" />
     <element path="swfLibs_includeAll\HUDAssets.swc" />
     <element path="swfLibs_includeAll\HUDAssets.swc" />
+    <element path="swcLibs_includeAll\UIComponents.swc" />
+    <element path="swfLibs_includeAll\HUDAssets.swc" />
+    <element path="swfLibs_includeAll\HUDAssets.swc" />
+    <element path="swfLibs_includeAll\HUDAssets.swc" />
+    <element path="swfLibs_includeAll\HUDAssets.swc" />
+    <element path="swfLibs_includeAll\HUDAssets.swc" />
+    <element path="swfLibs_includeAll\GamestoreScreen.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>

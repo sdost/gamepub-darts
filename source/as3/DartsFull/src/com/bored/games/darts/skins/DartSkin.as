@@ -43,6 +43,11 @@
 			return _flightModelXML;
 		}//end get flight()
 		
+		public function toString():String
+		{
+			return "[DartSkin skinid: " + skinid + " flightid: " + flightid + "]";
+		}//end toString()
+		
 	}//end DartSkin
 
 }//end com.bored.games.darts.skins

@@ -34,6 +34,8 @@
 			this.portrait = ImageFactory.getBitmapDataByQualifiedName("com.bored.games.darts.assets.icons.TheProfessor_Portrait_BMP", 150, 150);
 			
 			this.setDartSkin(new DartSkin(ImageFactory.getBitmapDataByQualifiedName("dartuv_theprofessor", AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight), dae_DartShaft.data, dae_DartFlightHeart.data));
+			this.dartSkin.skinid = "theprofessor";
+			this.dartSkin.flightid = "heart";
 			
 			this.accuracy = AppSettings.instance.professorAccuracy;
 			this.stepScale = AppSettings.instance.professorStepScale;

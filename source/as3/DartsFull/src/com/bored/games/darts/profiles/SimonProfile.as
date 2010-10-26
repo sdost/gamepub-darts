@@ -33,6 +33,8 @@
 			this.portrait = ImageFactory.getBitmapDataByQualifiedName("com.bored.games.darts.assets.icons.Simon_Portrait_BMP", 150, 150);
 			
 			this.setDartSkin(new DartSkin(ImageFactory.getBitmapDataByQualifiedName("dartuv_simon", AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight), dae_DartShaft.data, dae_DartFlightPincer.data));
+			this.dartSkin.skinid = "simon";
+			this.dartSkin.flightid = "pincer";
 			
 			this.accuracy = AppSettings.instance.simonAccuracy;
 			this.stepScale = AppSettings.instance.simonStepScale;

@@ -31,6 +31,8 @@
 			this.portrait =ImageFactory.getBitmapDataByQualifiedName("com.bored.games.darts.assets.icons.Mack_Portrait_BMP", 150, 150);
 			
 			this.setDartSkin(new DartSkin(ImageFactory.getBitmapDataByQualifiedName("dartuv_mack", AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight), dae_DartShaft.data, dae_DartFlightOval.data));
+			this.dartSkin.skinid = "mack";
+			this.dartSkin.flightid = "oval";
 			
 			this.accuracy = AppSettings.instance.mackAccuracy;
 			this.stepScale = AppSettings.instance.mackStepScale;

@@ -31,6 +31,8 @@
 			this.portrait = ImageFactory.getBitmapDataByQualifiedName("com.bored.games.darts.assets.icons.Anthony_Portrait_BMP", 150, 150);
 			
 			this.setDartSkin(new DartSkin(ImageFactory.getBitmapDataByQualifiedName("dartuv_anthony", AppSettings.instance.dartTextureWidth, AppSettings.instance.dartTextureHeight), dae_DartShaft.data, dae_DartFlightModHex.data));
+			this.dartSkin.skinid = "anthony";
+			this.dartSkin.flightid = "modhex";
 			
 			this.accuracy = AppSettings.instance.anthonyAccuracy;
 			this.stepScale = AppSettings.instance.anthonyStepScale;
