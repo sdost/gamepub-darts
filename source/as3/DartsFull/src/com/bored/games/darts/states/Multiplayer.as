@@ -81,7 +81,7 @@
 			BoredServices.addEventListener(ObjectEvent.MULTPLAYER_GAME_FAIL_EVT, onFail);
 			BoredServices.addEventListener(ObjectEvent.MULTPLAYER_GAME_START_EVT, onMPGameReady);
 			
-			BoredServices.showGameLobby(DartsGlobals.instance.multiplayerGameId);
+			BoredServices.showGameLobby([{"label":"Cricket", "gid":AppSettings.instance.cricketMultiplayerGameId}, {"label":"501", "gid":AppSettings.instance.fiveOhOneMultiplayerGameId}]);
 		}//end onEnter()
 		
 		private function onFail(e:Event):void
@@ -102,6 +102,15 @@
 			BoredServices.removeEventListener(ObjectEvent.MULTPLAYER_GAME_START_EVT, onMPGameReady);
 			
 			DartsGlobals.instance.multiplayerClient = e.obj;
+			
+			if ( DartsGlobals.instance.multiplayerClient.gameId == AppSettings.instance.cricketMultiplayerGameId )
+			{
+				DartsGlobals.instance.gameType = DartsGlobals.TYPE_CRICKET;
+			}
+			else if ( DartsGlobals.instance.multiplayerClient.gameId == AppSettings.instance.fiveOhOneMultiplayerGameId )
+			{
+				DartsGlobals.instance.gameType = DartsGlobals.TYPE_FIVEOHONE;
+			}
 			
 			if ( DartsGlobals.instance.gameType == DartsGlobals.TYPE_CRICKET ) 
 			{

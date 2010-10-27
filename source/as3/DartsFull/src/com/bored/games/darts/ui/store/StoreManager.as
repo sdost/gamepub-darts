@@ -61,9 +61,9 @@
 		{
 			_storeContents = new Vector.<StoreItem>();
 			
-			_storeContents.push( new PowerStoreItem( MovieClipFactory.getMovieClipByQualifiedName("com.bored.games.darts.assets.icons.ShieldIcon_MC"), "Shield", DartsGlobals.instance.localPlayer.getAbilityByName("Shield"), "shield", 450 ) );
-			_storeContents.push( new PowerStoreItem( MovieClipFactory.getMovieClipByQualifiedName("com.bored.games.darts.assets.icons.BeelineIcon_MC"), "Beeline", DartsGlobals.instance.localPlayer.getAbilityByName("Beeline"), "beeline", 450 ) );
-			_storeContents.push( new PowerStoreItem( MovieClipFactory.getMovieClipByQualifiedName("com.bored.games.darts.assets.icons.DoOverIcon_MC"), "Do-Over", DartsGlobals.instance.localPlayer.getAbilityByName("Do-Over"), "doover", 450 ) );
+			_storeContents.push( new PowerStoreItem( MovieClipFactory.getMovieClipByQualifiedName("com.bored.games.darts.assets.icons.ShieldIcon_MC"), "Shield", DartsGlobals.instance.localPlayer.getAbilityByName("Shield"), "shield", 100 ) );
+			_storeContents.push( new PowerStoreItem( MovieClipFactory.getMovieClipByQualifiedName("com.bored.games.darts.assets.icons.DoOverIcon_MC"), "Do-Over", DartsGlobals.instance.localPlayer.getAbilityByName("Do-Over"), "doover", 500 ) );
+			_storeContents.push( new PowerStoreItem( MovieClipFactory.getMovieClipByQualifiedName("com.bored.games.darts.assets.icons.BeelineIcon_MC"), "Beeline", DartsGlobals.instance.localPlayer.getAbilityByName("Beeline"), "beeline", 1000 ) );
 		}//end generatePowerList()
 		
 		public static function get storeContents():Vector.<StoreItem>

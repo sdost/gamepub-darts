@@ -53,8 +53,7 @@
 				_titleScreen.addEventListener(TitleScreen.STORY_GAME_CLICKED_EVT, onStoryGameClicked, false, 0, true);
 				_titleScreen.addEventListener(TitleScreen.PRACTICE_CRICKET_GAME_CLICKED_EVT, onPracticeGameClicked, false, 0, true);
 				_titleScreen.addEventListener(TitleScreen.PRACTICE_501_GAME_CLICKED_EVT, onPracticeGameClicked, false, 0, true);
-				_titleScreen.addEventListener(TitleScreen.MULTIPLAYER_CRICKET_GAME_CLICKED_EVT, onMultiplayerGameClicked, false, 0, true);
-				_titleScreen.addEventListener(TitleScreen.MULTIPLAYER_501_GAME_CLICKED_EVT, onMultiplayerGameClicked, false, 0, true);
+				_titleScreen.addEventListener(TitleScreen.MULTIPLAYER_GAME_CLICKED_EVT, onMultiplayerGameClicked, false, 0, true);
 				DartsGlobals.instance.screenSpace.addChild(_titleScreen);
 				
 				DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").addSound( new SMSound("title_sound", "button_title_mp3") );
@@ -99,6 +98,7 @@
 		{
 			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").play("title_sound");
 			
+			/*
 			if (e_evt.type == TitleScreen.MULTIPLAYER_CRICKET_GAME_CLICKED_EVT)
 			{
 				DartsGlobals.instance.multiplayerGameId = AppSettings.instance.cricketMultiplayerGameId;
@@ -109,6 +109,7 @@
 				DartsGlobals.instance.multiplayerGameId = AppSettings.instance.fiveOhOneMultiplayerGameId;
 				DartsGlobals.instance.gameType = DartsGlobals.TYPE_FIVEOHONE;
 			}
+			*/
 			
 			DartsGlobals.instance.gameMode = DartsGlobals.GAME_MULTIPLAYER;
 			DartsGlobals.instance.throwMode = DartsGlobals.THROW_BEGINNER;
@@ -126,8 +127,7 @@
 			_titleScreen.removeEventListener(TitleScreen.STORY_GAME_CLICKED_EVT, onStoryGameClicked);
 			_titleScreen.removeEventListener(TitleScreen.PRACTICE_CRICKET_GAME_CLICKED_EVT, onPracticeGameClicked);
 			_titleScreen.removeEventListener(TitleScreen.PRACTICE_501_GAME_CLICKED_EVT, onPracticeGameClicked);
-			_titleScreen.removeEventListener(TitleScreen.MULTIPLAYER_CRICKET_GAME_CLICKED_EVT, onMultiplayerGameClicked);
-			_titleScreen.removeEventListener(TitleScreen.MULTIPLAYER_501_GAME_CLICKED_EVT, onMultiplayerGameClicked);
+			_titleScreen.removeEventListener(TitleScreen.MULTIPLAYER_GAME_CLICKED_EVT, onMultiplayerGameClicked);
 			
 			_titleScreen.destroy();
 			

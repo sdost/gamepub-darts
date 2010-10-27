@@ -29,16 +29,19 @@
 		}//end constructor()
 		
 		override public function useAbility():int
-		{			
-			var soundController:SoundController = DartsGlobals.instance.soundManager.getSoundControllerByID("abilitySounds");
-			soundController.play("dooverActivate");
+		{						
+			DartsGlobals.addWarning("DoOverAbility::useAbility() -- DartsGlobals.instance.gameManager.lastDart = " + DartsGlobals.instance.gameManager.lastDart);
 			
-			if( DartsGlobals.instance.gameManager.lastDart ) {
+			if ( DartsGlobals.instance.gameManager.lastDart ) {
+				var soundController:SoundController = DartsGlobals.instance.soundManager.getSoundControllerByID("abilitySounds");
+				soundController.play("dooverActivate");
+				
 				var movie:MovieClip = MovieClipFactory.getMovieClipByQualifiedName("com.bored.games.darts.assets.effects.DoOverAnim_MC");
 				movie.x = DartsGlobals.instance.gameManager.lastDart.x * 100 + 350;
 				movie.y = DartsGlobals.instance.gameManager.lastDart.y * -100 + 275;
 				DartsGlobals.instance.stage.addChild(movie);
 			}
+			else return 0;
 			
 			DartsGlobals.instance.gameManager.redoDart();
 			DartsGlobals.instance.gameManager.scoreManager.revertLastThrow();

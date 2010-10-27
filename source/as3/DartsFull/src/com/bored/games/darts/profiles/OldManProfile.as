@@ -70,6 +70,7 @@
 			addShot(a_list, 2, 1, false, "boost");
 			addShot(a_list, 10, 1, false, "boost");
 			addShot(a_list, 17, 1, false, "boost");
+			addShot(a_list, 17, 1, false, "boost");
 			
 		}//end buildTutorialsThrows()
 		
