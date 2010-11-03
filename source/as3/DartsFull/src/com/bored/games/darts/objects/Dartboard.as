@@ -351,8 +351,12 @@
 				sticking = true;
 			} else if ( _blockedSections["c_" + points + "_" + multiplier + "_mc"] ) {
 				_dartboardSoundController.play("shieldHit");
+				
+				DartsGlobals.instance.gameManager.scoreManager.submitThrow(DartsGlobals.instance.gameManager.currentPlayer, points, multiplier);
 			} else {
 				_dartboardSoundController.play("bounce_wall");
+				
+				DartsGlobals.instance.gameManager.scoreManager.submitThrow(DartsGlobals.instance.gameManager.currentPlayer, points, multiplier);
 			}
 			/*
 			} else {

@@ -10,7 +10,7 @@ public abstract class Scoreboard {
 	
 	abstract boolean checkForWin(int player);
 	
-	abstract boolean submitThrow(int player, int points, int multiplier, int turn);
+	abstract boolean submitThrow(int player, int points, int multiplier, int turn, int round);
 	
 	abstract void getJSONObject(JSONObject jso) throws JSONException;
 }

@@ -47,7 +47,7 @@ public class CricketScoreboard extends Scoreboard {
 		return win;
 	}
 		
-	public boolean submitThrow(int player, int points, int multiplier, int turn) {
+	public boolean submitThrow(int player, int points, int multiplier, int turn, int round) {
 		System.out.println("CricketScoreboard::submitThrow(" + player + ", " + points + ", " + multiplier + ")");
 		
 		System.out.println("scoreMap["+player+"] -> " + _scoreMap.get(player));

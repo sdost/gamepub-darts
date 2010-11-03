@@ -1,7 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- build.xml -->
 <project name="Default Internet Assets Build for swc and/or swf" default="build" basedir=".">
-	<taskdef resource="flexTasks.tasks"/>
+	
+	<!-- The project config file. -->
+	<property file="project.config" prefix="proj" />
+	
+	<!-- The user-config file, specified in the project config file -->
+	<property file="${proj.user.config}" prefix="user" />
+	
+	<property name="FLEX_HOME" location="${user.flex.home}"/>
+	
+	<taskdef resource="flexTasks.tasks" classpath="${user.flex.home}/ant/lib/flexTasks.jar" />
 	
 	<!-- 
 		Built-In Ant Properties
@@ -42,14 +51,7 @@
 	
 	<echo>|||| OS: ${os.name} - ${os.arch} - ver: ${os.version} ||||</echo>
 	
-	<!-- The project config file. -->
-	<property file="project.config" prefix="proj" />
-	
-	<!-- The user-config file, specified in the project config file -->
-	<property file="${proj.user.config}" prefix="user" />
-	
 	<!-- The definition of FLEX_HOME - required to do any of the ant-building that this file does. -->
-	<property name="FLEX_HOME" value="${user.flex.home}" />
 	<property name="asdoc.exe" value="${FLEX_HOME}/bin/aasdoc.bat" />
 	
 	<property name="src.dir" value="${proj.src.dir}" />

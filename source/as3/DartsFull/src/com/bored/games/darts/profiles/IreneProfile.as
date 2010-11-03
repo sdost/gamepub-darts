@@ -45,7 +45,6 @@
 		
 		override public function generateShotList(a_gameType:String, a_myStats:Object, a_allStats:Object):Vector.<AIShotCandidate>
 		{
-			/*
 			var _gameType:String = a_gameType;
 			var myStats:Object = a_myStats;
 			var clipList:Vector.<Sprite> = new Vector.<Sprite>();
@@ -107,7 +106,8 @@
 			}
 			
 			return myShotList;
-			*/
+			
+			/*
 			var _gameType:String = a_gameType;
 			var myStats:Object = a_myStats;
 			var clipList:Vector.<Sprite> = new Vector.<Sprite>();
@@ -167,6 +167,7 @@
 			}
 			
 			return myShotList;
+			*/
 		}//end generateShotList()
 		
 		override public function pickShot(a_dartsRemaining:int, a_shots:Vector.<AIShotCandidate>):AIShotCandidate
@@ -189,7 +190,7 @@
 		}//end pickShot()
 				
 		override public function handleShot(a_points:int, a_multiplier:int):void
-		{
+		{	
 			/*
 			var stats:Object = DartsGlobals.instance.gameManager.scoreManager.getPlayerStats(DartsGlobals.instance.localPlayer.playerNum);
 			
@@ -211,6 +212,7 @@
 				DartsGlobals.instance.gameManager.abilityManager.activateAbility(DartsGlobals.instance.opponentPlayer.getAbilityByName(DoOverAbility.NAME));
 			}
 			*/
+		
 			/*
 			var version:int = Math.ceil( Math.random() * 2 );
 			

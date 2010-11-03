@@ -141,6 +141,8 @@
 			
 			if (!(e as Object).obj) return;
 			
+			if (!DartsGlobals.instance.opponentProfile) return;
+			
 			if ((e as Object).obj.valueOf("screen_name") != DartsGlobals.instance.opponentProfile.name) return;
 			
 			BoredServices.removeEventListener(ObjectEvent.USER_INFO_READY_EVT, onOpponentProfile);
@@ -162,15 +164,22 @@
 		
 		private function handleUserReady(a_evt:Event):void
 		{
-			var obj:Object = DartsGlobals.instance.multiplayerClient.getData(GameClient.USER_READY);
+			try 
+			{
+				var obj:Object = DartsGlobals.instance.multiplayerClient.getData(GameClient.USER_READY);
 			
-			if (obj.pid == DartsGlobals.instance.localPlayer.playerNum)
-			{
-				_gameConfirmScreen.setPlayerReady();
+				if (obj.pid == DartsGlobals.instance.localPlayer.playerNum)
+				{
+					_gameConfirmScreen.setPlayerReady();
+				}
+				else if (obj.pid == DartsGlobals.instance.opponentPlayer.playerNum)
+				{
+					_gameConfirmScreen.setOpponentReady();
+				}				
 			}
-			else if (obj.pid == DartsGlobals.instance.opponentPlayer.playerNum)
+			catch(e:Error)
 			{
-				_gameConfirmScreen.setOpponentReady();
+				DartsGlobals.addWarning("MultiplayerGameConfirm::handleUserReady() - " + e.message);
 			}
 		}//end onUserReady()
 		

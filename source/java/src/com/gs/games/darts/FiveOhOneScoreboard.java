@@ -11,9 +11,11 @@ public class FiveOhOneScoreboard extends Scoreboard {
 	
 	public static int FIVE_OH_ONE 		= 501;
 	
+	private int _lastRound = -1;
 	private int _lastTurn = -1;
 	private int _lastPlayer = -1;
 	private boolean _newTurn;
+	private boolean _busted;
 	
 	private HashMap<Integer, Vector<Integer>> _scoreMap;
 	
@@ -50,9 +52,9 @@ public class FiveOhOneScoreboard extends Scoreboard {
 		return true;
 	}
 	
-	public boolean submitThrow(int player, int points, int multiplier, int turn) {
+	public boolean submitThrow(int player, int points, int multiplier, int turn, int round) {
 		
-		if( _lastTurn == turn && _lastPlayer == player )
+		if( _lastRound == round && _lastTurn == turn && _lastPlayer == player )
 		{
 			_newTurn = false;
 		}
@@ -60,7 +62,9 @@ public class FiveOhOneScoreboard extends Scoreboard {
 		{
 			_lastPlayer = player;
 			_lastTurn = turn;
+			_lastRound = round;
 			_newTurn = true;
+			_busted = false;
 		}
 		
 		Vector<Integer> scoreList = _scoreMap.get(player);
@@ -76,7 +80,7 @@ public class FiveOhOneScoreboard extends Scoreboard {
 		
 		System.out.println("Temp: " + temp);
 		
-		if( temp < FIVE_OH_ONE )
+		if( temp < FIVE_OH_ONE && (FIVE_OH_ONE - temp) > 1 )
 		{
 			if( _newTurn ) {
 				scoreList.add(points * multiplier);
@@ -91,20 +95,7 @@ public class FiveOhOneScoreboard extends Scoreboard {
 		} 
 		else if ( temp == FIVE_OH_ONE )
 		{
-			if( points > 1 && multiplier == 2 )
-			{
-				if( _newTurn ) {
-					scoreList.add(points * multiplier);
-				} else {
-					int s = scoreList.get(scoreList.size()-1);
-					s += (points * multiplier);
-					scoreList.set(scoreList.size()-1, s);
-				}
-				_scoreMap.put(player, scoreList);
-				
-				return true;
-			}
-			else if( points == 1 && multiplier == 1 )
+			if( points >= 1 && multiplier == 2 )
 			{
 				if( _newTurn ) {
 					scoreList.add(points * multiplier);
@@ -124,6 +115,7 @@ public class FiveOhOneScoreboard extends Scoreboard {
 		}
 		else
 		{
+			_busted = true;
 			return false;
 		}
 	}
@@ -134,5 +126,6 @@ public class FiveOhOneScoreboard extends Scoreboard {
 		map.putAll(_scoreMap);
 		
 		jso.put("scores", map.toString());
+		jso.put("busted", _busted);
 	}
 }

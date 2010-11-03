@@ -44,7 +44,6 @@
 		
 		override public function generateShotList(a_gameType:String, a_myStats:Object, a_allStats:Object):Vector.<AIShotCandidate>
 		{
-			/*
 			var _gameType:String = a_gameType;
 			var myStats:Object = a_myStats;
 			var clipList:Vector.<Sprite> = new Vector.<Sprite>();
@@ -80,9 +79,16 @@
 			
 			points = 15;
 			while ( points <= 20 ) {
+				
+				trace("SimonProfile::generateShotList() -- points = " + points);
+				
 				die = Math.random();
 				
-				if ( myStats[points] >= 3 ) continue;
+				if ( myStats[points] >= 3 )
+				{
+					++points;
+					continue;
+				}
 				
 				if ( die < .4 )
 				{
@@ -126,7 +132,7 @@
 			}
 			
 			return myShotList;
-			*/
+			/*
 			var _gameType:String = a_gameType;
 			var myStats:Object = a_myStats;
 			var clipList:Vector.<Sprite> = new Vector.<Sprite>();
@@ -153,6 +159,7 @@
 			var lastPlayerScore:Object = DartsGlobals.instance.localPlayer.record.lastScore;
 			
 			return myShotList;
+			*/
 		}//end generateShotList()
 		
 		override public function pickShot(a_dartsRemaining:int, a_shots:Vector.<AIShotCandidate>):AIShotCandidate

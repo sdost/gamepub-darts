@@ -275,7 +275,7 @@ public class Darts extends TurnBasedExtension {
 				
 				p.addThrow();
 				
-				if( _scoreboard.submitThrow(super._curPlayer.getPlayerIndex(), board_Section, board_Multiplier, super._curTurn) )
+				if( _scoreboard.submitThrow(super._curPlayer.getPlayerIndex(), board_Section, board_Multiplier, super._curTurn, super._curRound) )
 				{
 					p.addScoringThrow();
 				}

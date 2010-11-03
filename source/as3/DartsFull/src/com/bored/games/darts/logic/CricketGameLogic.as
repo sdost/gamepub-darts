@@ -61,6 +61,8 @@
 			
 			DartsGlobals.addWarning("CricketGameLogic::endGame(" + a_winner + ") -- DartsGlobals.instance.localPlayer.playerNum = " + DartsGlobals.instance.localPlayer.playerNum);
 			
+			if (DartsGlobals.instance.gameMode != DartsGlobals.GAME_STORY) return;
+			
 			if ( a_winner == DartsGlobals.instance.localPlayer.playerNum ) 
 			{				
 				var cash:int = DartsGlobals.instance.externalServices.getData("gameCash");

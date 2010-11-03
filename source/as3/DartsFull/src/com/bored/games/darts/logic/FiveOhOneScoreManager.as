@@ -24,6 +24,7 @@
 		public function FiveOhOneScoreManager() 
 		{
 			_scoreboard = new Object();
+
 		}//end constructor()
 		
 		override public function initPlayerStats(a_playerNum:int):void
@@ -54,7 +55,7 @@
 			
 			var temp:int = score + (a_section * a_multiplier);
 			
-			if ( temp < FIVE_OH_ONE ) 
+			if ( temp < FIVE_OH_ONE && (FIVE_OH_ONE - temp) > 1) 
 			{
 				DartsGlobals.addWarning("FiveOhOneScoreManager::submitThrow() -- scoring throw: " + temp);
 				
@@ -71,18 +72,7 @@
 			{
 				DartsGlobals.addWarning("FiveOhOneScoreManager::submitThrow() -- winning throw?: " + temp);
 				
-				if ( a_section > 1 && a_multiplier == 2 ) 
-				{
-					if ( _newTurn ) {
-						scoreList.push(a_section * a_multiplier);
-					} else {
-						scoreList[scoreList.length-1] += (a_section * a_multiplier);
-					}
-					_scoreboard[a_playerNum] = scoreList;
-					
-					return true;
-				}
-				else if ( a_section == 1 && a_multiplier == 1 )
+				if ( a_section >= 1 && a_multiplier == 2 ) 
 				{
 					if ( _newTurn ) {
 						scoreList.push(a_section * a_multiplier);

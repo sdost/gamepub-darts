@@ -39,7 +39,7 @@
 			
 			if ( _threeInABed ) 
 			{
-				if ( _section < 0 )
+				if ( _section < 0 && a_points > 0 )
 					_section = a_points;
 				
 				_threeInABed = (_section == a_points);

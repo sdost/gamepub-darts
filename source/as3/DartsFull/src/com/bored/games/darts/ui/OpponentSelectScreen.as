@@ -371,9 +371,9 @@
 				if (a_evt.mightyButton == _professorBtn) {
 					DartsGlobals.instance.opponentProfile = new ProfessorProfile();
 					
-					var version:int = Math.ceil( Math.random() * 4 );
+					//var version:int = Math.ceil( Math.random() * 4 );
 					
-					_characterSounds.play("prof_start" + version.toString());
+					//_characterSounds.play("prof_start" + version.toString());
 				}
 				
 				_professorBtn.pause(true);

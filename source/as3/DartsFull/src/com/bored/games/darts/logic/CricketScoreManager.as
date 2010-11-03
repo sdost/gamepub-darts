@@ -134,7 +134,13 @@
 				for ( var score:String in a_scores[player] ) 
 				{
 					trace("scoreboard[" + player + "][" + score + "]: " + a_scores[player][score]);
-					
+					if ( _scoreboard[player][score] < CLOSED_OUT && a_scores[player][score] == CLOSED_OUT )
+					{
+						if ( int(player) == DartsGlobals.instance.localPlayer.playerNum )
+							_soundController.play("closeout_player");
+						else if ( int(player) == DartsGlobals.instance.opponentPlayer.playerNum )
+							_soundController.play("closeout_opponent");
+					}
 					_scoreboard[player][score] = a_scores[player][score];
 				}
 			}

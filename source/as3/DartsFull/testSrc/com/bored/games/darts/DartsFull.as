@@ -1,5 +1,8 @@
 ﻿package com.bored.games.darts
 {
+	import com.bored.games.darts.animations.Cutscene;
+	import com.bored.games.darts.configs.DefaultConfigs;
+	import com.bored.games.darts.configs.IntroScript;
 	import com.bored.games.darts.logic.CricketGameLogic;
 	import com.bored.games.darts.profiles.UserProfile;
 	import com.bored.games.darts.states.LogoSplash;
@@ -55,6 +58,8 @@
 		{
 			super.addedToStage();
 			
+			stage.stageFocusRect = false;
+			
 			DartsGlobals.instance.stateMachine = _myStateMachine = new GameFSM();
 			
 			WarningManager.instance.handleMethod = WarningManager.DISPATCH_WARNINGS;
@@ -64,19 +69,22 @@
 			
 			stage.align = StageAlign.TOP_LEFT;
 			
-			CutsceneManager.instance.loadScript("opening.scene");
+			//CutsceneManager.instance.loadScript("opening.scene");
+			CutsceneManager.instance.addScene(new Cutscene(IntroScript.data));
 			
 			// set the global stage value.
 			DartsGlobals.instance.stage = this.stage;
 			
 			DartsGlobals.instance.playerProfile = new UserProfile();
 			
-			AppSettings.instance.load("development.config");
+			AppSettings.instance.load(DefaultConfigs.data);
 			
 			AppSettings.instance.addEventListener(Event.COMPLETE, onConfigReady);
+			
+			onConfigReady();
 		}//end addedToStage()
 		
-		private function onConfigReady(a_evt:Event):void
+		private function onConfigReady(a_evt:Event = null):void
 		{
 			AppSettings.instance.removeEventListener(Event.COMPLETE, onConfigReady);
 			
