@@ -180,6 +180,7 @@
 					cursor.resetCursorImage();
 					cursor.show();
 					_currentPlayer = obj.pid;
+					_serverResults = null;
 					if (_bullOff)
 					{
 						DartsGlobals.instance.showModalPopup(BullOffWinnerModal);
@@ -196,6 +197,7 @@
 					cursor.hide();
 					//cursor.setCursorImage(MovieClipFactory.getMovieClipByQualifiedName("com.bored.games.assets.hud.WaitCursor_MC"));
 					_currentPlayer = obj.pid;
+					_serverResults = null;
 					if (_bullOff)
 					{
 						DartsGlobals.instance.showModalPopup(BullOffWinnerModal);
@@ -380,6 +382,11 @@
 				}
 			}
 		}
+		
+		override public function pause(a_bool:Boolean):void 
+		{
+			//super.pause(a_bool);
+		}//end pause()
 		
 	}//end RemoteFiveOhOneGameLogic
 
