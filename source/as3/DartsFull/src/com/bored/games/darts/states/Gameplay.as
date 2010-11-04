@@ -205,6 +205,8 @@
 				_gameplayScreen = null;
 			}
 			
+			DartsGlobals.instance.clearModalQueue();
+			
 			DartsGlobals.instance.gameManager.cleanup();
 			
 			System.gc();

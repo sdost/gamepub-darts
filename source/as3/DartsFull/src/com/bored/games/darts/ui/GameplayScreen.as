@@ -21,6 +21,7 @@
 	import away3dlite.primitives.Plane;
 	import com.bored.games.darts.objects.Dart;
 	import com.bored.games.darts.ui.hud.AbilityDock;
+	import com.bored.games.darts.ui.hud.BoredLogo;
 	import com.bored.games.darts.ui.hud.ControlPanel;
 	import com.bored.games.darts.ui.hud.CricketScoreBoard;
 	import com.bored.games.darts.ui.hud.DartDock;
@@ -93,6 +94,7 @@
 		private var _abilityDock:AbilityDock;
 		private var _dartDock:DartDock;
 		private var _controlPanel:ControlPanel;
+		private var _boredLogo:BoredLogo;
 		
 		private var _turnTimer:MovieClip;
 		
@@ -165,6 +167,13 @@
 			_dartDock.x = AppSettings.instance.dartDockPositionX;
 			_dartDock.y = AppSettings.instance.dartDockPositionY;
 			_dartDock.show();
+			
+			cls = getDefinitionByName(AppSettings.instance.boredLogoMovie) as Class;
+			_boredLogo = new BoredLogo(new cls());
+			DartsGlobals.instance.optionsInterfaceSpace.addChild(_boredLogo);
+			_boredLogo.x = AppSettings.instance.boredLogoPositionX;
+			_boredLogo.y = AppSettings.instance.boredLogoPositionY;
+			_boredLogo.show();
 			
 			/*
 			_stats = new Stats();
@@ -284,11 +293,13 @@
 			if (_scoreBoard) DartsGlobals.instance.optionsInterfaceSpace.removeChild(_scoreBoard);
 			if (_abilityDock) DartsGlobals.instance.optionsInterfaceSpace.removeChild(_abilityDock);
 			if (_dartDock) DartsGlobals.instance.optionsInterfaceSpace.removeChild(_dartDock);
+			if (_boredLogo) DartsGlobals.instance.optionsInterfaceSpace.removeChild(_boredLogo);
 			
 			_throwIndicator = null;
 			_scoreBoard = null;
 			_abilityDock = null;
 			_dartDock = null;
+			_boredLogo = null;
 			
 			_view.camera = null;
 			_view.scene = null;

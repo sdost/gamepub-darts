@@ -135,7 +135,10 @@ package com.bored.games.darts.configs
 			<add key="dartDockMovie" type="String" value="com.bored.games.assets.hud.DartDock_MC" />
 			<add key="dartDockPositionX" type="Number" value="637" />
 			<add key="dartDockPositionY" type="Number" value="490" />
-
+			<add key="boredLogoMovie" type="String" value="com.bored.games.assets.hud.BoredButton_MC" />
+			<add key="boredLogoPositionX" type="Number" value="540" />
+			<add key="boredLogoPositionY" type="Number" value="12" />
+			
 			<add key="sammyAccuracy" type="Number" value="0.02" />
 			<add key="mackAccuracy" type="Number" value="0.2" />
 			<add key="anthonyAccuracy" type="Number" value="0.4" /> <!-- would have been 5, but he hits 3 triples right away, so we artificially drop his accuracy to 0.3 -->

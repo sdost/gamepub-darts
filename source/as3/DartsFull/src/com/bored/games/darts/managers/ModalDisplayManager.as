@@ -138,6 +138,14 @@ package com.bored.games.darts.managers
 				_alertQueue[_alertQueue.length-1]['_alert'].filters = [];
 			}
 		}
+		
+		public function clearQueue():void
+		{
+			while (_alertQueue.length > 0)
+			{
+				manageQueue();
+			}
+		}
 
 		public function getBlurFilter():BitmapFilter
 		{

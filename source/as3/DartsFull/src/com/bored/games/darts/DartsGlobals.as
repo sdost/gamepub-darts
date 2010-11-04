@@ -487,6 +487,11 @@
 			if (_modalDisplayManager) _modalDisplayManager.manageQueue();
 		}//end processModalQueue()
 		
+		public function clearModalQueue():void
+		{
+			if (_modalDisplayManager) _modalDisplayManager.clearQueue();
+		}//end processModalQueue()
+		
 		/*****************************
 		 * 
 		 * WARNING CODE BLOCK, BELOW:

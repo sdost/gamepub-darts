@@ -4,6 +4,7 @@
 	import com.bored.games.darts.logic.DartsGameLogic;
 	import com.bored.games.darts.logic.RemoteCricketGameLogic;
 	import com.bored.games.darts.states.statemachines.GameFSM;
+	import com.greensock.TweenMax;
 	import com.inassets.ui.buttons.events.ButtonEvent;
 	import com.inassets.ui.buttons.MightyButton;
 	import com.inassets.ui.contentholders.ContentHolder;
@@ -44,6 +45,8 @@
 			
 			Mouse.show();
 			
+			TweenMax.pauseAll();
+			
 			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").addSound( new SMSound("yes_sound", "button_x_yes_mp3") );
 			DartsGlobals.instance.soundManager.getSoundControllerByID("buttonSoundController").addSound( new SMSound("no_sound", "button_x_no_mp3") );
 		}//end addedToStage()
@@ -78,7 +81,8 @@
 			DartsGlobals.instance.gameManager.resetDarts();
 			DartsGlobals.instance.gameManager.endTurn();
 			
-			DartsGlobals.instance.gameManager.pause(false);
+			//DartsGlobals.instance.gameManager.pause(false);
+			TweenMax.resumeAll();
 			
 			DartsGlobals.instance.gameManager.dispatchEvent(new Event(RemoteCricketGameLogic.RETURN_TO_LOBBY));
 		}//end onYesClicked()
